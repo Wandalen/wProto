@@ -721,6 +721,7 @@ var protoMake = function( options )
     constructor : options.constructor,
     extend : options.extend,
     supplement : options.supplement,
+    static : options.static,
     usingAtomicExtension : options.usingAtomicExtension,
     overrideOriginal : options.overrideOriginal,
   });
@@ -744,6 +745,7 @@ protoMake.defaults =
   parent : null,
   extend : null,
   supplement : null,
+  static : null,
   wname : null,
   usingGlobalName : false,
   usingAtomicExtension : false,
@@ -771,7 +773,7 @@ var protoExtend = function( options )
   _assert( _.objectIs( options ) );
 
   _assert( _.routineIs( options.constructor ) );
-  _assert( options.constructor.name );
+  _assert( options.constructor.name,'class constructor should have name' );
 
   _assert( _.routineIs( options.parent ) || options.parent === undefined || options.parent === null );
   _assert( _.objectIs( options.extend ) || options.extend === undefined || options.extend === null );
@@ -802,6 +804,12 @@ var protoExtend = function( options )
 
   if( options.supplement )
   _.mapSupplement( prototype,options.supplement );
+
+  if( options.static )
+  {
+    _.mapSupplement( prototype,options.static );
+    _.mapSupplement( options.constructor,options.static );
+  }
 
   // extend relationships
 
@@ -852,6 +860,7 @@ protoExtend.defaults =
   constructor : null,
   extend : null,
   supplement : null,
+  static : null,
   usingAtomicExtension : false,
   overrideOriginal : false,
 }

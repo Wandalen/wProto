@@ -58,6 +58,18 @@ var methodOfBetta = function methodOfBetta()
 
 //
 
+var staticFunction = function staticFunction()
+{
+
+  if( this === Self )
+  console.log( 'static function called as static' );
+  else
+  console.log( 'static function called as method' );
+
+}
+
+//
+
 var Composes =
 {
   a : 1,
@@ -103,6 +115,10 @@ var betta = new Betta();
 
 betta.methodOfAlpha();
 betta.methodOfBetta();
+
+betta.staticFunction();
+Betta.staticFunction();
+
 console.log( 'betta.a : ' + betta.a );
 
 })();
