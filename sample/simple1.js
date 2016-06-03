@@ -94,7 +94,7 @@ var Proto =
 var Static =
 {
 
-  staticMethod : staticMethod,
+  staticFunction : staticFunction,
 
 }
 
