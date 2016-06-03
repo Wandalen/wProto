@@ -1,0 +1,37 @@
+{
+  "name": "wProto",
+  "version": "0.3.1",
+  "description": "Little library of base level helping with definining classes in Java Script.",
+  "author": "Kostiantyn Wandalen <wtory.net@domainsbyproxy.com>",
+  "license": "MIT",
+  "main": "staging/component/Proto.s",
+  "files": [
+    "staging/component/Proto.s",
+    "production"
+  ],
+  "scripts": {
+    "test": "node x",
+    "make_doc": "./doc.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Wandalen/wProto.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Wandalen/wProto/issues"
+  },
+  "dependencies": {
+    "wTools": ""
+  },
+  "devDependencies": {
+    "wTesting": ""
+  },
+  "keywords": [
+    "wTools",
+    "wProto",
+    "Class",
+    "Object",
+    "Prototype",
+    "OOP"
+  ]
+}
