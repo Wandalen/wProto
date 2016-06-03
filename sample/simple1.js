@@ -11,10 +11,9 @@ if( typeof module !== 'undefined' )
 //
 
 var _ = wTools;
-var Parent = function Alpha()
-{
-  this.methodOfAlpha = function(){ console.log( 'method of alpha' ); }
-}
+var Parent = function Alpha(){}
+Parent.prototype.init = function(){}
+Parent.prototype.methodOfAlpha = function(){ console.log( 'method of alpha' ); }
 
 var Self = function Betta()
 {
@@ -28,12 +27,9 @@ var Self = function Betta()
 var init = function init()
 {
   var self = this;
+  Parent.prototype.init.call( this );
 
   _.mapExtendFiltering( _.filter.own(),self,Composes );
-  _.mapExtendFiltering( _.filter.own(),self,Aggregates );
-
-  if( options )
-  self.copy( options );
 
 }
 
@@ -121,5 +117,6 @@ betta.staticFunction();
 Betta.staticFunction();
 
 console.log( 'betta.a : ' + betta.a );
+console.log( 'betta.b : ' + betta.b );
 
 })();
