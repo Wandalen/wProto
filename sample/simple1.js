@@ -58,6 +58,14 @@ var methodOfBetta = function methodOfBetta()
 
 //
 
+var Composes =
+{
+  a : 1,
+  b : 2,
+}
+
+//
+
 var Proto =
 {
 
@@ -68,8 +76,6 @@ var Proto =
 
   constructor: Self,
   Composes: Composes,
-  Aggregates: Aggregates,
-  Restricts: Restricts,
 
 }
 
@@ -97,5 +103,6 @@ var betta = new Betta();
 
 betta.methodOfAlpha();
 betta.methodOfBetta();
+console.log( 'betta.a : ' + betta.a );
 
 })();
