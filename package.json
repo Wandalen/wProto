@@ -1,7 +1,7 @@
 {
   "name": "wProto",
   "version": "0.3.7",
-  "description": "Little library of base level helping with definining classes in Java Script.",
+  "description": "Little library of base level helping with defining classes in Java Script.",
   "author": "Kostiantyn Wandalen <wtory.net@domainsbyproxy.com>",
   "license": "MIT",
   "main": "staging/component/Proto.s",
