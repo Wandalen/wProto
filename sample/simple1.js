@@ -4,7 +4,6 @@
 
 if( typeof module !== 'undefined' )
 {
-  require( 'wTools' );
   require( 'wProto' );
 }
 
