@@ -557,6 +557,111 @@ var propertyAddOwnRestricts = function( protoObject,defaultsObject,options )
 }
 
 // --
+// getter / setter
+// --
+
+var setterMapCollectionMake = function( o )
+{
+
+  _.assertMapOnly( o,setterMapCollectionMake.defaults );
+  _.assert( _.strIs( o.name ) );
+  var symbol = Symbol.for( o.name );
+  var elementMaker = o.elementMaker;
+
+  return function _setterMapCollection( data )
+  {
+    var self = this;
+
+    _.assert( _.objectIs( data ) );
+
+    if( self[ symbol ] )
+    {
+
+      for( var d in self[ symbol ] )
+      delete self[ symbol ][ d ];
+
+    }
+    else
+    {
+
+      self[ symbol ] = {};
+
+    }
+
+    for( var d in data )
+    {
+      self[ symbol ][ d ] = elementMaker.call( self,data[ d ] );
+    }
+
+  }
+
+}
+
+setterMapCollectionMake.defaults =
+{
+  name : null,
+  elementMaker : null,
+}
+
+//
+
+var setterFriendMake = function( o )
+{
+
+  var name = o.name;
+  var nameOfLink = o.nameOfLink;
+  var maker = o.maker;
+  var symbol = Symbol.for( name );
+
+  _.assert( arguments.length === 1 );
+  _.assert( _.strIs( name ) );
+  _.assert( _.strIs( nameOfLink ) );
+  _.assert( _.routineIs( maker ) );
+  _.assertMapOnly( o,setterFriendMake.defaults );
+
+  return function setterFriend( data )
+  {
+
+    var self = this;
+    _.assert( data === null || _.objectIs( data ) );
+
+    //console.log( 'setting ' + namename );
+
+    if( !data )
+    {
+
+      self[ symbol ] = data;
+      return;
+
+    }
+    else if( !self[ symbol ] )
+    {
+
+      var options = {};
+      options[ nameOfLink ] = self;
+      options.name = name;
+      self[ symbol ] = maker( options );
+
+    }
+
+    self[ symbol ].copy( data );
+
+    _.assert( self[ symbol ][ nameOfLink ] === null || self[ symbol ][ nameOfLink ] === self );
+    if( self[ symbol ][ nameOfLink ] !== self )
+    self[ symbol ][ nameOfLink ] = self;
+
+  }
+
+}
+
+setterFriendMake.defaults =
+{
+  name : null,
+  nameOfLink : null,
+  maker : null,
+}
+
+// --
 // prototype
 // --
 
@@ -985,6 +1090,12 @@ var Proto =
   propertyAddOwnComposes: propertyAddOwnComposes,
   propertyAddOwnAggregates: propertyAddOwnAggregates,
   propertyAddOwnRestricts: propertyAddOwnRestricts,
+
+
+  // getter / setter
+
+  setterMapCollectionMake: setterMapCollectionMake,
+  setterFriendMake: setterFriendMake,
 
 
   // prototype
