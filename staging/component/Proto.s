@@ -90,8 +90,8 @@ var _accessor = function( o )
 
   }
 
-  _assert( _.objectLike( object ),'_.accessor:','expects object as argument but got', object );
-  _assert( _.objectIs( names ),'_.accessor:','expects object names as argument but got', names );
+  _assert( _.objectLike( object ),'_.accessor :','expects object as argument but got', object );
+  _assert( _.objectIs( names ),'_.accessor :','expects object names as argument but got', names );
 
   //
 
@@ -135,7 +135,7 @@ var _accessor = function( o )
         this[ fieldSymbol ] = src;
       }
 
-      _assert( !setter || !o.readOnly,'accessor:','readOnly but setter found in',object );
+      _assert( !setter || !o.readOnly,'accessor :','readOnly but setter found in',object );
 
       // getter
 
@@ -216,15 +216,15 @@ var accessorForbid = function accessorForbid( object,names )
 
   // verification
 
-  _assert( _.objectLike( object ),'_.accessor:','expects object as argument but got', object );
-  _assert( _.objectIs( names ),'_.accessor:','expects object names as argument but got', names );
+  _assert( _.objectLike( object ),'_.accessor :','expects object as argument but got', object );
+  _assert( _.objectIs( names ),'_.accessor :','expects object names as argument but got', names );
   _.assertMapOnly( o,accessorForbid.defaults );
   _.mapComplement( o,accessorForbid.defaults );
 
 
   // message
 
-  _assert( object.constructor === null || object.constructor.name || object.constructor._name,'accessorForbid:','object should have name' );
+  _assert( object.constructor === null || object.constructor.name || object.constructor._name,'accessorForbid :','object should have name' );
   var protoName = ( object.constructor ? ( object.constructor.name || object.constructor._name || '' ) : '' ) + '.';
   var message = 'is deprecated';
   if( o.message )
@@ -363,8 +363,8 @@ var constant = function( protoObject,namesObject )
 {
 
   _assert( arguments.length === 2 );
-  _assert( _.objectLike( protoObject ),'_.constant:','namesObject is needed:', protoObject );
-  _assert( _.mapIs( namesObject ),'_.constant:','namesObject is needed:', namesObject );
+  _assert( _.objectLike( protoObject ),'_.constant :','namesObject is needed :', protoObject );
+  _assert( _.mapIs( namesObject ),'_.constant :','namesObject is needed :', namesObject );
 
   for( var n in namesObject )
   {
@@ -407,8 +407,8 @@ var mixin = function( options )
 
   if( !_.mapIs( dst ) )
   {
-    _assert( dst.constructor.prototype === dst,'mixin:','expects prototype with own constructor field' );
-    _assert( dst.constructor.name.length > 0 || dst.constructor._name.length,'mixin:','constructor should has name' );
+    _assert( dst.constructor.prototype === dst,'mixin :','expects prototype with own constructor field' );
+    _assert( dst.constructor.name.length > 0 || dst.constructor._name.length,'mixin :','constructor should has name' );
     _assert( _.routineIs( dst.init ) );
   }
 
@@ -469,7 +469,7 @@ var _propertyAddOwnDefaults = function( defaultsName,dstProto,srcDefaults,option
 {
   var options = options || {};
 
-  _assert( _.objectIs( srcDefaults ),'_.constant:','srcDefaults is needed:', srcDefaults );
+  _assert( _.objectIs( srcDefaults ),'_.constant :','srcDefaults is needed :', srcDefaults );
 
   var defaultsName = _.nameUnfielded( defaultsName );
 
@@ -623,7 +623,7 @@ var setterFriendMake = function( o )
   {
 
     var self = this;
-    _.assert( data === null || _.objectIs( data ) );
+    _.assert( data === null || _.objectIs( data ),'setterFriend : expects null or object, but got ' + _.strTypeOf( data ) );
 
     //console.log( 'setting ' + namename );
 
@@ -646,7 +646,7 @@ var setterFriendMake = function( o )
 
     self[ symbol ].copy( data );
 
-    _.assert( self[ symbol ][ nameOfLink ] === null || self[ symbol ][ nameOfLink ] === self );
+    /*_.assert( self[ symbol ][ nameOfLink ] === null || self[ symbol ][ nameOfLink ] === self );*/
     if( self[ symbol ][ nameOfLink ] !== self )
     self[ symbol ][ nameOfLink ] = self;
 
@@ -770,7 +770,7 @@ var protoArchy = function( srcObject )
 //
 
 /**
- * Make prototype for constructor repairing relationship: Composes,Aggregates,Restricts.
+ * Make prototype for constructor repairing relationship : Composes,Aggregates,Restricts.
  * Execute optional extend / supplement if such options present.
  * @param {object} options - options.
  * @param {routine} options.constructor - constructor for which prototype is needed.
@@ -887,7 +887,7 @@ protoMake.defaults =
 //
 
 /**
- * Make prototype for constructor repairing relationship: Composes,Aggregates,Restricts.
+ * Make prototype for constructor repairing relationship : Composes,Aggregates,Restricts.
  * Execute optional extend / supplement if such options present.
  * @param {object} options - options.
  * @param {routine} options.constructor - constructor for which prototype is needed.
@@ -977,9 +977,9 @@ var protoExtend = function( options )
   if( options.usingAtomicExtension )
   {
     if( _.mapOwn( prototype,{ Composes : 'Composes' } ) )
-    _.mapExtendFiltering( _.filter.atomicOwn(),prototype,prototype.Composes );
+    _.mapExtendFiltering( _.filter.atomicSrcOwn(),prototype,prototype.Composes );
     if( _.mapOwn( prototype,{ Aggregates : 'Aggregates' } ) )
-    _.mapExtendFiltering( _.filter.atomicOwn(),prototype,prototype.Aggregates );
+    _.mapExtendFiltering( _.filter.atomicSrcOwn(),prototype,prototype.Aggregates );
   }
 
   //
@@ -1042,7 +1042,7 @@ var protoUnitedInterface = function( protos )
     for( var f in proto )
     {
       if( f in protoMap )
-      throw _.err( 'protoUnitedInterface:','several objects try to unite have same field:',f );
+      throw _.err( 'protoUnitedInterface :','several objects try to unite have same field :',f );
       protoMap[ f ] = proto;
 
       var methods = {}
@@ -1076,39 +1076,39 @@ var Proto =
 
   // property
 
-  _accessorOptions: _accessorOptions,
-  _accessor: _accessor,
-  accessor: accessor,
-  accessorForbid: accessorForbid,
-  accessorForbidOnce: accessorForbidOnce,
-  accessorReadOnly: accessorReadOnly,
+  _accessorOptions : _accessorOptions,
+  _accessor : _accessor,
+  accessor : accessor,
+  accessorForbid : accessorForbid,
+  accessorForbidOnce : accessorForbidOnce,
+  accessorReadOnly : accessorReadOnly,
 
-  constant: constant,
-  mixin: mixin,
+  constant : constant,
+  mixin : mixin,
 
-  _propertyAddOwnDefaults: _propertyAddOwnDefaults,
-  propertyAddOwnComposes: propertyAddOwnComposes,
-  propertyAddOwnAggregates: propertyAddOwnAggregates,
-  propertyAddOwnRestricts: propertyAddOwnRestricts,
+  _propertyAddOwnDefaults : _propertyAddOwnDefaults,
+  propertyAddOwnComposes : propertyAddOwnComposes,
+  propertyAddOwnAggregates : propertyAddOwnAggregates,
+  propertyAddOwnRestricts : propertyAddOwnRestricts,
 
 
   // getter / setter
 
-  setterMapCollectionMake: setterMapCollectionMake,
-  setterFriendMake: setterFriendMake,
+  setterMapCollectionMake : setterMapCollectionMake,
+  setterFriendMake : setterFriendMake,
 
 
   // prototype
 
-  protoAppend: protoAppend,
-  protoHas: protoHas,
-  protoOwning: protoOwning,
-  protoArchy: protoArchy,
+  protoAppend : protoAppend,
+  protoHas : protoHas,
+  protoOwning : protoOwning,
+  protoArchy : protoArchy,
 
-  protoMake: protoMake,
-  protoExtend: protoExtend,
+  protoMake : protoMake,
+  protoExtend : protoExtend,
 
-  protoUnitedInterface: protoUnitedInterface,
+  protoUnitedInterface : protoUnitedInterface,
 
 }
 

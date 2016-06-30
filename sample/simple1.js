@@ -1,4 +1,4 @@
-( function _Consequence_s_(){
+( function _simple1_js_(){
 
 'use strict';
 
