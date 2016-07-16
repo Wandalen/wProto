@@ -106,7 +106,7 @@ var _accessor = function( o )
       var rawName = _name[ n ];
 
       var redefinition = false;
-      var parent = object.constructor ? object.constructor.prototype.__proto__ : null;
+      var parent = object.constructor ? Object.getPrototypeOf( object.constructor.prototype ) : null;
       if( parent )
       redefinition = parent[ rawName + 'Get' ] !== undefined || parent[ '_' + rawName + 'Get' ] !== undefined;
 
@@ -388,7 +388,7 @@ var constant = function( protoObject,namesObject )
 
 /**
  * Mixin methods and fields into prototype of another object.
- * @param {object} o - o.
+ * @param {object} o - options.
  * @method mixin
  * @memberof wTools#
  */
@@ -397,13 +397,13 @@ var mixin = function( o )
 {
 
   var dst = o.dst;
-  var Functors = o.Functors;
-  var Proto = o.Proto;
+  var functors = o.functors;
+  var proto = o.proto;
 
   _assert( arguments.length === 1 );
   _assert( _.objectIs( dst ) );
   _assert( _.strIs( o.name ) );
-  _assert( _.mapIs( o.Proto ) );
+  _assert( _.mapIs( o.proto ) );
   _.assertMapOnly( o,mixin.defaults );
 
   if( !_.mapIs( dst ) )
@@ -415,31 +415,34 @@ var mixin = function( o )
 
   //
 
-  _.mapComplement( dst,Proto );
+  _.mapComplement( dst,proto );
 
   //
 
-  if( o.Proto.Composes )
-  propertyAddOwnComposes( dst,o.Proto.Composes,{ override : false } );
+  if( o.proto.Composes )
+  propertyAddOwnComposes( dst,o.proto.Composes,{ override : false } );
 
-  if( o.Proto.Aggregates )
-  propertyAddOwnAggregates( dst,o.Proto.Aggregates,{ override : false } );
+  if( o.proto.Aggregates )
+  propertyAddOwnAggregates( dst,o.proto.Aggregates,{ override : false } );
 
-  if( o.Proto.Restricts )
-  propertyAddOwnRestricts( dst,o.Proto.Restricts,{ override : false } );
+  if( o.proto.Associates )
+  propertyAddOwnAssociates( dst,o.proto.Associates,{ override : false } );
+
+  if( o.proto.Restricts )
+  propertyAddOwnRestricts( dst,o.proto.Restricts,{ override : false } );
 
   //
 
-  if( Functors )
-  for( var m in Functors )
-  dst[ m ] = Functors[ m ]( dst );
+  if( functors )
+  for( var m in functors )
+  dst[ m ] = functors[ m ]( dst );
 
   //
 
   if( !dst._mixins )
   dst._mixins = {};
 
-  _.assert( !dst._mixins[ o.name ],'try to mixin same mixin same several times : ' + o.name + ' into ' + 'dst.constructor.name' );
+  _.assert( !dst._mixins[ o.name ],'try to mixin same mixin same several times : ' + o.name + ' into ' + dst.constructor.name );
 
   dst._mixins[ o.name ] = 1;
 
@@ -448,8 +451,8 @@ var mixin = function( o )
 mixin.defaults =
 {
   dst : null,
-  Proto : null,
-  Functors : null,
+  proto : null,
+  functors : null,
   name : null,
 }
 
@@ -460,7 +463,7 @@ mixin.defaults =
  * @param {object} defaultsName - name of defualts container.
  * @param {object} dstProto - prototype of class which will get new constant property.
  * @param {object} srcDefaults - name/value map of defaults.
- * @param {object} o - o.
+ * @param {object} o - options.
  * @param {bool} o.override - to override defaults if exist.
  * @method _propertyAddOwnDefaults
  * @memberof _.wTools#
@@ -479,7 +482,7 @@ var _propertyAddOwnDefaults = function( defaultsName,dstProto,srcDefaults,o )
     var container = dstProto[ defaultsName.coded ];
     dstProto[ defaultsName.coded ] = {};
     if( container )
-    dstProto[ defaultsName.coded ].__proto__ = container;
+    Object.setPrototypeOf( dstProto[ defaultsName.coded ], container );
   }
 
   var container = dstProto[ defaultsName.coded ];
@@ -503,7 +506,7 @@ var _propertyAddOwnDefaults = function( defaultsName,dstProto,srcDefaults,o )
  * Add own defaults to object. Create new defaults container, if there is no such own.
  * @param {object} protoObject - prototype of class which will get new constant property.
  * @param {object} defaultsObject - name/value map of defaults.
- * @param {object} o - o.
+ * @param {object} o - options.
  * @param {bool} o.override - to override defaults if exist.
  * @method propertyAddOwnComposes
  * @memberof _.Property#
@@ -523,7 +526,7 @@ var propertyAddOwnComposes = function( protoObject,defaultsObject,o )
  * Add own aggregates to object. Create new aggregates container, if there is no such own.
  * @param {object} protoObject - prototype of class which will get new constant property.
  * @param {object} aggregatesObject - name/value map of aggregates.
- * @param {object} o - o.
+ * @param {object} o - options.
  * @param {bool} o.override - to override defaults if exist.
  * @method propertyAddOwnAggregates
  * @memberof _.wTools#
@@ -540,10 +543,30 @@ var propertyAddOwnAggregates = function( protoObject,defaultsObject,o )
 //
 
 /**
+ * Add own associates to object. Create new associates container, if there is no such own.
+ * @param {object} protoObject - prototype of class which will get new constant property.
+ * @param {object} aggregatesObject - name/value map of associates.
+ * @param {object} o - options.
+ * @param {bool} o.override - to override defaults if exist.
+ * @method propertyAddOwnAssociates
+ * @memberof _.wTools#
+ */
+
+var propertyAddOwnAssociates = function( protoObject,defaultsObject,o )
+{
+
+  var name = { Associates : 'Associates' };
+  return _propertyAddOwnDefaults( name,protoObject,defaultsObject,o );
+
+}
+
+//
+
+/**
  * Add own restricts to object. Create new restricts container, if there is no such own.
  * @param {object} protoObject - prototype of class which will get new constant property.
  * @param {object} restrictsObject - name/value map of restricts.
- * @param {object} o - o.
+ * @param {object} o - options.
  * @param {bool} o.override - to override defaults if exist.
  * @method propertyAddOwnRestricts
  * @memberof _.wTools#
@@ -704,6 +727,43 @@ setterCopyable_gen.defaults =
   maker : null,
 }
 
+//
+
+var setterBufferFrom_gen = function( o )
+{
+
+  var name = _.nameUnfielded( o.name ).coded;
+  var bufferConstructor = o.bufferConstructor;
+  var symbol = Symbol.for( name );
+
+  _.assert( arguments.length === 1 );
+  _.assert( _.strIs( name ) );
+  _.assert( _.routineIs( bufferConstructor ) );
+  _.assertMapOnly( o,setterBufferFrom_gen.defaults );
+
+  return function setterBufferFrom( data )
+  {
+    var self = this;
+
+    if( data === null )
+    {
+    }
+    else
+    {
+      data = _.bufferFrom({ src : data, bufferConstructor : bufferConstructor });
+    }
+
+    self[ symbol ] = data;
+  }
+
+}
+
+setterBufferFrom_gen.defaults =
+{
+  name : null,
+  bufferConstructor : null,
+}
+
 // --
 // prototype
 // --
@@ -727,7 +787,7 @@ var protoAppend = function( dstObject )
     _assert( _.objectIs( proto ) );
 
     var parent = _.protoArchy( dstObject );
-    parent.__proto__ = proto;
+    Object.setPrototypeOf( parent, proto );
 
   }
 
@@ -749,8 +809,9 @@ var protoHas = function( srcProto,insProto )
 
   do
   {
-    if( srcProto === insProto ) return true;
-    srcProto = srcProto.__proto__;
+    if( srcProto === insProto )
+    return true;
+    srcProto = Object.getPrototypeOf( srcProto );
   }
   while( srcProto !== Object.prototype );
 
@@ -783,7 +844,7 @@ var protoOwning = function( srcObject,names )
     if( has )
     return srcObject;
 
-    srcObject = srcObject.__proto__;
+    srcObject = Object.getPrototypeOf( srcObject );
   }
   while( srcObject !== Object.prototype );
 
@@ -804,8 +865,8 @@ var protoArchy = function( srcObject )
 
   _assert( _.objectIs( srcObject ) );
 
-  while( srcObject.__proto__ !== Object.prototype )
-  srcObject = srcObject.__proto__;
+  while( Object.getPrototypeOf( srcObject ) !== Object.prototype )
+  srcObject = Object.getPrototypeOf( srcObject );
 
   return srcObject;
 }
@@ -813,9 +874,9 @@ var protoArchy = function( srcObject )
 //
 
 /**
- * Make prototype for constructor repairing relationship : Composes,Aggregates,Restricts.
+ * Make prototype for constructor repairing relationship : Composes, Aggregates, Associates, Restricts.
  * Execute optional extend / supplement if such o present.
- * @param {object} o - o.
+ * @param {object} o - options.
  * @param {routine} o.constructor - constructor for which prototype is needed.
  * @param {routine} [o.parent] - constructor of parent class.
  * @param {object} [o.extend] - extend prototype by this map.
@@ -845,8 +906,9 @@ var ClassFacility =
 {
   Composes : 'Composes',
   Aggregates : 'Aggregates',
+  Associates : 'Associates',
   Restricts : 'Restricts',
-  Constitutes : 'Constitutes',
+  //Constitutes : 'Constitutes',
 }
 
 var protoMake = function( o )
@@ -888,8 +950,10 @@ var protoMake = function( o )
   if( !o.parent )
   o.parent = null;
 
+/*
   if( o.parent === Object )
   debugger;
+*/
 
   //if( o.parent && o.parent !== Object )
   //debugger;
@@ -951,9 +1015,9 @@ protoMake.defaults =
 //
 
 /**
- * Make prototype for constructor repairing relationship : Composes,Aggregates,Restricts.
+ * Make prototype for constructor repairing relationship : Composes, Aggregates, Associates, Restricts.
  * Execute optional extend / supplement if such o present.
- * @param {object} o - o.
+ * @param {object} o - options.
  * @param {routine} o.constructor - constructor for which prototype is needed.
  * @param {routine} [o.parent] - constructor of parent class.
  * @param {object} [o.extend] - extend prototype by this map.
@@ -978,6 +1042,7 @@ var protoExtend = function( o )
   _.assertMapNoUndefine( o );
   _.mapSupplement( o,protoExtend.defaults );
 
+  /**/
 
   if( o.usingOriginalPrototype && o.extend )
   {
@@ -987,7 +1052,7 @@ var protoExtend = function( o )
 
   var prototype = o.constructor.prototype;
 
-  // extend fields and methods
+  /* extend fields and methods */
 
   if( o.extend )
   {
@@ -1008,7 +1073,7 @@ var protoExtend = function( o )
 
   // extend relationships
 
-  var ParentPrototype = prototype.__proto__;
+  var ParentPrototype = Object.getPrototypeOf( prototype );
   if( o.usingOriginalPrototype || 1 )
   {
 
@@ -1030,7 +1095,7 @@ var protoExtend = function( o )
     if( _hasOwnProperty.call( prototype,f ) && ParentPrototype[ f ] )
     {
       _assert( prototype[ f ].constructor === ParentPrototype[ f ].constructor || prototype[ f ] === Object );
-      prototype[ f ].__proto__ = ParentPrototype[ f ];
+      Object.setPrototypeOf( prototype[ f ], ParentPrototype[ f ] );
     }
 */
   }
@@ -1043,11 +1108,14 @@ var protoExtend = function( o )
     _.mapExtendFiltering( _.filter.atomicSrcOwn(),prototype,prototype.Composes );
     if( _.mapOwn( prototype,{ Aggregates : 'Aggregates' } ) )
     _.mapExtendFiltering( _.filter.atomicSrcOwn(),prototype,prototype.Aggregates );
+    if( _.mapOwn( prototype,{ Associates : 'Associates' } ) )
+    _.mapExtendFiltering( _.filter.atomicSrcOwn(),prototype,prototype.Associates );
   }
 
   //
 
-  _.assert( _hasOwnProperty.call( o.constructor.prototype,'constructor' ),'prototype should has own constructor' );
+  _assert( _hasOwnProperty.call( o.constructor.prototype,'constructor' ),'prototype should has own constructor' );
+  _assert( o.constructor.prototype.Constitutes === undefined );
 
   return prototype;
 }
@@ -1068,7 +1136,7 @@ protoExtend.defaults =
  * Make united interface for several maps. Access to single map cause read and write to original maps.
  * @param {array} protos - maps to united.
  * @return {object} united interface.
- * @method protoMake
+ * @method protoUnitedInterface
  * @memberof wTools#
  */
 
@@ -1154,6 +1222,7 @@ var Proto =
   _propertyAddOwnDefaults : _propertyAddOwnDefaults,
   propertyAddOwnComposes : propertyAddOwnComposes,
   propertyAddOwnAggregates : propertyAddOwnAggregates,
+  propertyAddOwnAssociates : propertyAddOwnAssociates,
   propertyAddOwnRestricts : propertyAddOwnRestricts,
 
 
@@ -1162,6 +1231,7 @@ var Proto =
   setterMapCollection_gen : setterMapCollection_gen,
   setterFriend_gen : setterFriend_gen,
   setterCopyable_gen : setterCopyable_gen,
+  setterBufferFrom_gen : setterBufferFrom_gen,
 
 
   // prototype
