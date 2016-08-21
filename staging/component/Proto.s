@@ -1,17 +1,18 @@
-(function(){
+(function _Proto_s_(){
 
 'use strict';
 
 if( typeof module !== 'undefined' )
 {
 
+  if( typeof wBase === 'undefined' )
   try
   {
-    require( 'wTools' );
+    require( '../wTools.s' );
   }
   catch( err )
   {
-    require( '../wTools.s' );
+    require( 'wTools' );
   }
 
 }
@@ -308,37 +309,6 @@ var accessorForbidOnce = function( object,names )
   o.allowMultiple = 1;
 
   return accessorForbid( o );
-
-/*
-  var object = o.object;
-  var names = o.names;
-
-  //
-
-  for( var n in names )
-  {
-
-    var encodedName = n;
-    var rawName = names[ n ];
-    var getterName = object[ rawName + 'Get' ] ? rawName + 'Get' : '_' + rawName + 'Get';
-
-    var descriptor = Object.getOwnPropertyDescriptor( object,encodedName );
-
-    if( !descriptor )
-    continue;
-    if( !descriptor.set )
-    continue
-
-    if( descriptor.set.forbid )
-    delete names[ n ];
-
-  }
-
-  //
-
-  return accessorForbid( o );
-*/
-
 }
 
 //
@@ -908,10 +878,9 @@ var ClassFacility =
   Aggregates : 'Aggregates',
   Associates : 'Associates',
   Restricts : 'Restricts',
-  //Constitutes : 'Constitutes',
 }
 
-var protoMake = function( o )
+var protoMake = function protoMake( o )
 {
 
   var has =
@@ -927,40 +896,46 @@ var protoMake = function( o )
     type : 'type',
   }
 
+  /**/
+
   _assert( arguments.length === 1 );
   _assert( _.objectIs( o ) );
 
   _assert( _.routineIs( o.constructor ) );
   _assert( o.constructor.name || o.constructor._name );
   _assert( _hasOwnProperty.call( o.constructor.prototype,'constructor' ) );
+
   _.assertMapOwnAll( o.constructor.prototype,has );
   _.assertMapOwnNone( o.constructor.prototype,hasNot );
 
-  _assert( _.routineIs( o.parent ) || o.parent === undefined || o.parent === null );
+  _assert( _.routineIs( o.parent ) || o.parent === undefined || o.parent === null,'wrong type of parent :',_.strTypeOf( 'o.parent' ) );
   _assert( _.objectIs( o.extend ) || o.extend === undefined );
   _assert( _.objectIs( o.supplement ) || o.supplement === undefined );
-  _.assertMapOnly( o,protoMake.defaults );
-  _.assertMapNoUndefine( o );
-  _.mapSupplement( o,protoMake.defaults );
+  _.assert( o.parent !== o.extend );
 
-  //_assert( !_hasOwnProperty.call( o.extend,'constructor' ),'cant rewrite constructor, using original prototype' );
+  _.routineOptions( protoMake,o );
+
+  /**/
 
   var prototype;
 
   if( !o.parent )
   o.parent = null;
 
-/*
-  if( o.parent === Object )
-  debugger;
-*/
-
-  //if( o.parent && o.parent !== Object )
-  //debugger;
+  /* make prototype */
 
   if( o.usingOriginalPrototype )
   {
     prototype = o.constructor.prototype;
+
+    if( _hasOwnProperty.call( o.constructor.prototype,'constructor' ) )
+    {
+      if( o.extend )
+      _assert( !o.extend.constructor || o.extend.constructor === o.constructor,'cant rewrite constructor, using original prototype' );
+      if( o.supplement )
+      _assert( !o.supplement.constructor || o.supplement.constructor === o.constructor,'cant rewrite constructor, using original prototype' );
+    }
+
   }
   else
   {
@@ -969,12 +944,18 @@ var protoMake = function( o )
       _.assert( Object.keys( o.constructor.prototype ).length === 0 );
       _.assert( o.constructor.prototype.constructor === o.constructor );
     }
-    //_.assert( !o.constructor.prototype || o.constructor.prototype === Object.prototype );
-    //prototype = o.constructor.prototype = Object.create( o.parent ? o.parent.prototype : Object.prototype );
     prototype = o.constructor.prototype = Object.create( o.parent ? o.parent.prototype : null );
+    prototype.constructor = null;
   }
 
-  _.assert( o.parent !== o.extend );
+  /**/
+
+/*
+  if( o.constructor.name.indexOf( 'FileProvider' ) != -1 )
+  debugger;
+*/
+
+  /* extend */
 
   _.protoExtend
   ({
@@ -983,18 +964,9 @@ var protoMake = function( o )
     supplement : o.supplement,
     static : o.static,
     usingAtomicExtension : o.usingAtomicExtension,
-    usingOriginalPrototype : o.usingOriginalPrototype,
   });
 
-  // name
-
-  //if( o.usingGlobalName )
-  //_global_[ o.constructor.name ] = o.constructor;
-
-  //if( o.wname )
-  //wTools[ _.nameUnfielded( o.wname ).coded ] = o.constructor;
-
-  //
+  /**/
 
   return prototype;
 }
@@ -1006,8 +978,6 @@ protoMake.defaults =
   extend : null,
   supplement : null,
   static : null,
-  //wname : null,
-  //usingGlobalName : false,
   usingAtomicExtension : false,
   usingOriginalPrototype : false,
 }
@@ -1026,7 +996,7 @@ protoMake.defaults =
  * @memberof wTools#
  */
 
-var protoExtend = function( o )
+var protoExtend = function protoExtend( o )
 {
 
   _assert( arguments.length === 1 );
@@ -1035,20 +1005,10 @@ var protoExtend = function( o )
   _assert( _.routineIs( o.constructor ) );
   _assert( o.constructor.name || o.constructor._name,'class constructor should have name' );
 
-  _assert( _.routineIs( o.parent ) || o.parent === undefined || o.parent === null );
   _assert( _.objectIs( o.extend ) || o.extend === undefined || o.extend === null );
   _assert( _.objectIs( o.supplement ) || o.supplement === undefined || o.supplement === null );
-  _.assertMapOnly( o,protoExtend.defaults );
-  _.assertMapNoUndefine( o );
-  _.mapSupplement( o,protoExtend.defaults );
 
-  /**/
-
-  if( o.usingOriginalPrototype && o.extend )
-  {
-    if( _hasOwnProperty.call( o.constructor.prototype,'constructor' ) )
-    _assert( !o.extend.constructor || o.extend.constructor === o.constructor,'cant rewrite constructor, using original prototype' );
-  }
+  _.routineOptions( protoExtend,o );
 
   var prototype = o.constructor.prototype;
 
@@ -1063,7 +1023,13 @@ var protoExtend = function( o )
   }
 
   if( o.supplement )
-  _.mapSupplement( prototype,o.supplement );
+  {
+    var supplement = _.mapBut( o.supplement,ClassFacility );
+    _.mapSupplement( prototype,supplement );
+    if( !prototype.constructor )
+    if( _hasOwnProperty.call( o.supplement,'constructor' ) )
+    prototype.constructor = o.supplement.constructor;
+  }
 
   if( o.static )
   {
@@ -1071,36 +1037,19 @@ var protoExtend = function( o )
     _.mapSupplement( o.constructor,o.static );
   }
 
-  // extend relationships
+  /* extend relationships */
 
-  var ParentPrototype = Object.getPrototypeOf( prototype );
-  if( o.usingOriginalPrototype || 1 )
-  {
+  if( o.extend )
+  for( var f in ClassFacility )
+  if( o.extend[ f ] )
+  _propertyAddOwnDefaults( f,prototype,o.extend[ f ],{ override : true } );
 
-    if( o.extend )
-    for( var f in ClassFacility )
-    if( o.extend[ f ] )
-    _propertyAddOwnDefaults( f,prototype,o.extend[ f ],{ override : true } );
+  if( o.supplement )
+  for( var f in ClassFacility )
+  if( o.supplement[ f ] )
+  _propertyAddOwnDefaults( f,prototype,o.supplement[ f ],{ override : false } );
 
-    if( o.supplement )
-    for( var f in ClassFacility )
-    if( o.supplement[ f ] )
-    _propertyAddOwnDefaults( f,prototype,o.supplement[ f ],{ override : false } );
-
-  }
-  else
-  {
-/*
-    for( var f in ClassFacility )
-    if( _hasOwnProperty.call( prototype,f ) && ParentPrototype[ f ] )
-    {
-      _assert( prototype[ f ].constructor === ParentPrototype[ f ].constructor || prototype[ f ] === Object );
-      Object.setPrototypeOf( prototype[ f ], ParentPrototype[ f ] );
-    }
-*/
-  }
-
-  // atomic extension
+  /* atomic extension */
 
   if( o.usingAtomicExtension )
   {
@@ -1112,9 +1061,11 @@ var protoExtend = function( o )
     _.mapExtendFiltering( _.filter.atomicSrcOwn(),prototype,prototype.Associates );
   }
 
-  //
+  /* validation */
 
-  _assert( _hasOwnProperty.call( o.constructor.prototype,'constructor' ),'prototype should has own constructor' );
+  _assert( prototype === o.constructor.prototype );
+  _assert( _hasOwnProperty.call( prototype,'constructor' ),'prototype should has own constructor' );
+  _assert( _.routineIs( prototype.constructor ),'prototype should has own constructor' );
   _assert( o.constructor.prototype.Constitutes === undefined );
 
   return prototype;
@@ -1127,7 +1078,6 @@ protoExtend.defaults =
   supplement : null,
   static : null,
   usingAtomicExtension : false,
-  usingOriginalPrototype : false,
 }
 
 //
@@ -1247,6 +1197,8 @@ var Proto =
   protoUnitedInterface : protoUnitedInterface,
 
 }
+
+_global_.wProto = Proto;
 
 _.mapExtend( Self, Proto );
 
