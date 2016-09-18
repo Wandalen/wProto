@@ -1,4 +1,4 @@
-(function _Proto_s_(){
+( function _Proto_s_() {
 
 'use strict';
 
@@ -15,6 +15,15 @@ if( typeof module !== 'undefined' )
     require( 'wTools' );
   }
 
+  if( !wTools.nameFielded )
+  try
+  {
+    require( './NameTools.s' );
+  }
+  catch( err )
+  {
+  }
+
 }
 
 var Self = wTools;
@@ -23,6 +32,8 @@ var _ = wTools;
 var _hasOwnProperty = Object.hasOwnProperty;
 var _assert = _.assert;
 var _nameFielded = _.nameFielded;
+
+_.assert( _.routineIs( _nameFielded ) );
 
 // --
 // property
@@ -64,12 +75,12 @@ var _accessor = function( o )
   var methods = o.methods;
   var message = o.message;
 
-  // verification
+  /* verification */
 
   _assert( !_.atomicIs( object ) );
   _assert( !_.atomicIs( methods ) );
   _assert( !o.message || _.arrayIs( o.message ) );
-  _.assertMapOnly( o,_accessor.defaults );
+  _.assertMapHasOnly( o,_accessor.defaults );
   _.mapComplement( o,_accessor.defaults );
 
   if( o.strict /*&& o.preserveValues*/ )
@@ -214,12 +225,11 @@ var accessorForbid = function accessorForbid( object,names )
   var object = o.object;
   var names = o.names;
 
-
   // verification
 
   _assert( _.objectLike( object ),'_.accessor :','expects object as argument but got', object );
   _assert( _.objectIs( names ),'_.accessor :','expects object names as argument but got', names );
-  _.assertMapOnly( o,accessorForbid.defaults );
+  _.assertMapHasOnly( o,accessorForbid.defaults );
   _.mapComplement( o,accessorForbid.defaults );
 
 
@@ -324,17 +334,17 @@ var accessorReadOnly = function accessorReadOnly( object,names )
 
 /**
  * Makes constants properties.
- * @param {object} protoObject - prototype of class which will get new constant property.
+ * @param {object} dstProto - prototype of class which will get new constant property.
  * @param {object} namesObject - name/value map of constants.
  * @method constant
  * @memberof _.Property#
  */
 
-var constant = function( protoObject,namesObject )
+var constant = function( dstProto,namesObject )
 {
 
   _assert( arguments.length === 2 );
-  _assert( _.objectLike( protoObject ),'_.constant :','namesObject is needed :', protoObject );
+  _assert( _.objectLike( dstProto ),'_.constant :','namesObject is needed :', dstProto );
   _assert( _.mapIs( namesObject ),'_.constant :','namesObject is needed :', namesObject );
 
   for( var n in namesObject )
@@ -343,7 +353,7 @@ var constant = function( protoObject,namesObject )
     var encodedName = n;
     var value = namesObject[ n ];
 
-    Object.defineProperty( protoObject, encodedName,
+    Object.defineProperty( dstProto, encodedName,
     {
       value : value,
       enumerable : true,
@@ -367,14 +377,24 @@ var mixin = function( o )
 {
 
   var dst = o.dst;
-  var functors = o.functors;
-  var proto = o.proto;
+  var mixinDefaults =
+  {
+    name : null,
+    mixin : null,
+    Extend : null,
+    Supplement : null,
+    Functor : null,
+  }
 
   _assert( arguments.length === 1 );
   _assert( _.objectIs( dst ) );
-  _assert( _.strIs( o.name ) );
-  _assert( _.mapIs( o.proto ) );
-  _.assertMapOnly( o,mixin.defaults );
+  _assert( _.routineIs( o.mixin.mixin ) );
+  _assert( _.strIs( o.mixin.name ) );
+  _assert( _.mapIs( o.mixin.Extend ) || o.mixin.Extend === undefined || o.mixin.Extend === null );
+  _assert( _.mapIs( o.mixin.Supplement ) || o.mixin.Supplement === undefined || o.mixin.Supplement === null );
+  //_assert( _.mapIs( o.mixin ) );
+  _.assertMapHasOnly( o,mixin.defaults );
+  _.assertMapOwnOnly( o.mixin,mixinDefaults );
 
   if( !_.mapIs( dst ) )
   {
@@ -383,110 +403,141 @@ var mixin = function( o )
     _assert( _.routineIs( dst.init ) );
   }
 
-  //
+  /* */
 
-  _.mapComplement( dst,proto );
+  if( o.mixin.Supplement )
+  _.mapSupplement( dst,o.mixin.Supplement );
+  if( o.mixin.Extend )
+  _.mapExtend( dst,o.mixin.Extend );
 
-  //
+  /* facility */
 
-  if( o.proto.Composes )
-  propertyAddOwnComposes( dst,o.proto.Composes,{ override : false } );
+  if( o.mixin.Supplement )
+  for( var f in ClassFacility )
+  if( o.mixin.Supplement[ f ] )
+  _propertyAddOwnDefaults
+  ({
+    facilityName : f,
+    dstProto : dst,
+    srcDefaults : o.mixin.Supplement[ f ],
+    override : false,
+  });
 
-  if( o.proto.Aggregates )
-  propertyAddOwnAggregates( dst,o.proto.Aggregates,{ override : false } );
+  if( o.mixin.Extend )
+  for( var f in ClassFacility )
+  if( o.mixin.Extend[ f ] )
+  _propertyAddOwnDefaults
+  ({
+    facilityName : f,
+    dstProto : dst,
+    srcDefaults : o.mixin.Extend[ f ],
+    override : true,
+  });
 
-  if( o.proto.Associates )
-  propertyAddOwnAssociates( dst,o.proto.Associates,{ override : false } );
+  /* functor */
 
-  if( o.proto.Restricts )
-  propertyAddOwnRestricts( dst,o.proto.Restricts,{ override : false } );
+  if( o.mixin.Functor )
+  for( var m in o.mixin.Functor )
+  dst[ m ] = o.mixin.Functor[ m ].call( o,dst[ m ] );
 
-  //
-
-  if( functors )
-  for( var m in functors )
-  dst[ m ] = functors[ m ]( dst );
-
-  //
+  /* field */
 
   if( !dst._mixins )
   dst._mixins = {};
 
-  _.assert( !dst._mixins[ o.name ],'try to mixin same mixin same several times : ' + o.name + ' into ' + dst.constructor.name );
+  _.assert( !dst._mixins[ o.mixin.name ],'attempt to mixin same mixin same several times : ' + o.mixin.name + ' into ' + dst.constructor.name );
 
-  dst._mixins[ o.name ] = 1;
+  dst._mixins[ o.mixin.name ] = 1;
 
 }
 
 mixin.defaults =
 {
   dst : null,
-  proto : null,
-  functors : null,
-  name : null,
+  mixin : null,
+  // proto : null,
+  // functors : null,
+  // name : null,
 }
 
 //
 
 /**
  * Add own defaults to object. Create new defaults container, if there is no such own.
- * @param {object} defaultsName - name of defualts container.
- * @param {object} dstProto - prototype of class which will get new constant property.
- * @param {object} srcDefaults - name/value map of defaults.
  * @param {object} o - options.
+ * @param {object} o.defaultsName - name of defualts container.
+ * @param {object} o.dstProto - prototype of class which will get new constant property.
+ * @param {object} o.srcDefaults - name/value map of defaults.
  * @param {bool} o.override - to override defaults if exist.
  * @method _propertyAddOwnDefaults
  * @memberof _.wTools#
  */
 
-var _propertyAddOwnDefaults = function( defaultsName,dstProto,srcDefaults,o )
+//var _propertyAddOwnDefaults = function( defaultsName,dstProto,srcDefaults,o )
+var _propertyAddOwnDefaults = function( o )
 {
   var o = o || {};
 
-  _assert( _.objectIs( srcDefaults ),'_.constant :','srcDefaults is needed :', srcDefaults );
+  _assert( arguments.length === 1 );
+  _assert( _.objectIs( o.srcDefaults ),'expects object ( o.srcDefaults ), got', _.strTypeOf( o.srcDefaults ) );
+  _.routineOptions( _propertyAddOwnDefaults,o );
 
-  var defaultsName = _.nameUnfielded( defaultsName );
+  o.facilityName = _.nameUnfielded( o.facilityName );
 
-  if( !_hasOwnProperty.call( dstProto,defaultsName.coded ) )
+  if( !_hasOwnProperty.call( o.dstProto,o.facilityName.coded ) )
   {
-    var container = dstProto[ defaultsName.coded ];
-    dstProto[ defaultsName.coded ] = {};
-    if( container )
-    Object.setPrototypeOf( dstProto[ defaultsName.coded ], container );
+    var facility = o.dstProto[ o.facilityName.coded ];
+    o.dstProto[ o.facilityName.coded ] = {};
+    if( facility )
+    Object.setPrototypeOf( o.dstProto[ o.facilityName.coded ], facility );
   }
 
-  var container = dstProto[ defaultsName.coded ];
+  var facility = o.dstProto[ o.facilityName.coded ];
 
-  for( var n in srcDefaults )
+  for( var n in o.srcDefaults )
   {
 
     if( o.override === false )
-    if( n in container )
+    if( n in facility )
     continue;
 
-    container[ n ] = srcDefaults[ n ];
+    facility[ n ] = o.srcDefaults[ n ];
 
   }
 
+}
+
+_propertyAddOwnDefaults.defaults =
+{
+  facilityName : null,
+  dstProto : null,
+  srcDefaults : null,
+  override : false,
 }
 
 //
 
 /**
  * Add own defaults to object. Create new defaults container, if there is no such own.
- * @param {object} protoObject - prototype of class which will get new constant property.
- * @param {object} defaultsObject - name/value map of defaults.
- * @param {object} o - options.
- * @param {bool} o.override - to override defaults if exist.
+ * @param {object} dstProto - prototype of class which will get new constant property.
+ * @param {object} srcDefaults - name/value map of defaults.
  * @method propertyAddOwnComposes
  * @memberof _.Property#
  */
 
-var propertyAddOwnComposes = function( protoObject,defaultsObject,o )
+var propertyAddOwnComposes = function( dstProto,srcDefaults )
 {
 
-  var name = { Composes : 'Composes' };
-  return _propertyAddOwnDefaults( name,protoObject,defaultsObject,o );
+  _.assert( arguments.length === 2 );
+
+  var facilityName = { Composes : 'Composes' };
+  return _propertyAddOwnDefaults
+  ({
+    facilityName : facilityName,
+    dstProto : dstProto,
+    srcDefaults : srcDefaults,
+    override : false,
+  });
 
 }
 
@@ -494,19 +545,25 @@ var propertyAddOwnComposes = function( protoObject,defaultsObject,o )
 
 /**
  * Add own aggregates to object. Create new aggregates container, if there is no such own.
- * @param {object} protoObject - prototype of class which will get new constant property.
- * @param {object} aggregatesObject - name/value map of aggregates.
- * @param {object} o - options.
- * @param {bool} o.override - to override defaults if exist.
+ * @param {object} dstProto - prototype of class which will get new constant property.
+ * @param {object} srcDefaults - name/value map of defaults.
  * @method propertyAddOwnAggregates
  * @memberof _.wTools#
  */
 
-var propertyAddOwnAggregates = function( protoObject,defaultsObject,o )
+var propertyAddOwnAggregates = function( dstProto,srcDefaults )
 {
 
-  var name = { Aggregates : 'Aggregates' };
-  return _propertyAddOwnDefaults( name,protoObject,defaultsObject,o );
+  _.assert( arguments.length === 2 );
+
+  var facilityName = { Aggregates : 'Aggregates' };
+  return _propertyAddOwnDefaults
+  ({
+    facilityName : facilityName,
+    dstProto : dstProto,
+    srcDefaults : srcDefaults,
+    override : false,
+  });
 
 }
 
@@ -514,19 +571,25 @@ var propertyAddOwnAggregates = function( protoObject,defaultsObject,o )
 
 /**
  * Add own associates to object. Create new associates container, if there is no such own.
- * @param {object} protoObject - prototype of class which will get new constant property.
- * @param {object} aggregatesObject - name/value map of associates.
- * @param {object} o - options.
- * @param {bool} o.override - to override defaults if exist.
+ * @param {object} dstProto - prototype of class which will get new constant property.
+ * @param {object} srcDefaults - name/value map of defaults.
  * @method propertyAddOwnAssociates
  * @memberof _.wTools#
  */
 
-var propertyAddOwnAssociates = function( protoObject,defaultsObject,o )
+var propertyAddOwnAssociates = function( dstProto,srcDefaults )
 {
 
-  var name = { Associates : 'Associates' };
-  return _propertyAddOwnDefaults( name,protoObject,defaultsObject,o );
+  _.assert( arguments.length === 2 );
+
+  var facilityName = { Associates : 'Associates' };
+  return _propertyAddOwnDefaults
+  ({
+    facilityName : facilityName,
+    dstProto : dstProto,
+    srcDefaults : srcDefaults,
+    override : false,
+  });
 
 }
 
@@ -534,19 +597,25 @@ var propertyAddOwnAssociates = function( protoObject,defaultsObject,o )
 
 /**
  * Add own restricts to object. Create new restricts container, if there is no such own.
- * @param {object} protoObject - prototype of class which will get new constant property.
- * @param {object} restrictsObject - name/value map of restricts.
- * @param {object} o - options.
- * @param {bool} o.override - to override defaults if exist.
+ * @param {object} dstProto - prototype of class which will get new constant property.
+ * @param {object} srcDefaults - name/value map of defaults.
  * @method propertyAddOwnRestricts
  * @memberof _.wTools#
  */
 
-var propertyAddOwnRestricts = function( protoObject,defaultsObject,o )
+var propertyAddOwnRestricts = function( dstProto,srcDefaults )
 {
 
-  var name = { Restricts : 'Restricts' };
-  return _propertyAddOwnDefaults( name,protoObject,defaultsObject,o );
+  _.assert( arguments.length === 2 );
+
+  var facilityName = { Restricts : 'Restricts' };
+  return _propertyAddOwnDefaults
+  ({
+    facilityName : facilityName,
+    dstProto : dstProto,
+    srcDefaults : srcDefaults,
+    override : false,
+  });
 
 }
 
@@ -557,7 +626,7 @@ var propertyAddOwnRestricts = function( protoObject,defaultsObject,o )
 var setterMapCollection_gen = function( o )
 {
 
-  _.assertMapOnly( o,setterMapCollection_gen.defaults );
+  _.assertMapHasOnly( o,setterMapCollection_gen.defaults );
   _.assert( _.strIs( o.name ) );
   var symbol = Symbol.for( o.name );
   var elementMaker = o.elementMaker;
@@ -611,7 +680,7 @@ var setterFriend_gen = function( o )
   _.assert( _.strIs( name ) );
   _.assert( _.strIs( nameOfLink ) );
   _.assert( _.routineIs( maker ) );
-  _.assertMapOnly( o,setterFriend_gen.defaults );
+  _.assertMapHasOnly( o,setterFriend_gen.defaults );
 
   return function setterFriend( data )
   {
@@ -667,7 +736,7 @@ var setterCopyable_gen = function( o )
   _.assert( arguments.length === 1 );
   _.assert( _.strIs( name ) );
   _.assert( _.routineIs( maker ) );
-  _.assertMapOnly( o,setterCopyable_gen.defaults );
+  _.assertMapHasOnly( o,setterCopyable_gen.defaults );
 
   return function setterCopyable( data )
   {
@@ -709,7 +778,7 @@ var setterBufferFrom_gen = function( o )
   _.assert( arguments.length === 1 );
   _.assert( _.strIs( name ) );
   _.assert( _.routineIs( bufferConstructor ) );
-  _.assertMapOnly( o,setterBufferFrom_gen.defaults );
+  _.assertMapHasOnly( o,setterBufferFrom_gen.defaults );
 
   return function setterBufferFrom( data )
   {
@@ -872,14 +941,6 @@ _.protoMake
 });
 */
 
-var ClassFacility =
-{
-  Composes : 'Composes',
-  Aggregates : 'Aggregates',
-  Associates : 'Associates',
-  Restricts : 'Restricts',
-}
-
 var protoMake = function protoMake( o )
 {
 
@@ -941,7 +1002,7 @@ var protoMake = function protoMake( o )
   {
     if( o.constructor.prototype )
     {
-      _.assert( Object.keys( o.constructor.prototype ).length === 0 );
+      _.assert( Object.keys( o.constructor.prototype ).length === 0,'misuse of protoMake, prototype of constructor has properties put there manually.' );
       _.assert( o.constructor.prototype.constructor === o.constructor );
     }
     prototype = o.constructor.prototype = Object.create( o.parent ? o.parent.prototype : null );
@@ -1002,15 +1063,38 @@ var protoExtend = function protoExtend( o )
   _assert( arguments.length === 1 );
   _assert( _.objectIs( o ) );
 
-  _assert( _.routineIs( o.constructor ) );
+  _assert( _.routineIs( o.constructor ),'expects constructor o.constructor' );
   _assert( o.constructor.name || o.constructor._name,'class constructor should have name' );
 
   _assert( _.objectIs( o.extend ) || o.extend === undefined || o.extend === null );
   _assert( _.objectIs( o.supplement ) || o.supplement === undefined || o.supplement === null );
+  _assert( _.objectIs( o.static ) || o.static === undefined || o.static === null );
 
   _.routineOptions( protoExtend,o );
 
   var prototype = o.constructor.prototype;
+
+  /* extend relationships */
+
+  if( o.extend )
+  for( var f in ClassFacility )
+  _propertyAddOwnDefaults
+  ({
+    facilityName : f,
+    dstProto : prototype,
+    srcDefaults : o.extend[ f ] || {},
+    override : true,
+  });
+
+  if( o.supplement )
+  for( var f in ClassFacility )
+  _propertyAddOwnDefaults
+  ({
+    facilityName : f,
+    dstProto : prototype,
+    srcDefaults : o.supplement[ f ] || {},
+    override : false,
+  });
 
   /* extend fields and methods */
 
@@ -1031,23 +1115,22 @@ var protoExtend = function protoExtend( o )
     prototype.constructor = o.supplement.constructor;
   }
 
-  if( o.static )
+  /* static */
+
+  var addStatic = function( _static )
   {
-    _.mapSupplement( prototype,o.static );
-    _.mapSupplement( o.constructor,o.static );
+    _.mapSupplement( prototype,_static );
+    _.mapSupplement( o.constructor,_static );
   }
 
-  /* extend relationships */
+  if( o.static )
+  addStatic( o.static );
 
-  if( o.extend )
-  for( var f in ClassFacility )
-  if( o.extend[ f ] )
-  _propertyAddOwnDefaults( f,prototype,o.extend[ f ],{ override : true } );
+  if( o.extend && o.extend.Static )
+  addStatic( o.extend.Static );
 
-  if( o.supplement )
-  for( var f in ClassFacility )
-  if( o.supplement[ f ] )
-  _propertyAddOwnDefaults( f,prototype,o.supplement[ f ],{ override : false } );
+  if( o.supplement && o.supplement.Static )
+  addStatic( o.supplement.Static );
 
   /* atomic extension */
 
@@ -1059,6 +1142,8 @@ var protoExtend = function protoExtend( o )
     _.mapExtendFiltering( _.filter.atomicSrcOwn(),prototype,prototype.Aggregates );
     if( _.mapOwn( prototype,{ Associates : 'Associates' } ) )
     _.mapExtendFiltering( _.filter.atomicSrcOwn(),prototype,prototype.Associates );
+    if( _.mapOwn( prototype,{ Restricts : 'Restricts' } ) )
+    _.mapExtendFiltering( _.filter.atomicSrcOwn(),prototype,prototype.Restricts );
   }
 
   /* validation */
@@ -1078,6 +1163,26 @@ protoExtend.defaults =
   supplement : null,
   static : null,
   usingAtomicExtension : false,
+}
+
+//
+
+/**
+ * Complement instance by its semantic relationships.
+ * @param {object} instance - instance to complement.
+ * @method protoComplementInstance
+ * @memberof wTools#
+ */
+
+var protoComplementInstance = function protoComplementInstance( instance )
+{
+
+  _.mapComplement( instance,instance.Composes );
+  _.mapComplement( instance,instance.Aggregates );
+  _.mapComplement( instance,instance.Associates );
+  _.mapComplement( instance,instance.Restricts );
+
+  return instance;
 }
 
 //
@@ -1151,6 +1256,19 @@ var protoUnitedInterface = function( protos )
 }
 
 // --
+// var
+// --
+
+var ClassFacility =
+{
+  Composes : 'Composes',
+  Aggregates : 'Aggregates',
+  Associates : 'Associates',
+  Restricts : 'Restricts',
+  Static : 'Static',
+}
+
+// --
 // prototype
 // --
 
@@ -1194,7 +1312,13 @@ var Proto =
   protoMake : protoMake,
   protoExtend : protoExtend,
 
+  protoComplementInstance : protoComplementInstance,
+
   protoUnitedInterface : protoUnitedInterface,
+
+  // var
+
+  ClassFacility : ClassFacility,
 
 }
 
