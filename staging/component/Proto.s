@@ -808,111 +808,6 @@ setterBufferFrom_gen.defaults =
 // --
 
 /**
- * Append prototype to object. Find archi parent and replace its proto.
- * @param {object} dstObject - dst object to append proto.
- * @method protoAppend
- * @memberof wTools#
- */
-
-var protoAppend = function( dstObject )
-{
-
-  _assert( _.objectIs( dstObject ) );
-
-  for( var a = 1 ; a < arguments.length ; a++ )
-  {
-    var proto = arguments[ a ];
-
-    _assert( _.objectIs( proto ) );
-
-    var parent = _.protoArchy( dstObject );
-    Object.setPrototypeOf( parent, proto );
-
-  }
-
-  return dstObject;
-}
-
-//
-
-/**
- * Does srcProto has insProto as prototype.
- * @param {object} srcProto - proto stack to investigate.
- * @param {object} insProto - proto to look for.
- * @method protoHas
- * @memberof wTools#
- */
-
-var protoHas = function( srcProto,insProto )
-{
-
-  do
-  {
-    if( srcProto === insProto )
-    return true;
-    srcProto = Object.getPrototypeOf( srcProto );
-  }
-  while( srcProto !== Object.prototype );
-
-  return false;
-}
-
-//
-
-/**
- * Return proto owning names.
- * @param {object} srcObject - src object to investigate proto stack.
- * @method protoOwning
- * @memberof wTools#
- */
-
-var protoOwning = function( srcObject,names )
-{
-  var names = _nameFielded( names );
-  _assert( _.objectIs( srcObject ) );
-
-  do
-  {
-    var has = true;
-    for( var n in names )
-    if( !_hasOwnProperty.call( srcObject,n ) )
-    {
-      has = false;
-      break;
-    }
-    if( has )
-    return srcObject;
-
-    srcObject = Object.getPrototypeOf( srcObject );
-  }
-  while( srcObject !== Object.prototype );
-
-  return null;
-}
-
-//
-
-/**
- * Returns parent which has default proto.
- * @param {object} srcObject - dst object to append proto.
- * @method protoArchy
- * @memberof wTools#
- */
-
-var protoArchy = function( srcObject )
-{
-
-  _assert( _.objectIs( srcObject ) );
-
-  while( Object.getPrototypeOf( srcObject ) !== Object.prototype )
-  srcObject = Object.getPrototypeOf( srcObject );
-
-  return srcObject;
-}
-
-//
-
-/**
  * Make prototype for constructor repairing relationship : Composes, Aggregates, Associates, Restricts.
  * Execute optional extend / supplement if such o present.
  * @param {object} o - options.
@@ -1255,6 +1150,109 @@ var protoUnitedInterface = function( protos )
   return result;
 }
 
+/**
+ * Append prototype to object. Find archi parent and replace its proto.
+ * @param {object} dstObject - dst object to append proto.
+ * @method protoAppend
+ * @memberof wTools#
+ */
+
+var protoAppend = function( dstObject )
+{
+
+  _assert( _.objectIs( dstObject ) );
+
+  for( var a = 1 ; a < arguments.length ; a++ )
+  {
+    var proto = arguments[ a ];
+
+    _assert( _.objectIs( proto ) );
+
+    var parent = _.protoArchy( dstObject );
+    Object.setPrototypeOf( parent, proto );
+
+  }
+
+  return dstObject;
+}
+
+//
+
+/**
+ * Does srcProto has insProto as prototype.
+ * @param {object} srcProto - proto stack to investigate.
+ * @param {object} insProto - proto to look for.
+ * @method protoHas
+ * @memberof wTools#
+ */
+
+var protoHas = function( srcProto,insProto )
+{
+
+  do
+  {
+    if( srcProto === insProto )
+    return true;
+    srcProto = Object.getPrototypeOf( srcProto );
+  }
+  while( srcProto !== Object.prototype );
+
+  return false;
+}
+
+//
+
+/**
+ * Return proto owning names.
+ * @param {object} srcObject - src object to investigate proto stack.
+ * @method protoOwning
+ * @memberof wTools#
+ */
+
+var protoOwning = function( srcObject,names )
+{
+  var names = _nameFielded( names );
+  _assert( _.objectIs( srcObject ) );
+
+  do
+  {
+    var has = true;
+    for( var n in names )
+    if( !_hasOwnProperty.call( srcObject,n ) )
+    {
+      has = false;
+      break;
+    }
+    if( has )
+    return srcObject;
+
+    srcObject = Object.getPrototypeOf( srcObject );
+  }
+  while( srcObject !== Object.prototype );
+
+  return null;
+}
+
+//
+
+/**
+ * Returns parent which has default proto.
+ * @param {object} srcObject - dst object to append proto.
+ * @method protoArchy
+ * @memberof wTools#
+ */
+
+var protoArchy = function( srcObject )
+{
+
+  _assert( _.objectIs( srcObject ) );
+
+  while( Object.getPrototypeOf( srcObject ) !== Object.prototype )
+  srcObject = Object.getPrototypeOf( srcObject );
+
+  return srcObject;
+}
+
 // --
 // var
 // --
@@ -1304,17 +1302,18 @@ var Proto =
 
   // prototype
 
-  protoAppend : protoAppend,
-  protoHas : protoHas,
-  protoOwning : protoOwning,
-  protoArchy : protoArchy,
-
   protoMake : protoMake,
   protoExtend : protoExtend,
 
   protoComplementInstance : protoComplementInstance,
 
-  protoUnitedInterface : protoUnitedInterface,
+  protoUnitedInterface : protoUnitedInterface, /* experimental */
+
+  protoAppend : protoAppend, /* experimental */
+  protoHas : protoHas, /* experimental */
+  protoOwning : protoOwning, /* experimental */
+  protoArchy : protoArchy, /* experimental */
+
 
   // var
 
