@@ -1,13 +1,13 @@
-/**
-* Word definitions:
-*  self - current object
-*  Self - current class
-*  Parent - parent class
-*  Static - static fields
-*  extend - extend prototype with properties from map
-*  supplement - supplement prototype with unique properties from map
-*/
 
+/**
+* Definitions :
+*  self :: current object.
+*  Self :: current class.
+*  Parent :: parent class.
+*  Static :: static fields.
+*  extend :: extend destination with all properties from source.
+*  supplement :: supplement destination with those properties from source which do not belong to source.
+*/
 
 ( function _Proto_s_() {
 
