@@ -1,3 +1,14 @@
+/**
+* Word definitions:
+*  self - current object
+*  Self - current class
+*  Parent - parent class
+*  Static - static fields
+*  extend - extend prototype with properties from map
+*  supplement - supplement prototype with unique properties from map
+*/
+
+
 ( function _Proto_s_() {
 
 'use strict';
@@ -842,16 +853,35 @@ setterBufferFrom_gen.defaults =
 // --
 // prototype
 // --
+/**
+* @typedef {object} wProto~prototypeOptions
+* @property {routine} [o.constructor=null] - constructor for which prototype is needed.
+* @property {routine} [o.parent=null] - constructor of parent class.
+* @property {object} [o.extend=null] - extend prototype by this map.
+* @property {object} [o.supplement=null] - supplement prototype by this map.
+* @property {object} [o.static=null] - static fields of a class.
+* @property {boolean} [o.usingAtomicExtension=false] - extends class with atomic fields from relationship descriptors.
+* @property {boolean} [o.usingOriginalPrototype=false] - makes prototype using original constructor prototype.
+*/
 
 /**
  * Make prototype for constructor repairing relationship : Composes, Aggregates, Associates, Restricts.
  * Execute optional extend / supplement if such o present.
- * @param {object} o - options.
- * @param {routine} o.constructor - constructor for which prototype is needed.
- * @param {routine} [o.parent] - constructor of parent class.
- * @param {object} [o.extend] - extend prototype by this map.
- * @param {object} [o.supplement] - supplement prototype by this map.
+ * @param {wProto~prototypeOptions} o - options {@link wProto~prototypeOptions}.
  * @method protoMake
+ * @throws {exception} If no argument provided.
+ * @throws {exception} If( o ) is not a Object.
+ * @throws {exception} If( o.constructor ) is not a Routine.
+ * @throws {exception} If( o.constructor.name ) is not defined.
+ * @throws {exception} If( o.constructor.prototype ) has not own constructor.
+ * @throws {exception} If( o.constructor.prototype ) has restricted properties.
+ * @throws {exception} If( o.parent ) is not a Routine.
+ * @throws {exception} If( o.extend ) is not a Object.
+ * @throws {exception} If( o.supplement ) is not a Object.
+ * @throws {exception} If( o.parent ) is equal to( o.extend ).
+ * @throws {exception} If function cant rewrite constructor using original prototype.
+ * @throws {exception} If( o.usingOriginalPrototype ) is false and ( o.constructor.prototype ) has manually defined properties.
+ * @throws {exception} If( o.constructor.prototype.constructor ) is not equal( o.constructor  ).
  * @memberof wTools#
  */
 
@@ -979,12 +1009,20 @@ protoMake.defaults =
 /**
  * Make prototype for constructor repairing relationship : Composes, Aggregates, Associates, Restricts.
  * Execute optional extend / supplement if such o present.
- * @param {object} o - options.
- * @param {routine} o.constructor - constructor for which prototype is needed.
- * @param {routine} [o.parent] - constructor of parent class.
- * @param {object} [o.extend] - extend prototype by this map.
- * @param {object} [o.supplement] - supplement prototype by this map.
+ * @param {wProto~prototypeOptions} o - options {@link wProto~prototypeOptions}.
  * @method protoExtend
+ * @throws {exception} If no argument provided.
+ * @throws {exception} If( o ) is not a Object.
+ * @throws {exception} If( o.constructor ) is not a Routine.
+ * @throws {exception} If( prototype.constructor ) is not a Routine.
+ * @throws {exception} If( o.constructor.name ) is not defined.
+ * @throws {exception} If( o.constructor.prototype ) has not own constructor.
+ * @throws {exception} If( o.parent ) is not a Routine.
+ * @throws {exception} If( o.extend ) is not a Object.
+ * @throws {exception} If( o.supplement ) is not a Object.
+ * @throws {exception} If( o.static) is not a Object.
+ * @throws {exception} If( o.constructor.prototype.Constitutes ) is defined.
+ * @throws {exception} If( o.constructor.prototype ) is not equal( prototype ).
  * @memberof wTools#
  */
 
