@@ -343,6 +343,11 @@ var accessorReadOnly = function accessorReadOnly( object,names )
 var constant = function( dstProto,namesObject )
 {
 
+  // if( _.strIs( namesObject ) )
+  // {
+  //   namesObject = { [ namesObject ] : namesObject };
+  // }
+
   _assert( arguments.length === 2 );
   _assert( _.objectLike( dstProto ),'_.constant :','namesObject is needed :', dstProto );
   _assert( _.mapIs( namesObject ),'_.constant :','namesObject is needed :', namesObject );
@@ -356,6 +361,37 @@ var constant = function( dstProto,namesObject )
     Object.defineProperty( dstProto, encodedName,
     {
       value : value,
+      enumerable : true,
+      writable : false,
+    });
+
+  }
+
+}
+
+//
+
+var restrictReadOnly = function restrictReadOnly( dstProto,namesObject )
+{
+
+  if( _.strIs( namesObject ) )
+  {
+    namesObject = { [ namesObject ] : namesObject };
+  }
+
+  _assert( arguments.length === 2 );
+  _assert( _.objectLike( dstProto ),'_.constant :','namesObject is needed :', dstProto );
+  _assert( _.mapIs( namesObject ),'_.constant :','namesObject is needed :', namesObject );
+
+  for( var n in namesObject )
+  {
+
+    var encodedName = n;
+    var value = namesObject[ n ];
+
+    Object.defineProperty( dstProto, encodedName,
+    {
+      value : dstProto[ n ],
       enumerable : true,
       writable : false,
     });
@@ -1283,6 +1319,8 @@ var Proto =
   accessorReadOnly : accessorReadOnly,
 
   constant : constant,
+  restrictReadOnly : restrictReadOnly,
+
   mixin : mixin,
 
   _propertyAddOwnDefaults : _propertyAddOwnDefaults,
