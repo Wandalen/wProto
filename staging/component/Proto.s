@@ -453,9 +453,9 @@ var mixin = function( o )
   /* */
 
   if( o.mixin.Supplement )
-  _.mapSupplement( dst,o.mixin.Supplement );
+  _.mapSupplement( dst,_.mapBut( o.mixin.Supplement,ClassFacility ) );
   if( o.mixin.Extend )
-  _.mapExtend( dst,o.mixin.Extend );
+  _.mapExtend( dst,_.mapBut( o.mixin.Extend,ClassFacility ) );
 
   /* facility */
 
