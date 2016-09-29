@@ -1,13 +1,13 @@
-/**
-* Word definitions:
-*  self - current object
-*  Self - current class
-*  Parent - parent class
-*  Static - static fields
-*  extend - extend prototype with properties from map
-*  supplement - supplement prototype with unique properties from map
-*/
 
+/**
+* Definitions :
+*  self :: current object.
+*  Self :: current class.
+*  Parent :: parent class.
+*  Static :: static fields.
+*  extend :: extend destination with all properties from source.
+*  supplement :: supplement destination with those properties from source which do not belong to source.
+*/
 
 ( function _Proto_s_() {
 
@@ -354,6 +354,11 @@ var accessorReadOnly = function accessorReadOnly( object,names )
 var constant = function( dstProto,namesObject )
 {
 
+  // if( _.strIs( namesObject ) )
+  // {
+  //   namesObject = { [ namesObject ] : namesObject };
+  // }
+
   _assert( arguments.length === 2 );
   _assert( _.objectLike( dstProto ),'_.constant :','namesObject is needed :', dstProto );
   _assert( _.mapIs( namesObject ),'_.constant :','namesObject is needed :', namesObject );
@@ -367,6 +372,37 @@ var constant = function( dstProto,namesObject )
     Object.defineProperty( dstProto, encodedName,
     {
       value : value,
+      enumerable : true,
+      writable : false,
+    });
+
+  }
+
+}
+
+//
+
+var restrictReadOnly = function restrictReadOnly( dstProto,namesObject )
+{
+
+  if( _.strIs( namesObject ) )
+  {
+    namesObject = { [ namesObject ] : namesObject };
+  }
+
+  _assert( arguments.length === 2 );
+  _assert( _.objectLike( dstProto ),'_.constant :','namesObject is needed :', dstProto );
+  _assert( _.mapIs( namesObject ),'_.constant :','namesObject is needed :', namesObject );
+
+  for( var n in namesObject )
+  {
+
+    var encodedName = n;
+    var value = namesObject[ n ];
+
+    Object.defineProperty( dstProto, encodedName,
+    {
+      value : dstProto[ n ],
       enumerable : true,
       writable : false,
     });
@@ -417,9 +453,9 @@ var mixin = function( o )
   /* */
 
   if( o.mixin.Supplement )
-  _.mapSupplement( dst,o.mixin.Supplement );
+  _.mapSupplement( dst,_.mapBut( o.mixin.Supplement,ClassFacility ) );
   if( o.mixin.Extend )
-  _.mapExtend( dst,o.mixin.Extend );
+  _.mapExtend( dst,_.mapBut( o.mixin.Extend,ClassFacility ) );
 
   /* facility */
 
@@ -1321,6 +1357,8 @@ var Proto =
   accessorReadOnly : accessorReadOnly,
 
   constant : constant,
+  restrictReadOnly : restrictReadOnly,
+
   mixin : mixin,
 
   _propertyAddOwnDefaults : _propertyAddOwnDefaults,
