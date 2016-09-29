@@ -489,8 +489,14 @@ var mixin = function( o )
 
   /* field */
 
-  if( !dst._mixins )
-  dst._mixins = {};
+  //if( !dst._mixins )
+  if( !_hasOwnProperty.call( dst,'_mixins' ) )
+  {
+    //var _mixin = dst._mixins;
+    dst._mixins = Object.create( dst._mixins || null );
+    //if( _mixin )
+    //Object.setPrototypeOf( dst._mixins, _mixin );
+  }
 
   _.assert( !dst._mixins[ o.mixin.name ],'attempt to mixin same mixin same several times : ' + o.mixin.name + ' into ' + dst.constructor.name );
 
