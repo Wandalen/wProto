@@ -1059,6 +1059,7 @@ protoMake.defaults =
 //
 
 /**
+ * Extends and supplements( o.constructor ) prototype by fields and methods repairing relationship : Composes, Aggregates, Associates, Restricts.
  *
  * @param {wProto~prototypeOptions} o - options {@link wProto~prototypeOptions}.
  *
