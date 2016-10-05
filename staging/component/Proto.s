@@ -874,6 +874,45 @@ setterBufferFrom_gen.defaults =
  * Make prototype for constructor repairing relationship : Composes, Aggregates, Associates, Restricts.
  * Execute optional extend / supplement if such o present.
  * @param {wProto~prototypeOptions} o - options {@link wProto~prototypeOptions}.
+ *
+ * @example
+ *  var Parent = function Alpha(){ };
+ *  Parent.prototype.init = function( x )
+ *  {
+ *    var self = this;
+ *    self.x = 5;
+ *  };
+ *
+ *  var Self = function Betta()
+ *  {
+ *    return Self.prototype.init.apply( this,arguments );
+ *  }
+ *
+ *  var init = function init()
+ *  {
+ *    var self = this;
+ *    Parent.prototype.init.call( this );
+ *    _.mapExtendFiltering( _.filter.srcOwn(),self,Composes );
+ *  }
+ *  var Proto =
+ *  {
+ *   init: init,
+ *   constructor : Self,
+ *   Composes : { a : 1, b : 2 }
+ *  }
+ *
+ *  var proto = _.protoMake
+ *  ({
+ *    constructor : Self,
+ *    parent : Parent,
+ *    extend : Proto,
+ *  });
+ *
+ *  var betta = new Betta();
+ *  console.log( proto === Self.prototype ); //returns true
+ *  console.log( Parent.prototype.isPrototypeOf( betta ) ); //returns true
+ *  console.log( betta.a, betta.b, betta.x ); //returns 1 2 5
+ *
  * @method protoMake
  * @throws {exception} If no argument provided.
  * @throws {exception} If( o ) is not a Object.
