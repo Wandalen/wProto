@@ -877,7 +877,7 @@ setterBufferFrom_gen.defaults =
  *
  * @example
  *  var Parent = function Alpha(){ };
- *  Parent.prototype.init = function( x )
+ *  Parent.prototype.init = function(  )
  *  {
  *    var self = this;
  *    self.x = 5;
@@ -894,11 +894,18 @@ setterBufferFrom_gen.defaults =
  *    Parent.prototype.init.call( this );
  *    _.mapExtendFiltering( _.filter.srcOwn(),self,Composes );
  *  }
+ *
+ *  var Composes =
+ *  {
+ *   a : 1,
+ *   b : 2,
+ *  }
+ *
  *  var Proto =
  *  {
  *   init: init,
  *   constructor : Self,
- *   Composes : { a : 1, b : 2 }
+ *   Composes : Composes
  *  }
  *
  *  var proto = _.protoMake
