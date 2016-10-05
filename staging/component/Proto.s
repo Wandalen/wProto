@@ -1059,9 +1059,22 @@ protoMake.defaults =
 //
 
 /**
- * Make prototype for constructor repairing relationship : Composes, Aggregates, Associates, Restricts.
- * Execute optional extend / supplement if such o present.
+ *
  * @param {wProto~prototypeOptions} o - options {@link wProto~prototypeOptions}.
+ *
+ * @example
+ * var Self = function Betta() { };
+ * var Static = { staticFunction : function staticFunction(){ } };
+ * var Composes = { a : 1, b : 2 };
+ * var Proto = { constructor: Self, Composes: Composes };
+ *
+ * var proto =  _.protoExtend({
+ *     constructor: Self,
+ *     extend: Proto,
+ *     static : Static
+ * });
+ * console.log( Self.prototype === proto ); //returns true
+ *
  * @method protoExtend
  * @throws {exception} If no argument provided.
  * @throws {exception} If( o ) is not a Object.
