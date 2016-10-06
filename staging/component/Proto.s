@@ -517,9 +517,9 @@ mixin.defaults =
 
 /**
 * Default options for _propertyAddOwnDefaults function
-* @typedef {object} wProto~propertyAddOwnDefaults
+* @typedef {object} wTools~propertyAddOwnDefaults
 * @property {object} [ o.facilityName=null ] - object that contains class relationship type name.
-* Example : { Composes : 'Composes' }. See {@link wProto~ClassFacility}
+* Example : { Composes : 'Composes' }. See {@link wTools~ClassFacility}
 * @property {object} [ o.dstProto=null ] - prototype of class which will get new constant property.
 * @property {object} [ o.srcDefaults=null ] - name/value map of defaults.
 * @property {bool} [ o.override=false ] - to override defaults if exist.
@@ -527,7 +527,7 @@ mixin.defaults =
 
 /**
  * Adds own defaults to object. Creates new defaults container, if there is no such own.
- * @param {wProto~propertyAddOwnDefaults} o - options {@link wProto~propertyAddOwnDefaults}.
+ * @param {wTools~propertyAddOwnDefaults} o - options {@link wTools~propertyAddOwnDefaults}.
  * @private
  *
  * @example
@@ -545,7 +545,7 @@ mixin.defaults =
  * @throws {exception} If no argument provided.
  * @throws {exception} If( o.srcDefaults ) is not a Object.
  * @throws {exception} If( o ) is extented by unknown property.
- * @memberof _.wProto#
+ * @memberof wTools
  */
 
 //var _propertyAddOwnDefaults = function( defaultsName,dstProto,srcDefaults,o )
@@ -594,7 +594,7 @@ _propertyAddOwnDefaults.defaults =
 
 /**
  * Adds own defaults( Composes ) to object. Creates new defaults container, if there is no such own.
- * @param {array-like} arguments - for arguments details see {@link wProto~propertyAddOwnDefaults}.
+ * @param {array-like} arguments - for arguments details see {@link wTools~propertyAddOwnDefaults}.
  *
  * @example
  * var Self = function () { };
@@ -604,7 +604,7 @@ _propertyAddOwnDefaults.defaults =
  *
  * @method propertyAddOwnComposes
  * @throws {exception} If no arguments provided.
- * @memberof _.wProto#
+ * @memberof wTools
  */
 
 var propertyAddOwnComposes = function( dstProto,srcDefaults )
@@ -627,7 +627,7 @@ var propertyAddOwnComposes = function( dstProto,srcDefaults )
 
 /**
  * Adds own aggregates to object. Creates new aggregates container, if there is no such own.
- * @param {array-like} arguments - for arguments details see {@link wProto~propertyAddOwnDefaults}.
+ * @param {array-like} arguments - for arguments details see {@link wTools~propertyAddOwnDefaults}.
  *
  * @example
  * var Self = function () { };
@@ -637,7 +637,7 @@ var propertyAddOwnComposes = function( dstProto,srcDefaults )
  *
  * @method propertyAddOwnAggregates
  * @throws {exception} If no arguments provided.
- * @memberof _.wProto#
+ * @memberof wTools
  */
 
 var propertyAddOwnAggregates = function( dstProto,srcDefaults )
@@ -660,7 +660,7 @@ var propertyAddOwnAggregates = function( dstProto,srcDefaults )
 
 /**
  * Adds own associates to object. Creates new associates container, if there is no such own.
- * @param {array-like} arguments - for arguments details see {@link wProto~propertyAddOwnDefaults}.
+ * @param {array-like} arguments - for arguments details see {@link wTools~propertyAddOwnDefaults}.
  *
  * @example
  * var Self = function () { };
@@ -670,7 +670,7 @@ var propertyAddOwnAggregates = function( dstProto,srcDefaults )
  *
  * @method propertyAddOwnAssociates
  * @throws {exception} If no arguments provided.
- * @memberof _.wProto#
+ * @memberof wTools
  */
 
 var propertyAddOwnAssociates = function( dstProto,srcDefaults )
@@ -693,7 +693,7 @@ var propertyAddOwnAssociates = function( dstProto,srcDefaults )
 
 /**
  * Adds own restricts to object. Creates new restricts container, if there is no such own.
- * @param {array-like} arguments - for arguments details see {@link wProto~propertyAddOwnDefaults}.
+ * @param {array-like} arguments - for arguments details see {@link wTools~propertyAddOwnDefaults}.
  *
  * @example
  * var Self = function () { };
@@ -703,7 +703,7 @@ var propertyAddOwnAssociates = function( dstProto,srcDefaults )
  *
  * @method propertyAddOwnRestricts
  * @throws {exception} If no arguments provided.
- * @memberof _.wProto#
+ * @memberof wTools
  */
 
 var propertyAddOwnRestricts = function( dstProto,srcDefaults )
@@ -910,7 +910,7 @@ setterBufferFrom_gen.defaults =
 // prototype
 // --
 /**
-* @typedef {object} wProto~prototypeOptions
+* @typedef {object} wTools~prototypeOptions
 * @property {routine} [o.constructor=null] - constructor for which prototype is needed.
 * @property {routine} [o.parent=null] - constructor of parent class.
 * @property {object} [o.extend=null] - extend prototype by this map.
@@ -923,7 +923,7 @@ setterBufferFrom_gen.defaults =
 /**
  * Make prototype for constructor repairing relationship : Composes, Aggregates, Associates, Restricts.
  * Execute optional extend / supplement if such o present.
- * @param {wProto~prototypeOptions} o - options {@link wProto~prototypeOptions}.
+ * @param {wTools~prototypeOptions} o - options {@link wTools~prototypeOptions}.
  * @returns {object} Returns constructor's prototype based on( o.parent ) prototype and complemented by fields, static and non-static methods.
  *
  * @example
@@ -985,7 +985,7 @@ setterBufferFrom_gen.defaults =
  * @throws {exception} If function cant rewrite constructor using original prototype.
  * @throws {exception} If( o.usingOriginalPrototype ) is false and ( o.constructor.prototype ) has manually defined properties.
  * @throws {exception} If( o.constructor.prototype.constructor ) is not equal( o.constructor  ).
- * @memberof wTools#
+ * @memberof wTools
  */
 
 /*
@@ -1112,7 +1112,7 @@ protoMake.defaults =
 /**
  * Extends and supplements( o.constructor ) prototype by fields and methods repairing relationship : Composes, Aggregates, Associates, Restricts.
  *
- * @param {wProto~prototypeOptions} o - options {@link wProto~prototypeOptions}.
+ * @param {wTools~prototypeOptions} o - options {@link wTools~prototypeOptions}.
  * @returns {object} Returns constructor's prototype complemented by fields, static and non-static methods.
  *
  * @example
@@ -1141,7 +1141,7 @@ protoMake.defaults =
  * @throws {exception} If( o.static) is not a Object.
  * @throws {exception} If( o.constructor.prototype.Constitutes ) is defined.
  * @throws {exception} If( o.constructor.prototype ) is not equal( prototype ).
- * @memberof wTools#
+ * @memberof wTools
  */
 
 var protoExtend = function protoExtend( o )
@@ -1273,7 +1273,7 @@ protoExtend.defaults =
  *
  * @return {object} Returns complemented instance.
  * @method protoComplementInstance
- * @memberof wTools#
+ * @memberof wTools
  */
 
 var protoComplementInstance = function protoComplementInstance( instance )
@@ -1294,7 +1294,7 @@ var protoComplementInstance = function protoComplementInstance( instance )
  * @param {array} protos - maps to united.
  * @return {object} united interface.
  * @method protoUnitedInterface
- * @memberof wTools#
+ * @memberof wTools
  */
 
 var protoUnitedInterface = function( protos )
@@ -1361,7 +1361,7 @@ var protoUnitedInterface = function( protos )
  * Append prototype to object. Find archi parent and replace its proto.
  * @param {object} dstObject - dst object to append proto.
  * @method protoAppend
- * @memberof wTools#
+ * @memberof wTools
  */
 
 var protoAppend = function( dstObject )
@@ -1390,7 +1390,7 @@ var protoAppend = function( dstObject )
  * @param {object} srcProto - proto stack to investigate.
  * @param {object} insProto - proto to look for.
  * @method protoHas
- * @memberof wTools#
+ * @memberof wTools
  */
 
 var protoHas = function( srcProto,insProto )
@@ -1413,7 +1413,7 @@ var protoHas = function( srcProto,insProto )
  * Return proto owning names.
  * @param {object} srcObject - src object to investigate proto stack.
  * @method protoOwning
- * @memberof wTools#
+ * @memberof wTools
  */
 
 var protoOwning = function( srcObject,names )
@@ -1446,7 +1446,7 @@ var protoOwning = function( srcObject,names )
  * Returns parent which has default proto.
  * @param {object} srcObject - dst object to append proto.
  * @method protoArchy
- * @memberof wTools#
+ * @memberof wTools
  */
 
 var protoArchy = function( srcObject )
@@ -1465,8 +1465,8 @@ var protoArchy = function( srcObject )
 // --
 
 /**
- * @global {Object} wProto~ClassFacility - contains predefined class relationship types.
- * @memberof wProto#
+ * @global {Object} wTools~ClassFacility - contains predefined class relationship types.
+ * @memberof wTools
  */
 
 var ClassFacility =
