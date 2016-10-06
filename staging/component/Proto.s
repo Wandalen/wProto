@@ -593,11 +593,18 @@ _propertyAddOwnDefaults.defaults =
 //
 
 /**
- * Add own defaults to object. Create new defaults container, if there is no such own.
- * @param {object} dstProto - prototype of class which will get new constant property.
- * @param {object} srcDefaults - name/value map of defaults.
+ * Adds own defaults( Composes ) to object. Creates new defaults container, if there is no such own.
+ * @param {array-like} arguments - for arguments details see {@link wProto~propertyAddOwnDefaults}.
+ *
+ * @example
+ * var Self = function () { };
+ * var Composes = { tree : null };
+ * _.propertyAddOwnComposes( Self.prototype, Composes );
+ * console.log( Self.prototype ); // returns { Composes: { tree: null } }
+ *
  * @method propertyAddOwnComposes
- * @memberof _.Property#
+ * @throws {exception} If no arguments provided.
+ * @memberof _.wProto#
  */
 
 var propertyAddOwnComposes = function( dstProto,srcDefaults )
@@ -619,11 +626,18 @@ var propertyAddOwnComposes = function( dstProto,srcDefaults )
 //
 
 /**
- * Add own aggregates to object. Create new aggregates container, if there is no such own.
- * @param {object} dstProto - prototype of class which will get new constant property.
- * @param {object} srcDefaults - name/value map of defaults.
+ * Adds own aggregates to object. Creates new aggregates container, if there is no such own.
+ * @param {array-like} arguments - for arguments details see {@link wProto~propertyAddOwnDefaults}.
+ *
+ * @example
+ * var Self = function () { };
+ * var Aggregates = { tree : null };
+ * _.propertyAddOwnAggregates( Self.prototype, Aggregates );
+ * console.log( Self.prototype ); // returns { Aggregates: { tree: null } }
+ *
  * @method propertyAddOwnAggregates
- * @memberof _.wTools#
+ * @throws {exception} If no arguments provided.
+ * @memberof _.wProto#
  */
 
 var propertyAddOwnAggregates = function( dstProto,srcDefaults )
@@ -645,11 +659,18 @@ var propertyAddOwnAggregates = function( dstProto,srcDefaults )
 //
 
 /**
- * Add own associates to object. Create new associates container, if there is no such own.
- * @param {object} dstProto - prototype of class which will get new constant property.
- * @param {object} srcDefaults - name/value map of defaults.
+ * Adds own associates to object. Creates new associates container, if there is no such own.
+ * @param {array-like} arguments - for arguments details see {@link wProto~propertyAddOwnDefaults}.
+ *
+ * @example
+ * var Self = function () { };
+ * var Associates = { tree : null };
+ * _.propertyAddOwnAssociates( Self.prototype, Associates );
+ * console.log( Self.prototype ); // returns { Associates: { tree: null } }
+ *
  * @method propertyAddOwnAssociates
- * @memberof _.wTools#
+ * @throws {exception} If no arguments provided.
+ * @memberof _.wProto#
  */
 
 var propertyAddOwnAssociates = function( dstProto,srcDefaults )
@@ -671,11 +692,18 @@ var propertyAddOwnAssociates = function( dstProto,srcDefaults )
 //
 
 /**
- * Add own restricts to object. Create new restricts container, if there is no such own.
- * @param {object} dstProto - prototype of class which will get new constant property.
- * @param {object} srcDefaults - name/value map of defaults.
+ * Adds own restricts to object. Creates new restricts container, if there is no such own.
+ * @param {array-like} arguments - for arguments details see {@link wProto~propertyAddOwnDefaults}.
+ *
+ * @example
+ * var Self = function () { };
+ * var Restricts = { tree : null };
+ * _.propertyAddOwnRestricts( Self.prototype, Restricts );
+ * console.log( Self.prototype ); // returns { Restricts: { tree: null } }
+ *
  * @method propertyAddOwnRestricts
- * @memberof _.wTools#
+ * @throws {exception} If no arguments provided.
+ * @memberof _.wProto#
  */
 
 var propertyAddOwnRestricts = function( dstProto,srcDefaults )
