@@ -529,7 +529,22 @@ mixin.defaults =
  * Adds own defaults to object. Creates new defaults container, if there is no such own.
  * @param {wProto~propertyAddOwnDefaults} o - options {@link wProto~propertyAddOwnDefaults}.
  * @private
+ *
+ * @example
+ * var Self = function () { };
+ * _._propertyAddOwnDefaults
+ * ({
+ *   facilityName : { Composes : 'Composes' },
+ *   dstProto : Self.prototype,
+ *   srcDefaults : { a : 1, b : 2 },
+ *   override : false,
+ * });
+ * console.log( Self.prototype ); // returns { Composes: { a: 1, b: 2 } }
+ *
  * @method _propertyAddOwnDefaults
+ * @throws {exception} If no argument provided.
+ * @throws {exception} If( o.srcDefaults ) is not a Object.
+ * @throws {exception} If( o ) is extented by unknown property.
  * @memberof _.wTools#
  */
 
