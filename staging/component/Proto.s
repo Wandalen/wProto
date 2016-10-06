@@ -545,7 +545,7 @@ mixin.defaults =
  * @throws {exception} If no argument provided.
  * @throws {exception} If( o.srcDefaults ) is not a Object.
  * @throws {exception} If( o ) is extented by unknown property.
- * @memberof _.wTools#
+ * @memberof _.wProto#
  */
 
 //var _propertyAddOwnDefaults = function( defaultsName,dstProto,srcDefaults,o )
