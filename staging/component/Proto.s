@@ -874,6 +874,7 @@ setterBufferFrom_gen.defaults =
  * Make prototype for constructor repairing relationship : Composes, Aggregates, Associates, Restricts.
  * Execute optional extend / supplement if such o present.
  * @param {wProto~prototypeOptions} o - options {@link wProto~prototypeOptions}.
+ * @returns {object} Returns constructor's prototype based on( o.parent ) prototype and complemented by fields, static and non-static methods.
  *
  * @example
  *  var Parent = function Alpha(){ };
@@ -1062,6 +1063,7 @@ protoMake.defaults =
  * Extends and supplements( o.constructor ) prototype by fields and methods repairing relationship : Composes, Aggregates, Associates, Restricts.
  *
  * @param {wProto~prototypeOptions} o - options {@link wProto~prototypeOptions}.
+ * @returns {object} Returns constructor's prototype complemented by fields, static and non-static methods.
  *
  * @example
  * var Self = function Betta() { };
