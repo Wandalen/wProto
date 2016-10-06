@@ -7,6 +7,26 @@
 *  Static :: static fields.
 *  extend :: extend destination with all properties from source.
 *  supplement :: supplement destination with those properties from source which do not belong to source.
+*  routine :: alias of a function.
+*  method :: routine is called as 'method' when context( this ) points to instance of current class.
+*/
+
+/**
+* Relationships:
+*  A composes B
+*    :: A consists of B.
+*    :: A comprises B.
+*    :: A made up of B.
+*    :: A exists because of B, and B exists because of A.
+*  A aggregates B
+*    :: A has B.
+*    :: A exists because of B, but B exists without A.
+*  A associate B
+*    :: A has link on B
+*    :: A is linked with B
+*  A restricts B
+*    :: A use B.
+*    :: A has occasional relation with B.
 */
 
 ( function _Proto_s_() {
