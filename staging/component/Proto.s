@@ -1205,8 +1205,23 @@ protoExtend.defaults =
 //
 
 /**
- * Complement instance by its semantic relationships.
+ * Complements instance by its semantic relationships : Composes,Aggregates,Associates and Restricts.
  * @param {object} instance - instance to complement.
+ *
+ * @example
+ * var Self = function Alpha() { };
+ *
+ * var Proto = { constructor: Self, Composes : { a : 1, b : 2 } };
+ *
+ * _.protoMake
+ * ({
+ *     constructor: Self,
+ *     extend: Proto,
+ * });
+ * var obj = new Self();
+ * console.log( _.protoComplementInstance( obj ) ); //returns Alpha { a: 1, b: 2 }
+ *
+ * @return {object} Returns complemented instance.
  * @method protoComplementInstance
  * @memberof wTools#
  */
