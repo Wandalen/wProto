@@ -516,12 +516,19 @@ mixin.defaults =
 //
 
 /**
- * Add own defaults to object. Create new defaults container, if there is no such own.
- * @param {object} o - options.
- * @param {object} o.defaultsName - name of defualts container.
- * @param {object} o.dstProto - prototype of class which will get new constant property.
- * @param {object} o.srcDefaults - name/value map of defaults.
- * @param {bool} o.override - to override defaults if exist.
+* Default options for _propertyAddOwnDefaults function
+* @typedef {object} wProto~propertyAddOwnDefaults
+* @property {object} [ o.facilityName=null ] - object that contains class relationship type name.
+* Example : { Composes : 'Composes' }. See {@link wProto~ClassFacility}
+* @property {object} [ o.dstProto=null ] - prototype of class which will get new constant property.
+* @property {object} [ o.srcDefaults=null ] - name/value map of defaults.
+* @property {bool} [ o.override=false ] - to override defaults if exist.
+*/
+
+/**
+ * Adds own defaults to object. Creates new defaults container, if there is no such own.
+ * @param {wProto~propertyAddOwnDefaults} o - options {@link wProto~propertyAddOwnDefaults}.
+ * @private
  * @method _propertyAddOwnDefaults
  * @memberof _.wTools#
  */
@@ -1413,6 +1420,11 @@ var protoArchy = function( srcObject )
 // --
 // var
 // --
+
+/**
+ * @global {Object} wProto~ClassFacility - contains predefined class relationship types.
+ * @memberof wProto#
+ */
 
 var ClassFacility =
 {
