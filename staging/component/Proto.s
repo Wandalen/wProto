@@ -70,6 +70,30 @@ _.assert( _.routineIs( _nameFielded ) );
 // property
 // --
 
+/**
+ * Generates options object for _accessor, _accessorForbid functions.
+ * Can be called in three ways:
+ * - First by passing all options in one object;
+ * - Second by passing object and name options;
+ * - Third by passing object,names and message option as third parameter.
+ * @param {wTools~accessorOptions} o - options {@link wTools~accessorOptions}.
+ *
+ * @example
+ * //returns
+ * // { object: [Function],
+ * // methods: [Function],
+ * // names: { a: 'a', b: 'b' },
+ * // message: [ 'set/get call' ] }
+ *
+ * var Self = function () { };
+ * _._accessorOptions( Self,{ a : 'a', b : 'b' }, 'set/get call' );
+ *
+ * @private
+ * @method _accessorOptions
+ * @memberof wTools
+ */
+
+
 var _accessorOptions = function( object,names )
 {
   var o = arguments.length === 1 ? arguments[ 0 ] : {};
