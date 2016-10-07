@@ -315,6 +315,30 @@ _accessor.defaults =
 
 //
 
+/**
+ * Short-cut for _accessor function.
+ * Defines set/get functions on source object( o.object ) properties if they dont have them.
+ * For more details @see {@link wTools._accessor }.
+ * Can be called in three ways:
+ * - First by passing all options in one object( o );
+ * - Second by passing ( object ) and ( names ) options;
+ * - Third by passing ( object ), ( names ) and ( message ) option as third parameter.
+ *
+ * @param {wTools~accessorOptions} o - options {@link wTools~accessorOptions}.
+ *
+ * @example
+ * var Self = function () { };
+ * _.accessor(Self,{ a : 'a' }, 'set/get call' )
+ * Self.a = 1; // set/get call
+ * Self.a;
+ * // returns
+ * // set/get call
+ * // 1
+ *
+ * @method accessor
+ * @memberof wTools
+ */
+
 var accessor = function accessor( object,names )
 {
   var o = _accessorOptions.apply( this,arguments );
