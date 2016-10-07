@@ -413,6 +413,24 @@ var constant = function( dstProto,namesObject )
 
 //
 
+/**
+ * Makes properties of object( dstProto ) read only without changing their values. Uses properties names from argument( namesObject ).
+ * Sets undefined for property that not exists on source( dstProto ).
+ *
+ * @example
+ * var Self = function () { };
+ * Self.prototype.num = 100;
+ * var ReadOnly = { num : null, num2 : null  };
+ * _.restrictReadOnly ( Self.prototype,ReadOnly );
+ * console.log( Self.prototype ); // returns { num: 100, num2: undefined }
+ * Self.prototype.num2 = 1; // error assign to read only property
+ *
+ * @throws {exception} If no argument provided.
+ * @throws {exception} If( dstProto ) is not a Object.
+ * @throws {exception} If( namesObject ) is not a Map.
+ * @memberof wTools
+ */
+
 var restrictReadOnly = function restrictReadOnly( dstProto,namesObject )
 {
 
@@ -422,7 +440,7 @@ var restrictReadOnly = function restrictReadOnly( dstProto,namesObject )
   }
 
   _assert( arguments.length === 2 );
-  _assert( _.objectLike( dstProto ),'_.constant :','namesObject is needed :', dstProto );
+  _assert( _.objectLike( dstProto ),'_.constant :','dstProto is needed :', dstProto );
   _assert( _.mapIs( namesObject ),'_.constant :','namesObject is needed :', namesObject );
 
   for( var n in namesObject )
