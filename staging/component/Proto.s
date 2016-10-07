@@ -364,11 +364,22 @@ var accessorReadOnly = function accessorReadOnly( object,names )
 //
 
 /**
- * Makes constants properties.
+ * Makes constants properties on object by creating new or replacing existing properties.
  * @param {object} dstProto - prototype of class which will get new constant property.
  * @param {object} namesObject - name/value map of constants.
+ *
+ * @example
+ * var Self = function () { };
+ * var Constants = { num : 100  };
+ * _.constant ( Self.prototype,Constants );
+ * console.log( Self.prototype ); // returns { num: 100 }
+ * Self.prototype.num = 1;// error assign to read only property
+ *
  * @method constant
- * @memberof _.Property#
+ * @throws {exception} If no argument provided.
+ * @throws {exception} If( dstProto ) is not a Object.
+ * @throws {exception} If( namesObject ) is not a Map.
+ * @memberof wTools
  */
 
 var constant = function( dstProto,namesObject )
@@ -380,7 +391,7 @@ var constant = function( dstProto,namesObject )
   // }
 
   _assert( arguments.length === 2 );
-  _assert( _.objectLike( dstProto ),'_.constant :','namesObject is needed :', dstProto );
+  _assert( _.objectLike( dstProto ),'_.constant :','dstProto is needed :', dstProto );
   _assert( _.mapIs( namesObject ),'_.constant :','namesObject is needed :', namesObject );
 
   for( var n in namesObject )
