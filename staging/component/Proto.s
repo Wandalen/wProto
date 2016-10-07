@@ -123,6 +123,55 @@ var _accessorOptions = function( object,names )
 
 //
 
+/**
+ * Accessor options
+ * @typedef{object} wTools~accessorOptions
+ * @property{object} [ object=null ] - source object wich properties will get getter/setter defined.
+ * @property{object} [ names=null ] - properties of that object represent names of fields for wich function defines setter/getter.
+ * Function uses values( rawName ) of object( o.names ) properties to check if fields of( o.object ) have setter/getter.
+ * Example: if( rawName ) is 'a', function searchs for '_aSet' or 'aSet' and same for getter.
+ * @property{object} [ methods=null ] - object where function searchs for existing setter/getter of property.
+ * @property{array} [ message=null ] - setter/getter prints this message when called.
+ * @property{boolean} [ strict=true ] - makes object field private if no getter defined but object must have own constructor.
+ * @property{boolean} [ enumerable=true ] - sets property descriptor enumerable option.
+ * @property{boolean} [ preserveValues=true ] - saves values of existing object properties.
+ * @property{boolean} [ readOnly=false ] - if true function doesn't define setter to property.
+ **/
+
+/**
+ * Defines set/get functions on source object( o.object ) properties if they dont have them.
+ * If property specified by( o.names ) doesn't exist on source( o.object ) function creates it.
+ * If ( o.object.constructor.prototype ) has property with getter defined function forbids set/get access
+ * to object( o.object ) property. Field can be accessed by use of Symbol.for( rawName ) function,
+ * where( rawName ) is value of property from( o.names ) object.
+ *
+ * @param {wTools~accessorOptions} o - options {@link wTools~accessorOptions}.
+ *
+ * @example
+ * var Self = function () { };
+ * var o = _._accessorOptions( Self, { a : 'a', b : 'b' }, ['set/get call'] );
+ * _._accessor( o );
+ * Self.a = 1; // returns [ 'set/get call' ]
+ * Self.b = 2; // returns [ 'set/get call' ]
+ * console.log( Self.a );
+ * // returns [ 'set/get call' ]
+ * // 1
+ * console.log( Self.b );
+ * // returns [ 'set/get call' ]
+ * // 2
+ *
+ * @private
+ * @method _accessor
+ * @throws {exception} If( o.object ) is not a Object.
+ * @throws {exception} If( o.names ) is not a Object.
+ * @throws {exception} If( o.methods ) is not a Object.
+ * @throws {exception} If( o.message ) is not a Array.
+ * @throws {exception} If( o ) is extented by unknown property.
+ * @throws {exception} If( o.strict ) is true and object doesn't have own constructor.
+ * @throws {exception} If( o.readOnly ) is true and property has own setter.
+ * @memberof wTools
+ */
+
 var _accessor = function( o )
 {
   var object = o.object;
