@@ -416,6 +416,8 @@ var constant = function( dstProto,namesObject )
 /**
  * Makes properties of object( dstProto ) read only without changing their values. Uses properties names from argument( namesObject ).
  * Sets undefined for property that not exists on source( dstProto ).
+ * @param {object} dstProto - prototype of class which properties will get read only state.
+ * @param {object|string} namesObject - property name as string/map with properties.
  *
  * @example
  * var Self = function () { };
@@ -425,6 +427,7 @@ var constant = function( dstProto,namesObject )
  * console.log( Self.prototype ); // returns { num: 100, num2: undefined }
  * Self.prototype.num2 = 1; // error assign to read only property
  *
+ * @method restrictReadOnly
  * @throws {exception} If no argument provided.
  * @throws {exception} If( dstProto ) is not a Object.
  * @throws {exception} If( namesObject ) is not a Map.
