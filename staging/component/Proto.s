@@ -7,6 +7,29 @@
 *  Static :: static fields.
 *  extend :: extend destination with all properties from source.
 *  supplement :: supplement destination with those properties from source which do not belong to source.
+
+* Synonym :
+
+  A composes B
+    :: A consists of B.
+    :: A comprises B.
+    :: A made up of B.
+    :: A exists because of B, and B exists because of A.
+    :: A складається із B.
+  A aggregates B
+    :: A has B.
+    :: A exists because of B, but B exists without A.
+    :: A має B.
+  A associate B
+    :: A has link on B
+    :: A is linked with B
+    :: A посилається на B.
+  A restricts B
+    :: A use B.
+    :: A has occasional relation with B.
+    :: A використовує B.
+    :: A має обмежений, не чіткий, тимчасовий звязок із B.
+
 */
 
 ( function _Proto_s_() {
@@ -831,14 +854,15 @@ var setterBufferFrom_gen = function( o )
   _.assert( arguments.length === 1 );
   _.assert( _.strIs( name ) );
   _.assert( _.routineIs( bufferConstructor ) );
-  _.assertMapHasOnly( o,setterBufferFrom_gen.defaults );
+  _.routineOptions( setterBufferFrom_gen,o );
 
   return function setterBufferFrom( data )
   {
     var self = this;
 
-    if( data === null )
+    if( data === null || data === false )
     {
+      data = null;
     }
     else
     {
@@ -856,9 +880,44 @@ setterBufferFrom_gen.defaults =
   bufferConstructor : null,
 }
 
+//
+
+var setterChangesTracking_gen = function( o )
+{
+
+  var name = Symbol.for( _.nameUnfielded( o.name ).coded );
+  var nameOfChangeFlag = Symbol.for( _.nameUnfielded( o.nameOfChangeFlag ).coded );
+
+  _.assert( arguments.length === 1 );
+  _.routineOptions( setterChangesTracking_gen,o );
+
+  throw _.err( 'not tested' );
+
+  return function setterChangesTracking( data )
+  {
+    var self = this;
+
+    if( data === self[ name ] )
+    return;
+
+    self[ name ] = data;
+    self[ nameOfChangeFlag ] = true;
+
+  }
+
+}
+
+setterChangesTracking_gen.defaults =
+{
+  name : null,
+  nameOfChangeFlag : 'needsUpdate',
+  bufferConstructor : null,
+}
+
 // --
 // prototype
 // --
+
 /**
 * @typedef {object} wProto~prototypeOptions
 * @property {routine} [o.constructor=null] - constructor for which prototype is needed.
@@ -1380,6 +1439,7 @@ var Proto =
   setterFriend_gen : setterFriend_gen,
   setterCopyable_gen : setterCopyable_gen,
   setterBufferFrom_gen : setterBufferFrom_gen,
+  setterChangesTracking_gen : setterChangesTracking_gen,
 
 
   // prototype
