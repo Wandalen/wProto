@@ -9,10 +9,10 @@
 *  extend :: extend destination with all properties from source.
 *  supplement :: supplement destination with those properties from source which do not belong to source.
 
-*  routine :: steps to perform on input data, context and globals to get output data.
+*  routine :: arithmetical,logical and other manipulations on input data, context and globals to get output data.
 *  function :: routine which does not have side effects and don't use globals or context.
-*  procedure :: routine use globals.
-*  method :: routine which has context, can also modify context's states.
+*  procedure :: routine which use globals, possibly modify global's states.
+*  method :: routine which has context, possibly modify context's states.
 
 * Synonym :
 
@@ -79,6 +79,8 @@ _.assert( _.routineIs( _nameFielded ) );
 // property
 // --
 
+/* !!! no need to make examples for private routines */
+
 /**
  * Generates options object for _accessor, _accessorForbid functions.
  * Can be called in three ways:
@@ -132,6 +134,8 @@ var _accessorOptions = function( object,names )
 
 //
 
+// !!! description is good
+
 /**
  * Accessor options
  * @typedef{object} wTools~accessorOptions
@@ -158,7 +162,7 @@ var _accessorOptions = function( object,names )
  *
  * @example
  * var Self = function () { };
- * var o = _._accessorOptions( Self, { a : 'a', b : 'b' }, ['set/get call'] );
+ * var o = _._accessorOptions( Self, { a : 'a', b : 'b' }, [ 'set/get call' ] );
  * _._accessor( o );
  * Self.a = 1; // returns [ 'set/get call' ]
  * Self.b = 2; // returns [ 'set/get call' ]
@@ -324,6 +328,9 @@ _accessor.defaults =
 
 //
 
+// !!! move please maximum of description of _accessor here
+// _accessor is private routine
+
 /**
  * Short-cut for _accessor function.
  * Defines set/get functions on source object( o.object ) properties if they dont have them.
@@ -337,7 +344,7 @@ _accessor.defaults =
  *
  * @example
  * var Self = function () { };
- * _.accessor(Self,{ a : 'a' }, 'set/get call' )
+ * _.accessor( Self,{ a : 'a' }, 'set/get call' )
  * Self.a = 1; // set/get call
  * Self.a;
  * // returns
