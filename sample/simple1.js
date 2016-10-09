@@ -28,7 +28,7 @@ var init = function init()
   var self = this;
   Parent.prototype.init.call( this );
 
-  _.mapExtendFiltering( _.filter.own(),self,Composes );
+  _.mapExtendFiltering( _.filter.srcOwn(),self,Composes );
 
 }
 

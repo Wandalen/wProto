@@ -1,12 +1,18 @@
 
 /**
 * Definitions :
+
 *  self :: current object.
 *  Self :: current class.
 *  Parent :: parent class.
 *  Static :: static fields.
 *  extend :: extend destination with all properties from source.
 *  supplement :: supplement destination with those properties from source which do not belong to source.
+
+*  routine :: steps to perform on input data, context and globals to get output data.
+*  function :: routine which does not have side effects and don't use globals or context.
+*  procedure :: routine use globals.
+*  method :: routine which has context, can also modify context's states.
 
 * Synonym :
 
@@ -73,6 +79,30 @@ _.assert( _.routineIs( _nameFielded ) );
 // property
 // --
 
+/**
+ * Generates options object for _accessor, _accessorForbid functions.
+ * Can be called in three ways:
+ * - First by passing all options in one object;
+ * - Second by passing object and name options;
+ * - Third by passing object,names and message option as third parameter.
+ * @param {wTools~accessorOptions} o - options {@link wTools~accessorOptions}.
+ *
+ * @example
+ * //returns
+ * // { object: [Function],
+ * // methods: [Function],
+ * // names: { a: 'a', b: 'b' },
+ * // message: [ 'set/get call' ] }
+ *
+ * var Self = function () { };
+ * _._accessorOptions( Self,{ a : 'a', b : 'b' }, 'set/get call' );
+ *
+ * @private
+ * @method _accessorOptions
+ * @memberof wTools
+ */
+
+
 var _accessorOptions = function( object,names )
 {
   var o = arguments.length === 1 ? arguments[ 0 ] : {};
@@ -101,6 +131,55 @@ var _accessorOptions = function( object,names )
 }
 
 //
+
+/**
+ * Accessor options
+ * @typedef{object} wTools~accessorOptions
+ * @property{object} [ object=null ] - source object wich properties will get getter/setter defined.
+ * @property{object} [ names=null ] - properties of that object represent names of fields for wich function defines setter/getter.
+ * Function uses values( rawName ) of object( o.names ) properties to check if fields of( o.object ) have setter/getter.
+ * Example: if( rawName ) is 'a', function searchs for '_aSet' or 'aSet' and same for getter.
+ * @property{object} [ methods=null ] - object where function searchs for existing setter/getter of property.
+ * @property{array} [ message=null ] - setter/getter prints this message when called.
+ * @property{boolean} [ strict=true ] - makes object field private if no getter defined but object must have own constructor.
+ * @property{boolean} [ enumerable=true ] - sets property descriptor enumerable option.
+ * @property{boolean} [ preserveValues=true ] - saves values of existing object properties.
+ * @property{boolean} [ readOnly=false ] - if true function doesn't define setter to property.
+ **/
+
+/**
+ * Defines set/get functions on source object( o.object ) properties if they dont have them.
+ * If property specified by( o.names ) doesn't exist on source( o.object ) function creates it.
+ * If ( o.object.constructor.prototype ) has property with getter defined function forbids set/get access
+ * to object( o.object ) property. Field can be accessed by use of Symbol.for( rawName ) function,
+ * where( rawName ) is value of property from( o.names ) object.
+ *
+ * @param {wTools~accessorOptions} o - options {@link wTools~accessorOptions}.
+ *
+ * @example
+ * var Self = function () { };
+ * var o = _._accessorOptions( Self, { a : 'a', b : 'b' }, ['set/get call'] );
+ * _._accessor( o );
+ * Self.a = 1; // returns [ 'set/get call' ]
+ * Self.b = 2; // returns [ 'set/get call' ]
+ * console.log( Self.a );
+ * // returns [ 'set/get call' ]
+ * // 1
+ * console.log( Self.b );
+ * // returns [ 'set/get call' ]
+ * // 2
+ *
+ * @private
+ * @method _accessor
+ * @throws {exception} If( o.object ) is not a Object.
+ * @throws {exception} If( o.names ) is not a Object.
+ * @throws {exception} If( o.methods ) is not a Object.
+ * @throws {exception} If( o.message ) is not a Array.
+ * @throws {exception} If( o ) is extented by unknown property.
+ * @throws {exception} If( o.strict ) is true and object doesn't have own constructor.
+ * @throws {exception} If( o.readOnly ) is true and property has own setter.
+ * @memberof wTools
+ */
 
 var _accessor = function( o )
 {
@@ -245,6 +324,30 @@ _accessor.defaults =
 
 //
 
+/**
+ * Short-cut for _accessor function.
+ * Defines set/get functions on source object( o.object ) properties if they dont have them.
+ * For more details @see {@link wTools._accessor }.
+ * Can be called in three ways:
+ * - First by passing all options in one object( o );
+ * - Second by passing ( object ) and ( names ) options;
+ * - Third by passing ( object ), ( names ) and ( message ) option as third parameter.
+ *
+ * @param {wTools~accessorOptions} o - options {@link wTools~accessorOptions}.
+ *
+ * @example
+ * var Self = function () { };
+ * _.accessor(Self,{ a : 'a' }, 'set/get call' )
+ * Self.a = 1; // set/get call
+ * Self.a;
+ * // returns
+ * // set/get call
+ * // 1
+ *
+ * @method accessor
+ * @memberof wTools
+ */
+
 var accessor = function accessor( object,names )
 {
   var o = _accessorOptions.apply( this,arguments );
@@ -367,11 +470,22 @@ var accessorReadOnly = function accessorReadOnly( object,names )
 //
 
 /**
- * Makes constants properties.
+ * Makes constants properties on object by creating new or replacing existing properties.
  * @param {object} dstProto - prototype of class which will get new constant property.
  * @param {object} namesObject - name/value map of constants.
+ *
+ * @example
+ * var Self = function () { };
+ * var Constants = { num : 100  };
+ * _.constant ( Self.prototype,Constants );
+ * console.log( Self.prototype ); // returns { num: 100 }
+ * Self.prototype.num = 1;// error assign to read only property
+ *
  * @method constant
- * @memberof _.Property#
+ * @throws {exception} If no argument provided.
+ * @throws {exception} If( dstProto ) is not a Object.
+ * @throws {exception} If( namesObject ) is not a Map.
+ * @memberof wTools
  */
 
 var constant = function( dstProto,namesObject )
@@ -383,7 +497,7 @@ var constant = function( dstProto,namesObject )
   // }
 
   _assert( arguments.length === 2 );
-  _assert( _.objectLike( dstProto ),'_.constant :','namesObject is needed :', dstProto );
+  _assert( _.objectLike( dstProto ),'_.constant :','dstProto is needed :', dstProto );
   _assert( _.mapIs( namesObject ),'_.constant :','namesObject is needed :', namesObject );
 
   for( var n in namesObject )
@@ -405,6 +519,27 @@ var constant = function( dstProto,namesObject )
 
 //
 
+/**
+ * Makes properties of object( dstProto ) read only without changing their values. Uses properties names from argument( namesObject ).
+ * Sets undefined for property that not exists on source( dstProto ).
+ * @param {object} dstProto - prototype of class which properties will get read only state.
+ * @param {object|string} namesObject - property name as string/map with properties.
+ *
+ * @example
+ * var Self = function () { };
+ * Self.prototype.num = 100;
+ * var ReadOnly = { num : null, num2 : null  };
+ * _.restrictReadOnly ( Self.prototype,ReadOnly );
+ * console.log( Self.prototype ); // returns { num: 100, num2: undefined }
+ * Self.prototype.num2 = 1; // error assign to read only property
+ *
+ * @method restrictReadOnly
+ * @throws {exception} If no argument provided.
+ * @throws {exception} If( dstProto ) is not a Object.
+ * @throws {exception} If( namesObject ) is not a Map.
+ * @memberof wTools
+ */
+
 var restrictReadOnly = function restrictReadOnly( dstProto,namesObject )
 {
 
@@ -414,7 +549,7 @@ var restrictReadOnly = function restrictReadOnly( dstProto,namesObject )
   }
 
   _assert( arguments.length === 2 );
-  _assert( _.objectLike( dstProto ),'_.constant :','namesObject is needed :', dstProto );
+  _assert( _.objectLike( dstProto ),'_.constant :','dstProto is needed :', dstProto );
   _assert( _.mapIs( namesObject ),'_.constant :','namesObject is needed :', namesObject );
 
   for( var n in namesObject )
@@ -539,14 +674,36 @@ mixin.defaults =
 //
 
 /**
- * Add own defaults to object. Create new defaults container, if there is no such own.
- * @param {object} o - options.
- * @param {object} o.defaultsName - name of defualts container.
- * @param {object} o.dstProto - prototype of class which will get new constant property.
- * @param {object} o.srcDefaults - name/value map of defaults.
- * @param {bool} o.override - to override defaults if exist.
+* Default options for _propertyAddOwnDefaults function
+* @typedef {object} wTools~propertyAddOwnDefaults
+* @property {object} [ o.facilityName=null ] - object that contains class relationship type name.
+* Example : { Composes : 'Composes' }. See {@link wTools~ClassFacility}
+* @property {object} [ o.dstProto=null ] - prototype of class which will get new constant property.
+* @property {object} [ o.srcDefaults=null ] - name/value map of defaults.
+* @property {bool} [ o.override=false ] - to override defaults if exist.
+*/
+
+/**
+ * Adds own defaults to object. Creates new defaults container, if there is no such own.
+ * @param {wTools~propertyAddOwnDefaults} o - options {@link wTools~propertyAddOwnDefaults}.
+ * @private
+ *
+ * @example
+ * var Self = function () { };
+ * _._propertyAddOwnDefaults
+ * ({
+ *   facilityName : { Composes : 'Composes' },
+ *   dstProto : Self.prototype,
+ *   srcDefaults : { a : 1, b : 2 },
+ *   override : false,
+ * });
+ * console.log( Self.prototype ); // returns { Composes: { a: 1, b: 2 } }
+ *
  * @method _propertyAddOwnDefaults
- * @memberof _.wTools#
+ * @throws {exception} If no argument provided.
+ * @throws {exception} If( o.srcDefaults ) is not a Object.
+ * @throws {exception} If( o ) is extented by unknown property.
+ * @memberof wTools
  */
 
 //var _propertyAddOwnDefaults = function( defaultsName,dstProto,srcDefaults,o )
@@ -594,11 +751,18 @@ _propertyAddOwnDefaults.defaults =
 //
 
 /**
- * Add own defaults to object. Create new defaults container, if there is no such own.
- * @param {object} dstProto - prototype of class which will get new constant property.
- * @param {object} srcDefaults - name/value map of defaults.
+ * Adds own defaults( Composes ) to object. Creates new defaults container, if there is no such own.
+ * @param {array-like} arguments - for arguments details see {@link wTools~propertyAddOwnDefaults}.
+ *
+ * @example
+ * var Self = function () { };
+ * var Composes = { tree : null };
+ * _.propertyAddOwnComposes( Self.prototype, Composes );
+ * console.log( Self.prototype ); // returns { Composes: { tree: null } }
+ *
  * @method propertyAddOwnComposes
- * @memberof _.Property#
+ * @throws {exception} If no arguments provided.
+ * @memberof wTools
  */
 
 var propertyAddOwnComposes = function( dstProto,srcDefaults )
@@ -620,11 +784,18 @@ var propertyAddOwnComposes = function( dstProto,srcDefaults )
 //
 
 /**
- * Add own aggregates to object. Create new aggregates container, if there is no such own.
- * @param {object} dstProto - prototype of class which will get new constant property.
- * @param {object} srcDefaults - name/value map of defaults.
+ * Adds own aggregates to object. Creates new aggregates container, if there is no such own.
+ * @param {array-like} arguments - for arguments details see {@link wTools~propertyAddOwnDefaults}.
+ *
+ * @example
+ * var Self = function () { };
+ * var Aggregates = { tree : null };
+ * _.propertyAddOwnAggregates( Self.prototype, Aggregates );
+ * console.log( Self.prototype ); // returns { Aggregates: { tree: null } }
+ *
  * @method propertyAddOwnAggregates
- * @memberof _.wTools#
+ * @throws {exception} If no arguments provided.
+ * @memberof wTools
  */
 
 var propertyAddOwnAggregates = function( dstProto,srcDefaults )
@@ -646,11 +817,18 @@ var propertyAddOwnAggregates = function( dstProto,srcDefaults )
 //
 
 /**
- * Add own associates to object. Create new associates container, if there is no such own.
- * @param {object} dstProto - prototype of class which will get new constant property.
- * @param {object} srcDefaults - name/value map of defaults.
+ * Adds own associates to object. Creates new associates container, if there is no such own.
+ * @param {array-like} arguments - for arguments details see {@link wTools~propertyAddOwnDefaults}.
+ *
+ * @example
+ * var Self = function () { };
+ * var Associates = { tree : null };
+ * _.propertyAddOwnAssociates( Self.prototype, Associates );
+ * console.log( Self.prototype ); // returns { Associates: { tree: null } }
+ *
  * @method propertyAddOwnAssociates
- * @memberof _.wTools#
+ * @throws {exception} If no arguments provided.
+ * @memberof wTools
  */
 
 var propertyAddOwnAssociates = function( dstProto,srcDefaults )
@@ -672,11 +850,18 @@ var propertyAddOwnAssociates = function( dstProto,srcDefaults )
 //
 
 /**
- * Add own restricts to object. Create new restricts container, if there is no such own.
- * @param {object} dstProto - prototype of class which will get new constant property.
- * @param {object} srcDefaults - name/value map of defaults.
+ * Adds own restricts to object. Creates new restricts container, if there is no such own.
+ * @param {array-like} arguments - for arguments details see {@link wTools~propertyAddOwnDefaults}.
+ *
+ * @example
+ * var Self = function () { };
+ * var Restricts = { tree : null };
+ * _.propertyAddOwnRestricts( Self.prototype, Restricts );
+ * console.log( Self.prototype ); // returns { Restricts: { tree: null } }
+ *
  * @method propertyAddOwnRestricts
- * @memberof _.wTools#
+ * @throws {exception} If no arguments provided.
+ * @memberof wTools
  */
 
 var propertyAddOwnRestricts = function( dstProto,srcDefaults )
@@ -919,7 +1104,7 @@ setterChangesTracking_gen.defaults =
 // --
 
 /**
-* @typedef {object} wProto~prototypeOptions
+* @typedef {object} wTools~prototypeOptions
 * @property {routine} [o.constructor=null] - constructor for which prototype is needed.
 * @property {routine} [o.parent=null] - constructor of parent class.
 * @property {object} [o.extend=null] - extend prototype by this map.
@@ -932,7 +1117,54 @@ setterChangesTracking_gen.defaults =
 /**
  * Make prototype for constructor repairing relationship : Composes, Aggregates, Associates, Restricts.
  * Execute optional extend / supplement if such o present.
- * @param {wProto~prototypeOptions} o - options {@link wProto~prototypeOptions}.
+ * @param {wTools~prototypeOptions} o - options {@link wTools~prototypeOptions}.
+ * @returns {object} Returns constructor's prototype based on( o.parent ) prototype and complemented by fields, static and non-static methods.
+ *
+ * @example
+ *  var Parent = function Alpha(){ };
+ *  Parent.prototype.init = function(  )
+ *  {
+ *    var self = this;
+ *    self.x = 5;
+ *  };
+ *
+ *  var Self = function Betta()
+ *  {
+ *    return Self.prototype.init.apply( this,arguments );
+ *  }
+ *
+ *  var init = function init()
+ *  {
+ *    var self = this;
+ *    Parent.prototype.init.call( this );
+ *    _.mapExtendFiltering( _.filter.srcOwn(),self,Composes );
+ *  }
+ *
+ *  var Composes =
+ *  {
+ *   a : 1,
+ *   b : 2,
+ *  }
+ *
+ *  var Proto =
+ *  {
+ *   init: init,
+ *   constructor : Self,
+ *   Composes : Composes
+ *  }
+ *
+ *  var proto = _.protoMake
+ *  ({
+ *    constructor : Self,
+ *    parent : Parent,
+ *    extend : Proto,
+ *  });
+ *
+ *  var betta = new Betta();
+ *  console.log( proto === Self.prototype ); //returns true
+ *  console.log( Parent.prototype.isPrototypeOf( betta ) ); //returns true
+ *  console.log( betta.a, betta.b, betta.x ); //returns 1 2 5
+ *
  * @method protoMake
  * @throws {exception} If no argument provided.
  * @throws {exception} If( o ) is not a Object.
@@ -947,7 +1179,7 @@ setterChangesTracking_gen.defaults =
  * @throws {exception} If function cant rewrite constructor using original prototype.
  * @throws {exception} If( o.usingOriginalPrototype ) is false and ( o.constructor.prototype ) has manually defined properties.
  * @throws {exception} If( o.constructor.prototype.constructor ) is not equal( o.constructor  ).
- * @memberof wTools#
+ * @memberof wTools
  */
 
 /*
@@ -1072,9 +1304,24 @@ protoMake.defaults =
 //
 
 /**
- * Make prototype for constructor repairing relationship : Composes, Aggregates, Associates, Restricts.
- * Execute optional extend / supplement if such o present.
- * @param {wProto~prototypeOptions} o - options {@link wProto~prototypeOptions}.
+ * Extends and supplements( o.constructor ) prototype by fields and methods repairing relationship : Composes, Aggregates, Associates, Restricts.
+ *
+ * @param {wTools~prototypeOptions} o - options {@link wTools~prototypeOptions}.
+ * @returns {object} Returns constructor's prototype complemented by fields, static and non-static methods.
+ *
+ * @example
+ * var Self = function Betta() { };
+ * var Static = { staticFunction : function staticFunction(){ } };
+ * var Composes = { a : 1, b : 2 };
+ * var Proto = { constructor: Self, Composes: Composes };
+ *
+ * var proto =  _.protoExtend({
+ *     constructor: Self,
+ *     extend: Proto,
+ *     static : Static
+ * });
+ * console.log( Self.prototype === proto ); //returns true
+ *
  * @method protoExtend
  * @throws {exception} If no argument provided.
  * @throws {exception} If( o ) is not a Object.
@@ -1088,7 +1335,7 @@ protoMake.defaults =
  * @throws {exception} If( o.static) is not a Object.
  * @throws {exception} If( o.constructor.prototype.Constitutes ) is defined.
  * @throws {exception} If( o.constructor.prototype ) is not equal( prototype ).
- * @memberof wTools#
+ * @memberof wTools
  */
 
 var protoExtend = function protoExtend( o )
@@ -1202,10 +1449,25 @@ protoExtend.defaults =
 //
 
 /**
- * Complement instance by its semantic relationships.
+ * Complements instance by its semantic relationships : Composes,Aggregates,Associates and Restricts.
  * @param {object} instance - instance to complement.
+ *
+ * @example
+ * var Self = function Alpha() { };
+ *
+ * var Proto = { constructor: Self, Composes : { a : 1, b : 2 } };
+ *
+ * _.protoMake
+ * ({
+ *     constructor: Self,
+ *     extend: Proto,
+ * });
+ * var obj = new Self();
+ * console.log( _.protoComplementInstance( obj ) ); //returns Alpha { a: 1, b: 2 }
+ *
+ * @return {object} Returns complemented instance.
  * @method protoComplementInstance
- * @memberof wTools#
+ * @memberof wTools
  */
 
 var protoComplementInstance = function protoComplementInstance( instance )
@@ -1226,7 +1488,7 @@ var protoComplementInstance = function protoComplementInstance( instance )
  * @param {array} protos - maps to united.
  * @return {object} united interface.
  * @method protoUnitedInterface
- * @memberof wTools#
+ * @memberof wTools
  */
 
 var protoUnitedInterface = function( protos )
@@ -1293,7 +1555,7 @@ var protoUnitedInterface = function( protos )
  * Append prototype to object. Find archi parent and replace its proto.
  * @param {object} dstObject - dst object to append proto.
  * @method protoAppend
- * @memberof wTools#
+ * @memberof wTools
  */
 
 var protoAppend = function( dstObject )
@@ -1322,7 +1584,7 @@ var protoAppend = function( dstObject )
  * @param {object} srcProto - proto stack to investigate.
  * @param {object} insProto - proto to look for.
  * @method protoHas
- * @memberof wTools#
+ * @memberof wTools
  */
 
 var protoHas = function( srcProto,insProto )
@@ -1345,7 +1607,7 @@ var protoHas = function( srcProto,insProto )
  * Return proto owning names.
  * @param {object} srcObject - src object to investigate proto stack.
  * @method protoOwning
- * @memberof wTools#
+ * @memberof wTools
  */
 
 var protoOwning = function( srcObject,names )
@@ -1378,7 +1640,7 @@ var protoOwning = function( srcObject,names )
  * Returns parent which has default proto.
  * @param {object} srcObject - dst object to append proto.
  * @method protoArchy
- * @memberof wTools#
+ * @memberof wTools
  */
 
 var protoArchy = function( srcObject )
@@ -1395,6 +1657,11 @@ var protoArchy = function( srcObject )
 // --
 // var
 // --
+
+/**
+ * @global {Object} wTools~ClassFacility - contains predefined class relationship types.
+ * @memberof wTools
+ */
 
 var ClassFacility =
 {
