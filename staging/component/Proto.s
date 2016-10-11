@@ -381,6 +381,36 @@ var accessor = function accessor( object,names )
 
 //
 
+/**
+ * Forbids access to fields of object( o.object ) throught getter/setter functions.
+ * If property exists function redefines it without saving current value, also field becomes non-enumerable
+ * and can be access only using 'direct access'.
+ * Direct access to property is allowed by using Symbol.for( rawName ) function value as key,
+ * where( rawName ) is a value of property from( o.names ). Example: Self[ Symbol.for( 'a' ) ].
+ *
+ * @param {wTools~accessorOptions} o - options {@link wTools~accessorOptions}.
+ * @param { boolean } [ o.override=false ] - to override existing getter/setter.
+ * @param { boolean } [ o.allowMultiple=true ] -
+ *
+ * @example
+ * var Self = function () { };
+ * _.accessorForbid(  Self,{ a : 'a' }, 'use Symbol.for() to access field' );
+ * Self[ Symbol.for( 'a' ) ] = 1; // ok
+ * Self['a'] = 1; // throws error
+ *
+ *
+ * @method accessorForbid
+ * @throws {exception} If( o.object ) is not a Object.
+ * @throws {exception} If( o.object.constructor.name ) property is undefined.
+ * @throws {exception} If( o.names ) is not a Object.
+ * @throws {exception} If( o.methods ) is not a Object.
+ * @throws {exception} If( o.message ) is not a Array.
+ * @throws {exception} If( o ) is extented by unknown property.
+ * @throws {exception} If( o.strict ) is true and object doesn't have own constructor.
+ * @throws {exception} If( o.readOnly ) is true and property has own setter.
+ * @memberof wTools
+ */
+
 var accessorForbid = function accessorForbid( object,names )
 {
   var o = _accessorOptions.apply( this,arguments );
