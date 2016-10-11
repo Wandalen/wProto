@@ -515,6 +515,40 @@ var accessorForbidOnce = function( object,names )
 
 //
 
+/**
+ * Makes object( o.object ) properties readonly without changing their values by defining on them only getter function.
+ * If property specified by( o.names ) doesn't exist on source( o.object ) function creates it.
+ * If property has own setter defined function throws an error.
+ * Can be called in three ways:
+ * - First by passing all options in one object( o );
+ * - Second by passing ( object ) and ( names ) options;
+ * - Third by passing ( object ), ( names ) and ( message ) option as third parameter.
+ *
+ * @param {wTools~accessorOptions} o - options {@link wTools~accessorOptions}.
+ * @param { boolean } [ o.readOnly=true ] - function doesn't define setter to property.
+ *
+ * @example
+ * var Self = function Alpha() { };
+ * Self.prototype = Object.create( null );
+ * Self.prototype.a = 1;
+ * Self.prototype.constructor = Self;
+ * _.accessorReadOnly(  Self.prototype, { a : 'a' }  );
+ * var obj = new Self();
+ * console.log( obj.a );// returns 1
+ * obj.a = 2;// error property is readOnly
+ *
+ * @method accessorReadOnly
+ * @throws {exception} If( o.object ) is not a Object.
+ * @throws {exception} If( o.object.constructor.name ) property is undefined.
+ * @throws {exception} If( o.names ) is not a Object.
+ * @throws {exception} If( o.methods ) is not a Object.
+ * @throws {exception} If( o.message ) is not a Array.
+ * @throws {exception} If( o ) is extented by unknown property.
+ * @throws {exception} If( o.strict ) is true and object doesn't have own constructor.
+ * @throws {exception} If( o.readOnly ) is true and property has own setter.
+ * @memberof wTools
+ */
+
 var accessorReadOnly = function accessorReadOnly( object,names )
 {
   var o = _accessorOptions.apply( this,arguments );
