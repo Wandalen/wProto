@@ -661,10 +661,80 @@ var restrictReadOnly = function restrictReadOnly( dstProto,namesObject )
 //
 
 /**
- * Mixin methods and fields into prototype of another object.
- * @param {object} o - options.
+ * Mixin options
+ * @typedef{object} wTools~mixinOptions
+ * @property{object} [ o.dst=null ] - class which prototype will get new fields and methods.
+ * @property{object} [ o.mixin=null ] - source class with own mixin function,Extend,Supplement and Functor maps.
+ * @property{object} [ o.mixin.Extend=null ] - extend prototype by this map
+ * @property{object} [ o.mixin.Supplement=null ] - supplement prototype by this map.
+ * @property{object} [ o.mixin.Functor=null ] - map that contains functors,their names must be same as fields from( o.dst ) to perform correct call.
+ **/
+
+/**
+ * Mixin methods and fields from( o.mixin ) into prototype of another object( o.dst ).
+ * Supplements and extends prototype with properties and relationships : Composes, Aggregates, Associates, Restricts
+ * from( o.mixin.Supplement ) and ( o.mixin.Extend ).
+ * If map( o.mixin.Functor ) is provided function calls each functor which takes value of same named field from( o.dst ) as a parameter.
+ * Result of functor call is assigned to that property from( o.dst ).
+ * To forbid mixin prototype from same source( o.mixin ) more then once function saves it name into map( dst._mixins ).
+ *
+ * @param {object} o - options {@link wTools~mixinOptions}.
+ *
+ * @example
+ * var Supplement =
+ * {
+ *   example : function() { console.log( 'example function' ); },
+ *
+ *   Composes : { field : 'value1' }
+ * }
+ * var mixin = function( constructor )
+ * {
+ *   _.mixin
+ *   ({
+ *     dst : constructor.prototype,
+ *     mixin : Self,
+ *   });
+ *
+ * }
+ *
+ * var Self =
+ * {
+ *   Supplement : Supplement,
+ *   name : 'SelfMixin',
+ *   mixin : mixin
+ * }
+ *
+ * var o = function Alpha() { };
+ * o.prototype = Object.create( null );
+ * o.prototype.field = 'value2';
+ * o.prototype.constructor = o;
+ *
+ * Self.mixin( o );
+ *
+ * console.log( o.prototype );
+ * //returns
+ * // Alpha
+ * // {
+ * //   field: 'value2',
+ * //  constructor: [Function: Alpha],
+ * //  example: [Function],
+ * //  Composes: { field: 'value1' },
+ * //  _mixins: { SelfMixin: 1 }
+ * // }
+ *
+ *
  * @method mixin
- * @memberof wTools#
+ * @throws {exception} If( o.dst ) is not a Object.
+ * @throws {exception} If( o.mixin.mixin ) is not a Routine.
+ * @throws {exception} If( o.mixin.name ) is not a String.
+ * @throws {exception} If( o.mixin.Extend ) is not a Map,null or undefined.
+ * @throws {exception} If( o.mixin.Supplement ) is not a Map,null or undefined.
+ * @throws {exception} If( o ) is extented by unknown property.
+ * @throws {exception} If( o.mixin ) is extented by unknown property.
+ * @throws {exception} If( o.dst ) is not a Map and ( dst.constructor.prototype ) is not equal to( o.dst ).
+ * @throws {exception} If( o.dst ) is not a Map and ( dst.constructor.name ) is not defined.
+ * @throws {exception} If( o.dst ) is already mixed by( o.mixin ).
+ * @memberof wTools
  */
 
 var mixin = function( o )
