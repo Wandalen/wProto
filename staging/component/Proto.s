@@ -21,21 +21,15 @@
     :: A comprises B.
     :: A made up of B.
     :: A exists because of B, and B exists because of A.
-    :: A складається із B.
   A aggregates B
     :: A has B.
     :: A exists because of B, but B exists without A.
-    :: A має B.
   A associate B
     :: A has link on B
     :: A is linked with B
-    :: A посилається на B.
   A restricts B
     :: A use B.
     :: A has occasional relation with B.
-    :: A використовує B.
-    :: A має обмежений, не чіткий, тимчасовий звязок із B.
-
 */
 
 ( function _Proto_s_() {
