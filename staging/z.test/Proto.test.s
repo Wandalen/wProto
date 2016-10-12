@@ -103,6 +103,56 @@ var _accessorOptions = function( test )
 
 //
 
+var accessor = function ( test )
+{
+  test.description = 'setter';
+  var Alpha =
+  {
+    _aSet : function( src )
+    {
+      this[ Symbol.for( 'a' ) ] = src * 2;
+    }
+  };
+  _.accessor( Alpha, { a : 'a' } );
+  Alpha.a = 5;
+  var got = Alpha.a;
+  var expected = 10;
+  test.identical( got, expected );
+
+  test.description = 'getter';
+  var Alpha =
+  {
+    _aGet : function( )
+    {
+      return this[ Symbol.for( 'a' ) ] * 2;
+    }
+  };
+  _.accessor( Alpha, { a : 'a' } );
+  Alpha.a = 5;
+  var got = Alpha.a;
+  var expected = 10;
+  test.identical( got, expected );
+
+  test.description = 'getter & setter';
+  var Alpha =
+  {
+    _aSet : function( src )
+    {
+      this[ Symbol.for( 'a' ) ] = src * 2;
+    },
+    _aGet : function( )
+    {
+      return this[ Symbol.for( 'a' ) ] / 2;
+    }
+  };
+  _.accessor( Alpha, { a : 'a' } );
+  Alpha.a = 5;
+  var got = Alpha.a;
+  var expected = 5;
+  test.identical( got, expected );
+
+}
+
 var Proto =
 {
 
@@ -111,6 +161,7 @@ var Proto =
   tests:
   {
     _accessorOptions : _accessorOptions,
+    accessor : accessor
 
   }
 
