@@ -151,6 +151,28 @@ var accessor = function ( test )
   var expected = 5;
   test.identical( got, expected );
 
+  if( Config.debug )
+  {
+    test.description = 'empty call';
+    test.shouldThrowError( function()
+    {
+      _.accessor( );
+    });
+
+    test.description = 'invalid first argument type';
+    test.shouldThrowError( function()
+    {
+      _.accessor( 1, { a : 'a' } );
+    });
+
+    test.description = 'invalid second argument type';
+    test.shouldThrowError( function()
+    {
+      _.accessor( {}, [] );
+    });
+  }
+
+}
 }
 
 var Proto =
