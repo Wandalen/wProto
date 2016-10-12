@@ -691,7 +691,7 @@ var restrictReadOnly = function restrictReadOnly( dstProto,namesObject )
  *   _.mixin
  *   ({
  *     dst : constructor.prototype,
- *     mixin : Self,
+ *     mixin : ClassMixin,
  *   });
  * }
  *
