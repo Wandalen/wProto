@@ -298,7 +298,47 @@ var accessorReadOnly = function ( test )
   }
 }
 
+//
 
+var constant = function ( test )
+{
+  test.description = 'creates new constant';
+  var Alpha = { };
+  _.constant( Alpha, { a : 5 } );
+  var descriptor = Object.getOwnPropertyDescriptor( Alpha, 'a' );
+  var got = descriptor.writable;
+  var expected = false;
+  test.identical( got, expected );
+
+  test.description = 'rewrites existing field';
+  var Alpha = { a : 5 };
+  _.constant( Alpha, { a : 1 } );
+  var descriptor = Object.getOwnPropertyDescriptor( Alpha, 'a' );
+  var got = !descriptor.writable  && Alpha.a === 1;
+  var expected = true;
+  test.identical( got, expected );
+
+  if( Config.debug )
+  {
+    test.description = 'empty call';
+    test.shouldThrowError( function()
+    {
+      _.constant( );
+    });
+
+    test.description = 'invalid first argument type';
+    test.shouldThrowError( function()
+    {
+      _.constant( 1, { a : 'a' } );
+    });
+
+    test.description = 'invalid second argument type';
+    test.shouldThrowError( function()
+    {
+      _.constant( {}, [] );
+    });
+  }
+}
 
 var Proto =
 {
@@ -310,7 +350,8 @@ var Proto =
     _accessorOptions : _accessorOptions,
     accessor : accessor,
     accessorForbid : accessorForbid,
-    accessorReadOnly : accessorReadOnly
+    accessorReadOnly : accessorReadOnly,
+    constant : constant
 
   }
 
