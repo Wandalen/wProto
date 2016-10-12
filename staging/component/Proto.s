@@ -674,7 +674,7 @@ var restrictReadOnly = function restrictReadOnly( dstProto,namesObject )
  * Mixin methods and fields from( o.mixin ) into prototype of another object( o.dst ).
  * Supplements and extends prototype with properties and relationships : Composes, Aggregates, Associates, Restricts
  * from( o.mixin.Supplement ) and ( o.mixin.Extend ).
- * If map( o.mixin.Functor ) is provided function calls each functor which takes value of same named field from( o.dst ) as a parameter.
+ * If map( o.mixin.Functor ) is provided function calls each functor with two parameters: options object( o ) and value of same named field from( o.dst ).
  * Result of functor call is assigned to that property from( o.dst ).
  * To forbid mixin prototype from same source( o.mixin ) more than once function saves it name into map( dst._mixins ).
  *
