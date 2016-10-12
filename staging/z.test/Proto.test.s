@@ -241,6 +241,65 @@ var accessorForbid = function( test )
   }
 }
 
+//
+
+var accessorReadOnly = function ( test )
+{
+  test.description = 'readOnly';
+  var Alpha = { };
+  _.accessorReadOnly( Alpha, { a : 'a' } );
+  var descriptor = Object.getOwnPropertyDescriptor( Alpha, 'a' );
+  var got = descriptor.set ? true : false;
+  var expected = false;
+  test.identical( got, expected );
+
+  test.description = 'saves field value';
+  var Alpha = { a : 5};
+  _.accessorReadOnly( Alpha, { a : 'a' } );
+  var descriptor = Object.getOwnPropertyDescriptor( Alpha, 'a' );
+  var got = !descriptor.set && Alpha.a === 5;
+  var expected = true;
+  test.identical( got, expected );
+
+  if( Config.debug )
+  {
+    test.description = 'readonly';
+    test.shouldThrowError( function()
+    {
+      var Alpha = { };
+      _.accessorReadOnly( Alpha, { a : 'a' } );
+      Alpha.a = 5;
+    });
+
+    test.description = 'setter defined';
+    test.shouldThrowError( function()
+    {
+      var Alpha = { _aSet : function () { } };
+      _.accessorReadOnly( Alpha, { a : 'a' } );
+    });
+
+    test.description = 'empty call';
+    test.shouldThrowError( function()
+    {
+      _.accessorReadOnly( );
+    });
+
+    test.description = 'invalid first argument type';
+    test.shouldThrowError( function()
+    {
+      _.accessorReadOnly( 1, { a : 'a' } );
+    });
+
+    test.description = 'invalid second argument type';
+    test.shouldThrowError( function()
+    {
+      _.accessorReadOnly( {}, [] );
+    });
+  }
+}
+
+
+
 var Proto =
 {
 
@@ -250,7 +309,8 @@ var Proto =
   {
     _accessorOptions : _accessorOptions,
     accessor : accessor,
-    accessorForbid : accessorForbid
+    accessorForbid : accessorForbid,
+    accessorReadOnly : accessorReadOnly
 
   }
 
