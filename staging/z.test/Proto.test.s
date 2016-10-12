@@ -249,7 +249,8 @@ var Proto =
   tests:
   {
     _accessorOptions : _accessorOptions,
-    accessor : accessor
+    accessor : accessor,
+    accessorForbid : accessorForbid
 
   }
 
