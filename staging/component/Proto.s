@@ -676,7 +676,7 @@ var restrictReadOnly = function restrictReadOnly( dstProto,namesObject )
  * from( o.mixin.Supplement ) and ( o.mixin.Extend ).
  * If map( o.mixin.Functor ) is provided function calls each functor which takes value of same named field from( o.dst ) as a parameter.
  * Result of functor call is assigned to that property from( o.dst ).
- * To forbid mixin prototype from same source( o.mixin ) more then once function saves it name into map( dst._mixins ).
+ * To forbid mixin prototype from same source( o.mixin ) more than once function saves it name into map( dst._mixins ).
  *
  * @param {object} o - options {@link wTools~mixinOptions}.
  *
@@ -684,7 +684,6 @@ var restrictReadOnly = function restrictReadOnly( dstProto,namesObject )
  * var Supplement =
  * {
  *   example : function() { console.log( 'example function' ); },
- *
  *   Composes : { field : 'value1' }
  * }
  * var mixin = function( constructor )
@@ -694,31 +693,30 @@ var restrictReadOnly = function restrictReadOnly( dstProto,namesObject )
  *     dst : constructor.prototype,
  *     mixin : Self,
  *   });
- *
  * }
  *
- * var Self =
+ * var ClassMixin =
  * {
  *   Supplement : Supplement,
- *   name : 'SelfMixin',
+ *   name : 'ClassMixin',
  *   mixin : mixin
  * }
  *
- * var o = function Alpha() { };
- * o.prototype = Object.create( null );
- * o.prototype.field = 'value2';
- * o.prototype.constructor = o;
+ * var Alpha = function Alpha() { };
+ * Alpha.prototype = Object.create( null );
+ * Alpha.prototype.field = 'value2';
+ * Alpha.prototype.constructor = Alpha;
  *
- * Self.mixin( o );
+ * ClassMixin.mixin( Alpha );
  *
- * console.log( o.prototype );
+ * console.log( Alpha.prototype );
  * //returns
  * // Alpha
  * // {
  * //   field: 'value2',
- * //  constructor: [Function: Alpha],
- * //  example: [Function],
- * //  Composes: { field: 'value1' },
+ * //   constructor: [Function: Alpha],
+ * //   example: [Function],
+ * //   Composes: { field: 'value1' },
  * //  _mixins: { SelfMixin: 1 }
  * // }
  *
