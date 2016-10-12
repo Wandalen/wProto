@@ -173,6 +173,72 @@ var accessor = function ( test )
   }
 
 }
+
+//
+
+var accessorForbid = function( test )
+{
+
+  test.description = 'accessor forbid getter&setter';
+  var Alpha = { };
+  _.accessorForbid( Alpha, { a : 'a' } );
+  try
+  {
+    Alpha.a = 5;
+  }
+  catch( err )
+  {
+    Alpha[ Symbol.for( 'a' ) ] = 5;
+  }
+  var got;
+  try
+  {
+    got = Alpha.a;
+  }
+  catch( err )
+  {
+    got = Alpha[ Symbol.for( 'a' ) ];
+  }
+  var expected = 5;
+  test.identical( got, expected );
+
+  if( Config.debug )
+  {
+    test.description = 'forbid get';
+    test.shouldThrowError( function()
+    {
+      var Alpha = { };
+      _.accessorForbid( Alpha, { a : 'a' } );
+      Alpha.a;
+    });
+
+    test.description = 'forbid set';
+    test.shouldThrowError( function()
+    {
+      var Alpha = { };
+      _.accessorForbid( Alpha, { a : 'a' } );
+      Alpha.a = 5;
+    });
+
+    test.description = 'empty call';
+    test.shouldThrowError( function()
+    {
+      _.accessorForbid( );
+    });
+
+    test.description = 'invalid first argument type';
+    test.shouldThrowError( function()
+    {
+      _.accessorForbid( 1, { a : 'a' } );
+    });
+
+    test.description = 'invalid second argument type';
+    test.shouldThrowError( function()
+    {
+      _.accessorForbid( {}, [] );
+    });
+
+  }
 }
 
 var Proto =
