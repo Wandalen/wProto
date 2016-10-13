@@ -340,30 +340,30 @@ _accessor.defaults =
  * @param {wTools~accessorOptions} o - options {@link wTools~accessorOptions}.
  *
  * @example
- * var Self = function () { };
- * _.accessor( Self,{ a : 'a' }, 'set/get call' )
- * Self.a = 1; // set/get call
- * Self.a;
+ * var Alpha = function () { };
+ * _.accessor( Alpha,{ a : 'a' }, 'set/get call' )
+ * Alpha.a = 1; // set/get call
+ * Alpha.a;
  * // returns
  * // set/get call
  * // 1
  *
  * @example
- * var Self = function Alpha() { };
- * Self.prototype = Object.create( null );
- * Self.prototype.a = 1;
- * Self.prototype.constructor = Self;
+ * var Alpha = function Alpha() { };
+ * Alpha.prototype = Object.create( null );
+ * Alpha.prototype.a = 1;
+ * Alpha.prototype.constructor = Alpha;
  *
- * var o =
+ * _.accessor(
  * {
- *  object : Self.prototype,
+ *  object : Alpha.prototype,
  *  names : { a : 'a' },
  *  readOnly : true
- * }
+ * });
  *
- * _.accessor( o );
  *
- * var obj = new Self();
+ *
+ * var obj = new Alpha();
  * console.log( obj.a );// returns 1
  * obj.a = 5; // error property is readonly
  *
