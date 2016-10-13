@@ -1615,16 +1615,16 @@ protoExtend.defaults =
  * @param {object} instance - instance to complement.
  *
  * @example
- * var Self = function Alpha() { };
+ * var Alpha = function Alpha() { };
  *
- * var Proto = { constructor: Self, Composes : { a : 1, b : 2 } };
+ * var Proto = { constructor: Alpha, Composes : { a : 1, b : 2 } };
  *
  * _.protoMake
  * ({
- *     constructor: Self,
+ *     constructor: Alpha,
  *     extend: Proto,
  * });
- * var obj = new Self();
+ * var obj = new Alpha();
  * console.log( _.protoComplementInstance( obj ) ); //returns Alpha { a: 1, b: 2 }
  *
  * @return {object} Returns complemented instance.
