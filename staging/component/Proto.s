@@ -141,15 +141,15 @@ var _accessorOptions = function( object,names )
  * @param {wTools~accessorOptions} o - options {@link wTools~accessorOptions}.
  *
  * @example
- * var Self = function () { };
- * var o = _._accessorOptions( Self, { a : 'a', b : 'b' }, [ 'set/get call' ] );
+ * var Alpha = function () { };
+ * var o = _._accessorOptions( Alpha, { a : 'a', b : 'b' }, [ 'set/get call' ] );
  * _._accessor( o );
- * Self.a = 1; // returns [ 'set/get call' ]
- * Self.b = 2; // returns [ 'set/get call' ]
- * console.log( Self.a );
+ * Alpha.a = 1; // returns [ 'set/get call' ]
+ * Alpha.b = 2; // returns [ 'set/get call' ]
+ * console.log( Alpha.a );
  * // returns [ 'set/get call' ]
  * // 1
- * console.log( Self.b );
+ * console.log( Alpha.b );
  * // returns [ 'set/get call' ]
  * // 2
  *
