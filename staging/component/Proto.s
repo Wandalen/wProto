@@ -917,10 +917,10 @@ _propertyAddOwnDefaults.defaults =
  * @param {array-like} arguments - for arguments details see {@link wTools~propertyAddOwnDefaults}.
  *
  * @example
- * var Self = function () { };
+ * var Alpha = function() { };
  * var Composes = { tree : null };
- * _.propertyAddOwnComposes( Self.prototype, Composes );
- * console.log( Self.prototype ); // returns { Composes: { tree: null } }
+ * _.propertyAddOwnComposes( Alpha.prototype, Composes );
+ * console.log( Alpha.prototype ); // returns { Composes: { tree: null } }
  *
  * @method propertyAddOwnComposes
  * @throws {exception} If no arguments provided.
