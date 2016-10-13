@@ -983,10 +983,10 @@ var propertyAddOwnAggregates = function( dstProto,srcDefaults )
  * @param {array-like} arguments - for arguments details see {@link wTools~propertyAddOwnDefaults}.
  *
  * @example
- * var Self = function () { };
+ * var Alpha = function() { };
  * var Associates = { tree : null };
- * _.propertyAddOwnAssociates( Self.prototype, Associates );
- * console.log( Self.prototype ); // returns { Associates: { tree: null } }
+ * _.propertyAddOwnAssociates( Alpha.prototype, Associates );
+ * console.log( Alpha.prototype ); // returns { Associates: { tree: null } }
  *
  * @method propertyAddOwnAssociates
  * @throws {exception} If no arguments provided.
