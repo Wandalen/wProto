@@ -620,12 +620,12 @@ var constant = function( dstProto,namesObject )
  * @param {object|string} namesObject - property name as string/map with properties.
  *
  * @example
- * var Self = function () { };
- * Self.prototype.num = 100;
+ * var Alpha = function() { };
+ * Alpha.prototype.num = 100;
  * var ReadOnly = { num : null, num2 : null  };
- * _.restrictReadOnly ( Self.prototype,ReadOnly );
- * console.log( Self.prototype ); // returns { num: 100, num2: undefined }
- * Self.prototype.num2 = 1; // error assign to read only property
+ * _.restrictReadOnly ( Alpha.prototype,ReadOnly );
+ * console.log( Alpha.prototype ); // returns { num: 100, num2: undefined }
+ * Alpha.prototype.num2 = 1; // error assign to read only property
  *
  * @method restrictReadOnly
  * @throws {exception} If no argument provided.
