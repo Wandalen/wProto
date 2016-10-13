@@ -398,10 +398,10 @@ var accessor = function accessor( object,names )
  * @param { boolean } [ o.allowMultiple=true ] -
  *
  * @example
- * var Self = function () { };
- * _.accessorForbid(  Self,{ a : 'a' }, 'use Symbol.for() to access field' );
- * Self[ Symbol.for( 'a' ) ] = 1; // ok
- * Self['a'] = 1; // throws error
+ * var Alpha = function () { };
+ * _.accessorForbid(  Alpha,{ a : 'a' }, 'use Symbol.for() to access field' );
+ * Alpha[ Symbol.for( 'a' ) ] = 1; // ok
+ * Alpha['a'] = 1; // throws error
  *
  *
  * @method accessorForbid
