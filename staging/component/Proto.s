@@ -950,10 +950,10 @@ var propertyAddOwnComposes = function( dstProto,srcDefaults )
  * @param {array-like} arguments - for arguments details see {@link wTools~propertyAddOwnDefaults}.
  *
  * @example
- * var Self = function () { };
+ * var Alpha = function () { };
  * var Aggregates = { tree : null };
- * _.propertyAddOwnAggregates( Self.prototype, Aggregates );
- * console.log( Self.prototype ); // returns { Aggregates: { tree: null } }
+ * _.propertyAddOwnAggregates( Alpha.prototype, Aggregates );
+ * console.log( Alpha.prototype ); // returns { Aggregates: { tree: null } }
  *
  * @method propertyAddOwnAggregates
  * @throws {exception} If no arguments provided.
