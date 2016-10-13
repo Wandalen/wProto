@@ -1016,10 +1016,10 @@ var propertyAddOwnAssociates = function( dstProto,srcDefaults )
  * @param {array-like} arguments - for arguments details see {@link wTools~propertyAddOwnDefaults}.
  *
  * @example
- * var Self = function () { };
+ * var Alpha = function () { };
  * var Restricts = { tree : null };
- * _.propertyAddOwnRestricts( Self.prototype, Restricts );
- * console.log( Self.prototype ); // returns { Restricts: { tree: null } }
+ * _.propertyAddOwnRestricts( Alpha.prototype, Restricts );
+ * console.log( Alpha.prototype ); // returns { Restricts: { tree: null } }
  *
  * @method propertyAddOwnRestricts
  * @throws {exception} If no arguments provided.
