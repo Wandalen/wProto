@@ -569,11 +569,11 @@ var accessorReadOnly = function accessorReadOnly( object,names )
  * @param {object} namesObject - name/value map of constants.
  *
  * @example
- * var Self = function () { };
+ * var Alpha = function() { };
  * var Constants = { num : 100  };
- * _.constant ( Self.prototype,Constants );
- * console.log( Self.prototype ); // returns { num: 100 }
- * Self.prototype.num = 1;// error assign to read only property
+ * _.constant ( Alpha.prototype,Constants );
+ * console.log( Alpha.prototype ); // returns { num: 100 }
+ * Alpha.prototype.num = 1;// error assign to read only property
  *
  * @method constant
  * @throws {exception} If no argument provided.
