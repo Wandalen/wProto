@@ -851,15 +851,15 @@ mixin.defaults =
  * @private
  *
  * @example
- * var Self = function () { };
+ * var Alpha = function() { };
  * _._propertyAddOwnDefaults
  * ({
  *   facilityName : { Composes : 'Composes' },
- *   dstProto : Self.prototype,
+ *   dstProto : Alpha.prototype,
  *   srcDefaults : { a : 1, b : 2 },
  *   override : false,
  * });
- * console.log( Self.prototype ); // returns { Composes: { a: 1, b: 2 } }
+ * console.log( Alpha.prototype ); // returns { Composes: { a: 1, b: 2 } }
  *
  * @method _propertyAddOwnDefaults
  * @throws {exception} If no argument provided.
