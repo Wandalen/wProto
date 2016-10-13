@@ -533,12 +533,12 @@ var accessorForbidOnce = function( object,names )
  * @param { boolean } [ o.readOnly=true ] - function doesn't define setter to property.
  *
  * @example
- * var Self = function Alpha() { };
- * Self.prototype = Object.create( null );
- * Self.prototype.a = 1;
- * Self.prototype.constructor = Self;
- * _.accessorReadOnly(  Self.prototype, { a : 'a' }  );
- * var obj = new Self();
+ * var Alpha = function() { };
+ * Alpha.prototype = Object.create( null );
+ * Alpha.prototype.a = 1;
+ * Alpha.prototype.constructor = Alpha;
+ * _.accessorReadOnly(  Alpha.prototype, { a : 'a' }  );
+ * var obj = new Alpha();
  * console.log( obj.a );// returns 1
  * obj.a = 2;// error property is readOnly
  *
