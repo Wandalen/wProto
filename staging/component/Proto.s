@@ -104,7 +104,6 @@ _.assert( _.routineIs( _nameFielded ) );
  * @memberof wTools
  */
 
-
 var _accessorOptions = function( object,names )
 {
   var o = arguments.length === 1 ? arguments[ 0 ] : {};
@@ -134,7 +133,51 @@ var _accessorOptions = function( object,names )
 
 //
 
-// !!! description is good
+var _accessorRegister = function( o )
+{
+
+  _.routineOptions( _accessorRegister,o );
+  _.assert( Object.hasOwnProperty.call( o.proto,'Accessors' ),'_accessorRegister : proto should has Accessors map' );
+
+  if( Config.debug )
+  if( !o.rewriting )
+  {
+    var stack = o.proto.Accessors[ o.name ] ? o.proto.Accessors[ o.name ].stack : '';
+    _.assert
+    (
+      !o.proto.Accessors[ o.name ],
+      'defined at' + '\n',
+      stack,
+      '\naccessor',o.name,'of',o.proto.constructor.name
+    );
+    if( o.proto.Accessors[ o.name ] )
+    debugger;
+  }
+
+  _.assert( _.strIs( o.name ) );
+
+  o.proto.Accessors[ o.name ] =
+  {
+    name : o.name,
+    makerName : o.makerName,
+    makerArgs : o.makerArgs,
+  }
+
+  if( Config.debug )
+  o.proto.Accessors[ o.name ].stack = _.stack();
+
+}
+
+_accessorRegister.defaults =
+{
+  name : null,
+  proto : null,
+  makerName : null,
+  makerArgs : null,
+  rewriting : 0,
+}
+
+//
 
 /**
  * Accessor options
@@ -215,14 +258,19 @@ var _accessor = function( o )
     }
 
     _.assertMapOwnAll( object,has );
-    _.accessorForbidOnce( object,hasNot );
+    _.accessorForbid
+    ({
+      object : object,
+      names : hasNot,
+      prime : 0,
+    });
 
   }
 
-  _assert( _.objectLike( object ),'_.accessor :','expects object as argument but got', object );
+  _assert( _.objectLike( object ),'_.accessor :','expects object as argument                  m  but got', object );
   _assert( _.objectIs( names ),'_.accessor :','expects object names as argument but got', names );
 
-  //
+  /* */
 
   var _name = names;
   for( var n in _name )
@@ -233,6 +281,26 @@ var _accessor = function( o )
 
       var encodedName = n;
       var rawName = _name[ n ];
+
+      if( o.prime )
+      {
+
+        var optionsForRegister = _.mapExtend( {},o );
+        optionsForRegister.names = encodedName;
+        if( optionsForRegister.methods === optionsForRegister.object )
+        optionsForRegister.methods = null;
+        optionsForRegister.object = null;
+
+        _._accessorRegister
+        ({
+          proto : object,
+          name : encodedName,
+          makerName : null,
+          makerArgs : [ optionsForRegister ],
+          rewriting : o.rewriting,
+        });
+
+      }
 
       var redefinition = false;
       var parent = object.constructor ? Object.getPrototypeOf( object.constructor.prototype ) : null;
@@ -287,7 +355,7 @@ var _accessor = function( o )
       {
         set : setter,
         get : getter,
-        enumerable : o.enumerable,
+        enumerable : !!o.enumerable,
         configurable : false,
       });
 
@@ -295,12 +363,22 @@ var _accessor = function( o )
 
       if( o.strict && !redefinition )
       {
+
         var m =
-        [ 'use Symbol.for( \'' + rawName + '\' ) ',
+        [
+          'use Symbol.for( \'' + rawName + '\' ) ',
           'to get direct access to property\'s field, ',
           'not ' + fieldName,
         ].join( '' );
-        _.accessorForbid( object,fieldName,m );
+        //_.accessorForbid( object,fieldName,m ); xxx
+        _.accessorForbid
+        ({
+          object : object,
+          names : fieldName,
+          message : [ m ],
+          prime : 0,
+        });
+
       }
 
       // cache private field
@@ -324,12 +402,12 @@ _accessor.defaults =
   preserveValues : 1,
   readOnly : 0,
 
+  prime : 1,
+  rewriting : 0,
+
 }
 
 //
-
-// !!! move please maximum of description of _accessor here
-// _accessor is private routine
 
 /**
  * Short-cut for _accessor function.
@@ -436,9 +514,10 @@ var accessorForbid = function accessorForbid( object,names )
 
   }
 
-  o.preserveValues = 0;
-  o.strict = 0;
-  o.enumerable = false;
+  // o.preserveValues = 0;
+  // o.strict = 0;
+  // o.enumerable = false;
+
   o.names = names;
   o.object = object;
   o.methods = methods;
@@ -448,22 +527,18 @@ var accessorForbid = function accessorForbid( object,names )
 
 accessorForbid.defaults =
 {
+  preserveValues : 0,
+  strict : 0,
+  enumerable : 0,
+  prime : 0,
   override : 0,
   allowMultiple : 1,
+  rewriting : 1,
 }
 
 accessorForbid.defaults.__proto__ = _accessor.defaults;
 
-//
-
-var accessorForbidOnce = function( object,names )
-{
-  var o = _accessorOptions.apply( this,arguments );
-
-  o.allowMultiple = 1;
-
-  return accessorForbid( o );
-}
+console.warn( 'REMINDER : merge override,allowMultiple,rewriting' )
 
 //
 
@@ -472,6 +547,43 @@ var accessorReadOnly = function accessorReadOnly( object,names )
   var o = _accessorOptions.apply( this,arguments );
   o.readOnly = true;
   return accessor( o );
+}
+
+//
+
+var accessorSupplement = function accessorSupplement( dst,src )
+{
+
+  _.assert( arguments.length === 2 );
+  _.assert( Object.hasOwnProperty.call( dst,'Accessors' ),'accessorSupplement : dst should has Accessors map' );
+  _.assert( Object.hasOwnProperty.call( src,'Accessors' ),'accessorSupplement : src should has Accessors map' );
+
+  for( var a in src.Accessors )
+  {
+
+    var accessor = src.Accessors[ a ];
+    _.assert( _.arrayIs( accessor.makerArgs ) );
+
+    if( dst.Accessors[ a ] )
+    continue;
+
+    console.log( 'accessorSupplement',a );
+
+    if( accessor.makerName )
+    {
+      _.assert( _.routineIs( dst[ accessor.makerName ] ),'dst does not have accessor maker',accessor.makerName );
+      dst[ accessor.makerName ].apply( dst,accessor.makerArgs );
+    }
+    else
+    {
+      debugger;
+      throw _.err( 'not tested' );
+      _.assert( accessor.makerArgs.length === 1 );
+      _.protoAccessor( dst,accessor.makerArgs[ 0 ] );
+    }
+
+  }
+
 }
 
 //
@@ -552,7 +664,8 @@ var restrictReadOnly = function restrictReadOnly( dstProto,namesObject )
 
   if( _.strIs( namesObject ) )
   {
-    namesObject = { [ namesObject ] : namesObject };
+    namesObject = {};
+    namesObject[ namesObject ] = namesObject;
   }
 
   _assert( arguments.length === 2 );
@@ -1190,12 +1303,6 @@ setterChangesTracking_gen.defaults =
  */
 
 /*
-  Self.prototype = Object.create( Parent.prototype );
-  _.mapExtend( Self.prototype,Proto );
-  _.mapSupplement( Self.prototype,Original.prototype );
-*/
-
-/*
 _.protoMake
 ({
   constructor : Self,
@@ -1227,8 +1334,8 @@ var protoMake = function protoMake( o )
   _assert( arguments.length === 1 );
   _assert( _.objectIs( o ) );
 
-  _assert( _.routineIs( o.constructor ) );
-  _assert( o.constructor.name || o.constructor._name );
+  _assert( _.routineIs( o.constructor ),'protoMake expects constructor' );
+  _assert( o.constructor.name || o.constructor._name,'constructor should have name' );
   _assert( _hasOwnProperty.call( o.constructor.prototype,'constructor' ) );
 
   _.assertMapOwnAll( o.constructor.prototype,has );
@@ -1292,7 +1399,7 @@ var protoMake = function protoMake( o )
     usingAtomicExtension : o.usingAtomicExtension,
   });
 
-  /**/
+  /* */
 
   return prototype;
 }
@@ -1348,7 +1455,10 @@ protoMake.defaults =
 var protoExtend = function protoExtend( o )
 {
 
-  _assert( arguments.length === 1 );
+  if( arguments.length === 2 )
+  o = { constructor : arguments[ 0 ], extend : arguments[ 1 ] };
+
+  _assert( arguments.length === 1 || arguments.length === 2 );
   _assert( _.objectIs( o ) );
 
   _assert( _.routineIs( o.constructor ),'expects constructor o.constructor' );
@@ -1546,7 +1656,8 @@ var protoUnitedInterface = function( protos )
         object : result,
         names : names,
         methods : methods,
-        strict : false,
+        strict : 0,
+        prime : 0,
       });
 
     }
@@ -1677,6 +1788,7 @@ var ClassFacility =
   Associates : 'Associates',
   Restricts : 'Restricts',
   Static : 'Static',
+  Accessors : 'Accessors',
 }
 
 // --
@@ -1689,11 +1801,13 @@ var Proto =
   // property
 
   _accessorOptions : _accessorOptions,
+  _accessorRegister : _accessorRegister,
+
   _accessor : _accessor,
   accessor : accessor,
   accessorForbid : accessorForbid,
-  accessorForbidOnce : accessorForbidOnce,
   accessorReadOnly : accessorReadOnly,
+  accessorSupplement : accessorSupplement,
 
   constant : constant,
   restrictReadOnly : restrictReadOnly,
