@@ -140,7 +140,7 @@ var _accessorRegister = function( o )
   _.assert( Object.hasOwnProperty.call( o.proto,'Accessors' ),'_accessorRegister : proto should has Accessors map' );
 
   if( Config.debug )
-  if( !o.rewriting )
+  if( !o.combining )
   {
     var stack = o.proto.Accessors[ o.name ] ? o.proto.Accessors[ o.name ].stack : '';
     _.assert
@@ -154,17 +154,30 @@ var _accessorRegister = function( o )
     debugger;
   }
 
+  _.assert( !o.combining || o.combining === 'rewrite' || o.combining === 'append' );
   _.assert( _.strIs( o.name ) );
 
-  o.proto.Accessors[ o.name ] =
+  var descriptor =
   {
     name : o.name,
-    makerName : o.makerName,
-    makerArgs : o.makerArgs,
+    declaratorName : o.declaratorName,
+    declaratorArgs : o.declaratorArgs,
+    declaratorKind : o.declaratorKind,
+    combining : o.combining,
   }
 
   if( Config.debug )
-  o.proto.Accessors[ o.name ].stack = _.stack();
+  descriptor.stack = _.stack();
+
+  if( o.combining === 'append' )
+  {
+    if( _.arrayIs( o.proto.Accessors[ o.name ] ) )
+    o.proto.Accessors[ o.name ].push( descriptor );
+    else
+    o.proto.Accessors[ o.name ] = [ descriptor ];
+  }
+
+  o.proto.Accessors[ o.name ] = descriptor;
 
 }
 
@@ -172,9 +185,10 @@ _accessorRegister.defaults =
 {
   name : null,
   proto : null,
-  makerName : null,
-  makerArgs : null,
-  rewriting : 0,
+  declaratorName : null,
+  declaratorArgs : null,
+  declaratorKind : null,
+  combining : 0,
 }
 
 //
@@ -228,17 +242,13 @@ _accessorRegister.defaults =
  * @memberof wTools
  */
 
-var _accessor = function( o )
+var _accessor = function _accessor( o )
 {
-  var object = o.object;
-  var names = o.names;
-  var methods = o.methods;
-  var message = o.message;
 
   /* verification */
 
-  _assert( !_.atomicIs( object ) );
-  _assert( !_.atomicIs( methods ) );
+  _assert( !_.atomicIs( o.object ) );
+  _assert( !_.atomicIs( o.methods ) );
   _assert( !o.message || _.arrayIs( o.message ) );
   _.assertMapHasOnly( o,_accessor.defaults );
   _.mapComplement( o,_accessor.defaults );
@@ -257,133 +267,25 @@ var _accessor = function( o )
       type : 'type',
     }
 
-    _.assertMapOwnAll( object,has );
+    _.assertMapOwnAll( o.object,has );
     _.accessorForbid
     ({
-      object : object,
+      object : o.object,
       names : hasNot,
       prime : 0,
     });
 
   }
 
-  _assert( _.objectLike( object ),'_.accessor :','expects object as argument                  m  but got', object );
-  _assert( _.objectIs( names ),'_.accessor :','expects object names as argument but got', names );
+  _assert( _.objectLike( o.object ),'_.accessor :','expects object ( object ), but got', o.object );
+  _assert( _.objectIs( o.names ),'_.accessor :','expects object ( names ), but got', o.names );
 
   /* */
 
-  var _name = names;
-  for( var n in _name )
+  for( var n in o.names )
   {
 
-    (function _accessorField()
-    {
-
-      var encodedName = n;
-      var rawName = _name[ n ];
-
-      if( o.prime )
-      {
-
-        var optionsForRegister = _.mapExtend( {},o );
-        optionsForRegister.names = encodedName;
-        if( optionsForRegister.methods === optionsForRegister.object )
-        optionsForRegister.methods = null;
-        optionsForRegister.object = null;
-
-        _._accessorRegister
-        ({
-          proto : object,
-          name : encodedName,
-          makerName : null,
-          makerArgs : [ optionsForRegister ],
-          rewriting : o.rewriting,
-        });
-
-      }
-
-      var redefinition = false;
-      var parent = object.constructor ? Object.getPrototypeOf( object.constructor.prototype ) : null;
-      if( parent )
-      redefinition = parent[ rawName + 'Get' ] !== undefined || parent[ '_' + rawName + 'Get' ] !== undefined;
-
-      var setter = methods[ '_' + rawName + 'Set' ] ? methods[ '_' + rawName + 'Set' ] : methods[ rawName + 'Set' ];
-      var getter = methods[ '_' + rawName + 'Get' ] ? methods[ '_' + rawName + 'Get' ] : methods[ rawName + 'Get' ];
-
-      var fieldName = '_' + rawName;
-      var fieldSymbol = Symbol.for( rawName );
-
-      if( o.preserveValues )
-      if( _hasOwnProperty.call( object,encodedName ) )
-      object[ fieldSymbol ] = object[ encodedName ];
-
-      // setter
-
-      if( !setter && !o.readOnly )
-      if( message )
-      setter = function setter( src )
-      {
-        console.info.apply( console,message );
-        this[ fieldSymbol ] = src;
-      }
-      else
-      setter = function setter( src )
-      {
-        this[ fieldSymbol ] = src;
-      }
-
-      _assert( !setter || !o.readOnly,'accessor :','readOnly but setter found in',object );
-
-      // getter
-
-      if( !getter )
-      if( message )
-      getter = function getter()
-      {
-        console.info.apply( console,message );
-        return this[ fieldSymbol ];
-      }
-      else
-      getter = function getter()
-      {
-        return this[ fieldSymbol ];
-      }
-
-      // define accessor
-
-      Object.defineProperty( object, encodedName,
-      {
-        set : setter,
-        get : getter,
-        enumerable : !!o.enumerable,
-        configurable : false,
-      });
-
-      // define private field
-
-      if( o.strict && !redefinition )
-      {
-
-        var m =
-        [
-          'use Symbol.for( \'' + rawName + '\' ) ',
-          'to get direct access to property\'s field, ',
-          'not ' + fieldName,
-        ].join( '' );
-        //_.accessorForbid( object,fieldName,m ); xxx
-        _.accessorForbid
-        ({
-          object : object,
-          names : fieldName,
-          message : [ m ],
-          prime : 0,
-        });
-
-      }
-
-      // cache private field
-
-    })();
+    _accessorProperty( o,n );
 
   }
 
@@ -403,8 +305,211 @@ _accessor.defaults =
   readOnly : 0,
 
   prime : 1,
-  rewriting : 0,
 
+  //rewriting : 0,
+  combining : 0,
+
+}
+
+//
+
+var Combining = [ 'rewrite','supplement','apppend','prepend' ];
+var _accessorProperty = function( o,name )
+{
+
+  _.assert( arguments.length === 2 );
+
+  var encodedName = name;
+  var rawName = name;
+  var appending = 0;
+
+  if( o.combining === 'append' )
+  debugger;
+
+  /* */
+
+  var propertyDescriptor = _.propertyDescriptorGet( o.object,encodedName );
+  if( propertyDescriptor.descriptor )
+  {
+
+    _.assert
+    (
+      o.combining,
+      'overridin of property',encodedName + '\n' +
+      '( o.combining ) suppose to be',Combining.join(),'if accessor overided'
+    );
+
+    _.assert( o.combining === 'rewrite' || o.combining === 'append','not implemented' );
+    if( o.combining === 'append' )
+    {
+
+      debugger;
+
+      if( o.methods[ '_' + rawName + 'Set' ] === propertyDescriptor.descriptor.set )
+      o.methods[ '_' + rawName + 'Set' ] = null;
+      if( o.methods[ rawName + 'Set' ] === propertyDescriptor.descriptor.set )
+      o.methods[ rawName + 'Set' ] = null;
+      if( o.methods[ '_' + rawName + 'Get' ] === propertyDescriptor.descriptor.get )
+      o.methods[ '_' + rawName + 'Get' ] = null;
+      if( o.methods[ rawName + 'Get' ] === propertyDescriptor.descriptor.get )
+      o.methods[ rawName + 'Get' ] = null;
+
+      var settrGetterSecond = _accessorSetterGetterMake( o,o.methods,rawName );
+
+      if( o.methods[ '_' + rawName + 'Set' ] )
+      o.methods[ '_' + rawName + 'Set' ] = null;
+      if( o.methods[ rawName + 'Set' ] )
+      o.methods[ rawName + 'Set' ] = null;
+      if( o.methods[ '_' + rawName + 'Get' ] )
+      o.methods[ '_' + rawName + 'Get' ] = null;
+      if( o.methods[ rawName + 'Get' ] )
+      o.methods[ rawName + 'Get' ] = null;
+
+      o.methods[ '_' + rawName + 'Set' ] = function appendingSet( src )
+      {
+        debugger;
+        src = propertyDescriptor.descriptor.set.call( this,src );
+        _.assert( src !== undefined );
+        return settrGetterSecond.set.call( this,src );
+      }
+
+      o.methods[ '_' + rawName + 'Get' ] = settrGetterSecond.get;
+
+      appending = 1;
+    }
+
+  }
+
+  /* */
+
+  if( o.prime )
+  {
+
+    var optionsForRegister = _.mapExtend( {},o );
+    optionsForRegister.names = encodedName;
+    if( optionsForRegister.methods === optionsForRegister.object )
+    optionsForRegister.methods = {};
+    optionsForRegister.object = null;
+
+    if( !optionsForRegister.methods[ '_' + rawName + 'Get' ] && !optionsForRegister.methods[ rawName + 'Get' ] )
+    optionsForRegister.methods[ '_' + rawName + 'Get' ] = o.object[ '_' + name + 'Get' ] ? o.object[ '_' + name + 'Get' ] : o.object[ name + 'Get' ];
+
+    if( !optionsForRegister.methods[ '_' + rawName + 'Set' ] && !optionsForRegister.methods[ rawName + 'Set' ] )
+    optionsForRegister.methods[ '_' + rawName + 'Set' ] = o.object[ '_' + name + 'Set' ] ? o.object[ '_' + name + 'Set' ] : o.object[ name + 'Set' ];
+
+    _._accessorRegister
+    ({
+      proto : o.object,
+      name : encodedName,
+      declaratorName : null,
+      declaratorArgs : [ optionsForRegister ],
+      combining : o.combining,
+    });
+
+  }
+
+  /* */
+
+  //var redefinition = false;
+  // var parent = o.object.constructor ? Object.getPrototypeOf( o.object.constructor.prototype ) : null;
+  // if( parent )
+  // redefinition = parent[ rawName + 'Get' ] !== undefined || parent[ '_' + rawName + 'Get' ] !== undefined;
+
+  var settrGetter = _accessorSetterGetterMake( o,o.methods,rawName );
+  var fieldName = '_' + rawName;
+  var fieldSymbol = Symbol.for( rawName );
+
+  if( o.preserveValues )
+  if( _hasOwnProperty.call( o.object,encodedName ) )
+  o.object[ fieldSymbol ] = o.object[ encodedName ];
+
+  /* define accessor */
+
+  Object.defineProperty( o.object, encodedName,
+  {
+    set : settrGetter.set,
+    get : settrGetter.get,
+    enumerable : !!o.enumerable,
+    configurable : o.combining === 'append',
+  });
+
+  /* define private field */
+
+  if( o.strict && !propertyDescriptor.descriptor )
+  {
+
+    var m =
+    [
+      'use Symbol.for( \'' + rawName + '\' ) ',
+      'to get direct access to property\'s field, ',
+      'not ' + fieldName,
+    ].join( '' );
+
+    _.accessorForbid
+    ({
+      object : o.object,
+      names : fieldName,
+      message : [ m ],
+      prime : 0,
+    });
+
+  }
+
+}
+
+//
+
+var _accessorSetterGetterMake = function( o,object,name )
+{
+  var result = {};
+
+  result.set = object[ '_' + name + 'Set' ] ? object[ '_' + name + 'Set' ] : object[ name + 'Set' ];
+  result.get = object[ '_' + name + 'Get' ] ? object[ '_' + name + 'Get' ] : object[ name + 'Get' ];
+
+  var fieldName = '_' + name;
+  var fieldSymbol = Symbol.for( name );
+
+  if( o.preserveValues )
+  if( _hasOwnProperty.call( o.object,name ) )
+  o.object[ fieldSymbol ] = o.object[ name ];
+
+  /* set */
+
+  if( !result.set && !o.readOnly )
+  if( o.message )
+  result.set = function set( src )
+  {
+    console.info.apply( console,o.message );
+    this[ fieldSymbol ] = src;
+    return src;
+  }
+  else
+  result.set = function set( src )
+  {
+    this[ fieldSymbol ] = src;
+    return src;
+  }
+
+  _assert( !result.set || !o.readOnly,'accessor :','readOnly but settter found in',o.object );
+
+  /* get */
+
+  if( !result.get )
+  if( o.message )
+  result.get = function get()
+  {
+    console.info.apply( console,o.message );
+    return this[ fieldSymbol ];
+  }
+  else
+  result.get = function get()
+  {
+    return this[ fieldSymbol ];
+  }
+
+  /* */
+
+  return result;
 }
 
 //
@@ -447,7 +552,7 @@ var accessorForbid = function accessorForbid( object,names )
   var object = o.object;
   var names = o.names;
 
-  // verification
+  /* verification */
 
   _assert( _.objectLike( object ),'_.accessor :','expects object as argument but got', object );
   _assert( _.objectIs( names ),'_.accessor :','expects object names as argument but got', names );
@@ -455,7 +560,7 @@ var accessorForbid = function accessorForbid( object,names )
   _.mapComplement( o,accessorForbid.defaults );
 
 
-  // message
+  /* message */
 
   _assert( object.constructor === null || object.constructor.name || object.constructor._name,'accessorForbid :','object should have name' );
   var protoName = ( object.constructor ? ( object.constructor.name || object.constructor._name || '' ) : '' ) + '.';
@@ -464,9 +569,8 @@ var accessorForbid = function accessorForbid( object,names )
   message = o.message.join( ' : ' );
 
 
-  // property
+  /* property */
 
-  /*var stack = _.stack();*/
   var methods = {};
   for( var n in names )
   {
@@ -492,18 +596,33 @@ var accessorForbid = function accessorForbid( object,names )
       methods[ setterName ] = handler;
       methods[ getterName ] = handler;
 
-      if( !o.override || o.allowMultiple )
-      if( _hasOwnProperty.call( object,encodedName ) )
+      /* */
+
+      var propertyDescriptor = _.propertyDescriptorGet( o.object,encodedName );
+      if( propertyDescriptor.descriptor )
       {
-        var descriptor = Object.getOwnPropertyDescriptor( object,encodedName );
-        if( _.routineIs( descriptor.get ) && descriptor.get.forbid && o.allowMultiple )
+        _.assert( o.combining,'accessorForbid : if accessor overided expect ( o.combining ) is',Combining.join() );
+
+        if( _.routineIs( propertyDescriptor.descriptor.get ) && propertyDescriptor.descriptor.get.name === 'forbidden' )
         {
           delete names[ n ];
           return;
         }
-        else if( !o.override )
-        handler();
+
       }
+
+      // if( !o.override || o.allowMultiple )
+      // if( _hasOwnProperty.call( object,encodedName ) )
+      // {
+      //   var descriptor = Object.getOwnPropertyDescriptor( object,encodedName );
+      //   if( _.routineIs( descriptor.get ) && descriptor.get.forbid && o.allowMultiple )
+      //   {
+      //     delete names[ n ];
+      //     return;
+      //   }
+      //   else if( !o.override )
+      //   handler();
+      // }
 
       if( !Object.isExtensible( object ) )
       {
@@ -531,14 +650,13 @@ accessorForbid.defaults =
   strict : 0,
   enumerable : 0,
   prime : 0,
-  override : 0,
-  allowMultiple : 1,
-  rewriting : 1,
+  //override : 0,
+  //allowMultiple : 1,
+  //rewriting : 1,
+  combining : 'rewrite',
 }
 
 accessorForbid.defaults.__proto__ = _accessor.defaults;
-
-console.warn( 'REMINDER : merge override,allowMultiple,rewriting' )
 
 //
 
@@ -551,38 +669,59 @@ var accessorReadOnly = function accessorReadOnly( object,names )
 
 //
 
-var accessorSupplement = function accessorSupplement( dst,src )
+var accessorsSupplement = function accessorsSupplement( dst,src )
 {
 
   _.assert( arguments.length === 2 );
-  _.assert( Object.hasOwnProperty.call( dst,'Accessors' ),'accessorSupplement : dst should has Accessors map' );
-  _.assert( Object.hasOwnProperty.call( src,'Accessors' ),'accessorSupplement : src should has Accessors map' );
+  _.assert( Object.hasOwnProperty.call( dst,'Accessors' ),'accessorsSupplement : dst should has Accessors map' );
+  _.assert( Object.hasOwnProperty.call( src,'Accessors' ),'accessorsSupplement : src should has Accessors map' );
 
+  /* */
+
+  var supplement = function( accessor )
+  {
+
+    _.assert( _.arrayIs( accessor.declaratorArgs ) );
+    _.assert( !accessor.combining || accessor.combining === 'rewrite' || accessor.combining === 'append','not implemented' );
+
+    //if( accessor.combining !== 'append' && accessor.combining !== 'prepend' )
+    if( _.objectIs( dst.Accessors[ a ] ) )
+    return;
+
+    // console.log( 'accessorsSupplement',a );
+
+    if( accessor.declaratorName )
+    {
+      _.assert( _.routineIs( dst[ accessor.declaratorName ] ),'dst does not have accessor maker',accessor.declaratorName );
+      dst[ accessor.declaratorName ].apply( dst,accessor.declaratorArgs );
+    }
+    else
+    {
+      _.assert( accessor.declaratorArgs.length === 1 );
+      var optionsForAccessor = _.mapExtend( {},accessor.declaratorArgs[ 0 ] );
+      optionsForAccessor.object = dst;
+      if( !optionsForAccessor.methods )
+      optionsForAccessor.methods = dst;
+      _.accessor( optionsForAccessor );
+    }
+
+  }
+
+  /* */
+
+  // debugger;
   for( var a in src.Accessors )
   {
 
     var accessor = src.Accessors[ a ];
-    _.assert( _.arrayIs( accessor.makerArgs ) );
 
-    if( dst.Accessors[ a ] )
-    continue;
-
-    console.log( 'accessorSupplement',a );
-
-    if( accessor.makerName )
-    {
-      _.assert( _.routineIs( dst[ accessor.makerName ] ),'dst does not have accessor maker',accessor.makerName );
-      dst[ accessor.makerName ].apply( dst,accessor.makerArgs );
-    }
-    else
-    {
-      debugger;
-      throw _.err( 'not tested' );
-      _.assert( accessor.makerArgs.length === 1 );
-      _.protoAccessor( dst,accessor.makerArgs[ 0 ] );
-    }
+    if( _.objectIs( accessor ) )
+    supplement( accessor );
+    else for( var i = 0 ; i < accessor.length ; i++ )
+    supplement( accessor[ i ] );
 
   }
+  // debugger;
 
 }
 
@@ -1094,6 +1233,7 @@ var setterFriend_gen = function( o )
     if( self[ symbol ][ nameOfLink ] !== self )
     self[ symbol ][ nameOfLink ] = self;
 
+    return self[ symbol ];
   }
 
 }
@@ -1137,6 +1277,7 @@ var setterCopyable_gen = function( o )
 
     }
 
+    return self[ symbol ];
   }
 
 }
@@ -1175,6 +1316,7 @@ var setterBufferFrom_gen = function( o )
     }
 
     self[ symbol ] = data;
+    return data;
   }
 
 }
@@ -1208,6 +1350,7 @@ var setterChangesTracking_gen = function( o )
     self[ name ] = data;
     self[ nameOfChangeFlag ] = true;
 
+    return data;
   }
 
 }
@@ -1772,6 +1915,41 @@ var protoArchy = function( srcObject )
   return srcObject;
 }
 
+//
+
+var propertyDescriptorGet = function( object,name )
+{
+  var result = { object : null, descriptor : null }
+
+  _.assert( arguments.length === 2 );
+
+  do
+  {
+    result.descriptor = Object.getOwnPropertyDescriptor( object,name );
+    if( result.descriptor && !( 'value' in result.descriptor ) )
+    {
+      result.object = object;
+      return result;
+    }
+    object = Object.getPrototypeOf( object );
+  }
+  while( object );
+
+  return result;
+}
+
+//
+
+var propertyGetterSetterGet = function( object,name )
+{
+  var result = {};
+
+  result.set = object[ '_' + name + 'Set' ] || object[ '' + name + 'Set' ];
+  result.get = object[ '_' + name + 'Get' ] || object[ '' + name + 'Get' ];
+
+  return result;
+}
+
 // --
 // var
 // --
@@ -1804,10 +1982,13 @@ var Proto =
   _accessorRegister : _accessorRegister,
 
   _accessor : _accessor,
+  _accessorProperty : _accessorProperty,
+  _accessorSetterGetterMake : _accessorSetterGetterMake,
+
   accessor : accessor,
   accessorForbid : accessorForbid,
   accessorReadOnly : accessorReadOnly,
-  accessorSupplement : accessorSupplement,
+  accessorsSupplement : accessorsSupplement,
 
   constant : constant,
   restrictReadOnly : restrictReadOnly,
@@ -1843,6 +2024,9 @@ var Proto =
   protoHas : protoHas, /* experimental */
   protoOwning : protoOwning, /* experimental */
   protoArchy : protoArchy, /* experimental */
+
+  propertyDescriptorGet : propertyDescriptorGet,
+  propertyGetterSetterGet : propertyGetterSetterGet,
 
 
   // var
