@@ -1734,20 +1734,20 @@ protoExtend.defaults =
  *     extend: Proto,
  * });
  * var obj = new Self();
- * console.log( _.protoComplementInstance( obj ) ); //returns Alpha { a: 1, b: 2 }
+ * console.log( _.instanceInit( obj ) ); //returns Alpha { a: 1, b: 2 }
  *
  * @return {object} Returns complemented instance.
- * @method protoComplementInstance
+ * @method instanceInit
  * @memberof wTools
  */
 
-var protoComplementInstance = function protoComplementInstance( instance )
+var instanceInit = function instanceInit( instance )
 {
 
   _.mapComplement( instance,instance.Restricts );
   _.mapComplement( instance,instance.Composes );
-  _.mapComplement( instance,instance.Aggregates );
-  _.mapComplement( instance,instance.Associates );
+  _.mapSupplement( instance,instance.Aggregates );
+  _.mapSupplement( instance,instance.Associates );
 
   return instance;
 }
@@ -2059,7 +2059,7 @@ var Proto =
   protoMake : protoMake,
   protoExtend : protoExtend,
 
-  protoComplementInstance : protoComplementInstance,
+  instanceInit : instanceInit,
 
   protoUnitedInterface : protoUnitedInterface, /* experimental */
 
