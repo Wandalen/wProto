@@ -1746,7 +1746,7 @@ var instanceInit = function instanceInit( instance )
 
   _.mapComplement( instance,instance.Restricts );
   _.mapComplement( instance,instance.Composes );
-  _.mapSupplementOwn( instance,instance.Aggregates );
+  _.mapComplement( instance,instance.Aggregates );
   _.mapSupplementOwn( instance,instance.Associates );
 
   return instance;
