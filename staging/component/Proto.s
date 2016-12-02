@@ -5,7 +5,7 @@
 *  self :: current object.
 *  Self :: current class.
 *  Parent :: parent class.
-*  Static :: static fields.
+*  Statics :: static fields.
 *  extend :: extend destination with all properties from source.
 *  supplement :: supplement destination with those properties from source which do not belong to source.
 
@@ -154,7 +154,7 @@ var _accessorRegister = function( o )
     debugger;
   }
 
-  _.assert( !o.combining || o.combining === 'rewrite' || o.combining === 'append' );
+  _.assert( !o.combining || o.combining === 'rewrite' || o.combining === 'append', 'not supported ( o.combinng )',o.combinng );
   _.assert( _.strIs( o.name ) );
 
   var descriptor =
@@ -179,6 +179,7 @@ var _accessorRegister = function( o )
 
   o.proto.Accessors[ o.name ] = descriptor;
 
+  return descriptor;
 }
 
 _accessorRegister.defaults =
@@ -261,18 +262,19 @@ var _accessor = function _accessor( o )
       constructor : 'constructor',
     }
 
-    var hasNot =
-    {
-      Type : 'Type',
-      type : 'type',
-    }
+    // var hasNot =
+    // {
+    //   Type : 'Type',
+    //   type : 'type',
+    // }
 
     _.assertMapOwnAll( o.object,has );
     _.accessorForbid
     ({
       object : o.object,
-      names : hasNot,
+      names : ClassForbiddenFacility,
       prime : 0,
+      strict : 0,
     });
 
   }
@@ -313,7 +315,6 @@ _accessor.defaults =
 
 //
 
-var Combining = [ 'rewrite','supplement','apppend','prepend' ];
 var _accessorProperty = function( o,name )
 {
 
@@ -328,7 +329,7 @@ var _accessorProperty = function( o,name )
 
   /* */
 
-  var propertyDescriptor = _.propertyDescriptorGet( o.object,encodedName );
+  var propertyDescriptor = _.accessorDescriptorGet( o.object,encodedName );
   if( propertyDescriptor.descriptor )
   {
 
@@ -451,6 +452,7 @@ var _accessorProperty = function( o,name )
       names : fieldName,
       message : [ m ],
       prime : 0,
+      strict : 0,
     });
 
   }
@@ -552,13 +554,15 @@ var accessorForbid = function accessorForbid( object,names )
   var object = o.object;
   var names = o.names;
 
+  if( o.combining === 'rewrite' && o.strict === undefined )
+  o.strict = 0;
+
   /* verification */
 
   _assert( _.objectLike( object ),'_.accessor :','expects object as argument but got', object );
   _assert( _.objectIs( names ),'_.accessor :','expects object names as argument but got', names );
   _.assertMapHasOnly( o,accessorForbid.defaults );
   _.mapComplement( o,accessorForbid.defaults );
-
 
   /* message */
 
@@ -591,14 +595,14 @@ var accessorForbid = function accessorForbid( object,names )
         throw _.err( messageLine );
       }
 
-      handler.forbid = true;
+      handler.isForbid = true;
 
       methods[ setterName ] = handler;
       methods[ getterName ] = handler;
 
       /* */
 
-      var propertyDescriptor = _.propertyDescriptorGet( o.object,encodedName );
+      var propertyDescriptor = _.accessorDescriptorGet( o.object,encodedName );
       if( propertyDescriptor.descriptor )
       {
         _.assert( o.combining,'accessorForbid : if accessor overided expect ( o.combining ) is',Combining.join() );
@@ -611,18 +615,18 @@ var accessorForbid = function accessorForbid( object,names )
 
       }
 
-      // if( !o.override || o.allowMultiple )
-      // if( _hasOwnProperty.call( object,encodedName ) )
-      // {
-      //   var descriptor = Object.getOwnPropertyDescriptor( object,encodedName );
-      //   if( _.routineIs( descriptor.get ) && descriptor.get.forbid && o.allowMultiple )
-      //   {
-      //     delete names[ n ];
-      //     return;
-      //   }
-      //   else if( !o.override )
-      //   handler();
-      // }
+      if( o.strict )
+      if( _hasOwnProperty.call( object,encodedName ) )
+      {
+        var descriptor = Object.getOwnPropertyDescriptor( object,encodedName );
+        if( _.routineIs( descriptor.get ) && descriptor.get.isForbid )
+        {
+          delete names[ n ];
+          return;
+        }
+        else
+        handler();
+      }
 
       if( !Object.isExtensible( object ) )
       {
@@ -640,6 +644,7 @@ var accessorForbid = function accessorForbid( object,names )
   o.names = names;
   o.object = object;
   o.methods = methods;
+  o.strict = 0;
 
   return _accessor( _.mapScreen( _accessor.defaults,o ) );
 }
@@ -647,7 +652,7 @@ var accessorForbid = function accessorForbid( object,names )
 accessorForbid.defaults =
 {
   preserveValues : 0,
-  strict : 0,
+  strict : 1,
   enumerable : 0,
   prime : 0,
   //override : 0,
@@ -1143,10 +1148,10 @@ var propertyAddOwnRestricts = function( dstProto,srcDefaults )
 // getter / setter generator
 // --
 
-var setterMapCollection_gen = function( o )
+var setterMapCollection_functor = function( o )
 {
 
-  _.assertMapHasOnly( o,setterMapCollection_gen.defaults );
+  _.assertMapHasOnly( o,setterMapCollection_functor.defaults );
   _.assert( _.strIs( o.name ) );
   var symbol = Symbol.for( o.name );
   var elementMaker = o.elementMaker;
@@ -1180,7 +1185,7 @@ var setterMapCollection_gen = function( o )
 
 }
 
-setterMapCollection_gen.defaults =
+setterMapCollection_functor.defaults =
 {
   name : null,
   elementMaker : null,
@@ -1188,7 +1193,7 @@ setterMapCollection_gen.defaults =
 
 //
 
-var setterFriend_gen = function( o )
+var setterFriend_functor = function( o )
 {
 
   var name = _.nameUnfielded( o.name ).coded;
@@ -1200,7 +1205,7 @@ var setterFriend_gen = function( o )
   _.assert( _.strIs( name ) );
   _.assert( _.strIs( nameOfLink ) );
   _.assert( _.routineIs( maker ) );
-  _.assertMapHasOnly( o,setterFriend_gen.defaults );
+  _.assertMapHasOnly( o,setterFriend_functor.defaults );
 
   return function setterFriend( data )
   {
@@ -1238,7 +1243,7 @@ var setterFriend_gen = function( o )
 
 }
 
-setterFriend_gen.defaults =
+setterFriend_functor.defaults =
 {
   name : null,
   nameOfLink : null,
@@ -1247,7 +1252,7 @@ setterFriend_gen.defaults =
 
 //
 
-var setterCopyable_gen = function( o )
+var setterCopyable_functor = function( o )
 {
 
   var name = _.nameUnfielded( o.name ).coded;
@@ -1257,7 +1262,7 @@ var setterCopyable_gen = function( o )
   _.assert( arguments.length === 1 );
   _.assert( _.strIs( name ) );
   _.assert( _.routineIs( maker ) );
-  _.assertMapHasOnly( o,setterCopyable_gen.defaults );
+  _.assertMapHasOnly( o,setterCopyable_functor.defaults );
 
   return function setterCopyable( data )
   {
@@ -1282,7 +1287,7 @@ var setterCopyable_gen = function( o )
 
 }
 
-setterCopyable_gen.defaults =
+setterCopyable_functor.defaults =
 {
   name : null,
   maker : null,
@@ -1290,7 +1295,7 @@ setterCopyable_gen.defaults =
 
 //
 
-var setterBufferFrom_gen = function( o )
+var setterBufferFrom_functor = function( o )
 {
 
   var name = _.nameUnfielded( o.name ).coded;
@@ -1300,7 +1305,7 @@ var setterBufferFrom_gen = function( o )
   _.assert( arguments.length === 1 );
   _.assert( _.strIs( name ) );
   _.assert( _.routineIs( bufferConstructor ) );
-  _.routineOptions( setterBufferFrom_gen,o );
+  _.routineOptions( setterBufferFrom_functor,o );
 
   return function setterBufferFrom( data )
   {
@@ -1321,7 +1326,7 @@ var setterBufferFrom_gen = function( o )
 
 }
 
-setterBufferFrom_gen.defaults =
+setterBufferFrom_functor.defaults =
 {
   name : null,
   bufferConstructor : null,
@@ -1329,14 +1334,14 @@ setterBufferFrom_gen.defaults =
 
 //
 
-var setterChangesTracking_gen = function( o )
+var setterChangesTracking_functor = function( o )
 {
 
   var name = Symbol.for( _.nameUnfielded( o.name ).coded );
   var nameOfChangeFlag = Symbol.for( _.nameUnfielded( o.nameOfChangeFlag ).coded );
 
   _.assert( arguments.length === 1 );
-  _.routineOptions( setterChangesTracking_gen,o );
+  _.routineOptions( setterChangesTracking_functor,o );
 
   throw _.err( 'not tested' );
 
@@ -1355,7 +1360,7 @@ var setterChangesTracking_gen = function( o )
 
 }
 
-setterChangesTracking_gen.defaults =
+setterChangesTracking_functor.defaults =
 {
   name : null,
   nameOfChangeFlag : 'needsUpdate',
@@ -1468,8 +1473,8 @@ var protoMake = function protoMake( o )
   {
     Parent : 'Parent',
     Self : 'Self',
-    Type : 'Type',
-    type : 'type',
+    // Type : 'Type',
+    // type : 'type',
   }
 
   /**/
@@ -1483,6 +1488,7 @@ var protoMake = function protoMake( o )
 
   _.assertMapOwnAll( o.constructor.prototype,has );
   _.assertMapOwnNone( o.constructor.prototype,hasNot );
+  _.assertMapOwnNone( o.constructor.prototype,ClassForbiddenFacility );
 
   _assert( _.routineIs( o.parent ) || o.parent === undefined || o.parent === null,'wrong type of parent :',_.strTypeOf( 'o.parent' ) );
   _assert( _.objectIs( o.extend ) || o.extend === undefined );
@@ -1538,7 +1544,7 @@ var protoMake = function protoMake( o )
     constructor : o.constructor,
     extend : o.extend,
     supplement : o.supplement,
-    static : o.static,
+    //static : o.static,
     usingAtomicExtension : o.usingAtomicExtension,
   });
 
@@ -1553,7 +1559,7 @@ protoMake.defaults =
   parent : null,
   extend : null,
   supplement : null,
-  static : null,
+  //static : null,
   usingAtomicExtension : false,
   usingOriginalPrototype : false,
 }
@@ -1568,14 +1574,13 @@ protoMake.defaults =
  *
  * @example
  * var Self = function Betta() { };
- * var Static = { staticFunction : function staticFunction(){ } };
+ * var Statics = { staticFunction : function staticFunction(){ } };
  * var Composes = { a : 1, b : 2 };
- * var Proto = { constructor: Self, Composes: Composes };
+ * var Proto = { constructor : Self, Composes : Composes, Statics : Statics };
  *
  * var proto =  _.protoExtend({
  *     constructor: Self,
  *     extend: Proto,
- *     static : Static
  * });
  * console.log( Self.prototype === proto ); //returns true
  *
@@ -1609,7 +1614,7 @@ var protoExtend = function protoExtend( o )
 
   _assert( _.objectIs( o.extend ) || o.extend === undefined || o.extend === null );
   _assert( _.objectIs( o.supplement ) || o.supplement === undefined || o.supplement === null );
-  _assert( _.objectIs( o.static ) || o.static === undefined || o.static === null );
+  // _assert( _.objectIs( o.static ) || o.static === undefined || o.static === null );
 
   _.routineOptions( protoExtend,o );
 
@@ -1656,22 +1661,28 @@ var protoExtend = function protoExtend( o )
     prototype.constructor = o.supplement.constructor;
   }
 
-  /* static */
+  /* statics */
 
-  var addStatic = function( _static )
+  // var addStatic = function( _static )
+  // {
+  //   _.mapSupplement( prototype,_static );
+  //   _.mapSupplement( o.constructor,_static );
+  // }
+
+  // if( o.static )
+  // addStatic( o.static );
+
+  if( o.extend && o.extend.Statics )
   {
-    _.mapSupplement( prototype,_static );
-    _.mapSupplement( o.constructor,_static );
+    _.mapExtend( prototype,o.extend.Statics );
+    _.mapExtend( o.constructor,o.extend.Statics );
   }
 
-  if( o.static )
-  addStatic( o.static );
-
-  if( o.extend && o.extend.Static )
-  addStatic( o.extend.Static );
-
-  if( o.supplement && o.supplement.Static )
-  addStatic( o.supplement.Static );
+  if( o.supplement && o.supplement.Statics )
+  {
+    _.mapSupplement( prototype,o.supplement.Statics );
+    _.mapSupplement( o.constructor,o.supplement.Statics );
+  }
 
   /* atomic extension */
 
@@ -1702,7 +1713,7 @@ protoExtend.defaults =
   constructor : null,
   extend : null,
   supplement : null,
-  static : null,
+  //static : null,
   usingAtomicExtension : false,
 }
 
@@ -1733,10 +1744,10 @@ protoExtend.defaults =
 var protoComplementInstance = function protoComplementInstance( instance )
 {
 
+  _.mapComplement( instance,instance.Restricts );
   _.mapComplement( instance,instance.Composes );
   _.mapComplement( instance,instance.Aggregates );
   _.mapComplement( instance,instance.Associates );
-  _.mapComplement( instance,instance.Restricts );
 
   return instance;
 }
@@ -1848,7 +1859,7 @@ var protoAppend = function( dstObject )
  * @memberof wTools
  */
 
-var protoHas = function( srcProto,insProto )
+var protoHas = function protoHas( srcProto,insProto )
 {
 
   do
@@ -1917,7 +1928,7 @@ var protoArchy = function( srcObject )
 
 //
 
-var propertyDescriptorGet = function( object,name )
+var accessorDescriptorGet = function accessorDescriptorGet( object,name )
 {
   var result = { object : null, descriptor : null }
 
@@ -1927,6 +1938,29 @@ var propertyDescriptorGet = function( object,name )
   {
     result.descriptor = Object.getOwnPropertyDescriptor( object,name );
     if( result.descriptor && !( 'value' in result.descriptor ) )
+    {
+      result.object = object;
+      return result;
+    }
+    object = Object.getPrototypeOf( object );
+  }
+  while( object );
+
+  return result;
+}
+
+//
+
+var propertyDescriptorGet_ = function propertyDescriptorGet_( object,name )
+{
+  var result = { object : null, descriptor : null }
+
+  _.assert( arguments.length === 2 );
+
+  do
+  {
+    result.descriptor = Object.getOwnPropertyDescriptor( object,name );
+    if( result.descriptor )
     {
       result.object = object;
       return result;
@@ -1965,9 +1999,18 @@ var ClassFacility =
   Aggregates : 'Aggregates',
   Associates : 'Associates',
   Restricts : 'Restricts',
-  Static : 'Static',
+  Statics : 'Statics',
   Accessors : 'Accessors',
 }
+
+var ClassForbiddenFacility =
+{
+  Static : 'Static',
+  Type : 'Type',
+  type : 'type',
+}
+
+var Combining = [ 'rewrite','supplement','apppend','prepend' ];
 
 // --
 // prototype
@@ -2004,11 +2047,11 @@ var Proto =
 
   // getter / setter generator
 
-  setterMapCollection_gen : setterMapCollection_gen,
-  setterFriend_gen : setterFriend_gen,
-  setterCopyable_gen : setterCopyable_gen,
-  setterBufferFrom_gen : setterBufferFrom_gen,
-  setterChangesTracking_gen : setterChangesTracking_gen,
+  setterMapCollection_functor : setterMapCollection_functor,
+  setterFriend_functor : setterFriend_functor,
+  setterCopyable_functor : setterCopyable_functor,
+  setterBufferFrom_functor : setterBufferFrom_functor,
+  setterChangesTracking_functor : setterChangesTracking_functor,
 
 
   // prototype
@@ -2025,13 +2068,17 @@ var Proto =
   protoOwning : protoOwning, /* experimental */
   protoArchy : protoArchy, /* experimental */
 
-  propertyDescriptorGet : propertyDescriptorGet,
+  accessorDescriptorGet : accessorDescriptorGet,
+
+  propertyDescriptorGet_ : propertyDescriptorGet_,
   propertyGetterSetterGet : propertyGetterSetterGet,
 
 
   // var
 
   ClassFacility : ClassFacility,
+  ClassForbiddenFacility : ClassForbiddenFacility,
+  Combining : Combining,
 
 }
 
