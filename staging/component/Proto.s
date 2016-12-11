@@ -1,3 +1,6 @@
+( function _Proto_s_() {
+
+'use strict';
 
 /**
 * Definitions :
@@ -38,9 +41,9 @@
 
 */
 
-( function _Proto_s_() {
-
-'use strict';
+/*
+  - rename constructor options!!!
+*/
 
 if( typeof module !== 'undefined' )
 {
@@ -842,7 +845,7 @@ var restrictReadOnly = function restrictReadOnly( dstProto,namesObject )
  * @memberof wTools#
  */
 
-var mixin = function( o )
+var mixin = function mixin( o )
 {
 
   var dst = o.dst;
@@ -858,50 +861,63 @@ var mixin = function( o )
   _assert( arguments.length === 1 );
   _assert( _.objectIs( dst ) );
   _assert( _.routineIs( o.mixin.mixin ) );
+  //_assert( _.mapIs( o.mixin ) );
   _assert( _.strIs( o.mixin.name ) );
   _assert( _.mapIs( o.mixin.Extend ) || o.mixin.Extend === undefined || o.mixin.Extend === null );
   _assert( _.mapIs( o.mixin.Supplement ) || o.mixin.Supplement === undefined || o.mixin.Supplement === null );
-  //_assert( _.mapIs( o.mixin ) );
   _.assertMapHasOnly( o,mixin.defaults );
   _.assertMapOwnOnly( o.mixin,mixinDefaults );
+
+  /* mixin into routine */
 
   if( !_.mapIs( dst ) )
   {
     _assert( dst.constructor.prototype === dst,'mixin :','expects prototype with own constructor field' );
-    _assert( dst.constructor.name.length > 0 || dst.constructor._name.length,'mixin :','constructor should has name' );
+    _assert( dst.constructor.name.length || dst.constructor._name.length,'mixin :','constructor should has name' );
     _assert( _.routineIs( dst.init ) );
   }
 
-  /* */
+  /* extend */
 
-  if( o.mixin.Supplement )
-  _.mapSupplement( dst,_.mapBut( o.mixin.Supplement,ClassFacility ) );
-  if( o.mixin.Extend )
-  _.mapExtend( dst,_.mapBut( o.mixin.Extend,ClassFacility ) );
-
-  /* facility */
-
-  if( o.mixin.Supplement )
-  for( var f in ClassFacility )
-  if( o.mixin.Supplement[ f ] )
-  _propertyAddOwnDefaults
+  _.assert( _.mapOwn( dst,'constructor' ) );
+  _.assert( dst.constructor.prototype === dst );
+  _.protoExtend
   ({
-    facilityName : f,
-    dstProto : dst,
-    srcDefaults : o.mixin.Supplement[ f ],
-    override : false,
+    constructor : dst.constructor,
+    extend : o.mixin.Extend,
+    supplement : o.mixin.Supplement,
   });
 
-  if( o.mixin.Extend )
-  for( var f in ClassFacility )
-  if( o.mixin.Extend[ f ] )
-  _propertyAddOwnDefaults
-  ({
-    facilityName : f,
-    dstProto : dst,
-    srcDefaults : o.mixin.Extend[ f ],
-    override : true,
-  });
+  // /* */
+  //
+  // if( o.mixin.Supplement )
+  // _.mapSupplement( dst,_.mapBut( o.mixin.Supplement,ClassFacility ) );
+  // if( o.mixin.Extend )
+  // _.mapExtend( dst,_.mapBut( o.mixin.Extend,ClassFacility ) );
+  //
+  // /* facility */
+  //
+  // if( o.mixin.Supplement )
+  // for( var f in ClassFacility )
+  // if( o.mixin.Supplement[ f ] )
+  // _propertyAddOwnDefaults
+  // ({
+  //   facilityName : f,
+  //   dstProto : dst,
+  //   srcDefaults : o.mixin.Supplement[ f ],
+  //   override : false,
+  // });
+  //
+  // if( o.mixin.Extend )
+  // for( var f in ClassFacility )
+  // if( o.mixin.Extend[ f ] )
+  // _propertyAddOwnDefaults
+  // ({
+  //   facilityName : f,
+  //   dstProto : dst,
+  //   srcDefaults : o.mixin.Extend[ f ],
+  //   override : true,
+  // });
 
   /* functor */
 
@@ -911,13 +927,9 @@ var mixin = function( o )
 
   /* field */
 
-  //if( !dst._mixins )
   if( !_hasOwnProperty.call( dst,'_mixins' ) )
   {
-    //var _mixin = dst._mixins;
     dst._mixins = Object.create( dst._mixins || null );
-    //if( _mixin )
-    //Object.setPrototypeOf( dst._mixins, _mixin );
   }
 
   _.assert( !dst._mixins[ o.mixin.name ],'attempt to mixin same mixin same several times : ' + o.mixin.name + ' into ' + dst.constructor.name );
@@ -930,9 +942,6 @@ mixin.defaults =
 {
   dst : null,
   mixin : null,
-  // proto : null,
-  // functors : null,
-  // name : null,
 }
 
 //
@@ -1530,13 +1539,6 @@ var protoMake = function protoMake( o )
     prototype.constructor = null;
   }
 
-  /**/
-
-/*
-  if( o.constructor.name.indexOf( 'FileProvider' ) != -1 )
-  debugger;
-*/
-
   /* extend */
 
   _.protoExtend
@@ -1544,7 +1546,6 @@ var protoMake = function protoMake( o )
     constructor : o.constructor,
     extend : o.extend,
     supplement : o.supplement,
-    //static : o.static,
     usingAtomicExtension : o.usingAtomicExtension,
   });
 
@@ -1662,15 +1663,6 @@ var protoExtend = function protoExtend( o )
   }
 
   /* statics */
-
-  // var addStatic = function( _static )
-  // {
-  //   _.mapSupplement( prototype,_static );
-  //   _.mapSupplement( o.constructor,_static );
-  // }
-
-  // if( o.static )
-  // addStatic( o.static );
 
   if( o.extend && o.extend.Statics )
   {
