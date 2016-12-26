@@ -136,24 +136,32 @@ var _accessorOptions = function( object,names )
 
 //
 
-var _accessorRegister = function( o )
+var _accessorRegister = function _accessorRegister( o )
 {
 
   _.routineOptions( _accessorRegister,o );
-  _.assert( Object.hasOwnProperty.call( o.proto,'Accessors' ),'_accessorRegister : proto should has Accessors map' );
+  // _.assert( _hasOwnProperty.call( o.proto,'_Accessors' ),'_accessorRegister : proto should has _Accessors map' );
+
+  _.protoMakeOwnDescendant( o.proto,'_Accessors' );
+  // if( !o.proto._Accessors )
+  // o.proto._Accessors = Object.create( null );
+  var accessors = o.proto._Accessors;
+
+  if( o.combining && o.combining !== 'rewrite' )
+  debugger;
 
   if( Config.debug )
   if( !o.combining )
   {
-    var stack = o.proto.Accessors[ o.name ] ? o.proto.Accessors[ o.name ].stack : '';
+    var stack = accessors[ o.name ] ? accessors[ o.name ].stack : '';
     _.assert
     (
-      !o.proto.Accessors[ o.name ],
+      !accessors[ o.name ],
       'defined at' + '\n',
       stack,
       '\naccessor',o.name,'of',o.proto.constructor.name
     );
-    if( o.proto.Accessors[ o.name ] )
+    if( accessors[ o.name ] )
     debugger;
   }
 
@@ -174,13 +182,13 @@ var _accessorRegister = function( o )
 
   if( o.combining === 'append' )
   {
-    if( _.arrayIs( o.proto.Accessors[ o.name ] ) )
-    o.proto.Accessors[ o.name ].push( descriptor );
+    if( _.arrayIs( accessors[ o.name ] ) )
+    accessors[ o.name ].push( descriptor );
     else
-    o.proto.Accessors[ o.name ] = [ descriptor ];
+    accessors[ o.name ] = [ descriptor ];
   }
 
-  o.proto.Accessors[ o.name ] = descriptor;
+  accessors[ o.name ] = descriptor;
 
   return descriptor;
 }
@@ -464,12 +472,12 @@ var _accessorProperty = function( o,name )
 
 //
 
-var _accessorSetterGetterMake = function( o,object,name )
+var _accessorSetterGetterMake = function _accessorSetterGetterMake( o,object,name )
 {
   var result = {};
 
-  result.set = object[ '_' + name + 'Set' ] ? object[ '_' + name + 'Set' ] : object[ name + 'Set' ];
-  result.get = object[ '_' + name + 'Get' ] ? object[ '_' + name + 'Get' ] : object[ name + 'Get' ];
+  result.set = object[ name + 'Set' ] ? object[ name + 'Set' ] : object[ '_' + name + 'Set' ];
+  result.get = object[ name + 'Get' ] ? object[ name + 'Get' ] : object[ '_' + name + 'Get' ];
 
   var fieldName = '_' + name;
   var fieldSymbol = Symbol.for( name );
@@ -512,7 +520,7 @@ var _accessorSetterGetterMake = function( o,object,name )
     return this[ fieldSymbol ];
   }
 
-  /* */
+  /* return */
 
   return result;
 }
@@ -681,8 +689,8 @@ var accessorsSupplement = function accessorsSupplement( dst,src )
 {
 
   _.assert( arguments.length === 2 );
-  _.assert( Object.hasOwnProperty.call( dst,'Accessors' ),'accessorsSupplement : dst should has Accessors map' );
-  _.assert( Object.hasOwnProperty.call( src,'Accessors' ),'accessorsSupplement : src should has Accessors map' );
+  _.assert( _hasOwnProperty.call( dst,'_Accessors' ),'accessorsSupplement : dst should has _Accessors map' );
+  _.assert( _hasOwnProperty.call( src,'_Accessors' ),'accessorsSupplement : src should has _Accessors map' );
 
   /* */
 
@@ -693,7 +701,7 @@ var accessorsSupplement = function accessorsSupplement( dst,src )
     _.assert( !accessor.combining || accessor.combining === 'rewrite' || accessor.combining === 'append','not implemented' );
 
     //if( accessor.combining !== 'append' && accessor.combining !== 'prepend' )
-    if( _.objectIs( dst.Accessors[ a ] ) )
+    if( _.objectIs( dst._Accessors[ a ] ) )
     return;
 
     // console.log( 'accessorsSupplement',a );
@@ -718,10 +726,10 @@ var accessorsSupplement = function accessorsSupplement( dst,src )
   /* */
 
   // debugger;
-  for( var a in src.Accessors )
+  for( var a in src._Accessors )
   {
 
-    var accessor = src.Accessors[ a ];
+    var accessor = src._Accessors[ a ];
 
     if( _.objectIs( accessor ) )
     supplement( accessor );
@@ -888,37 +896,6 @@ var mixin = function mixin( o )
     supplement : o.mixin.Supplement,
   });
 
-  // /* */
-  //
-  // if( o.mixin.Supplement )
-  // _.mapSupplement( dst,_.mapBut( o.mixin.Supplement,ClassFacility ) );
-  // if( o.mixin.Extend )
-  // _.mapExtend( dst,_.mapBut( o.mixin.Extend,ClassFacility ) );
-  //
-  // /* facility */
-  //
-  // if( o.mixin.Supplement )
-  // for( var f in ClassFacility )
-  // if( o.mixin.Supplement[ f ] )
-  // _propertyAddOwnDefaults
-  // ({
-  //   facilityName : f,
-  //   dstProto : dst,
-  //   srcDefaults : o.mixin.Supplement[ f ],
-  //   override : false,
-  // });
-  //
-  // if( o.mixin.Extend )
-  // for( var f in ClassFacility )
-  // if( o.mixin.Extend[ f ] )
-  // _propertyAddOwnDefaults
-  // ({
-  //   facilityName : f,
-  //   dstProto : dst,
-  //   srcDefaults : o.mixin.Extend[ f ],
-  //   override : true,
-  // });
-
   /* functor */
 
   if( o.mixin.Functor )
@@ -979,8 +956,7 @@ mixin.defaults =
  * @memberof wTools
  */
 
-//var _propertyAddOwnDefaults = function( defaultsName,dstProto,srcDefaults,o )
-var _propertyAddOwnDefaults = function( o )
+var _propertyAddOwnDefaults = function _propertyAddOwnDefaults( o )
 {
   var o = o || {};
 
@@ -990,13 +966,15 @@ var _propertyAddOwnDefaults = function( o )
 
   o.facilityName = _.nameUnfielded( o.facilityName );
 
-  if( !_hasOwnProperty.call( o.dstProto,o.facilityName.coded ) )
-  {
-    var facility = o.dstProto[ o.facilityName.coded ];
-    o.dstProto[ o.facilityName.coded ] = {};
-    if( facility )
-    Object.setPrototypeOf( o.dstProto[ o.facilityName.coded ], facility );
-  }
+  // if( !_hasOwnProperty.call( o.dstProto,o.facilityName.coded ) )
+  // {
+  //   var facility = o.dstProto[ o.facilityName.coded ];
+  //   o.dstProto[ o.facilityName.coded ] = Object.create( null );
+  //   if( facility )
+  //   Object.setPrototypeOf( o.dstProto[ o.facilityName.coded ], facility );
+  // }
+
+  _.protoMakeOwnDescendant( o.dstProto,o.facilityName.coded );
 
   var facility = o.dstProto[ o.facilityName.coded ];
 
@@ -1482,11 +1460,9 @@ var protoMake = function protoMake( o )
   {
     Parent : 'Parent',
     Self : 'Self',
-    // Type : 'Type',
-    // type : 'type',
   }
 
-  /**/
+  /* */
 
   _assert( arguments.length === 1 );
   _assert( _.objectIs( o ) );
@@ -1495,18 +1471,24 @@ var protoMake = function protoMake( o )
   _assert( o.constructor.name || o.constructor._name,'constructor should have name' );
   _assert( _hasOwnProperty.call( o.constructor.prototype,'constructor' ) );
 
-  _.assertMapOwnAll( o.constructor.prototype,has );
+  _.assertMapOwnAll( o.constructor.prototype,has,'protoMake : expects constructor' );
   _.assertMapOwnNone( o.constructor.prototype,hasNot );
   _.assertMapOwnNone( o.constructor.prototype,ClassForbiddenFacility );
 
   _assert( _.routineIs( o.parent ) || o.parent === undefined || o.parent === null,'wrong type of parent :',_.strTypeOf( 'o.parent' ) );
   _assert( _.objectIs( o.extend ) || o.extend === undefined );
   _assert( _.objectIs( o.supplement ) || o.supplement === undefined );
-  _.assert( o.parent !== o.extend );
+  _assert( o.parent !== o.extend );
+
+  if( o.extend && _hasOwnProperty.call( o.extend,'constructor' ) )
+  _assert( o.extend.constructor === o.constructor );
+
+  // if( o.supplement && _hasOwnProperty.call( o.supplement,'constructor' ) )
+  // _assert( o.supplement.constructor === o.constructor );
 
   _.routineOptions( protoMake,o );
 
-  /**/
+  /* */
 
   var prototype;
 
@@ -1532,11 +1514,20 @@ var protoMake = function protoMake( o )
   {
     if( o.constructor.prototype )
     {
-      _.assert( Object.keys( o.constructor.prototype ).length === 0,'misuse of protoMake, prototype of constructor has properties put there manually.' );
+      _.assert( Object.keys( o.constructor.prototype ).length === 0,'misuse of protoMake, prototype of constructor has properties put there manually' );
       _.assert( o.constructor.prototype.constructor === o.constructor );
     }
     prototype = o.constructor.prototype = Object.create( o.parent ? o.parent.prototype : null );
-    prototype.constructor = null;
+    //prototype.constructor = null;
+  }
+
+  /* constructor */
+
+  prototype.constructor = o.constructor;
+
+  if( o.parent )
+  {
+    Object.setPrototypeOf( o.constructor,o.parent );
   }
 
   /* extend */
@@ -1547,7 +1538,15 @@ var protoMake = function protoMake( o )
     extend : o.extend,
     supplement : o.supplement,
     usingAtomicExtension : o.usingAtomicExtension,
+    usingStatics : 0,
   });
+
+  /* statics */
+
+  _.assert( prototype.constructor );
+  _.assert( prototype.Statics );
+  _.mapSupplementOwn( prototype,prototype.Statics );
+  _.mapSupplementOwn( prototype.constructor,prototype.Statics );
 
   /* */
 
@@ -1560,7 +1559,6 @@ protoMake.defaults =
   parent : null,
   extend : null,
   supplement : null,
-  //static : null,
   usingAtomicExtension : false,
   usingOriginalPrototype : false,
 }
@@ -1579,7 +1577,8 @@ protoMake.defaults =
  * var Composes = { a : 1, b : 2 };
  * var Proto = { constructor : Self, Composes : Composes, Statics : Statics };
  *
- * var proto =  _.protoExtend({
+ * var proto =  _.protoExtend
+ * ({
  *     constructor: Self,
  *     extend: Proto,
  * });
@@ -1664,16 +1663,21 @@ var protoExtend = function protoExtend( o )
 
   /* statics */
 
-  if( o.extend && o.extend.Statics )
+  if( o.usingStatics )
   {
-    _.mapExtend( prototype,o.extend.Statics );
-    _.mapExtend( o.constructor,o.extend.Statics );
-  }
 
-  if( o.supplement && o.supplement.Statics )
-  {
-    _.mapSupplement( prototype,o.supplement.Statics );
-    _.mapSupplement( o.constructor,o.supplement.Statics );
+    if( o.extend && o.extend.Statics )
+    {
+      _.mapExtend( prototype,o.extend.Statics );
+      _.mapExtend( o.constructor,o.extend.Statics );
+    }
+
+    if( o.supplement && o.supplement.Statics )
+    {
+      _.mapSupplement( prototype,o.supplement.Statics );
+      _.mapSupplement( o.constructor,o.supplement.Statics );
+    }
+
   }
 
   /* atomic extension */
@@ -1705,8 +1709,8 @@ protoExtend.defaults =
   constructor : null,
   extend : null,
   supplement : null,
-  //static : null,
-  usingAtomicExtension : false,
+  usingStatics : 1,
+  usingAtomicExtension : 0,
 }
 
 //
@@ -1815,6 +1819,28 @@ var protoUnitedInterface = function( protos )
   return result;
 }
 
+//
+
+var protoMakeOwnDescendant = function protoMakeOwnDescendant( dst,fieldName )
+{
+
+  _assert( arguments.length === 2 );
+
+  // var fieldName = _.nameUnfielded( fieldName ).coded;
+
+  if( !_hasOwnProperty.call( dst,fieldName ) )
+  {
+    var field = dst[ fieldName ];
+    dst[ fieldName ] = Object.create( null );
+    if( field )
+    Object.setPrototypeOf( dst[ fieldName ], field );
+  }
+
+  return dst;
+}
+
+//
+
 /**
  * Append prototype to object. Find archi parent and replace its proto.
  * @param {object} dstObject - dst object to append proto.
@@ -1874,7 +1900,7 @@ var protoHas = function protoHas( srcProto,insProto )
  * @memberof wTools
  */
 
-var protoOwning = function( srcObject,names )
+var protoOwning = function protoOwning( srcObject,names )
 {
   var names = _nameFielded( names );
   _assert( _.objectIs( srcObject ) );
@@ -1992,7 +2018,7 @@ var ClassFacility =
   Associates : 'Associates',
   Restricts : 'Restricts',
   Statics : 'Statics',
-  Accessors : 'Accessors',
+  // Accessors : 'Accessors',
 }
 
 var ClassForbiddenFacility =
@@ -2054,6 +2080,8 @@ var Proto =
   instanceInit : instanceInit,
 
   protoUnitedInterface : protoUnitedInterface, /* experimental */
+
+  protoMakeOwnDescendant : protoMakeOwnDescendant, /* experimental */
 
   protoAppend : protoAppend, /* experimental */
   protoHas : protoHas, /* experimental */
