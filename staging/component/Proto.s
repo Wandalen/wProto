@@ -67,8 +67,6 @@ if( typeof module !== 'undefined' )
   {
   }
 
-  require( './ProtoHelper.s' );
-
 }
 
 var Self = wTools;
@@ -2120,6 +2118,13 @@ _.mapExtend( Self, Proto );
 // --
 // export
 // --
+
+if( typeof module !== 'undefined' )
+{
+
+  require( './ProtoHelper.s' );
+
+}
 
 if( typeof module !== 'undefined' && module !== null )
 {
