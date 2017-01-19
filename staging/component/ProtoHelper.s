@@ -1,4 +1,4 @@
-( function _Proto_s_() {
+( function _ProtoHelper_s_() {
 
 'use strict';
 

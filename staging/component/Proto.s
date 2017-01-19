@@ -67,6 +67,8 @@ if( typeof module !== 'undefined' )
   {
   }
 
+  require( './ProtoHelper.s' );
+
 }
 
 var Self = wTools;
