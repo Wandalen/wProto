@@ -123,6 +123,8 @@ var _accessorOptions = function( object,names )
 
   if( !o.methods )
   o.methods = object;
+  else
+  o.methods = _.mapExtend( {},o.methods );
 
   var names = o.names = _nameFielded( names );
 
@@ -422,11 +424,6 @@ var _accessorProperty = function( o,name )
 
   /* */
 
-  //var redefinition = false;
-  // var parent = o.object.constructor ? Object.getPrototypeOf( o.object.constructor.prototype ) : null;
-  // if( parent )
-  // redefinition = parent[ rawName + 'Get' ] !== undefined || parent[ '_' + rawName + 'Get' ] !== undefined;
-
   var settrGetter = _accessorSetterGetterMake( o,o.methods,rawName );
   var fieldName = '_' + rawName;
   var fieldSymbol = Symbol.for( rawName );
@@ -577,12 +574,13 @@ var accessorForbid = function accessorForbid( object,names )
 
   /* message */
 
-  _assert( object.constructor === null || object.constructor.name || object.constructor._name,'accessorForbid :','object should have name' );
-  var protoName = ( object.constructor ? ( object.constructor.name || object.constructor._name || '' ) : '' ) + '.';
+  var _constructor = object.constructor || Object.getPrototypeOf( object );
+  _assert( _.routineIs( _constructor ) || _constructor === null );
+  _assert( _constructor === null || _constructor.name || _constructor._name,'accessorForbid :','object should have name' );
+  var protoName = ( _constructor ? ( _constructor.name || _constructor._name || '' ) : '' ) + '.';
   var message = 'is deprecated';
   if( o.message )
   message = o.message.join( ' : ' );
-
 
   /* property */
 
@@ -680,7 +678,7 @@ var accessorReadOnly = function accessorReadOnly( object,names )
 {
   var o = _accessorOptions.apply( this,arguments );
   o.readOnly = true;
-  return accessor( o );
+  return _accessor( o );
 }
 
 //
@@ -1194,34 +1192,45 @@ var setterFriend_functor = function( o )
   _.assert( _.routineIs( maker ) );
   _.assertMapHasOnly( o,setterFriend_functor.defaults );
 
-  return function setterFriend( data )
+  return function setterFriend( src )
   {
 
     var self = this;
-    _.assert( data === null || _.objectIs( data ),'setterFriend : expects null or object, but got ' + _.strTypeOf( data ) );
+    _.assert( src === null || _.objectIs( src ),'setterFriend : expects null or object, but got ' + _.strTypeOf( src ) );
 
-    //console.log( 'setting ' + namename );
-
-    if( !data )
+    if( !src )
     {
 
-      self[ symbol ] = data;
+      self[ symbol ] = src;
       return;
 
     }
     else if( !self[ symbol ] )
     {
 
-      var o = {};
-      o[ nameOfLink ] = self;
-      o.name = name;
-      self[ symbol ] = maker( o );
+      if( _.mapIs( src ) )
+      {
+        var o = {};
+        o[ nameOfLink ] = self;
+        o.name = name;
+        self[ symbol ] = maker( o );
+        self[ symbol ].copy( src );
+      }
+      else
+      {
+        self[ symbol ] = src;
+      }
+
+    }
+    else
+    {
+
+      self[ symbol ].copy( src );
 
     }
 
-    self[ symbol ].copy( data );
+    // self[ symbol ].copy( src );
 
-    /*_.assert( self[ symbol ][ nameOfLink ] === null || self[ symbol ][ nameOfLink ] === self );*/
     if( self[ symbol ][ nameOfLink ] !== self )
     self[ symbol ][ nameOfLink ] = self;
 
