@@ -180,7 +180,7 @@ var _accessorRegister = function _accessorRegister( o )
   }
 
   if( Config.debug )
-  descriptor.stack = _.stack();
+  descriptor.stack = _.diagnosticStack();
 
   if( o.combining === 'append' )
   {
@@ -469,9 +469,13 @@ var _accessorProperty = function( o,name )
 
 //
 
-var _accessorSetterGetterMake = function _accessorSetterGetterMake( o,object,name )
+function _accessorSetterGetterMake( o,object,name )
 {
   var result = {};
+
+  _.assert( arguments.length === 3 );
+  _.assert( _.objectLike( object ) );
+  _.assert( _.strIs( name ) );
 
   result.set = object[ name + 'Set' ] ? object[ name + 'Set' ] : object[ '_' + name + 'Set' ];
   result.get = object[ name + 'Get' ] ? object[ name + 'Get' ] : object[ '_' + name + 'Get' ];
@@ -518,6 +522,25 @@ var _accessorSetterGetterMake = function _accessorSetterGetterMake( o,object,nam
   }
 
   /* return */
+
+  return result;
+}
+
+//
+
+function _accessorSetterGetterGet( object,name )
+{
+  var result = {};
+
+  _.assert( arguments.length === 2 );
+  _.assert( _.objectIs( object ) );
+  _.assert( _.strIs( name ) );
+
+  result.setName = object[ name + 'Set' ] ? name + 'Set' : '_' + name + 'Set';
+  result.getName = object[ name + 'Get' ] ? name + 'Get' : '_' + name + 'Get';
+
+  result.set = object[ result.setName ];
+  result.get = object[ result.getName ];
 
   return result;
 }
@@ -858,6 +881,7 @@ var mixin = function mixin( o )
   var mixinDefaults =
   {
     name : null,
+    nameShort : null,
     mixin : null,
     Extend : null,
     Supplement : null,
@@ -1361,6 +1385,56 @@ setterChangesTracking_functor.defaults =
   name : null,
   nameOfChangeFlag : 'needsUpdate',
   bufferConstructor : null,
+}
+
+//
+
+function accessorToElement( o )
+{
+
+  _.assert( arguments.length === 1 );
+  _.assert( _.objectIs( o.names ) );
+  _.routineOptions( accessorToElement,o );
+
+  var names = {};
+  for( var n in o.names ) (function()
+  {
+    names[ n ] = n;
+
+    var arrayName = o.arrayName;
+    var index = o.names[ n ];
+    _.assert( _.numberIs( index ) );
+    _.assert( index >= 0 );
+
+    var setterGetter = _accessorSetterGetterGet( o.object,n );
+
+    if( !setterGetter.set )
+    o.object[ setterGetter.setName ] = function accessorToElementSet( src )
+    {
+      this[ arrayName ][ index ] = src;
+    }
+
+    if( !setterGetter.get )
+    o.object[ setterGetter.getName ] = function accessorToElementGet()
+    {
+      return this[ arrayName ][ index ];
+    }
+
+  })();
+
+  _.accessor
+  ({
+    object : o.object,
+    names : names,
+  });
+
+}
+
+accessorToElement.defaults =
+{
+  object : null,
+  names : null,
+  arrayName : null,
 }
 
 // --
@@ -2053,7 +2127,9 @@ var Proto =
 
   _accessor : _accessor,
   _accessorProperty : _accessorProperty,
+
   _accessorSetterGetterMake : _accessorSetterGetterMake,
+  _accessorSetterGetterGet : _accessorSetterGetterGet,
 
   accessor : accessor,
   accessorForbid : accessorForbid,
@@ -2079,6 +2155,8 @@ var Proto =
   setterCopyable_functor : setterCopyable_functor,
   setterBufferFrom_functor : setterBufferFrom_functor,
   setterChangesTracking_functor : setterChangesTracking_functor,
+
+  accessorToElement : accessorToElement,
 
 
   // prototype
