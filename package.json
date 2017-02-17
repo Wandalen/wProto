@@ -1,10 +1,10 @@
 {
   "name": "wProto",
   "version": "0.3.34",
-  "description": "Little library of base level helping with defining classes in Java Script.",
+  "description": "Little library of base level helping with defining classes and mixins in Java Script.",
   "author": "Kostiantyn Wandalen <wtory.net@domainsbyproxy.com>",
   "license": "MIT",
-  "main": "staging/component/Proto.s",
+  "main": "staging/abase/component/Proto.s",
   "files": [
     "staging/component",
     "production"
@@ -29,6 +29,7 @@
   "keywords": [
     "wTools",
     "wProto",
+    "mixin",
     "Class",
     "Object",
     "Prototype",
