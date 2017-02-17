@@ -76,7 +76,8 @@ var _hasOwnProperty = Object.hasOwnProperty;
 var _assert = _.assert;
 var _nameFielded = _.nameFielded;
 
-_.assert( _.routineIs( _nameFielded ) );
+_.assert( _.routineIs( _nameFielded ),'wProto needs wTools/staging/abase/component/NameTools.s' );
+_.assert( _.objectIs( _.filter ),'wProto needs wTools/staging/abase/abase/FieldMapper.s' );
 
 // --
 // property
