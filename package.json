@@ -6,7 +6,7 @@
   "license": "MIT",
   "main": "staging/abase/component/Proto.s",
   "files": [
-    "staging/component",
+    "staging/abase",
     "production"
   ],
   "scripts": {
