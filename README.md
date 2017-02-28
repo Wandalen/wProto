@@ -7,3 +7,4 @@ Little library of base level helping with defining classes and mixins in Java Sc
 npm install
 node sample/Sample.s
 ```
+
