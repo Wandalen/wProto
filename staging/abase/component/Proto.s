@@ -2198,7 +2198,13 @@ if( typeof module !== 'undefined' )
 {
 
   require( './ProtoLike.s' );
-  require( '../../abase/akernel/aKernelWithComponents.s' );
+  try
+  {
+    require( '../../abase/akernel/aKernelWithComponents.s' );
+  }
+  catch( err )
+  {
+  }
 
 }
 
