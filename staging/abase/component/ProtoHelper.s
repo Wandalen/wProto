@@ -1,4 +1,4 @@
-( function _ProtoHelper_s_() {
+( function _ProtoLike_s_() {
 
 'use strict';
 
@@ -15,43 +15,61 @@ if( typeof module !== 'undefined' )
     require( 'wTools' );
   }
 
-  // if( typeof wProto === 'undefined' )
-  // try
-  // {
-  //   require( './Proto.s' );
-  // }
-  // catch( err )
-  // {
-  //   require( 'wProto' );
-  // }
+  require( './Proto.s' );
 
 }
 
 var _ = wTools;
-
 var _hasOwnProperty = Object.hasOwnProperty;
 var _assert = _.assert;
 var _nameFielded = _.nameFielded;
 
+if( wTools.construction )
+return;
+
 //
 
 var Parent = null;
-var Self = function wProtoHelper( o )
+var Self = function wLike( o )
 {
 }
 
-Self.nameShort = 'ProtoHelper';
+Self.nameShort = 'Like';
 
 // --
 // helper
 // --
 
+// function _classesOf()
+// {
+//   var result = [];
+//   for( var a = 0 ; a < arguments.length ; a++ )
+//   __classesOf( arguments[ a ],result );
+//   return result;
+// }
+//
+// //
+//
+// function __classesOf( src,result )
+// {
+//   _.assert( arguments.length === 1 );
+//   if(  )
+//   _.arrayAppendOnceMerging( result,src[ symbolForClass ] );
+//   _.arrayAppendOnceMerging( result,src[ symbolForParents ] );
+// }
+
+//
+
 function like()
 {
   var helper = new Self();
-  var result = Object.create( null );
+  var proto = Object.create( null );
+  var location;
 
-  Object.defineProperty( result, 'constructor',
+  // if( Config.debug )
+  // location = _.diagnosticLocation( 1 ).full;
+
+  Object.defineProperty( proto, 'constructor',
   {
     enumerable : false,
     configurable : false,
@@ -60,25 +78,34 @@ function like()
     {
       _.assert( arguments.length === 0 || arguments.length === 1,'construction expects one or none argument' );
 
-      if( !( this instanceof result.constructor ) )
-      if( o instanceof result.constructor )
+      if( !( this instanceof proto.constructor ) )
+      if( o instanceof proto.constructor )
       return o;
       else
-      return new( _.routineJoin( result.constructor, result.constructor, arguments ) );
+      return new( _.routineJoin( proto.constructor, proto.constructor, arguments ) );
 
-      _.mapExtend( this,result );
+      _.assertMapHasOnly( this,proto,'Prototype of the object ' + ( location ? 'defined at\n' + location + '\n' : '' ) + 'does not have requested fields.' );
+
+      _.mapExtend( this,proto );
       Object.preventExtensions( this );
       _.mapExtend( this,o );
 
       return this;
-
     }
   });
 
-  // result.constructor.prototype = Object.create( null );
-  result.constructor.prototype = result;
+  var allClasses = [ proto ];
+  for( var a = 0 ; a < arguments.length ; a++ )
+  {
+    var arg = arguments[ a ];
+    _.assert( arg[ symbolForAllClasses ] );
+    if( arg[ symbolForAllClasses ] )
+    _.arrayAppendOnceMerging( allClasses,arg[ symbolForAllClasses ] );
+  }
 
-  Object.defineProperty( result, 'Parents',
+  proto.constructor.prototype = proto;
+
+  Object.defineProperty( proto, symbolForParents,
   {
     enumerable : false,
     configurable : false,
@@ -86,13 +113,31 @@ function like()
     value : _.arraySlice( arguments ),
   });
 
-  helper.result = result;
+  Object.defineProperty( proto, symbolForAllClasses,
+  {
+    enumerable : false,
+    configurable : false,
+    writable : false,
+    value : allClasses,
+  });
+
+  Object.defineProperty( proto, symbolForClass,
+  {
+    enumerable : false,
+    configurable : false,
+    writable : false,
+    value : proto,
+  });
+
+  /* */
+
+  helper.proto = proto;
   helper.usingPrototype = false;
 
   Object.freeze( helper );
 
   if( arguments.length > 0 )
-  _.mapExtend.apply( _,Array.prototype.concat.apply( [ result ],arguments ) );
+  _.mapExtend.apply( _,Array.prototype.concat.apply( [ proto ],arguments ) );
 
   return helper;
 }
@@ -110,7 +155,7 @@ function name( src )
 function also( src )
 {
   _.assert( arguments.length === 1 );
-  _.mapExtend( this.result,src );
+  _.mapExtend( this.proto,src );
   return this;
 }
 
@@ -119,7 +164,7 @@ function also( src )
 function but( src )
 {
   _.assert( arguments.length === 1 );
-  _.mapDelete( this.result,src );
+  _.mapDelete( this.proto,src );
   return this;
 }
 
@@ -127,17 +172,25 @@ function but( src )
 
 function _endGet()
 {
-  return this.result;
+  return this.proto;
 }
 
 //
 
 function isLike( instance,parent )
 {
-  if( !instance.Parents )
+  if( !instance[ symbolForAllClasses ] )
   return false;
-  return instance.Parents.indexOf( parent ) !== -1;
+  return instance[ symbolForAllClasses ].indexOf( parent ) !== -1;
 }
+
+// --
+// var
+// --
+
+var symbolForParents = Symbol.for( 'parents' );
+var symbolForClass = Symbol.for( 'class' );
+var symbolForAllClasses = Symbol.for( 'allClasses' );
 
 // --
 // prototype
@@ -196,5 +249,9 @@ if( typeof module !== 'undefined' && module !== null )
 {
   module[ 'exports' ] = Self;
 }
+
+// --
+// assert
+// --
 
 })();

@@ -41,17 +41,13 @@
 
 */
 
-/*
-  - rename constructor options!!!
-*/
-
 if( typeof module !== 'undefined' )
 {
 
   if( typeof wBase === 'undefined' )
   try
   {
-    require( '../wTools.s' );
+    require( '../../abase/akernel/aKernel.s' );
   }
   catch( err )
   {
@@ -76,8 +72,8 @@ var _hasOwnProperty = Object.hasOwnProperty;
 var _assert = _.assert;
 var _nameFielded = _.nameFielded;
 
+_.assert( _.objectIs( _.filter ),'wProto needs wTools/staging/abase/akernel/FieldMapper.s' );
 _.assert( _.routineIs( _nameFielded ),'wProto needs wTools/staging/abase/component/NameTools.s' );
-_.assert( _.objectIs( _.filter ),'wProto needs wTools/staging/abase/abase/FieldMapper.s' );
 
 // --
 // property
@@ -139,7 +135,7 @@ function _accessorOptions( object,names )
 
 //
 
-var _accessorRegister = function _accessorRegister( o )
+function _accessorRegister( o )
 {
 
   _.routineOptions( _accessorRegister,o );
@@ -257,7 +253,7 @@ _accessorRegister.defaults =
  * @memberof wTools
  */
 
-var _accessor = function _accessor( o )
+function _accessor( o )
 {
 
   /* verification */
@@ -572,7 +568,7 @@ function _accessorSetterGetterGet( object,name )
  * @memberof wTools
  */
 
-var accessor = function accessor( object,names )
+function accessor( object,names )
 {
   var o = _accessorOptions.apply( this,arguments );
   return _accessor( o );
@@ -580,7 +576,7 @@ var accessor = function accessor( object,names )
 
 //
 
-var accessorForbid = function accessorForbid( object,names )
+function accessorForbid( object,names )
 {
   var o = _accessorOptions.apply( this,arguments );
   var object = o.object;
@@ -698,7 +694,7 @@ accessorForbid.defaults.__proto__ = _accessor.defaults;
 
 //
 
-var accessorReadOnly = function accessorReadOnly( object,names )
+function accessorReadOnly( object,names )
 {
   var o = _accessorOptions.apply( this,arguments );
   o.readOnly = true;
@@ -707,7 +703,7 @@ var accessorReadOnly = function accessorReadOnly( object,names )
 
 //
 
-var accessorsSupplement = function accessorsSupplement( dst,src )
+function accessorsSupplement( dst,src )
 {
 
   _.assert( arguments.length === 2 );
@@ -836,7 +832,7 @@ function constant( dstProto,namesObject )
  * @memberof wTools
  */
 
-var restrictReadOnly = function restrictReadOnly( dstProto,namesObject )
+function restrictReadOnly( dstProto,namesObject )
 {
 
   if( _.strIs( namesObject ) )
@@ -875,7 +871,7 @@ var restrictReadOnly = function restrictReadOnly( dstProto,namesObject )
  * @memberof wTools#
  */
 
-var mixin = function mixin( o )
+function mixin( o )
 {
 
   var dst = o.dst;
@@ -979,7 +975,7 @@ mixin.defaults =
  * @memberof wTools
  */
 
-var _propertyAddOwnDefaults = function _propertyAddOwnDefaults( o )
+function _propertyAddOwnDefaults( o )
 {
   var o = o || {};
 
@@ -1472,7 +1468,7 @@ accessorToElement.defaults =
  *    return Self.prototype.init.apply( this,arguments );
  *  }
  *
- *  var init = function init()
+ *  function init()
  *  {
  *    var self = this;
  *    Parent.prototype.init.call( this );
@@ -1532,7 +1528,7 @@ _.protoMake
 });
 */
 
-var protoMake = function protoMake( o )
+function protoMake( o )
 {
 
   var has =
@@ -1684,7 +1680,7 @@ protoMake.defaults =
  * @memberof wTools
  */
 
-var protoExtend = function protoExtend( o )
+function protoExtend( o )
 {
 
   if( arguments.length === 2 )
@@ -1821,7 +1817,7 @@ protoExtend.defaults =
  * @memberof wTools
  */
 
-var instanceInit = function instanceInit( instance )
+function instanceInit( instance )
 {
 
   _.mapComplement( instance,instance.Restricts );
@@ -1905,7 +1901,7 @@ function protoUnitedInterface( protos )
 
 //
 
-var protoMakeOwnDescendant = function protoMakeOwnDescendant( dst,fieldName )
+function protoMakeOwnDescendant( dst,fieldName )
 {
 
   _assert( arguments.length === 2 );
@@ -1961,7 +1957,7 @@ function protoAppend( dstObject )
  * @memberof wTools
  */
 
-var protoHas = function protoHas( srcProto,insProto )
+function protoHas( srcProto,insProto )
 {
 
   do
@@ -1984,7 +1980,7 @@ var protoHas = function protoHas( srcProto,insProto )
  * @memberof wTools
  */
 
-var protoOwning = function protoOwning( srcObject,names )
+function protoOwning( srcObject,names )
 {
   var names = _nameFielded( names );
   _assert( _.objectIs( srcObject ) );
@@ -2030,7 +2026,7 @@ function protoArchy( srcObject )
 
 //
 
-var accessorDescriptorGet = function accessorDescriptorGet( object,name )
+function accessorDescriptorGet( object,name )
 {
   var result = { object : null, descriptor : null }
 
@@ -2053,7 +2049,7 @@ var accessorDescriptorGet = function accessorDescriptorGet( object,name )
 
 //
 
-var propertyDescriptorGet_ = function propertyDescriptorGet_( object,name )
+function propertyDescriptorGet_( object,name )
 {
   var result = { object : null, descriptor : null }
 
@@ -2201,7 +2197,8 @@ _.mapExtend( Self, Proto );
 if( typeof module !== 'undefined' )
 {
 
-  require( './ProtoHelper.s' );
+  require( './ProtoLike.s' );
+  require( '../../abase/akernel/aKernelWithComponents.s' );
 
 }
 
