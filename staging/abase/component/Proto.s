@@ -1835,13 +1835,18 @@ protoExtend.defaults =
  * @memberof wTools
  */
 
-function instanceInit( instance )
+function instanceInit( instance,prototype )
 {
 
-  _.mapComplement( instance,instance.Restricts );
-  _.mapComplement( instance,instance.Composes );
-  _.mapComplement( instance,instance.Aggregates );
-  _.mapSupplementOwn( instance,instance.Associates );
+  _.assert( arguments.length === 1 || arguments.length === 2 );
+
+  if( prototype === undefined )
+  prototype = instance;
+
+  _.mapComplement( instance,prototype.Restricts );
+  _.mapComplement( instance,prototype.Composes );
+  _.mapComplement( instance,prototype.Aggregates );
+  _.mapSupplementOwn( instance,prototype.Associates );
 
   return instance;
 }
