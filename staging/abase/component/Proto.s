@@ -887,7 +887,7 @@ function mixin( o )
 
   _assert( arguments.length === 1 );
   _assert( _.objectIs( dst ) );
-  _assert( _.routineIs( o.mixin.mixin ) );
+  _assert( _.routineIs( o.mixin.mixin ),'expects ( o.mixin ), but got not mixin',_.strTypeOf( o.mixin ) );
   //_assert( _.mapIs( o.mixin ) );
   _assert( _.strIs( o.mixin.name ) );
   _assert( _.mapIs( o.mixin.Extend ) || o.mixin.Extend === undefined || o.mixin.Extend === null );
@@ -928,7 +928,7 @@ function mixin( o )
     dst._mixins = Object.create( dst._mixins || null );
   }
 
-  _.assert( !dst._mixins[ o.mixin.name ],'attempt to mixin same mixin same several times : ' + o.mixin.name + ' into ' + dst.constructor.name );
+  _.assert( !dst._mixins[ o.mixin.name ],'attempt to mixin same mixin "' + o.mixin.name + '" several times into ' + dst.constructor.name );
 
   dst._mixins[ o.mixin.name ] = 1;
 
@@ -938,6 +938,24 @@ mixin.defaults =
 {
   dst : null,
   mixin : null,
+}
+
+//
+
+function mixinHas( _constructor,mixin )
+{
+  _assert( _.routineIs( _constructor ) );
+
+  if( _.strIs( mixin ) )
+  {
+    return _constructor.prototype._mixins && _constructor.prototype._mixins[ mixin ];
+  }
+  else
+  {
+    _assert( _.routineIs( mixin.mixin ),'expects ( mixin ), but got not mixin',_.strTypeOf( mixin ) );
+    _assert( _.strIsNotEmpty( mixin.name ),'expects ( mixin ), but got not mixin',_.strTypeOf( mixin ) );
+    return _constructor.prototype._mixins && _constructor.prototype._mixins[ mixin.name ];
+  }
 }
 
 //
@@ -2137,6 +2155,7 @@ var Proto =
   restrictReadOnly : restrictReadOnly,
 
   mixin : mixin,
+  mixinHas : mixinHas,
 
   _propertyAddOwnDefaults : _propertyAddOwnDefaults,
   propertyAddOwnComposes : propertyAddOwnComposes,
