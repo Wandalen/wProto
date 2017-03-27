@@ -1853,6 +1853,56 @@ function instanceInit( instance,prototype )
 
 //
 
+function instanceFilterInit( o )
+{
+
+  _.routineOptions( instanceFilterInit,o );
+
+  // var self = _.instanceFilterInit
+  // ({
+  //   constructor : Self,
+  //   parent : Parent,
+  //   extend : Extend,
+  // });
+
+  _.assert( !o.args || o.args.length === 0 || o.args.length === 1 );
+
+  var result = Object.create( null );
+
+  _.instanceInit( result,o.constructor.prototype );
+
+  if( o.args[ 0 ] )
+  wCopyable.copyCustom.call( result,
+  {
+    proto : o.constructor.prototype,
+    src : o.args[ 0 ],
+    technique : 'object',
+  });
+
+  if( !result.original )
+  result.original = _.FileProvider.Default();
+
+  _.mapExtend( result,o.extend );
+
+  Object.setPrototypeOf( result,result.original );
+
+  if( o.strict )
+  Object.preventExtensions( result );
+
+  return result;
+}
+
+instanceFilterInit.defaults =
+{
+  constructor : null,
+  parent : null,
+  extend : null,
+  args : null,
+  strict : 1,
+}
+
+//
+
 /**
  * Make united interface for several maps. Access to single map cause read and write to original maps.
  * @param {array} protos - maps to united.
@@ -2186,6 +2236,7 @@ var Proto =
   protoExtend : protoExtend,
 
   instanceInit : instanceInit,
+  instanceFilterInit : instanceFilterInit,
 
   protoUnitedInterface : protoUnitedInterface, /* experimental */
 
