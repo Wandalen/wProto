@@ -40,26 +40,6 @@ Self.nameShort = 'Like';
 // helper
 // --
 
-// function _classesOf()
-// {
-//   var result = [];
-//   for( var a = 0 ; a < arguments.length ; a++ )
-//   __classesOf( arguments[ a ],result );
-//   return result;
-// }
-//
-// //
-//
-// function __classesOf( src,result )
-// {
-//   _.assert( arguments.length === 1 );
-//   if(  )
-//   _.arrayAppendOnceMerging( result,src[ symbolForClass ] );
-//   _.arrayAppendOnceMerging( result,src[ symbolForParents ] );
-// }
-
-//
-
 function like()
 {
   var helper = new Self();

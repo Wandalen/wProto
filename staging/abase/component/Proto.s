@@ -96,7 +96,7 @@ _.assert( _.routineIs( _nameFielded ),'wProto needs wTools/staging/abase/compone
  * // names: { a: 'a', b: 'b' },
  * // message: [ 'set/get call' ] }
  *
- * var Self = function () { };
+ * var Self = function ClassName() { };
  * _._accessorOptions( Self,{ a : 'a', b : 'b' }, 'set/get call' );
  *
  * @private
@@ -229,7 +229,7 @@ _accessorRegister.defaults =
  * @param {wTools~accessorOptions} o - options {@link wTools~accessorOptions}.
  *
  * @example
- * var Self = function () { };
+ * var Self = function ClassName() { };
  * var o = _._accessorOptions( Self, { a : 'a', b : 'b' }, [ 'set/get call' ] );
  * _._accessor( o );
  * Self.a = 1; // returns [ 'set/get call' ]
@@ -556,7 +556,7 @@ function _accessorSetterGetterGet( object,name )
  * @param {wTools~accessorOptions} o - options {@link wTools~accessorOptions}.
  *
  * @example
- * var Self = function () { };
+ * var Self = function ClassName() { };
  * _.accessor( Self,{ a : 'a' }, 'set/get call' )
  * Self.a = 1; // set/get call
  * Self.a;
@@ -767,7 +767,7 @@ function accessorsSupplement( dst,src )
  * @param {object} namesObject - name/value map of constants.
  *
  * @example
- * var Self = function () { };
+ * var Self = function ClassName() { };
  * var Constants = { num : 100  };
  * _.constant ( Self.prototype,Constants );
  * console.log( Self.prototype ); // returns { num: 100 }
@@ -818,7 +818,7 @@ function constant( dstProto,namesObject )
  * @param {object|string} namesObject - property name as string/map with properties.
  *
  * @example
- * var Self = function () { };
+ * var Self = function ClassName() { };
  * Self.prototype.num = 100;
  * var ReadOnly = { num : null, num2 : null  };
  * _.restrictReadOnly ( Self.prototype,ReadOnly );
@@ -976,7 +976,7 @@ function mixinHas( _constructor,mixin )
  * @private
  *
  * @example
- * var Self = function () { };
+ * var Self = function ClassName() { };
  * _._propertyAddOwnDefaults
  * ({
  *   facilityName : { Composes : 'Composes' },
@@ -1043,7 +1043,7 @@ _propertyAddOwnDefaults.defaults =
  * @param {array-like} arguments - for arguments details see {@link wTools~propertyAddOwnDefaults}.
  *
  * @example
- * var Self = function () { };
+ * var Self = function ClassName() { };
  * var Composes = { tree : null };
  * _.propertyAddOwnComposes( Self.prototype, Composes );
  * console.log( Self.prototype ); // returns { Composes: { tree: null } }
@@ -1076,7 +1076,7 @@ function propertyAddOwnComposes( dstProto,srcDefaults )
  * @param {array-like} arguments - for arguments details see {@link wTools~propertyAddOwnDefaults}.
  *
  * @example
- * var Self = function () { };
+ * var Self = function ClassName() { };
  * var Aggregates = { tree : null };
  * _.propertyAddOwnAggregates( Self.prototype, Aggregates );
  * console.log( Self.prototype ); // returns { Aggregates: { tree: null } }
@@ -1109,7 +1109,7 @@ function propertyAddOwnAggregates( dstProto,srcDefaults )
  * @param {array-like} arguments - for arguments details see {@link wTools~propertyAddOwnDefaults}.
  *
  * @example
- * var Self = function () { };
+ * var Self = function ClassName() { };
  * var Associates = { tree : null };
  * _.propertyAddOwnAssociates( Self.prototype, Associates );
  * console.log( Self.prototype ); // returns { Associates: { tree: null } }
@@ -1142,7 +1142,7 @@ function propertyAddOwnAssociates( dstProto,srcDefaults )
  * @param {array-like} arguments - for arguments details see {@link wTools~propertyAddOwnDefaults}.
  *
  * @example
- * var Self = function () { };
+ * var Self = function ClassName() { };
  * var Restricts = { tree : null };
  * _.propertyAddOwnRestricts( Self.prototype, Restricts );
  * console.log( Self.prototype ); // returns { Restricts: { tree: null } }
