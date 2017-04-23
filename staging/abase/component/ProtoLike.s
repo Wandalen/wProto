@@ -21,8 +21,8 @@ if( typeof module !== 'undefined' )
 
 var _ = wTools;
 var _hasOwnProperty = Object.hasOwnProperty;
-var _assert = _.assert;
-var _nameFielded = _.nameFielded;
+var _assert = wTools.assert;
+var _nameFielded = wTools.nameFielded;
 
 if( wTools.construction )
 return;
@@ -45,9 +45,10 @@ function like()
   var helper = new Self();
   var proto = Object.create( null );
   var location;
+  var _ = wTools;
 
   // if( Config.debug )
-  // location = _.diagnosticLocation( 1 ).full;
+  // location = wTools.diagnosticLocation( 1 ).full;
 
   Object.defineProperty( proto, 'constructor',
   {
@@ -56,19 +57,19 @@ function like()
     writable : false,
     value : function Construction( o )
     {
-      _.assert( arguments.length === 0 || arguments.length === 1,'construction expects one or none argument' );
+      wTools.assert( arguments.length === 0 || arguments.length === 1,'construction expects one or none argument' );
 
       if( !( this instanceof proto.constructor ) )
       if( o instanceof proto.constructor )
       return o;
       else
-      return new( _.routineJoin( proto.constructor, proto.constructor, arguments ) );
+      return new( wTools.routineJoin( proto.constructor, proto.constructor, arguments ) );
 
-      _.assertMapHasOnly( this,proto,'Prototype of the object ' + ( location ? 'defined at\n' + location + '\n' : '' ) + 'does not have requested fields.' );
+      wTools.assertMapHasOnly( this,proto,'Prototype of the object ' + ( location ? 'defined at\n' + location + '\n' : '' ) + 'does not have requested fields.' );
 
-      _.mapExtend( this,proto );
+      wTools.mapExtend( this,proto );
       Object.preventExtensions( this );
-      _.mapExtend( this,o );
+      wTools.mapExtend( this,o );
 
       return this;
     }
@@ -78,9 +79,9 @@ function like()
   for( var a = 0 ; a < arguments.length ; a++ )
   {
     var arg = arguments[ a ];
-    _.assert( arg[ symbolForAllClasses ] );
+    wTools.assert( arg[ symbolForAllClasses ] );
     if( arg[ symbolForAllClasses ] )
-    _.arrayAppendOnceMerging( allClasses,arg[ symbolForAllClasses ] );
+    wTools.arrayAppendOnceMerging( allClasses,arg[ symbolForAllClasses ] );
   }
 
   proto.constructor.prototype = proto;
@@ -90,7 +91,7 @@ function like()
     enumerable : false,
     configurable : false,
     writable : false,
-    value : _.arraySlice( arguments ),
+    value : wTools.arraySlice( arguments ),
   });
 
   Object.defineProperty( proto, symbolForAllClasses,
@@ -117,7 +118,7 @@ function like()
   Object.freeze( helper );
 
   if( arguments.length > 0 )
-  _.mapExtend.apply( _,Array.prototype.concat.apply( [ proto ],arguments ) );
+  wTools.mapExtend.apply( wTools,Array.prototype.concat.apply( [ proto ],arguments ) );
 
   return helper;
 }
@@ -126,7 +127,7 @@ function like()
 
 function name( src )
 {
-  _.assert( arguments.length === 1 );
+  wTools.assert( arguments.length === 1 );
   return this;
 }
 
@@ -134,8 +135,8 @@ function name( src )
 
 function also( src )
 {
-  _.assert( arguments.length === 1 );
-  _.mapExtend( this.proto,src );
+  wTools.assert( arguments.length === 1 );
+  wTools.mapExtend( this.proto,src );
   return this;
 }
 
@@ -143,8 +144,8 @@ function also( src )
 
 function but( src )
 {
-  _.assert( arguments.length === 1 );
-  _.mapDelete( this.proto,src );
+  wTools.assert( arguments.length === 1 );
+  wTools.mapDelete( this.proto,src );
   return this;
 }
 
@@ -181,9 +182,9 @@ var Proto =
   isLike : isLike,
 }
 
-_.assert( !wTools.construction );
+wTools.assert( !wTools.construction );
 wTools.construction = Object.create( null );
-_.mapExtend( wTools.construction, Proto );
+wTools.mapExtend( wTools.construction, Proto );
 
 // --
 // prototype
@@ -194,7 +195,7 @@ var Proto =
   like : like,
 }
 
-_.mapExtend( wTools, Proto );
+wTools.mapExtend( wTools, Proto );
 
 // --
 // prototype
@@ -208,14 +209,14 @@ var Proto =
   _endGet : _endGet,
 }
 
-_.protoMake
+wTools.protoMake
 ({
   constructor : Self,
   parent : Parent,
   extend : Proto,
 });
 
-_.accessorReadOnly
+wTools.accessorReadOnly
 ({
   object : Self.prototype,
   names : { end : 'end' },

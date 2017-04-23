@@ -272,12 +272,6 @@ function _accessor( o )
       constructor : 'constructor',
     }
 
-    // var hasNot =
-    // {
-    //   Type : 'Type',
-    //   type : 'type',
-    // }
-
     _.assertMapOwnAll( o.object,has );
     _.accessorForbid
     ({
@@ -289,7 +283,7 @@ function _accessor( o )
 
   }
 
-  _assert( _.objectLike( o.object ),'_.accessor :','expects object ( object ), but got', o.object );
+  _assert( _.objectLikeOrRoutine( o.object ),'_.accessor :','expects object ( object ), but got', o.object );
   _assert( _.objectIs( o.names ),'_.accessor :','expects object ( names ), but got', o.names );
 
   /* */
@@ -471,7 +465,7 @@ function _accessorSetterGetterMake( o,object,name )
   var result = {};
 
   _.assert( arguments.length === 3 );
-  _.assert( _.objectLike( object ) );
+  _.assert( _.objectLikeOrRoutine( object ) );
   _.assert( _.strIs( name ) );
 
   result.set = object[ name + 'Set' ] ? object[ name + 'Set' ] : object[ '_' + name + 'Set' ];
@@ -587,7 +581,7 @@ function accessorForbid( object,names )
 
   /* verification */
 
-  _assert( _.objectLike( object ),'_.accessor :','expects object as argument but got', object );
+  _assert( _.objectLikeOrRoutine( object ),'_.accessor :','expects object as argument but got', object );
   _assert( _.objectIs( names ),'_.accessor :','expects object names as argument but got', names );
   _.assertMapHasOnly( o,accessorForbid.defaults );
   _.mapComplement( o,accessorForbid.defaults );
@@ -783,13 +777,8 @@ function accessorsSupplement( dst,src )
 function constant( dstProto,namesObject )
 {
 
-  // if( _.strIs( namesObject ) )
-  // {
-  //   namesObject = { [ namesObject ] : namesObject };
-  // }
-
   _assert( arguments.length === 2 );
-  _assert( _.objectLike( dstProto ),'_.constant :','dstProto is needed :', dstProto );
+  _assert( _.objectLikeOrRoutine( dstProto ),'_.constant :','dstProto is needed :', dstProto );
   _assert( _.mapIs( namesObject ),'_.constant :','namesObject is needed :', namesObject );
 
   for( var n in namesObject )
@@ -842,7 +831,7 @@ function restrictReadOnly( dstProto,namesObject )
   }
 
   _assert( arguments.length === 2 );
-  _assert( _.objectLike( dstProto ),'_.constant :','dstProto is needed :', dstProto );
+  _assert( _.objectLikeOrRoutine( dstProto ),'_.constant :','dstProto is needed :', dstProto );
   _assert( _.mapIs( namesObject ),'_.constant :','namesObject is needed :', namesObject );
 
   for( var n in namesObject )
@@ -886,9 +875,8 @@ function mixin( o )
   }
 
   _assert( arguments.length === 1 );
-  _assert( _.objectIs( dst ) );
+  _assert( _.objectIs( dst ),'mixin : expects dst object, but got',_.strTypeOf( dst ) );
   _assert( _.routineIs( o.mixin.mixin ),'expects ( o.mixin ), but got not mixin',_.strTypeOf( o.mixin ) );
-  //_assert( _.mapIs( o.mixin ) );
   _assert( _.strIs( o.mixin.name ) );
   _assert( _.mapIs( o.mixin.Extend ) || o.mixin.Extend === undefined || o.mixin.Extend === null );
   _assert( _.mapIs( o.mixin.Supplement ) || o.mixin.Supplement === undefined || o.mixin.Supplement === null );
@@ -1746,6 +1734,7 @@ function protoExtend( o )
   {
     var extend = _.mapBut( o.extend,ClassFacility );
     _.mapExtend( prototype,extend );
+    // _.mapExtendFiltering( _.filter.srcOwnRoutines(),prototype.Routines,extend );
     if( _hasOwnProperty.call( o.extend,'constructor' ) )
     prototype.constructor = o.extend.constructor;
   }
@@ -1754,6 +1743,7 @@ function protoExtend( o )
   {
     var supplement = _.mapBut( o.supplement,ClassFacility );
     _.mapSupplement( prototype,supplement );
+    // _.mapExtendFiltering( _.filter.dstNotHasSrcOwnRoutines(),prototype.Routines,supplement );
     if( !prototype.constructor )
     if( _hasOwnProperty.call( o.supplement,'constructor' ) )
     prototype.constructor = o.supplement.constructor;
@@ -1847,6 +1837,24 @@ function instanceInit( instance,prototype )
   _.mapComplement( instance,prototype.Composes );
   _.mapComplement( instance,prototype.Aggregates );
   _.mapSupplementOwn( instance,prototype.Associates );
+
+  return instance;
+}
+
+//
+
+function instanceInitExtending( instance,prototype )
+{
+
+  _.assert( arguments.length === 1 || arguments.length === 2 );
+
+  if( prototype === undefined )
+  prototype = instance;
+
+  _.mapExtendFiltering( _.filter.cloning(),instance,prototype.Restricts );
+  _.mapExtendFiltering( _.filter.cloning(),instance,prototype.Composes );
+  _.mapExtendFiltering( _.filter.cloning(),instance,prototype.Aggregates );
+  _.mapExtend( instance,prototype.Associates );
 
   return instance;
 }
@@ -2171,6 +2179,7 @@ var ClassFacility =
   Associates : 'Associates',
   Restricts : 'Restricts',
   Statics : 'Statics',
+  // Routines : 'Routines',
   // Accessors : 'Accessors',
 }
 
@@ -2236,6 +2245,7 @@ var Proto =
   protoExtend : protoExtend,
 
   instanceInit : instanceInit,
+  instanceInitExtending : instanceInitExtending,
   instanceFilterInit : instanceFilterInit,
 
   protoUnitedInterface : protoUnitedInterface, /* experimental */
