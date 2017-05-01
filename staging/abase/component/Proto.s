@@ -106,7 +106,7 @@ _.assert( _.routineIs( _nameFielded ),'wProto needs wTools/staging/abase/compone
 
 function _accessorOptions( object,names )
 {
-  var o = arguments.length === 1 ? arguments[ 0 ] : {};
+  var o = arguments.length === 1 ? arguments[ 0 ] : Object.create( null );
 
   if( arguments.length === 1 )
   {
@@ -121,7 +121,7 @@ function _accessorOptions( object,names )
   if( !o.methods )
   o.methods = object;
   else
-  o.methods = _.mapExtend( {},o.methods );
+  o.methods = _.mapExtend( null,o.methods );
 
   var names = o.names = _nameFielded( names );
 
@@ -344,7 +344,11 @@ function _accessorProperty( o,name )
       '( o.combining ) suppose to be',Combining.join(),'if accessor overided'
     );
 
-    _.assert( o.combining === 'rewrite' || o.combining === 'append','not implemented' );
+    _.assert( o.combining === 'rewrite' || o.combining === 'append' || o.combining === 'supplement','not implemented' );
+
+    if( o.combining === 'supplement' )
+    return;
+
     if( o.combining === 'append' )
     {
 
@@ -390,11 +394,14 @@ function _accessorProperty( o,name )
   if( o.prime )
   {
 
-    var optionsForRegister = _.mapExtend( {},o );
+    var optionsForRegister = _.mapExtend( null,o );
     optionsForRegister.names = encodedName;
     if( optionsForRegister.methods === optionsForRegister.object )
-    optionsForRegister.methods = {};
+    optionsForRegister.methods = Object.create( null );
     optionsForRegister.object = null;
+
+    // if( rawName === 'data' )
+    // debugger;
 
     if( !optionsForRegister.methods[ '_' + rawName + 'Get' ] && !optionsForRegister.methods[ rawName + 'Get' ] )
     optionsForRegister.methods[ '_' + rawName + 'Get' ] = o.object[ '_' + name + 'Get' ] ? o.object[ '_' + name + 'Get' ] : o.object[ name + 'Get' ];
@@ -462,7 +469,7 @@ function _accessorProperty( o,name )
 
 function _accessorSetterGetterMake( o,object,name )
 {
-  var result = {};
+  var result = Object.create( null );
 
   _.assert( arguments.length === 3 );
   _.assert( _.objectLikeOrRoutine( object ) );
@@ -521,7 +528,7 @@ function _accessorSetterGetterMake( o,object,name )
 
 function _accessorSetterGetterGet( object,name )
 {
-  var result = {};
+  var result = Object.create( null );
 
   _.assert( arguments.length === 2 );
   _.assert( _.objectIs( object ) );
@@ -574,7 +581,7 @@ function accessorForbid( object,names )
 {
   var o = _accessorOptions.apply( this,arguments );
   var object = o.object;
-  var names = o.names;
+  var names = _.mapExtend( null,o.names );
 
   if( o.combining === 'rewrite' && o.strict === undefined )
   o.strict = 0;
@@ -598,7 +605,7 @@ function accessorForbid( object,names )
 
   /* property */
 
-  var methods = {};
+  var methods = Object.create( null );
   for( var n in names )
   {
 
@@ -700,6 +707,8 @@ function accessorReadOnly( object,names )
 function accessorsSupplement( dst,src )
 {
 
+  _.protoMakeOwnDescendant( dst,'_Accessors' );
+
   _.assert( arguments.length === 2 );
   _.assert( _hasOwnProperty.call( dst,'_Accessors' ),'accessorsSupplement : dst should has _Accessors map' );
   _.assert( _hasOwnProperty.call( src,'_Accessors' ),'accessorsSupplement : src should has _Accessors map' );
@@ -726,7 +735,7 @@ function accessorsSupplement( dst,src )
     else
     {
       _.assert( accessor.declaratorArgs.length === 1 );
-      var optionsForAccessor = _.mapExtend( {},accessor.declaratorArgs[ 0 ] );
+      var optionsForAccessor = _.mapExtend( null,accessor.declaratorArgs[ 0 ] );
       optionsForAccessor.object = dst;
       if( !optionsForAccessor.methods )
       optionsForAccessor.methods = dst;
@@ -826,7 +835,7 @@ function restrictReadOnly( dstProto,namesObject )
 
   if( _.strIs( namesObject ) )
   {
-    namesObject = {};
+    namesObject = Object.create( null );
     namesObject[ namesObject ] = namesObject;
   }
 
@@ -983,7 +992,7 @@ function mixinHas( _constructor,mixin )
 
 function _propertyAddOwnDefaults( o )
 {
-  var o = o || {};
+  var o = o || Object.create( null );
 
   _assert( arguments.length === 1 );
   _assert( _.objectIs( o.srcDefaults ),'expects object ( o.srcDefaults ), got', _.strTypeOf( o.srcDefaults ) );
@@ -1184,7 +1193,7 @@ function setterMapCollection_functor( o )
     else
     {
 
-      self[ symbol ] = {};
+      self[ symbol ] = Object.create( null );
 
     }
 
@@ -1237,7 +1246,7 @@ function setterFriend_functor( o )
 
       if( _.mapIs( src ) )
       {
-        var o = {};
+        var o = Object.create( null );
         o[ nameOfLink ] = self;
         o.name = name;
         self[ symbol ] = maker( o );
@@ -1399,7 +1408,7 @@ function accessorToElement( o )
   _.assert( _.objectIs( o.names ) );
   _.routineOptions( accessorToElement,o );
 
-  var names = {};
+  var names = Object.create( null );
   for( var n in o.names ) (function()
   {
     names[ n ] = n;
@@ -1714,7 +1723,7 @@ function protoExtend( o )
   ({
     facilityName : f,
     dstProto : prototype,
-    srcDefaults : o.extend[ f ] || {},
+    srcDefaults : o.extend[ f ] || Object.create( null ),
     override : true,
   });
 
@@ -1724,7 +1733,7 @@ function protoExtend( o )
   ({
     facilityName : f,
     dstProto : prototype,
-    srcDefaults : o.supplement[ f ] || {},
+    srcDefaults : o.supplement[ f ] || Object.create( null ),
     override : false,
   });
 
@@ -1921,10 +1930,10 @@ instanceFilterInit.defaults =
 
 function protoUnitedInterface( protos )
 {
-  var result = {};
+  var result = Object.create( null );
   var unitedArraySymbol = Symbol.for( '_unitedArray_' );
   var unitedMapSymbol = Symbol.for( '_unitedMap_' );
-  var protoMap = {};
+  var protoMap = Object.create( null );
 
   _assert( arguments.length === 1 );
   _assert( _.arrayIs( protos ) );
@@ -1957,10 +1966,10 @@ function protoUnitedInterface( protos )
       throw _.err( 'protoUnitedInterface :','several objects try to unite have same field :',f );
       protoMap[ f ] = proto;
 
-      var methods = {}
+      var methods = Object.create( null )
       methods[ f + 'Get' ] = get( f );
       methods[ f + 'Set' ] = set( f );
-      var names = {};
+      var names = Object.create( null );
       names[ f ] = f;
       _.accessor
       ({
@@ -2109,13 +2118,20 @@ function protoArchy( srcObject )
 
 function accessorDescriptorGet( object,name )
 {
-  var result = { object : null, descriptor : null }
+  var result = Object.create( null );
+  result.object = null;
+  result.descriptor = null;
 
   _.assert( arguments.length === 2 );
 
   do
   {
     result.descriptor = Object.getOwnPropertyDescriptor( object,name );
+
+    // if( result.descriptor )
+    // if( 'value' in result.descriptor )
+    // debugger;
+
     if( result.descriptor && !( 'value' in result.descriptor ) )
     {
       result.object = object;
@@ -2132,7 +2148,9 @@ function accessorDescriptorGet( object,name )
 
 function propertyDescriptorGet_( object,name )
 {
-  var result = { object : null, descriptor : null }
+  var result = Object.create( null );
+  result.object = null;
+  result.descriptor = null;
 
   _.assert( arguments.length === 2 );
 
@@ -2155,7 +2173,7 @@ function propertyDescriptorGet_( object,name )
 
 function propertyGetterSetterGet( object,name )
 {
-  var result = {};
+  var result = Object.create( null );
 
   result.set = object[ '_' + name + 'Set' ] || object[ '' + name + 'Set' ];
   result.get = object[ '_' + name + 'Get' ] || object[ '' + name + 'Get' ];
@@ -2172,8 +2190,8 @@ function propertyGetterSetterGet( object,name )
  * @memberof wTools
  */
 
-var ClassFacility =
-{
+var ClassFacility = Object.freeze
+({
   Composes : 'Composes',
   Aggregates : 'Aggregates',
   Associates : 'Associates',
@@ -2181,14 +2199,14 @@ var ClassFacility =
   Statics : 'Statics',
   // Routines : 'Routines',
   // Accessors : 'Accessors',
-}
+});
 
-var ClassForbiddenFacility =
-{
+var ClassForbiddenFacility = Object.freeze
+({
   Static : 'Static',
   Type : 'Type',
   type : 'type',
-}
+});
 
 var Combining = [ 'rewrite','supplement','apppend','prepend' ];
 
