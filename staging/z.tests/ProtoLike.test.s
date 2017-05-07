@@ -8,7 +8,6 @@ if( typeof module !== 'undefined' )
   require( '../../abase/component/Proto.s' );
   require( '../../abase/component/ProtoLike.s' );
 
-  //if( typeof wBase === 'undefined' )
   try
   {
     require( '../../abase/wTools.s' );
@@ -92,10 +91,11 @@ var Self =
 
   },
 
-};
+}
+
+//
 
 Self = wTestSuite( Self );
-
 if( typeof module !== 'undefined' && !module.parent )
 _.Testing.test( Self.name );
 

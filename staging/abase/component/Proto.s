@@ -1165,6 +1165,143 @@ function propertyAddOwnRestricts( dstProto,srcDefaults )
 
 }
 
+
+//
+
+/**
+ * Make sure src does not have redundant fields.
+ * @param {object} src - source object of the class.
+ * @method assertDoesNotHaveReduntantFields
+ * @memberof wTools
+ */
+
+//function doesNotHaveRedundantFields( src )
+function assertDoesNotHaveReduntantFields( src )
+{
+
+  var Composes = src.Composes || Object.create( null );
+  var Aggregates = src.Aggregates || Object.create( null );
+  var Associates = src.Associates || Object.create( null );
+  var Restricts = src.Restricts || Object.create( null );
+
+  _.assert( _.ojbectIs( src ) )
+  _.assertMapOwnOnly( src, Composes, Aggregates, Associates, Restricts );
+
+  return dst;
+}
+
+
+// --
+// typing
+// --
+
+/**
+ * Is instance.
+ * @function instanceIs
+ * @param {object} src - entity to check
+ * @memberof wTools#
+ */
+
+function instanceIs( src )
+{
+  _.assert( arguments.length === 1 );
+
+  if( _hasOwnProperty.call( src,'constructor' ) )
+  return false;
+  else if( _hasOwnProperty.call( src,'prototype' ) && src.prototype )
+  return false;
+
+  return true;
+}
+
+//
+
+/**
+ * Is prototype.
+ * @function prototypeIs
+ * @param {object} src - entity to check
+ * @memberof wTools#
+ */
+
+function prototypeIs( src )
+{
+  _.assert( arguments.length === 1 );
+  return _hasOwnProperty.call( src, 'constructor' );
+}
+
+//
+
+/**
+ * Is constructor.
+ * @function constructorIs
+ * @param {object} src - entity to check
+ * @memberof wTools#
+ */
+
+function constructorIs( src )
+{
+  _.assert( arguments.length === 1 );
+  return _.routineIs( src ) && !instanceIs( src );
+}
+
+//
+
+function constructorGet( src )
+{
+  var proto;
+
+  _.assert( arguments.length === 1 );
+
+  if( _hasOwnProperty.call( src,'constructor' ) )
+  {
+    proto = src; /* proto */
+  }
+  else if( _hasOwnProperty.call( src,'prototype' )  )
+  {
+    if( src.prototype )
+    proto = src.prototype; /* constructor */
+    else
+    proto = Object.getPrototypeOf( Object.getPrototypeOf( src ) ); /* instance behind ruotine */
+  }
+  else
+  {
+    proto = Object.getPrototypeOf( src ); /* instance */
+  }
+
+  return proto.constructor;
+}
+
+//
+
+/**
+ * Get parent's constructor.
+ * @method parentGet
+ * @memberof wCopyable#
+ */
+
+function parentGet( src )
+{
+  var c = constructorGet( src );
+
+  _.assert( arguments.length === 1 );
+
+  var proto = Object.getPrototypeOf( c.prototype );
+  var result = proto ? proto.constructor : null;
+
+  return result;
+}
+
+//
+
+function prototypeGet( src )
+{
+  var c = constructorGet( src );
+
+  _.assert( arguments.length === 1 );
+
+  return c.prototype;
+}
+
 // --
 // getter / setter generator
 // --
@@ -1627,6 +1764,9 @@ function protoMake( o )
 
   /* extend */
 
+  if( o.constructor.name === 'wConsequence' )
+  debugger;
+
   _.protoExtend
   ({
     constructor : o.constructor,
@@ -1638,10 +1778,17 @@ function protoMake( o )
 
   /* statics */
 
+  // if( o.constructor.name === 'wConsequence' )
+  // debugger;
+
+  /*
+    !!! implement accessor for static properties
+  */
+
   _.assert( prototype.constructor );
   _.assert( prototype.Statics );
-  _.mapExtendFiltering( _.filter.dstNotOwnSrcOwn(),prototype,prototype.Statics );
-  _.mapExtendFiltering( _.filter.dstNotOwnSrcOwn(),prototype.constructor,prototype.Statics );
+  _.mapExtendFiltering( _.filter.dstNotOwnSrcOwn(),prototype,prototype.Statics ); // xxx
+  _.mapExtendFiltering( _.filter.dstNotOwnSrcOwn(),prototype.constructor,prototype.Statics ); // xxx
 
   /* */
 
@@ -1709,13 +1856,12 @@ function protoExtend( o )
 
   _assert( _.objectIs( o.extend ) || o.extend === undefined || o.extend === null );
   _assert( _.objectIs( o.supplement ) || o.supplement === undefined || o.supplement === null );
-  // _assert( _.objectIs( o.static ) || o.static === undefined || o.static === null );
 
   _.routineOptions( protoExtend,o );
 
   var prototype = o.constructor.prototype;
 
-  /* extend relationships */
+  /* adjust relationships */
 
   if( o.extend )
   for( var f in ClassFacility )
@@ -1737,58 +1883,62 @@ function protoExtend( o )
     override : false,
   });
 
-  /* extend fields and methods */
+/*
+
+to prioritize ordinary facets adjustment order should be
+
+- static extend
+- ordinary extend
+- ordinary supplement
+- static supplement
+
+*/
+
+  /* static extend */
+
+  if( o.usingStatics && o.extend && o.extend.Statics )
+  {
+    _.mapExtend( prototype,o.extend.Statics );
+    _.mapExtend( o.constructor,o.extend.Statics );
+  }
+
+  /* ordinary extend */
 
   if( o.extend )
   {
     var extend = _.mapBut( o.extend,ClassFacility );
     _.mapExtend( prototype,extend );
-    // _.mapExtendFiltering( _.filter.srcOwnRoutines(),prototype.Routines,extend );
     if( _hasOwnProperty.call( o.extend,'constructor' ) )
     prototype.constructor = o.extend.constructor;
   }
+
+  /* ordinary supplement */
 
   if( o.supplement )
   {
     var supplement = _.mapBut( o.supplement,ClassFacility );
     _.mapSupplement( prototype,supplement );
-    // _.mapExtendFiltering( _.filter.dstNotHasSrcOwnRoutines(),prototype.Routines,supplement );
     if( !prototype.constructor )
     if( _hasOwnProperty.call( o.supplement,'constructor' ) )
     prototype.constructor = o.supplement.constructor;
   }
 
-  /* statics */
+  /* static supplement */
 
-  if( o.usingStatics )
+  if( o.usingStatics && o.supplement && o.supplement.Statics )
   {
-
-    if( o.extend && o.extend.Statics )
-    {
-      _.mapExtend( prototype,o.extend.Statics );
-      _.mapExtend( o.constructor,o.extend.Statics );
-    }
-
-    if( o.supplement && o.supplement.Statics )
-    {
-      _.mapSupplement( prototype,o.supplement.Statics );
-      _.mapSupplement( o.constructor,o.supplement.Statics );
-    }
-
+    _.mapSupplement( prototype,o.supplement.Statics );
+    _.mapSupplement( o.constructor,o.supplement.Statics );
   }
 
-  /* atomic extension */
+  /* atomic extend */
 
   if( o.usingAtomicExtension )
   {
-    if( _.mapOwn( prototype,{ Composes : 'Composes' } ) )
+    for( var f in ClassFacility )
+    if( f !== 'Statics' )
+    if( _.mapOwn( prototype,f ) )
     _.mapExtendFiltering( _.filter.atomicSrcOwn(),prototype,prototype.Composes );
-    if( _.mapOwn( prototype,{ Aggregates : 'Aggregates' } ) )
-    _.mapExtendFiltering( _.filter.atomicSrcOwn(),prototype,prototype.Aggregates );
-    if( _.mapOwn( prototype,{ Associates : 'Associates' } ) )
-    _.mapExtendFiltering( _.filter.atomicSrcOwn(),prototype,prototype.Associates );
-    if( _.mapOwn( prototype,{ Restricts : 'Restricts' } ) )
-    _.mapExtendFiltering( _.filter.atomicSrcOwn(),prototype,prototype.Restricts );
   }
 
   /* validation */
@@ -2114,6 +2264,45 @@ function protoArchy( srcObject )
   return srcObject;
 }
 
+
+//
+
+/**
+ * Iterate through prototypes.
+ * @param {object} proto - prototype
+ * @method protoEach
+ * @memberof wTools
+ */
+
+function protoEach( proto,onEach )
+{
+  var result = [];
+
+  _.assert( _.routineIs( onEach ) || !onEach );
+  _.assert( _.prototypeIs( proto ) );
+  _.assert( arguments.length === 1 || arguments.length === 2 );
+
+  do
+  {
+
+    if( onEach )
+    onEach.call( this,proto );
+
+    result.push( proto );
+
+    var parent = _.parentGet( proto );
+
+    proto = parent ? parent.prototype : null;
+
+    if( proto && proto.constructor === Object )
+    proto = null;
+
+  }
+  while( proto );
+
+  return result;
+}
+
 //
 
 function accessorDescriptorGet( object,name )
@@ -2190,23 +2379,19 @@ function propertyGetterSetterGet( object,name )
  * @memberof wTools
  */
 
-var ClassFacility = Object.freeze
-({
-  Composes : 'Composes',
-  Aggregates : 'Aggregates',
-  Associates : 'Associates',
-  Restricts : 'Restricts',
-  Statics : 'Statics',
-  // Routines : 'Routines',
-  // Accessors : 'Accessors',
-});
+var ClassFacility = Object.create( null );
+ClassFacility.Composes = 'Composes';
+ClassFacility.Aggregates = 'Aggregates';
+ClassFacility.Associates = 'Associates';
+ClassFacility.Restricts = 'Restricts';
+ClassFacility.Statics = 'Statics';
+Object.freeze( ClassFacility );
 
-var ClassForbiddenFacility = Object.freeze
-({
-  Static : 'Static',
-  Type : 'Type',
-  type : 'type',
-});
+var ClassForbiddenFacility = Object.create( null );
+ClassForbiddenFacility.Static = 'Static';
+ClassForbiddenFacility.Type = 'Type';
+ClassForbiddenFacility.type = 'type';
+Object.freeze( ClassForbiddenFacility );
 
 var Combining = [ 'rewrite','supplement','apppend','prepend' ];
 
@@ -2245,6 +2430,19 @@ var Proto =
   propertyAddOwnAssociates : propertyAddOwnAssociates,
   propertyAddOwnRestricts : propertyAddOwnRestricts,
 
+  assertDoesNotHaveReduntantFields : assertDoesNotHaveReduntantFields,
+
+
+  // typing
+
+  instanceIs : instanceIs,
+  prototypeIs : prototypeIs,
+  constructorIs : constructorIs,
+
+  constructorGet : constructorGet,
+  parentGet : parentGet,
+  prototypeGet : prototypeGet,
+
 
   // getter / setter generator
 
@@ -2274,6 +2472,8 @@ var Proto =
   protoHas : protoHas, /* experimental */
   protoOwning : protoOwning, /* experimental */
   protoArchy : protoArchy, /* experimental */
+
+  protoEach : protoEach,
 
   accessorDescriptorGet : accessorDescriptorGet,
 
