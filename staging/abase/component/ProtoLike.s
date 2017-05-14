@@ -81,7 +81,7 @@ function like()
     var arg = arguments[ a ];
     wTools.assert( arg[ symbolForAllClasses ] );
     if( arg[ symbolForAllClasses ] )
-    wTools.arrayAppendOnceMerging( allClasses,arg[ symbolForAllClasses ] );
+    wTools._arrayAppendArrayOnce( allClasses,arg[ symbolForAllClasses ] );
   }
 
   proto.constructor.prototype = proto;
@@ -211,7 +211,7 @@ var Proto =
 
 wTools.protoMake
 ({
-  constructor : Self,
+  cls : Self,
   parent : Parent,
   extend : Proto,
 });
