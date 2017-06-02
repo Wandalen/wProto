@@ -2258,6 +2258,85 @@ function protoArchy( srcObject )
   return srcObject;
 }
 
+//
+
+var _protoCrossReferAssociations = Object.create( null );
+function protoCrossRefer( o )
+{
+  var names = _.mapKeys( o.entities );
+  var length = names.length;
+
+  var association = _protoCrossReferAssociations[ o.name ];
+  if( !association )
+  {
+    _.assert( _protoCrossReferAssociations[ o.name ] === undefined );
+    association = _protoCrossReferAssociations[ o.name ] = Object.create( null );
+    association.name = o.name;
+    association.length = length;
+    association.have = 0;
+    association.entities = _.mapExtend( null,o.entities );
+  }
+
+  _.assert( association.name === o.name );
+  _.assert( association.length === length );
+
+  for( var e in o.entities )
+  {
+    if( !association.entities[ e ] )
+    association.entities[ e ] = o.entities[ e ];
+    else if( o.entities[ e ] )
+    _.assert( association.entities[ e ] === o.entities[ e ] );
+  }
+
+  association.have = 0;
+  for( var e in association.entities )
+  if( association.entities[ e ] )
+  association.have += 1;
+
+  if( association.have === association.length )
+  {
+
+    for( var src in association.entities )
+    for( var dst in association.entities )
+    {
+      if( src === dst )
+      continue;
+      var dstEntity = association.entities[ dst ];
+      var srcEntity = association.entities[ src ];
+      _.assert( !dstEntity[ src ] || dstEntity[ src ] === srcEntity );
+      _.assert( !dstEntity.prototype[ src ] || dstEntity.prototype[ src ] === srcEntity );
+      _.protoExtend( dstEntity,{ Statics : { [ src ] : srcEntity } } );
+      _.assert( dstEntity[ src ] === srcEntity );
+      _.assert( dstEntity.prototype[ src ] === srcEntity );
+    }
+
+    _protoCrossReferAssociations[ o.name ] = null;
+
+    return true;
+  }
+
+  return false;
+}
+
+protoCrossRefer.defaults =
+{
+  entities : null,
+  name : null,
+}
+
+// _.protoCrossRefer
+// ({
+//   namespace : _,
+//   entities :
+//   {
+//     System : Self,
+//   },
+//   names :
+//   {
+//     System : 'LiveSystem',
+//     Node : 'LiveNode',
+//   },
+// });
 
 //
 
@@ -2391,24 +2470,24 @@ function instanceFinit( src )
   _.assert( _.objectLikeOrRoutine( src ) );
   _.assert( arguments.length === 1 );
 
-  var validator =
-  {
-    set : function( obj, k, e )
-    {
-      debugger;
-      throw _.err( 'Attempt ot access to finited instance with field',k );
-      return false;
-    },
-    get : function( obj, k, e )
-    {
-      debugger;
-      throw _.err( 'Attempt ot access to finited instance with field',k );
-      return false;
-    },
-  }
+  // var validator =
+  // {
+  //   set : function( obj, k, e )
+  //   {
+  //     debugger;
+  //     throw _.err( 'Attempt ot access to finited instance with field',k );
+  //     return false;
+  //   },
+  //   get : function( obj, k, e )
+  //   {
+  //     debugger;
+  //     throw _.err( 'Attempt ot access to finited instance with field',k );
+  //     return false;
+  //   },
+  // }
+  // var result = new Proxy( src, validator );
 
   Object.freeze( src );
-  var result = new Proxy( src, validator );
 
 }
 
@@ -2646,6 +2725,7 @@ var Proto =
   protoOwning : protoOwning, /* experimental */
   protoArchy : protoArchy, /* experimental */
 
+  protoCrossRefer : protoCrossRefer,
   protoEach : protoEach,
 
   accessorDescriptorGet : accessorDescriptorGet,
@@ -2677,6 +2757,16 @@ var Proto =
 _global_.wProto = Proto;
 
 _.mapExtend( Self, Proto );
+
+_.accessorForbid( wTools,
+{
+  _ArrayDescriptor : '_ArrayDescriptor',
+  ArrayDescriptor : 'ArrayDescriptor',
+  _ArrayDescriptors : '_ArrayDescriptors',
+  ArrayDescriptors : 'ArrayDescriptors',
+  arrays : 'arrays',
+  arrayOf : 'arrayOf',
+});
 
 // --
 // export

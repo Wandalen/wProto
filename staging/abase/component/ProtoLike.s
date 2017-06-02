@@ -80,8 +80,10 @@ function like()
   {
     var arg = arguments[ a ];
     wTools.assert( arg[ symbolForAllClasses ] );
+    // if( arg[ symbolForAllClasses ] )
+    // debugger;
     if( arg[ symbolForAllClasses ] )
-    wTools._arrayAppendArrayOnce( allClasses,arg[ symbolForAllClasses ] );
+    wTools.__arrayAppendArrayOnce( allClasses,arg[ symbolForAllClasses ] );
   }
 
   proto.constructor.prototype = proto;
