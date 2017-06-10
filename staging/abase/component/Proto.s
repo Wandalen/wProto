@@ -5,7 +5,7 @@
 /**
 * Definitions :
 
-*  self :: current object.x
+*  self :: current object.
 *  Self :: current class.
 *  Parent :: parent class.
 *  Statics :: static fields.
@@ -85,9 +85,9 @@ _.assert( _.routineIs( _nameFielded ),'wProto needs wTools/staging/abase/compone
 /**
  * Generates options object for _accessor, _accessorForbid functions.
  * Can be called in three ways:
- * - First by passing all options in one object;
- * - Second by passing object and name options;
- * - Third by passing object,names and message option as third parameter.
+ * - First by passign all options in one object;
+ * - Second by passign object and name options;
+ * - Third by passign object,names and message option as third parameter.
  * @param {wTools~accessorOptions} o - options {@link wTools~accessorOptions}.
  *
  * @example
@@ -124,7 +124,10 @@ function _accessorOptions( object,names )
   else
   o.methods = _.mapExtend( null,o.methods );
 
-  var names = o.names = _nameFielded( names );
+  if( !_.arrayIs( names ) )
+  o.names = _nameFielded( names );
+  else
+  o.names = names;
 
   if( arguments.length > 2 )
   {
@@ -552,9 +555,9 @@ function _accessorSetterGetterGet( object,name )
  * Defines set/get functions on source object( o.object ) properties if they dont have them.
  * For more details @see {@link wTools._accessor }.
  * Can be called in three ways:
- * - First by passing all options in one object( o );
- * - Second by passing ( object ) and ( names ) options;
- * - Third by passing ( object ), ( names ) and ( message ) option as third parameter.
+ * - First by passign all options in one object( o );
+ * - Second by passign ( object ) and ( names ) options;
+ * - Third by passign ( object ), ( names ) and ( message ) option as third parameter.
  *
  * @param {wTools~accessorOptions} o - options {@link wTools~accessorOptions}.
  *
@@ -579,11 +582,14 @@ function accessor( object,names )
 
 //
 
-function accessorForbid( object,names )
+function accessorForbid()
 {
   var o = _accessorOptions.apply( this,arguments );
   var object = o.object;
-  var names = _.mapExtend( null,o.names );
+  var names = o.names;
+
+  if( _.objectIs( o.names ) )
+  names = _.mapExtend( null,o.names );
 
   if( o.combining === 'rewrite' && o.strict === undefined )
   o.strict = 0;
@@ -591,7 +597,7 @@ function accessorForbid( object,names )
   /* verification */
 
   _assert( _.objectLikeOrRoutine( object ),'_.accessor :','expects object as argument but got', object );
-  _assert( _.objectIs( names ),'_.accessor :','expects object names as argument but got', names );
+  _assert( _.objectIs( names ) || _.arrayIs( names ),'_.accessor :','expects object names as argument but got', names );
   _.assertMapHasOnly( o,accessorForbid.defaults );
   _.mapComplement( o,accessorForbid.defaults );
 
@@ -605,73 +611,91 @@ function accessorForbid( object,names )
   if( o.message )
   message = o.message.join( ' : ' );
 
-  /* property */
+  /* _accessorForbid */
 
-  var methods = Object.create( null );
-  for( var n in names )
+  var encodedName,rawName;
+  function _accessorForbid()
   {
-
-    var encodedName = n;
-    var rawName = names[ n ];
 
     var setterName = '_' + rawName + 'Set';
     var getterName = '_' + rawName + 'Get';
 
-    (function _accessorForbid()
+    var messageLine = protoName + rawName + ' : ' + message;
+    var handler = function forbidden()
     {
+      debugger;
+      throw _.err( messageLine );
+    }
 
-      var messageLine = protoName + rawName + ' : ' + message;
-      var handler = function forbidden()
+    handler.isForbid = true;
+
+    methods[ setterName ] = handler;
+    methods[ getterName ] = handler;
+
+    /* */
+
+    var propertyDescriptor = _.accessorDescriptorGet( o.object,encodedName );
+    if( propertyDescriptor.descriptor )
+    {
+      _.assert( o.combining,'accessorForbid : if accessor overided expect ( o.combining ) is',Combining.join() );
+
+      if( _.routineIs( propertyDescriptor.descriptor.get ) && propertyDescriptor.descriptor.get.name === 'forbidden' )
       {
-        debugger;
-        throw _.err( messageLine );
+        delete names[ encodedName ];
+        return;
       }
 
-      handler.isForbid = true;
+    }
 
-      methods[ setterName ] = handler;
-      methods[ getterName ] = handler;
-
-      /* */
-
-      var propertyDescriptor = _.accessorDescriptorGet( o.object,encodedName );
-      if( propertyDescriptor.descriptor )
+    if( o.strict )
+    if( _hasOwnProperty.call( object,encodedName ) )
+    {
+      var descriptor = Object.getOwnPropertyDescriptor( object,encodedName );
+      if( _.routineIs( descriptor.get ) && descriptor.get.isForbid )
       {
-        _.assert( o.combining,'accessorForbid : if accessor overided expect ( o.combining ) is',Combining.join() );
-
-        if( _.routineIs( propertyDescriptor.descriptor.get ) && propertyDescriptor.descriptor.get.name === 'forbidden' )
-        {
-          delete names[ n ];
-          return;
-        }
-
+        delete names[ encodedName ];
+        return;
       }
+      else
+      handler();
+    }
 
-      if( o.strict )
-      if( _hasOwnProperty.call( object,encodedName ) )
-      {
-        var descriptor = Object.getOwnPropertyDescriptor( object,encodedName );
-        if( _.routineIs( descriptor.get ) && descriptor.get.isForbid )
-        {
-          delete names[ n ];
-          return;
-        }
-        else
-        handler();
-      }
-
-      if( !Object.isExtensible( object ) )
-      {
-        delete names[ n ];
-      }
-
-    })();
+    if( !Object.isExtensible( object ) )
+    {
+      delete names[ encodedName ];
+    }
 
   }
 
-  // o.preserveValues = 0;
-  // o.strict = 0;
-  // o.enumerable = false;
+  /* property */
+
+  var methods = Object.create( null );
+
+  if( _.objectIs( names ) )
+  {
+
+    for( var n in names )
+    {
+      var encodedName = n;
+      var rawName = names[ n ];
+      _accessorForbid();
+    }
+
+  }
+  else
+  {
+
+    var namesArray = names;
+    names = Object.create( null );
+    for( var n = 0 ; n < namesArray.length ; n++ )
+    {
+      var encodedName = namesArray[ n ];
+      var rawName = namesArray[ n ];
+      names[ encodedName ] = rawName;
+      _accessorForbid();
+    }
+
+  }
 
   o.names = names;
   o.object = object;
@@ -1040,8 +1064,8 @@ function mixinHas( _constructor,mixin )
 //
 
 /**
-* Default options for _descendantAdd function
-* @typedef {object} wTools~descendantAddDefaults
+* Default options for _protoAddLegacy function
+* @typedef {object} wTools~protoAddDefaults
 * @property {object} [ o.descendantName=null ] - object that contains class relationship type name.
 * Example : { Composes : 'Composes' }. See {@link wTools~ClassFacility}
 * @property {object} [ o.dstProto=null ] - prototype of class which will get new constant property.
@@ -1051,12 +1075,12 @@ function mixinHas( _constructor,mixin )
 
 /**
  * Adds own defaults to object. Creates new defaults container, if there is no such own.
- * @param {wTools~descendantAddDefaults} o - options {@link wTools~descendantAddDefaults}.
+ * @param {wTools~protoAddDefaults} o - options {@link wTools~protoAddDefaults}.
  * @private
  *
  * @example
  * var Self = function ClassName( o ) { };
- * _._descendantAdd
+ * _._protoAddLegacy
  * ({
  *   descendantName : { Composes : 'Composes' },
  *   dstProto : Self.prototype,
@@ -1064,20 +1088,20 @@ function mixinHas( _constructor,mixin )
  * });
  * console.log( Self.prototype ); // returns { Composes: { a: 1, b: 2 } }
  *
- * @method _descendantAdd
+ * @method _protoAddLegacy
  * @throws {exception} If no argument provided.
  * @throws {exception} If( o.srcDefaults ) is not a Object.
  * @throws {exception} If( o ) is extented by unknown property.
  * @memberof wTools
  */
 
-function _descendantAdd( o )
+function _protoAddLegacy( o )
 {
   var o = o || Object.create( null );
 
   _assert( arguments.length === 1 );
   _assert( _.objectIs( o.srcDefaults ),'expects object ( o.srcDefaults ), got', _.strTypeOf( o.srcDefaults ) );
-  _.routineOptions( _descendantAdd,o );
+  _.routineOptions( _protoAddLegacy,o );
 
   o.descendantName = _.nameUnfielded( o.descendantName );
 
@@ -1102,7 +1126,7 @@ function _descendantAdd( o )
 
 }
 
-_descendantAdd.defaults =
+_protoAddLegacy.defaults =
 {
   descendantName : null,
   dstProto : null,
@@ -1115,26 +1139,26 @@ _descendantAdd.defaults =
 
 /**
  * Adds own defaults( Composes ) to object. Creates new defaults container, if there is no such own.
- * @param {array-like} arguments - for arguments details see {@link wTools~descendantAddDefaults}.
+ * @param {array-like} arguments - for arguments details see {@link wTools~protoAddDefaults}.
  *
  * @example
  * var Self = function ClassName( o ) { };
  * var Composes = { tree : null };
- * _.descendantAddComposes( Self.prototype, Composes );
+ * _.protoAddComposes( Self.prototype, Composes );
  * console.log( Self.prototype ); // returns { Composes: { tree: null } }
  *
- * @method descendantAddComposes
+ * @method protoAddComposes
  * @throws {exception} If no arguments provided.
  * @memberof wTools
  */
 
-function descendantAddComposes( dstProto,srcDefaults )
+function protoAddComposes( dstProto,srcDefaults )
 {
 
   _.assert( arguments.length === 2 );
 
   var descendantName = 'Composes';
-  return _descendantAdd
+  return _protoAddLegacy
   ({
     descendantName : descendantName,
     dstProto : dstProto,
@@ -1148,26 +1172,26 @@ function descendantAddComposes( dstProto,srcDefaults )
 
 /**
  * Adds own aggregates to object. Creates new aggregates container, if there is no such own.
- * @param {array-like} arguments - for arguments details see {@link wTools~descendantAddDefaults}.
+ * @param {array-like} arguments - for arguments details see {@link wTools~protoAddDefaults}.
  *
  * @example
  * var Self = function ClassName( o ) { };
  * var Aggregates = { tree : null };
- * _.descendantAddAggregates( Self.prototype, Aggregates );
+ * _.protoAddAggregates( Self.prototype, Aggregates );
  * console.log( Self.prototype ); // returns { Aggregates: { tree: null } }
  *
- * @method descendantAddAggregates
+ * @method protoAddAggregates
  * @throws {exception} If no arguments provided.
  * @memberof wTools
  */
 
-function descendantAddAggregates( dstProto,srcDefaults )
+function protoAddAggregates( dstProto,srcDefaults )
 {
 
   _.assert( arguments.length === 2 );
 
   var descendantName = 'Aggregates';
-  return _descendantAdd
+  return _protoAddLegacy
   ({
     descendantName : descendantName,
     dstProto : dstProto,
@@ -1181,26 +1205,26 @@ function descendantAddAggregates( dstProto,srcDefaults )
 
 /**
  * Adds own associates to object. Creates new associates container, if there is no such own.
- * @param {array-like} arguments - for arguments details see {@link wTools~descendantAddDefaults}.
+ * @param {array-like} arguments - for arguments details see {@link wTools~protoAddDefaults}.
  *
  * @example
  * var Self = function ClassName( o ) { };
  * var Associates = { tree : null };
- * _.descendantAddAssociates( Self.prototype, Associates );
+ * _.protoAddAssociates( Self.prototype, Associates );
  * console.log( Self.prototype ); // returns { Associates: { tree: null } }
  *
- * @method descendantAddAssociates
+ * @method protoAddAssociates
  * @throws {exception} If no arguments provided.
  * @memberof wTools
  */
 
-function descendantAddAssociates( dstProto,srcDefaults )
+function protoAddAssociates( dstProto,srcDefaults )
 {
 
   _.assert( arguments.length === 2 );
 
   var descendantName = 'Associates';
-  return _descendantAdd
+  return _protoAddLegacy
   ({
     descendantName : descendantName,
     dstProto : dstProto,
@@ -1214,26 +1238,26 @@ function descendantAddAssociates( dstProto,srcDefaults )
 
 /**
  * Adds own restricts to object. Creates new restricts container, if there is no such own.
- * @param {array-like} arguments - for arguments details see {@link wTools~descendantAddDefaults}.
+ * @param {array-like} arguments - for arguments details see {@link wTools~protoAddDefaults}.
  *
  * @example
  * var Self = function ClassName( o ) { };
  * var Restricts = { tree : null };
- * _.descendantAddRestricts( Self.prototype, Restricts );
+ * _.protoAddRestricts( Self.prototype, Restricts );
  * console.log( Self.prototype ); // returns { Restricts: { tree: null } }
  *
- * @method descendantAddRestricts
+ * @method protoAddRestricts
  * @throws {exception} If no arguments provided.
  * @memberof wTools
  */
 
-function descendantAddRestricts( dstProto,srcDefaults )
+function protoAddRestricts( dstProto,srcDefaults )
 {
 
   _.assert( arguments.length === 2 );
 
   var descendantName = 'Restricts';
-  return _descendantAdd
+  return _protoAddLegacy
   ({
     descendantName : descendantName,
     dstProto : dstProto,
@@ -1294,6 +1318,21 @@ function constructorIs( src )
 {
   _.assert( arguments.length === 1 );
   return _.routineIs( src ) && !instanceIs( src );
+}
+
+//
+
+function subclassIs( cls,subCls )
+{
+
+  _.assert( _.routineIs( cls ) );
+  _.assert( _.routineIs( subCls ) );
+  _.assert( arguments.length === 2 );
+
+  if( cls === subCls )
+  return true;
+
+  return Object.isPrototypeOf.call( cls.prototype, subCls.prototype );
 }
 
 //
@@ -1664,7 +1703,7 @@ accessorToElement.defaults =
  *  Parent.prototype.init = function(  )
  *  {
  *    var self = this;
- *    self.x = 5;
+ *    self.c = 5;
  *  };
  *
  *  var Self = function Betta( o )
@@ -1702,7 +1741,7 @@ accessorToElement.defaults =
  *  var betta = new Betta();
  *  console.log( proto === Self.prototype ); //returns true
  *  console.log( Parent.prototype.isPrototypeOf( betta ) ); //returns true
- *  console.log( betta.a, betta.b, betta.x ); //returns 1 2 5
+ *  console.log( betta.a, betta.b, betta.c ); //returns 1 2 5
  *
  * @method protoMake
  * @throws {exception} If no argument provided.
@@ -1752,7 +1791,7 @@ function protoMake( o )
   _assert( _.objectIs( o ) );
 
   // _assert( !_hasOwnProperty.call( o,'constructor' ) );
-  _.assertOwnNoConstructor( o );
+  _.assertOwnNoConstructor( o,'options for protoMake should have no constructor' );
   _assert( _hasOwnProperty.call( o,'cls' ) );
   _assert( _.routineIs( o.cls ),'protoMake expects constructor' );
   _assert( o.cls.name || o.cls._name,'constructor should have name' );
@@ -1925,7 +1964,7 @@ function protoExtend( o )
 
   if( o.extend )
   for( var f in ClassFacility )
-  _descendantAdd
+  _protoAddLegacy
   ({
     descendantName : f,
     dstProto : prototype,
@@ -1935,7 +1974,7 @@ function protoExtend( o )
 
   if( o.extendDstNotOwn )
   for( var f in ClassFacility )
-  _descendantAdd
+  _protoAddLegacy
   ({
     descendantName : f,
     dstProto : prototype,
@@ -1946,7 +1985,7 @@ function protoExtend( o )
 
   if( o.supplement )
   for( var f in ClassFacility )
-  _descendantAdd
+  _protoAddLegacy
   ({
     descendantName : f,
     dstProto : prototype,
@@ -2682,11 +2721,11 @@ var Proto =
   mixinApply : mixinApply,
   mixinHas : mixinHas,
 
-  _descendantAdd : _descendantAdd,
-  descendantAddComposes : descendantAddComposes,
-  descendantAddAggregates : descendantAddAggregates,
-  descendantAddAssociates : descendantAddAssociates,
-  descendantAddRestricts : descendantAddRestricts,
+  _protoAddLegacy : _protoAddLegacy,
+  protoAddComposes : protoAddComposes,
+  protoAddAggregates : protoAddAggregates,
+  protoAddAssociates : protoAddAssociates,
+  protoAddRestricts : protoAddRestricts,
 
 
   // typing
@@ -2694,6 +2733,8 @@ var Proto =
   instanceIs : instanceIs,
   prototypeIs : prototypeIs,
   constructorIs : constructorIs,
+
+  subclassIs : subclassIs,
 
   constructorGet : constructorGet,
   parentGet : parentGet,
