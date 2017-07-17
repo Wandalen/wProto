@@ -85,9 +85,9 @@ _.assert( _.routineIs( _nameFielded ),'wProto needs wTools/staging/abase/compone
 /**
  * Generates options object for _accessor, _accessorForbid functions.
  * Can be called in three ways:
- * - First by passign all options in one object;
- * - Second by passign object and name options;
- * - Third by passign object,names and message option as third parameter.
+ * - First by passing all options in one object;
+ * - Second by passing object and name options;
+ * - Third by passing object,names and message option as third parameter.
  * @param {wTools~accessorOptions} o - options {@link wTools~accessorOptions}.
  *
  * @example
@@ -507,7 +507,7 @@ function _accessorSetterGetterMake( o,object,name )
     return src;
   }
 
-  _assert( !result.set || !o.readOnly,'accessor :','readOnly but settter found in',o.object );
+  _assert( !result.set || !o.readOnly,'accessor :','readOnly but seter found in',o.object );
 
   /* get */
 
@@ -555,9 +555,9 @@ function _accessorSetterGetterGet( object,name )
  * Defines set/get functions on source object( o.object ) properties if they dont have them.
  * For more details @see {@link wTools._accessor }.
  * Can be called in three ways:
- * - First by passign all options in one object( o );
- * - Second by passign ( object ) and ( names ) options;
- * - Third by passign ( object ), ( names ) and ( message ) option as third parameter.
+ * - First by passing all options in one object( o );
+ * - Second by passing ( object ) and ( names ) options;
+ * - Third by passing ( object ), ( names ) and ( message ) option as third parameter.
  *
  * @param {wTools~accessorOptions} o - options {@link wTools~accessorOptions}.
  *
@@ -1349,6 +1349,7 @@ function constructorGet( src )
   }
   else if( _hasOwnProperty.call( src,'prototype' )  )
   {
+    // debugger;
     if( src.prototype )
     proto = src.prototype; /* constructor */
     else
@@ -1822,19 +1823,19 @@ function protoMake( o )
 
   if( o.usingOriginalPrototype )
   {
-    debugger;
+    // debugger;
     prototype = o.cls.prototype;
 
     if( _hasOwnProperty.call( o.cls.prototype,'constructor' ) )
     {
-      debugger;
-      throw _.err( 'not tested' );
-      if( o.extend )
-      _assert( !o.extend.constructor || o.extend.constructor === o.cls,'cant rewrite constructor, using original prototype' );
-      if( o.extendDstNotOwn )
-      _assert( !o.extendDstNotOwn.constructor || o.extendDstNotOwn.constructor === o.cls,'cant rewrite constructor, using original prototype' );
-      if( o.supplement )
-      _assert( !o.supplement.constructor || o.supplement.constructor === o.cls,'cant rewrite constructor, using original prototype' );
+      // debugger;
+      // // throw _.err( 'not tested' );
+      // if( o.extend )
+      // _assert( !o.extend.constructor || o.extend.constructor === o.cls,'cant rewrite constructor, using original prototype' );
+      // if( o.extendDstNotOwn )
+      // _assert( !o.extendDstNotOwn.constructor || o.extendDstNotOwn.constructor === o.cls,'cant rewrite constructor, using original prototype' );
+      // if( o.supplement )
+      // _assert( !o.supplement.constructor || o.supplement.constructor === o.cls,'cant rewrite constructor, using original prototype' );
     }
 
   }
@@ -1845,7 +1846,30 @@ function protoMake( o )
       _.assert( Object.keys( o.cls.prototype ).length === 0,'misuse of protoMake, prototype of constructor has properties put there manually' );
       _.assert( o.cls.prototype.constructor === o.cls );
     }
-    prototype = o.cls.prototype = Object.create( o.parent ? o.parent.prototype : null );
+    if( o.parent )
+    {
+      if( o.usingPoison )
+      {
+        debugger; xxx
+        // var c = class C extends o.parent
+        // {
+        //   constructor()
+        //   {
+        //     debugger;
+        //     return super.apply( this,arguments );
+        //   }
+        // };
+        // prototype = o.cls.prototype = c.prototype;
+      }
+      else
+      {
+        prototype = o.cls.prototype = Object.create( o.parent.prototype );
+      }
+    }
+    else
+    {
+      prototype = o.cls.prototype = Object.create( null );
+    }
   }
 
   /* constructor */
@@ -1894,6 +1918,7 @@ protoMake.defaults =
   supplement : null,
   usingAtomicExtension : false,
   usingOriginalPrototype : false,
+  usingPoison : false,
 }
 
 //
@@ -1961,6 +1986,15 @@ function protoExtend( o )
   var prototype = o.prototype = o.cls.prototype;
 
   /* adjust relationships */
+
+  for( var f in ClassFacility )
+  _protoAddLegacy
+  ({
+    descendantName : f,
+    dstProto : prototype,
+    srcDefaults : Object.create( null ),
+    override : true,
+  });
 
   if( o.extend )
   for( var f in ClassFacility )
@@ -2664,6 +2698,27 @@ function assertInstanceDoesNotHaveReduntantFields( src )
 }
 
 // --
+// type
+// --
+
+class wCallableObject extends Function
+{
+  constructor()
+  {
+    super( 'return this.self.__call__.apply( this.self,arguments );' );
+
+    var context = Object.create( null );
+    var self = this.bind( context );
+    context.self = self;
+    Object.freeze( context );
+
+    return self;
+  }
+}
+
+wCallableObject.nameShort = 'CallableObject';
+
+// --
 // var
 // --
 
@@ -2789,6 +2844,7 @@ var Proto =
 
   // var
 
+  CallableObject : wCallableObject,
   ClassFacility : ClassFacility,
   ClassForbiddenFacility : ClassForbiddenFacility,
   Combining : Combining,
@@ -2828,8 +2884,6 @@ if( typeof module !== 'undefined' )
 }
 
 if( typeof module !== 'undefined' && module !== null )
-{
-  module[ 'exports' ] = Self;
-}
+module[ 'exports' ] = Self;
 
 })();

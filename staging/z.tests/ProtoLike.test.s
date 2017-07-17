@@ -54,7 +54,9 @@ function isLike( test )
   /* */
 
   test.description = 'base instance like base class';
+  debugger;
   var base1 = Base1.constructor();
+  debugger;
   var is = _.construction.isLike( base1,Base1 );
   test.shouldBe( is );
 

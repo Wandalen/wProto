@@ -67,8 +67,13 @@ function like()
 
       wTools.assertMapHasOnly( this,proto,'Prototype of the object ' + ( location ? 'defined at\n' + location + '\n' : '' ) + 'does not have requested fields.' );
 
-      wTools.mapExtend( this,proto );
+      wTools.mapComplement( this,proto );
       Object.preventExtensions( this );
+
+      // if( !o )
+      // debugger;
+
+      if( o )
       wTools.mapExtend( this,o );
 
       return this;
