@@ -19,6 +19,14 @@ if( typeof module !== 'undefined' )
 
 }
 
+/*
+
+!!!
+
+- implement custom instnaceof for structures
+
+*/
+
 var _ = wTools;
 var _hasOwnProperty = Object.hasOwnProperty;
 var _assert = wTools.assert;
@@ -216,7 +224,7 @@ var Proto =
   _endGet : _endGet,
 }
 
-wTools.protoMake
+wTools.prototypeMake
 ({
   cls : Self,
   parent : Parent,
@@ -226,7 +234,7 @@ wTools.protoMake
 wTools.accessorReadOnly
 ({
   object : Self.prototype,
-  names : { end : 'end' },
+  names : { end : { readOnlyProduct : 0 } },
 });
 
 // --
