@@ -2102,7 +2102,7 @@ function prototypeMake( o )
     {
       if( o.cls.prototype )
       {
-        _.assert( Object.keys( o.cls.prototype ).length === 0,'misuse of prototypeMake, prototype of constructor has properties which where put there manually' );
+        _.assert( Object.keys( o.cls.prototype ).length === 0,'misuse of prototypeMake, prototype of constructor has properties which where put there manually',Object.keys( o.cls.prototype ) );
         _.assert( o.cls.prototype.constructor === o.cls );
       }
       if( o.parent )
