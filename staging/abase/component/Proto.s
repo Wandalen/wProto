@@ -20,7 +20,7 @@
 * Synonym :
 
   A composes B
-    :: A consists of B.
+    :: A consists of B.s
     :: A comprises B.
     :: A made up of B.
     :: A exists because of B, and B exists because of A.
@@ -223,7 +223,7 @@ _accessorRegister.defaults =
  * @property{object} [ object=null ] - source object wich properties will get getter/setter defined.
  * @property{object} [ names=null ] - properties of that object represent names of fields for wich function defines setter/getter.
  * Function uses values( rawName ) of object( o.names ) properties to check if fields of( o.object ) have setter/getter.
- * Example: if( rawName ) is 'a', function searchs for '_aSet' or 'aSet' and same for getter.
+ * Example : if( rawName ) is 'a', function searchs for '_aSet' or 'aSet' and same for getter.
  * @property{object} [ methods=null ] - object where function searchs for existing setter/getter of property.
  * @property{array} [ message=null ] - setter/getter prints this message when called.
  * @property{boolean} [ strict=true ] - makes object field private if no getter defined but object must have own constructor.
@@ -1262,9 +1262,9 @@ function descendantMakeOwnedBy( dst,fieldName )
 * Default options for descendantAdd function
 * @typedef {object} wTools~protoAddDefaults
 * @property {object} [ o.descendantName=null ] - object that contains class relationship type name.
-* Example : { Composes : 'Composes' }. See {@link wTools~ClassFacility}
+* Example : { Composes : 'Composes' }. See {@link wTools~ClassFieldFacility}
 * @property {object} [ o.dstProto=null ] - prototype of class which will get new constant property.
-* @property {object} [ o.srcDefaults=null ] - name/value map of defaults.
+* @property {object} [ o.srcMap=null ] - name/value map of defaults.
 * @property {bool} [ o.override=false ] - to override defaults if exist.
 */
 
@@ -1279,13 +1279,13 @@ function descendantMakeOwnedBy( dst,fieldName )
  * ({
  *   descendantName : { Composes : 'Composes' },
  *   dstProto : Self.prototype,
- *   srcDefaults : { a : 1, b : 2 },
+ *   srcMap : { a : 1, b : 2 },
  * });
  * console.log( Self.prototype ); // returns { Composes: { a: 1, b: 2 } }
  *
  * @method descendantAdd
  * @throws {exception} If no argument provided.
- * @throws {exception} If( o.srcDefaults ) is not a Object.
+ * @throws {exception} If( o.srcMap ) is not a Object.
  * @throws {exception} If( o ) is extented by unknown property.
  * @memberof wTools
  */
@@ -1296,7 +1296,7 @@ function descendantAdd( o )
 
   _.routineOptions( descendantAdd,o );
   _.assert( arguments.length === 1 );
-  _.assert( o.srcDefaults === null || _.objectIs( o.srcDefaults ),'expects object ( o.srcDefaults ), got', _.strTypeOf( o.srcDefaults ) );
+  _.assert( o.srcMap === null || _.objectIs( o.srcMap ),'expects object ( o.srcMap ), got', _.strTypeOf( o.srcMap ) );
 
   o.descendantName = _.nameUnfielded( o.descendantName );
 
@@ -1304,8 +1304,8 @@ function descendantAdd( o )
 
   var descendant = o.dstProto[ o.descendantName.coded ];
 
-  if( o.srcDefaults )
-  for( var n in o.srcDefaults )
+  if( o.srcMap )
+  for( var n in o.srcMap )
   {
 
     if( o.dstNotOwn === true )
@@ -1316,7 +1316,7 @@ function descendantAdd( o )
     if( n in descendant )
     continue;
 
-    descendant[ n ] = o.srcDefaults[ n ];
+    descendant[ n ] = o.srcMap[ n ];
 
   }
 
@@ -1326,7 +1326,7 @@ descendantAdd.defaults =
 {
   descendantName : null,
   dstProto : null,
-  srcDefaults : null,
+  srcMap : null,
   override : false,
   dstNotOwn : false,
 }
@@ -1348,7 +1348,7 @@ descendantAdd.defaults =
  * @memberof wTools
  */
 
-function descendantComposesAddTo( dstProto,srcDefaults )
+function descendantComposesAddTo( dstProto,srcMap )
 {
 
   _.assert( arguments.length === 2 );
@@ -1358,7 +1358,7 @@ function descendantComposesAddTo( dstProto,srcDefaults )
   ({
     descendantName : descendantName,
     dstProto : dstProto,
-    srcDefaults : srcDefaults,
+    srcMap : srcMap,
     override : false,
   });
 
@@ -1381,7 +1381,7 @@ function descendantComposesAddTo( dstProto,srcDefaults )
  * @memberof wTools
  */
 
-function descendantAggregatesAddTo( dstProto,srcDefaults )
+function descendantAggregatesAddTo( dstProto,srcMap )
 {
 
   _.assert( arguments.length === 2 );
@@ -1391,7 +1391,7 @@ function descendantAggregatesAddTo( dstProto,srcDefaults )
   ({
     descendantName : descendantName,
     dstProto : dstProto,
-    srcDefaults : srcDefaults,
+    srcMap : srcMap,
     override : false,
   });
 
@@ -1414,7 +1414,7 @@ function descendantAggregatesAddTo( dstProto,srcDefaults )
  * @memberof wTools
  */
 
-function descendantAssociatesAddTo( dstProto,srcDefaults )
+function descendantAssociatesAddTo( dstProto,srcMap )
 {
 
   _.assert( arguments.length === 2 );
@@ -1424,7 +1424,7 @@ function descendantAssociatesAddTo( dstProto,srcDefaults )
   ({
     descendantName : descendantName,
     dstProto : dstProto,
-    srcDefaults : srcDefaults,
+    srcMap : srcMap,
     override : false,
   });
 
@@ -1447,7 +1447,7 @@ function descendantAssociatesAddTo( dstProto,srcDefaults )
  * @memberof wTools
  */
 
-function descendantRestrictsAddTo( dstProto,srcDefaults )
+function descendantRestrictsAddTo( dstProto,srcMap )
 {
 
   _.assert( arguments.length === 2 );
@@ -1457,7 +1457,7 @@ function descendantRestrictsAddTo( dstProto,srcDefaults )
   ({
     descendantName : descendantName,
     dstProto : dstProto,
-    srcDefaults : srcDefaults,
+    srcMap : srcMap,
     override : false,
   });
 
@@ -1477,6 +1477,8 @@ function descendantRestrictsAddTo( dstProto,srcDefaults )
 function prototypeIs( src )
 {
   _.assert( arguments.length === 1 );
+  if( _.primitiveIs( src ) )
+  return false;
   return _hasOwnProperty.call( src, 'constructor' );
 }
 
@@ -1498,6 +1500,13 @@ function prototypeIsStandard( src )
 
 function prototypeGet( src )
 {
+
+  if( !( 'constructor' in src ) )
+  return null;
+
+  // if( _.mapIsPure( src ) )
+  // return null;
+
   var c = constructorGet( src );
 
   _.assert( arguments.length === 1 );
@@ -1556,28 +1565,10 @@ function constructorGet( src )
     proto = Object.getPrototypeOf( src ); /* instance */
   }
 
+  if( proto === null )
+  return null;
+  else
   return proto.constructor;
-}
-
-//
-
-/**
- * Is instance.
- * @function instanceIs
- * @param {object} src - entity to check
- * @memberof wTools#
- */
-
-function instanceIs( src )
-{
-  _.assert( arguments.length === 1 );
-
-  if( _hasOwnProperty.call( src,'constructor' ) )
-  return false;
-  else if( _hasOwnProperty.call( src,'prototype' ) && src.prototype )
-  return false;
-
-  return true;
 }
 
 //
@@ -1853,7 +1844,7 @@ setterChangesTracking_functor.defaults =
 // etc
 // --
 
-function propertyDescriptorGet_( object,name )
+function propertyDescriptorGet( object,name )
 {
   var result = Object.create( null );
   result.object = null;
@@ -1933,7 +1924,7 @@ function ifDebugProxyReadOnly( ins )
 */
 
 /**
- * Make prototype for constructor repairing relationship : Composes, Aggregates, Associates, Restricts.
+ * Make prototype for constructor repairing relationship : Composes, Aggregates, Associates, Medials, Restricts.
  * Execute optional extend / supplement if such o present.
  * @param {wTools~prototypeOptions} o - options {@link wTools~prototypeOptions}.
  * @returns {object} Returns constructor's prototype based on( o.parent ) prototype and complemented by fields, static and non-static methods.
@@ -2229,7 +2220,7 @@ prototypeMake.defaults =
 //
 
 /**
- * Extends and supplements( o.cls ) prototype by fields and methods repairing relationship : Composes, Aggregates, Associates, Restricts.
+ * Extends and supplements( o.cls ) prototype by fields and methods repairing relationship : Composes, Aggregates, Associates, Medials, Restricts.
  *
  * @param {wTools~prototypeOptions} o - options {@link wTools~prototypeOptions}.
  * @returns {object} Returns constructor's prototype complemented by fields, static and non-static methods.
@@ -2308,43 +2299,42 @@ function prototypeExtend( o )
 
   /* adjust relationships */
 
-  for( var f in ClassFacility )
+  for( var f in _.ClassAllowedFacility )
   descendantAdd
   ({
     descendantName : f,
     dstProto : o.prototype,
-    // srcDefaults : Object.create( null ),
     override : true,
   });
 
   if( o.extend )
-  for( var f in ClassFacility )
+  for( var f in _.ClassAllowedFacility )
   descendantAdd
   ({
     descendantName : f,
     dstProto : o.prototype,
-    srcDefaults : o.extend[ f ] || Object.create( null ), // !!!
+    srcMap : o.extend[ f ] || Object.create( null ),
     override : true,
   });
 
   if( o.extendDstNotOwn )
-  for( var f in ClassFacility )
+  for( var f in _.ClassAllowedFacility )
   descendantAdd
   ({
     descendantName : f,
     dstProto : o.prototype,
-    srcDefaults : o.extendDstNotOwn[ f ] || Object.create( null ),
+    srcMap : o.extendDstNotOwn[ f ] || Object.create( null ),
     override : false,
     dstNotOwn : true,
   });
 
   if( o.supplement )
-  for( var f in ClassFacility )
+  for( var f in _.ClassAllowedFacility )
   descendantAdd
   ({
     descendantName : f,
     dstProto : o.prototype,
-    srcDefaults : o.supplement[ f ] || Object.create( null ),
+    srcMap : o.supplement[ f ] || Object.create( null ),
     override : false,
   });
 
@@ -2372,7 +2362,7 @@ to prioritize ordinary facets adjustment order should be
 
   if( o.extend )
   {
-    var extend = _.mapBut( o.extend,ClassFacility );
+    var extend = _.mapBut( o.extend,_.ClassAllowedFacility );
     _.mapExtend( o.prototype,extend );
     if( o.cls )
     if( _hasOwnProperty.call( o.extend,'constructor' ) )
@@ -2383,7 +2373,7 @@ to prioritize ordinary facets adjustment order should be
 
   if( o.extendDstNotOwn )
   {
-    var extend = _.mapBut( o.extendDstNotOwn,ClassFacility );
+    var extend = _.mapBut( o.extendDstNotOwn,_.ClassAllowedFacility );
     _.mapExtendFiltering( _.filter.dstNotOwn(),o.prototype,extend );
     if( o.cls )
     if( _hasOwnProperty.call( o.extendDstNotOwn,'constructor' ) )
@@ -2394,7 +2384,7 @@ to prioritize ordinary facets adjustment order should be
 
   if( o.supplement )
   {
-    var supplement = _.mapBut( o.supplement,ClassFacility );
+    var supplement = _.mapBut( o.supplement,_.ClassAllowedFacility );
     _.mapSupplement( o.prototype,supplement );
     if( o.cls )
     if( !_hasOwnProperty.call( o.prototype,'constructor' ) )
@@ -2424,7 +2414,7 @@ to prioritize ordinary facets adjustment order should be
 
   if( o.usingAtomicExtension )
   {
-    for( var f in ClassFacility )
+    for( var f in _.ClassAllowedFacility )
     if( f !== 'Statics' )
     if( _.mapOwnKey( o.prototype,f ) )
     _.mapExtendFiltering( _.filter.atomicSrcOwn(),o.prototype,o.prototype.Composes );
@@ -2795,6 +2785,8 @@ function prototypeAllFieldsGet( src )
   _.mapExtend( result,prototype.Aggregates );
   if( prototype.Associates )
   _.mapExtend( result,prototype.Associates );
+  if( prototype.Medials )
+  _.mapExtend( result,prototype.Medials );
   if( prototype.Restricts )
   _.mapExtend( result,prototype.Restricts );
 
@@ -2834,13 +2826,8 @@ function prototypeHasField( src,fieldName )
   _.assert( _.prototypeIsStandard( prototype ) );
   _.assert( arguments.length === 2 );
 
-  if( prototype.Composes[ fieldName ] )
-  return true;
-  if( prototype.Aggregates[ fieldName ] )
-  return true;
-  if( prototype.Associates[ fieldName ] )
-  return true;
-  if( prototype.Restricts[ fieldName ] )
+  for( var f in _.ClassFieldFacility )
+  if( prototype[ f ][ fieldName ] )
   return true;
 
   return false;
@@ -2849,6 +2836,55 @@ function prototypeHasField( src,fieldName )
 // --
 // instance
 // --
+
+/**
+ * Is instance.
+ * @function instanceIs
+ * @param {object} src - entity to check
+ * @memberof wTools#
+ */
+
+function instanceIs( src )
+{
+  _.assert( arguments.length === 1 );
+
+  if( _.primitiveIs( src ) )
+  return false;
+
+  if( _hasOwnProperty.call( src,'constructor' ) )
+  return false;
+  else if( _hasOwnProperty.call( src,'prototype' ) && src.prototype )
+  return false;
+
+  if( Object.getPrototypeOf( src ) === Object.prototype )
+  return false;
+  if( Object.getPrototypeOf( src ) === null )
+  return false;
+
+  return true;
+}
+
+//
+
+function instanceIsStandard( src )
+{
+  _.assert( arguments.length === 1 );
+
+  // if( _.mapIsPure( src ) )
+  // debugger;
+
+  if( !_.instanceIs( src ) )
+  return false;
+
+  var proto = _.prototypeGet( src );
+
+  if( !proto )
+  return false;
+
+  return _.prototypeIsStandard( proto );
+}
+
+//
 
 /**
  * Is this instance finited.
@@ -2897,7 +2933,7 @@ function instanceFinit( src )
 //
 
 /**
- * Complements instance by its semantic relationships : Composes,Aggregates,Associates and Restricts.
+ * Complements instance by its semantic relationships : Composes, Aggregates, Associates, Medials, Restricts.
  * @param {object} instance - instance to complement.
  *
  * @example
@@ -3053,17 +3089,23 @@ wCallableObject.nameShort = 'CallableObject';
 // --
 
 /**
- * @global {Object} wTools~ClassFacility - contains predefined class relationship types.
+ * @global {Object} wTools~ClassFieldFacility - contains predefined class relationship types.
  * @memberof wTools
  */
 
-var ClassFacility = Object.create( null );
-ClassFacility.Composes = 'Composes';
-ClassFacility.Aggregates = 'Aggregates';
-ClassFacility.Associates = 'Associates';
-ClassFacility.Restricts = 'Restricts';
-ClassFacility.Statics = 'Statics';
-// Object.freeze( ClassFacility );
+var ClassFieldFacility = Object.create( null );
+ClassFieldFacility.Composes = 'Composes';
+ClassFieldFacility.Aggregates = 'Aggregates';
+ClassFieldFacility.Associates = 'Associates';
+ClassFieldFacility.Restricts = 'Restricts';
+
+var ClassAllowedFacility = Object.create( null );
+ClassAllowedFacility.Composes = 'Composes';
+ClassAllowedFacility.Aggregates = 'Aggregates';
+ClassAllowedFacility.Associates = 'Associates';
+ClassAllowedFacility.Medials = 'Medials';
+ClassAllowedFacility.Restricts = 'Restricts';
+ClassAllowedFacility.Statics = 'Statics';
 
 var ClassForbiddenFacility = Object.create( null );
 ClassForbiddenFacility.Static = 'Static';
@@ -3136,7 +3178,6 @@ var Proto =
   constructorIsStandard : constructorIsStandard,
   constructorGet : constructorGet,
 
-  instanceIs : instanceIs,
   subclassIs : subclassIs,
   parentGet : parentGet,
 
@@ -3152,7 +3193,7 @@ var Proto =
 
   // etc
 
-  propertyDescriptorGet_ : propertyDescriptorGet_,
+  propertyDescriptorGet : propertyDescriptorGet,
   propertyGetterSetterGet : propertyGetterSetterGet,
 
   proxyReadOnly : proxyReadOnly,
@@ -3183,6 +3224,8 @@ var Proto =
 
   // instance
 
+  instanceIs : instanceIs,
+  instanceIsStandard : instanceIsStandard,
   instanceIsFinited : instanceIsFinited,
   instanceFinit : instanceFinit,
 
@@ -3196,7 +3239,8 @@ var Proto =
   // var
 
   CallableObject : wCallableObject,
-  ClassFacility : ClassFacility,
+  ClassFieldFacility : ClassFieldFacility,
+  ClassAllowedFacility : ClassAllowedFacility,
   ClassForbiddenFacility : ClassForbiddenFacility,
   Combining : Combining,
   GenericAccessorDeclaratorsMap : GenericAccessorDeclaratorsMap,

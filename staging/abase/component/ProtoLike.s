@@ -96,7 +96,7 @@ function like()
     // if( arg[ symbolForAllClasses ] )
     // debugger;
     if( arg[ symbolForAllClasses ] )
-    wTools.__arrayAppendArrayOnce( allClasses,arg[ symbolForAllClasses ] );
+    wTools.arrayAppendArrayOnce( allClasses,arg[ symbolForAllClasses ] );
   }
 
   proto.constructor.prototype = proto;
