@@ -73,7 +73,7 @@ var _propertyIsEumerable = Object.propertyIsEnumerable;
 var _assert = _.assert;
 var _nameFielded = _.nameFielded;
 
-_.assert( _.objectIs( _.filter ),'wProto needs wTools/staging/abase/akernel/FieldMapper.s' );
+_.assert( _.objectIs( _.field ),'wProto needs wTools/staging/abase/akernel/FieldMapper.s' );
 _.assert( _.routineIs( _nameFielded ),'wProto needs wTools/staging/abase/component/NameTools.s' );
 
 // --
@@ -1109,7 +1109,7 @@ function mixinMake( o )
   {
 
     o.prototype = Object.create( null );
-    _.prototypeExtend
+    _.classExtend
     ({
 
       cls : null,
@@ -1177,7 +1177,7 @@ function mixinApply( o )
 
   _.assert( _.mapOwnKey( dstProto,'constructor' ) );
   _.assert( dstProto.constructor.prototype === dstProto );
-  _.prototypeExtend
+  _.classExtend
   ({
     cls : dstProto.constructor,
     extend : d.extend,
@@ -1946,7 +1946,7 @@ function ifDebugProxyReadOnly( ins )
  *  {
  *    var self = this;
  *    Parent.prototype.init.call( this );
- *    _.mapExtendFiltering( _.filter.srcOwn(),self,Composes );
+ *    _.mapExtendFiltering( _.field.srcOwn(),self,Composes );
  *  }
  *
  *  var Composes =
@@ -1962,7 +1962,7 @@ function ifDebugProxyReadOnly( ins )
  *   Composes : Composes
  *  }
  *
- *  var proto = _.prototypeMake
+ *  var proto = _.classMake
  *  ({
  *    // cls : Self, // xxx
  *    parent : Parent,
@@ -1974,7 +1974,7 @@ function ifDebugProxyReadOnly( ins )
  *  console.log( Parent.prototype.isPrototypeOf( betta ) ); //returns true
  *  console.log( betta.a, betta.b, betta.c ); //returns 1 2 5
  *
- * @method prototypeMake
+ * @method classMake
  * @throws {exception} If no argument provided.
  * @throws {exception} If( o ) is not a Object.
  * @throws {exception} If( o.cls ) is not a Routine.
@@ -1992,7 +1992,7 @@ function ifDebugProxyReadOnly( ins )
  */
 
 /*
-_.prototypeMake
+_.classMake
 ({
   cls : Self,
   parent : Parent,
@@ -2002,7 +2002,7 @@ _.prototypeMake
 });
 */
 
-function prototypeMake( o )
+function classMake( o )
 {
 
   var result;
@@ -2021,7 +2021,7 @@ function prototypeMake( o )
 
   _.assert( arguments.length === 1 );
   _.assert( _.objectIs( o ) );
-  _.assertOwnNoConstructor( o,'options for prototypeMake should have no constructor' );
+  _.assertOwnNoConstructor( o,'options for classMake should have no constructor' );
 
   if( o.withClass === undefined )
   o.withClass = true;
@@ -2030,13 +2030,13 @@ function prototypeMake( o )
   {
 
     _.assert( o.cls );
-    _.assert( _.routineIs( o.cls ),'prototypeMake expects constructor' );
+    _.assert( _.routineIs( o.cls ),'classMake expects constructor' );
     _.assert( o.cls.name || o.cls._name,'constructor should have name' );
     _.assert( _hasOwnProperty.call( o.cls.prototype,'constructor' ) );
     _.assert( !o.name || o.cls.name === o.name || o.cls._name === o.name,'class has name',o.cls.name + ', but options',o.name );
     _.assert( !o.nameShort || !o.cls.nameShort|| o.cls.nameShort === o.nameShort,'class has short name',o.cls.nameShort + ', but options',o.nameShort );
 
-    _.assertMapOwnAll( o.cls.prototype,has,'prototypeMake : expects constructor' );
+    _.assertMapOwnAll( o.cls.prototype,has,'classMake : expects constructor' );
     _.assertMapOwnNone( o.cls.prototype,hasNot );
     _.assertMapOwnNone( o.cls.prototype,ClassForbiddenFacility );
 
@@ -2054,7 +2054,7 @@ function prototypeMake( o )
   _.assert( _.objectIs( o.supplement ) || o.supplement === undefined );
   _.assert( o.parent !== o.extend );
 
-  _.routineOptions( prototypeMake,o );
+  _.routineOptions( classMake,o );
 
   /* */
 
@@ -2093,7 +2093,7 @@ function prototypeMake( o )
     {
       if( o.cls.prototype )
       {
-        _.assert( Object.keys( o.cls.prototype ).length === 0,'misuse of prototypeMake, prototype of constructor has properties which where put there manually',Object.keys( o.cls.prototype ) );
+        _.assert( Object.keys( o.cls.prototype ).length === 0,'misuse of classMake, prototype of constructor has properties which where put there manually',Object.keys( o.cls.prototype ) );
         _.assert( o.cls.prototype.constructor === o.cls );
       }
       if( o.parent )
@@ -2117,7 +2117,7 @@ function prototypeMake( o )
 
     /* extend */
 
-    _.prototypeExtend
+    _.classExtend
     ({
       cls : o.cls,
       extend : o.extend,
@@ -2136,8 +2136,8 @@ function prototypeMake( o )
     _.assert( prototype.constructor );
     _.assert( prototype.Statics );
 
-    _.mapExtendFiltering( _.filter.dstNotOwnSrcOwn(),prototype,prototype.Statics ); // xxx
-    _.mapExtendFiltering( _.filter.dstNotOwnSrcOwn(),prototype.constructor,prototype.Statics ); // xxx
+    _.mapExtendFiltering( _.field.dstNotOwnSrcOwn(),prototype,prototype.Statics ); // xxx
+    _.mapExtendFiltering( _.field.dstNotOwnSrcOwn(),prototype.constructor,prototype.Statics ); // xxx
 
     _.assert( prototype === o.cls.prototype );
     _.assert( _hasOwnProperty.call( prototype,'constructor' ),'prototype should has own constructor' );
@@ -2198,7 +2198,7 @@ function prototypeMake( o )
   return result;
 }
 
-prototypeMake.defaults =
+classMake.defaults =
 {
   cls : null,
   parent : null,
@@ -2231,14 +2231,14 @@ prototypeMake.defaults =
  * var Composes = { a : 1, b : 2 };
  * var Proto = { constructor : Self, Composes : Composes, Statics : Statics };
  *
- * var proto =  _.prototypeExtend
+ * var proto =  _.classExtend
  * ({
  *     cls : Self,
  *     extend : Proto,
  * });
  * console.log( Self.prototype === proto ); //returns true
  *
- * @method prototypeExtend
+ * @method classExtend
  * @throws {exception} If no argument provided.
  * @throws {exception} If( o ) is not a Object.
  * @throws {exception} If( o.cls ) is not a Routine.
@@ -2254,7 +2254,7 @@ prototypeMake.defaults =
  * @memberof wTools
  */
 
-function prototypeExtend( o )
+function classExtend( o )
 {
 
   if( arguments.length === 2 )
@@ -2290,7 +2290,7 @@ function prototypeExtend( o )
     _.assertOwnNoConstructor( o.supplement );
   }
 
-  _.routineOptions( prototypeExtend,o );
+  _.routineOptions( classExtend,o );
 
   if( !o.prototype )
   o.prototype = o.cls.prototype;
@@ -2374,7 +2374,7 @@ to prioritize ordinary facets adjustment order should be
   if( o.extendDstNotOwn )
   {
     var extend = _.mapBut( o.extendDstNotOwn,_.ClassAllowedFacility );
-    _.mapExtendFiltering( _.filter.dstNotOwn(),o.prototype,extend );
+    _.mapExtendFiltering( _.field.dstNotOwn(),o.prototype,extend );
     if( o.cls )
     if( _hasOwnProperty.call( o.extendDstNotOwn,'constructor' ) )
     o.prototype.constructor = o.extendDstNotOwn.constructor;
@@ -2396,9 +2396,9 @@ to prioritize ordinary facets adjustment order should be
 
   if( o.usingStatics && o.extendDstNotOwn && o.extendDstNotOwn.Statics )
   {
-    _.mapExtendFiltering( _.filter.dstNotOwn(), o.prototype, o.extendDstNotOwn.Statics );
+    _.mapExtendFiltering( _.field.dstNotOwn(), o.prototype, o.extendDstNotOwn.Statics );
     if( o.cls )
-    _.mapExtendFiltering( _.filter.dstNotOwn(), o.cls, o.extendDstNotOwn.Statics );
+    _.mapExtendFiltering( _.field.dstNotOwn(), o.cls, o.extendDstNotOwn.Statics );
   }
 
   /* static supplement */
@@ -2417,7 +2417,7 @@ to prioritize ordinary facets adjustment order should be
     for( var f in _.ClassAllowedFacility )
     if( f !== 'Statics' )
     if( _.mapOwnKey( o.prototype,f ) )
-    _.mapExtendFiltering( _.filter.atomicSrcOwn(),o.prototype,o.prototype.Composes );
+    _.mapExtendFiltering( _.field.atomicSrcOwn(),o.prototype,o.prototype.Composes );
   }
 
   /* accessors */
@@ -2460,7 +2460,7 @@ to prioritize ordinary facets adjustment order should be
   return o.prototype;
 }
 
-prototypeExtend.defaults =
+classExtend.defaults =
 {
   cls : null,
   prototype : null,
@@ -2550,11 +2550,11 @@ function protoUnitedInterface( protos )
 /**
  * Append prototype to object. Find archi parent and replace its proto.
  * @param {object} dstObject - dst object to append proto.
- * @method protoAppend
+ * @method prototypeAppend
  * @memberof wTools
  */
 
-function protoAppend( dstObject )
+function prototypeAppend( dstObject )
 {
 
   _assert( _.objectIs( dstObject ) );
@@ -2565,7 +2565,7 @@ function protoAppend( dstObject )
 
     _assert( _.objectIs( proto ) );
 
-    var parent = _.protoArchy( dstObject );
+    var parent = _.prototypeArchyGet( dstObject );
     Object.setPrototypeOf( parent, proto );
 
   }
@@ -2579,11 +2579,11 @@ function protoAppend( dstObject )
  * Does srcProto has insProto as prototype.
  * @param {object} srcProto - proto stack to investigate.
  * @param {object} insProto - proto to look for.
- * @method protoHas
+ * @method prototypeHas
  * @memberof wTools
  */
 
-function protoHas( srcProto,insProto )
+function prototypeHas( srcProto,insProto )
 {
 
   do
@@ -2635,11 +2635,11 @@ function prototypeHasPrototype( srcObject,names )
 /**
  * Returns parent which has default proto.
  * @param {object} srcObject - dst object to append proto.
- * @method protoArchy
+ * @method prototypeArchyGet
  * @memberof wTools
  */
 
-function protoArchy( srcObject )
+function prototypeArchyGet( srcObject )
 {
 
   _assert( _.objectIs( srcObject ) );
@@ -2697,7 +2697,7 @@ function prototypeCrossRefer( o )
       var srcEntity = association.entities[ src ];
       _.assert( !dstEntity[ src ] || dstEntity[ src ] === srcEntity );
       _.assert( !dstEntity.prototype[ src ] || dstEntity.prototype[ src ] === srcEntity );
-      _.prototypeExtend( dstEntity,{ Statics : { [ src ] : srcEntity } } );
+      _.classExtend( dstEntity,{ Statics : { [ src ] : srcEntity } } );
       _.assert( dstEntity[ src ] === srcEntity );
       _.assert( dstEntity.prototype[ src ] === srcEntity );
     }
@@ -2941,7 +2941,7 @@ function instanceFinit( src )
  *
  * var Proto = { constructor: Self, Composes : { a : 1, b : 2 } };
  *
- * _.prototypeMake
+ * _.classMake
  * ({
  *     constructor: Self,
  *     extend: Proto,
@@ -2980,9 +2980,9 @@ function instanceInitExtending( instance,prototype )
   if( prototype === undefined )
   prototype = instance;
 
-  _.mapExtendFiltering( _.filter.cloning(),instance,prototype.Restricts );
-  _.mapExtendFiltering( _.filter.cloning(),instance,prototype.Composes );
-  _.mapExtendFiltering( _.filter.cloning(),instance,prototype.Aggregates );
+  _.mapExtendFiltering( _.field.cloning(),instance,prototype.Restricts );
+  _.mapExtendFiltering( _.field.cloning(),instance,prototype.Composes );
+  _.mapExtendFiltering( _.field.cloning(),instance,prototype.Aggregates );
   _.mapExtend( instance,prototype.Associates );
 
   return instance;
@@ -3204,15 +3204,15 @@ var Proto =
 
   /* split the section !!! */
 
-  prototypeMake : prototypeMake,
-  prototypeExtend : prototypeExtend,
+  classMake : classMake,
+  classExtend : classExtend,
 
   protoUnitedInterface : protoUnitedInterface, /* experimental */
 
-  protoAppend : protoAppend, /* experimental */
-  protoHas : protoHas, /* experimental */
+  prototypeAppend : prototypeAppend, /* experimental */
+  prototypeHas : prototypeHas, /* experimental */
   prototypeHasPrototype : prototypeHasPrototype, /* experimental */
-  protoArchy : protoArchy, /* experimental */
+  prototypeArchyGet : prototypeArchyGet, /* experimental */
 
   prototypeCrossRefer : prototypeCrossRefer,
   prototypeEach : prototypeEach,

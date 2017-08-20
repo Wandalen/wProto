@@ -224,7 +224,7 @@ var Proto =
   _endGet : _endGet,
 }
 
-wTools.prototypeMake
+wTools.classMake
 ({
   cls : Self,
   parent : Parent,
