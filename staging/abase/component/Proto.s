@@ -2004,8 +2004,19 @@ _.classMake
 
 function classMake( o )
 {
-
   var result;
+
+  if( o.withClass === undefined )
+  o.withClass = true;
+
+  if( o.cls && !o.name )
+  o.name = o.cls.name;
+
+  if( o.cls && !o.nameShort )
+  o.nameShort = o.cls.nameShort;
+
+  /* */
+
   var has =
   {
     constructor : 'constructor',
@@ -2017,14 +2028,9 @@ function classMake( o )
     Self : 'Self',
   }
 
-  /* */
-
   _.assert( arguments.length === 1 );
   _.assert( _.objectIs( o ) );
   _.assertOwnNoConstructor( o,'options for classMake should have no constructor' );
-
-  if( o.withClass === undefined )
-  o.withClass = true;
 
   if( o.withClass )
   {
@@ -2184,6 +2190,11 @@ function classMake( o )
     result = _.mixinMake( o );
 
   }
+
+  /* handler */
+
+  if( prototype.onClassMakeEnd )
+  prototype.onClassMakeEnd( o );
 
   /* */
 
@@ -2965,7 +2976,7 @@ function instanceInit( instance,prototype )
   _.mapComplement( instance,prototype.Restricts );
   _.mapComplement( instance,prototype.Composes );
   _.mapComplement( instance,prototype.Aggregates );
-  _.mapSupplementOwn( instance,prototype.Associates );
+  _.mapSupplementOrComplementPureContainers( instance,prototype.Associates );
 
   return instance;
 }
