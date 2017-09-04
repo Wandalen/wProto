@@ -2811,8 +2811,6 @@ function prototypeCopyableFieldsGet( src )
   var prototype = _.prototypeGet( src );
   var result = Object.create( null );
 
-  debugger;
-
   _.assert( _.prototypeIs( src ) || _.constructorIs( src ) );
   _.assert( _.prototypeIsStandard( prototype ) );
   _.assert( arguments.length === 1 );
