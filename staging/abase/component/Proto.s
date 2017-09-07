@@ -2831,7 +2831,7 @@ function prototypeAllFieldsGet( src )
   var result = Object.create( null );
 
   _.assert( _.prototypeIs( src ) || _.constructorIs( src ) );
-  _.assert( _.prototypeIsStandard( prototype ) );
+  _.assert( _.prototypeIsStandard( prototype ),'expects standard prototype' );
   _.assert( arguments.length === 1 );
 
   if( prototype.Composes )
@@ -2856,7 +2856,7 @@ function prototypeCopyableFieldsGet( src )
   var result = Object.create( null );
 
   _.assert( _.prototypeIs( src ) || _.constructorIs( src ) );
-  _.assert( _.prototypeIsStandard( prototype ) );
+  _.assert( _.prototypeIsStandard( prototype ),'expects standard prototype' );
   _.assert( arguments.length === 1 );
 
   if( prototype.Composes )
@@ -2876,7 +2876,7 @@ function prototypeHasField( src,fieldName )
   var prototype = _.prototypeGet( src );
 
   _.assert( _.prototypeIs( src ) || _.constructorIs( src ) );
-  _.assert( _.prototypeIsStandard( prototype ) );
+  _.assert( _.prototypeIsStandard( prototype ),'expects standard prototype' );
   _.assert( arguments.length === 2 );
 
   for( var f in _.ClassFieldFacility )

@@ -278,13 +278,16 @@ function _accessorOptions( test )
 
 function accessor( test )
 {
-  test.description = 'setter';
+
+  test.description = 'setter'; /**/
   var Alpha =
   {
     _aSet : function( src )
     {
       this[ Symbol.for( 'a' ) ] = src * 2;
-    }
+    },
+    Composes : {},
+    constructor : function(){},
   };
   _.accessor( Alpha, { a : 'a' } );
   Alpha.a = 5;
@@ -292,13 +295,15 @@ function accessor( test )
   var expected = 10;
   test.identical( got, expected );
 
-  test.description = 'getter';
+  test.description = 'getter'; /**/
   var Alpha =
   {
     _aGet : function( )
     {
       return this[ Symbol.for( 'a' ) ] * 2;
-    }
+    },
+    Composes : {},
+    constructor : function(){},
   };
   _.accessor( Alpha, { a : 'a' } );
   Alpha.a = 5;
@@ -306,7 +311,7 @@ function accessor( test )
   var expected = 10;
   test.identical( got, expected );
 
-  test.description = 'getter & setter';
+  test.description = 'getter & setter'; /**/
   var Alpha =
   {
     _aSet : function( src )
@@ -316,7 +321,9 @@ function accessor( test )
     _aGet : function( )
     {
       return this[ Symbol.for( 'a' ) ] / 2;
-    }
+    },
+    Composes : {},
+    constructor : function(){},
   };
   _.accessor( Alpha, { a : 'a' } );
   Alpha.a = 5;
@@ -324,26 +331,38 @@ function accessor( test )
   var expected = 5;
   test.identical( got, expected );
 
-  if( Config.debug )
+  if( !Config.debug )
+  return;
+
+  test.description = 'empty call'; /**/
+  test.shouldThrowError( function()
   {
-    test.description = 'empty call';
-    test.shouldThrowError( function()
-    {
-      _.accessor( );
-    });
+    _.accessor( );
+  });
 
-    test.description = 'invalid first argument type';
-    test.shouldThrowError( function()
-    {
-      _.accessor( 1, { a : 'a' } );
-    });
+  test.description = 'invalid first argument type'; /**/
+  test.shouldThrowError( function()
+  {
+    _.accessor( 1, { a : 'a' } );
+  });
 
-    test.description = 'invalid second argument type';
-    test.shouldThrowError( function()
-    {
-      _.accessor( {}, [] );
-    });
-  }
+  test.description = 'invalid second argument type'; /**/
+  test.shouldThrowError( function()
+  {
+    _.accessor( {}, [] );
+  });
+
+  test.description = 'does not have Composes'; /**/
+  test.shouldThrowError( function()
+  {
+    _.accessor( { constructor : function(){}, },{ a : 'a' } );
+  });
+
+  test.description = 'does not have constructor'; /**/
+  test.shouldThrowError( function()
+  {
+    _.accessor( { Composes : {}, },{ a : 'a' } );
+  });
 
 }
 
