@@ -1,3 +1,6 @@
+( function _Proto_s_() {
+
+'use strict';
 
 /**
 * Definitions :
@@ -5,7 +8,7 @@
 *  self :: current object.
 *  Self :: current class.
 *  Parent :: parent class.
-*  Static :: static fields.
+*  Statics :: static fields.
 *  extend :: extend destination with all properties from source.
 *  supplement :: supplement destination with those properties from source which do not belong to source.
 
@@ -17,7 +20,7 @@
 * Synonym :
 
   A composes B
-    :: A consists of B.
+    :: A consists of B.s
     :: A comprises B.
     :: A made up of B.
     :: A exists because of B, and B exists because of A.
@@ -27,19 +30,16 @@
     :: A exists because of B, but B exists without A.
     :: A має B.
   A associate B
-    :: A has link on B.
-    :: A is linked with B.
+    :: A has link on B
+    :: A is linked with B
     :: A посилається на B.
   A restricts B
     :: A use B.
     :: A has occasional relation with B.
     :: A використовує B.
     :: A має обмежений, не чіткий, тимчасовий звязок із B.
+
 */
-
-( function _Proto_s_() {
-
-'use strict';
 
 if( typeof module !== 'undefined' )
 {
@@ -47,7 +47,7 @@ if( typeof module !== 'undefined' )
   if( typeof wBase === 'undefined' )
   try
   {
-    require( '../wTools.s' );
+    require( '../../abase/akernel/aKernel.s' );
   }
   catch( err )
   {
@@ -69,10 +69,12 @@ var Self = wTools;
 var _ = wTools;
 
 var _hasOwnProperty = Object.hasOwnProperty;
+var _propertyIsEumerable = Object.propertyIsEnumerable;
 var _assert = _.assert;
 var _nameFielded = _.nameFielded;
 
-_.assert( _.routineIs( _nameFielded ) );
+_.assert( _.objectIs( _.field ),'wProto needs wTools/staging/abase/akernel/FieldMapper.s' );
+_.assert( _.routineIs( _nameFielded ),'wProto needs wTools/staging/abase/component/NameTools.s' );
 
 // --
 // property
@@ -95,7 +97,7 @@ _.assert( _.routineIs( _nameFielded ) );
  * // names: { a: 'a', b: 'b' },
  * // message: [ 'set/get call' ] }
  *
- * var Self = function () { };
+ * var Self = function ClassName( o ) { };
  * _._accessorOptions( Self,{ a : 'a', b : 'b' }, 'set/get call' );
  *
  * @private
@@ -103,9 +105,9 @@ _.assert( _.routineIs( _nameFielded ) );
  * @memberof wTools
  */
 
-var _accessorOptions = function( object,names )
+function _accessorOptions( object,names )
 {
-  var o = arguments.length === 1 ? arguments[ 0 ] : {};
+  var o = arguments.length === 1 ? arguments[ 0 ] : Object.create( null );
 
   if( arguments.length === 1 )
   {
@@ -119,8 +121,13 @@ var _accessorOptions = function( object,names )
 
   if( !o.methods )
   o.methods = object;
+  else
+  o.methods = _.mapExtend( null,o.methods );
 
-  var names = o.names = _nameFielded( names );
+  if( !_.arrayIs( names ) )
+  o.names = _nameFielded( names );
+  else
+  o.names = names;
 
   if( arguments.length > 2 )
   {
@@ -132,28 +139,40 @@ var _accessorOptions = function( object,names )
 
 //
 
-var _accessorRegister = function( o )
+function _accessorRegister( o )
 {
 
   _.routineOptions( _accessorRegister,o );
-  _.assert( Object.hasOwnProperty.call( o.proto,'Accessors' ),'_accessorRegister : proto should has Accessors map' );
+  _.assert( _.prototypeIsStandard( o.proto ),'expects formal prototype' );
+  _.assert( _.strIsNotEmpty( o.declaratorName ) );
+  _.assert( _.arrayIs( o.declaratorArgs ) );
+  _.descendantMakeOwnedBy( o.proto,'_Accessors' );
+
+  // if( Config.debug )
+  // for( var a = 0 ; a < o.declaratorArgs.length ; a++ )
+  // _.entityFreeze( o.declaratorArgs[ a ] );
+
+  var accessors = o.proto._Accessors;
+
+  if( o.combining && o.combining !== 'rewrite' )
+  debugger;
 
   if( Config.debug )
   if( !o.combining )
   {
-    var stack = o.proto.Accessors[ o.name ] ? o.proto.Accessors[ o.name ].stack : '';
+    var stack = accessors[ o.name ] ? accessors[ o.name ].stack : '';
     _.assert
     (
-      !o.proto.Accessors[ o.name ],
+      !accessors[ o.name ],
       'defined at' + '\n',
       stack,
       '\naccessor',o.name,'of',o.proto.constructor.name
     );
-    if( o.proto.Accessors[ o.name ] )
+    if( accessors[ o.name ] )
     debugger;
   }
 
-  _.assert( !o.combining || o.combining === 'rewrite' || o.combining === 'append' );
+  _.assert( !o.combining || o.combining === 'rewrite' || o.combining === 'append', 'not supported ( o.combinng )',o.combinng );
   _.assert( _.strIs( o.name ) );
 
   var descriptor =
@@ -166,18 +185,24 @@ var _accessorRegister = function( o )
   }
 
   if( Config.debug )
-  descriptor.stack = _.stack();
+  descriptor.stack = _.diagnosticStack();
 
   if( o.combining === 'append' )
   {
-    if( _.arrayIs( o.proto.Accessors[ o.name ] ) )
-    o.proto.Accessors[ o.name ].push( descriptor );
+    if( _.arrayIs( accessors[ o.name ] ) )
+    accessors[ o.name ].push( descriptor );
     else
-    o.proto.Accessors[ o.name ] = [ descriptor ];
+    accessors[ o.name ] = [ descriptor ];
   }
 
-  o.proto.Accessors[ o.name ] = descriptor;
+  // if( o.declaratorName )
+  // debugger;
+  // if( o.declaratorKind )
+  // debugger;
 
+  accessors[ o.name ] = descriptor;
+
+  return descriptor;
 }
 
 _accessorRegister.defaults =
@@ -193,20 +218,39 @@ _accessorRegister.defaults =
 //
 
 /**
+ * Accessor options
+ * @typedef{object} wTools~accessorOptions
+ * @property{object} [ object=null ] - source object wich properties will get getter/setter defined.
+ * @property{object} [ names=null ] - properties of that object represent names of fields for wich function defines setter/getter.
+ * Function uses values( rawName ) of object( o.names ) properties to check if fields of( o.object ) have setter/getter.
+ * Example : if( rawName ) is 'a', function searchs for '_aSet' or 'aSet' and same for getter.
+ * @property{object} [ methods=null ] - object where function searchs for existing setter/getter of property.
+ * @property{array} [ message=null ] - setter/getter prints this message when called.
+ * @property{boolean} [ strict=true ] - makes object field private if no getter defined but object must have own constructor.
+ * @property{boolean} [ enumerable=true ] - sets property descriptor enumerable option.
+ * @property{boolean} [ preserveValues=true ] - saves values of existing object properties.
+ * @property{boolean} [ readOnly=false ] - if true function doesn't define setter to property.
+ **/
+
+/**
  * Defines set/get functions on source object( o.object ) properties if they dont have them.
+ * If property specified by( o.names ) doesn't exist on source( o.object ) function creates it.
+ * If ( o.object.constructor.prototype ) has property with getter defined function forbids set/get access
+ * to object( o.object ) property. Field can be accessed by use of Symbol.for( rawName ) function,
+ * where( rawName ) is value of property from( o.names ) object.
  *
  * @param {wTools~accessorOptions} o - options {@link wTools~accessorOptions}.
  *
  * @example
- * var Alpha = function () { };
- * var o = _._accessorOptions( Alpha, { a : 'a', b : 'b' }, [ 'set/get call' ] );
+ * var Self = function ClassName( o ) { };
+ * var o = _._accessorOptions( Self, { a : 'a', b : 'b' }, [ 'set/get call' ] );
  * _._accessor( o );
- * Alpha.a = 1; // returns [ 'set/get call' ]
- * Alpha.b = 2; // returns [ 'set/get call' ]
- * console.log( Alpha.a );
+ * Self.a = 1; // returns [ 'set/get call' ]
+ * Self.b = 2; // returns [ 'set/get call' ]
+ * console.log( Self.a );
  * // returns [ 'set/get call' ]
  * // 1
- * console.log( Alpha.b );
+ * console.log( Self.b );
  * // returns [ 'set/get call' ]
  * // 2
  *
@@ -222,7 +266,7 @@ _accessorRegister.defaults =
  * @memberof wTools
  */
 
-var _accessor = function _accessor( o )
+function _accessor( o )
 {
 
   /* verification */
@@ -233,7 +277,7 @@ var _accessor = function _accessor( o )
   _.assertMapHasOnly( o,_accessor.defaults );
   _.mapComplement( o,_accessor.defaults );
 
-  if( o.strict /*&& o.preserveValues*/ )
+  if( o.strict )
   {
 
     var has =
@@ -241,31 +285,55 @@ var _accessor = function _accessor( o )
       constructor : 'constructor',
     }
 
-    var hasNot =
-    {
-      Type : 'Type',
-      type : 'type',
-    }
-
     _.assertMapOwnAll( o.object,has );
     _.accessorForbid
     ({
       object : o.object,
-      names : hasNot,
+      names : ClassForbiddenFacility,
       prime : 0,
+      strict : 0,
     });
 
   }
 
-  _assert( _.objectLike( o.object ),'_.accessor :','expects object ( object ), but got', o.object );
+  _assert( _.objectLikeOrRoutine( o.object ),'_.accessor :','expects object ( object ), but got', o.object );
   _assert( _.objectIs( o.names ),'_.accessor :','expects object ( names ), but got', o.names );
+
+  /* */
+
+  var AllowedIndividualOptions =
+  {
+    strict : 1,
+    enumerable : 1,
+    preserveValues : 1,
+    readOnly : 0,
+    readOnlyProduct : 0,
+    prime : 1,
+    combining : 0,
+  }
 
   /* */
 
   for( var n in o.names )
   {
 
-    _accessorProperty( o,n );
+    var individual = o.names[ n ];
+
+    _.assert( _.strIs( individual ) || _.objectIs( individual ) );
+
+    if( _.strIs( individual ) )
+    {
+      _.assert( individual === n );
+      individual = o;
+    }
+    else
+    {
+      _.assertMapHasOnly( individual,AllowedIndividualOptions );
+      individual = _.mapExtend( null,o,individual );
+      _.assert( individual.object );
+    }
+
+    _accessorProperty( individual,n );
 
   }
 
@@ -283,21 +351,19 @@ _accessor.defaults =
   enumerable : 1,
   preserveValues : 1,
   readOnly : 0,
-
+  readOnlyProduct : 0,
   prime : 1,
-
-  //rewriting : 0,
   combining : 0,
 
 }
 
 //
 
-var Combining = [ 'rewrite','supplement','apppend','prepend' ];
-var _accessorProperty = function( o,name )
+function _accessorProperty( o,name )
 {
 
   _.assert( arguments.length === 2 );
+  _.assert( _.strIs( name ) );
 
   var encodedName = name;
   var rawName = name;
@@ -308,7 +374,7 @@ var _accessorProperty = function( o,name )
 
   /* */
 
-  var propertyDescriptor = _.propertyDescriptorGet( o.object,encodedName );
+  var propertyDescriptor = _.accessorDescriptorGet( o.object,encodedName );
   if( propertyDescriptor.descriptor )
   {
 
@@ -319,7 +385,11 @@ var _accessorProperty = function( o,name )
       '( o.combining ) suppose to be',Combining.join(),'if accessor overided'
     );
 
-    _.assert( o.combining === 'rewrite' || o.combining === 'append','not implemented' );
+    _.assert( o.combining === 'rewrite' || o.combining === 'append' || o.combining === 'supplement','not implemented' );
+
+    if( o.combining === 'supplement' )
+    return;
+
     if( o.combining === 'append' )
     {
 
@@ -365,10 +435,10 @@ var _accessorProperty = function( o,name )
   if( o.prime )
   {
 
-    var optionsForRegister = _.mapExtend( {},o );
+    var optionsForRegister = _.mapExtend( null,o );
     optionsForRegister.names = encodedName;
     if( optionsForRegister.methods === optionsForRegister.object )
-    optionsForRegister.methods = {};
+    optionsForRegister.methods = Object.create( null );
     optionsForRegister.object = null;
 
     if( !optionsForRegister.methods[ '_' + rawName + 'Get' ] && !optionsForRegister.methods[ rawName + 'Get' ] )
@@ -381,7 +451,7 @@ var _accessorProperty = function( o,name )
     ({
       proto : o.object,
       name : encodedName,
-      declaratorName : null,
+      declaratorName : 'Accessor',
       declaratorArgs : [ optionsForRegister ],
       combining : o.combining,
     });
@@ -390,13 +460,8 @@ var _accessorProperty = function( o,name )
 
   /* */
 
-  //var redefinition = false;
-  // var parent = o.object.constructor ? Object.getPrototypeOf( o.object.constructor.prototype ) : null;
-  // if( parent )
-  // redefinition = parent[ rawName + 'Get' ] !== undefined || parent[ '_' + rawName + 'Get' ] !== undefined;
-
   var settrGetter = _accessorSetterGetterMake( o,o.methods,rawName );
-  var fieldName = '_' + rawName;
+  var forbiddenName = '_' + rawName;
   var fieldSymbol = Symbol.for( rawName );
 
   if( o.preserveValues )
@@ -413,24 +478,26 @@ var _accessorProperty = function( o,name )
     configurable : o.combining === 'append',
   });
 
-  /* define private field */
+  /* forbid underscore field */
 
-  if( o.strict && !propertyDescriptor.descriptor )
+  if( o.strict && !propertyDescriptor.descriptor  )
   {
 
     var m =
     [
       'use Symbol.for( \'' + rawName + '\' ) ',
       'to get direct access to property\'s field, ',
-      'not ' + fieldName,
+      'not ' + forbiddenName,
     ].join( '' );
 
+    if( !_.prototypeIsStandard( o.object ) || ( _.prototypeIsStandard( o.object ) && !_.prototypeHasField( o.object,forbiddenName ) ) )
     _.accessorForbid
     ({
       object : o.object,
-      names : fieldName,
+      names : forbiddenName,
       message : [ m ],
       prime : 0,
+      strict : 1,
     });
 
   }
@@ -439,12 +506,16 @@ var _accessorProperty = function( o,name )
 
 //
 
-var _accessorSetterGetterMake = function( o,object,name )
+function _accessorSetterGetterMake( o,object,name )
 {
-  var result = {};
+  var result = Object.create( null );
 
-  result.set = object[ '_' + name + 'Set' ] ? object[ '_' + name + 'Set' ] : object[ name + 'Set' ];
-  result.get = object[ '_' + name + 'Get' ] ? object[ '_' + name + 'Get' ] : object[ name + 'Get' ];
+  _.assert( arguments.length === 3 );
+  _.assert( _.objectLikeOrRoutine( object ) );
+  _.assert( _.strIs( name ) );
+
+  result.set = object[ name + 'Set' ] ? object[ name + 'Set' ] : object[ '_' + name + 'Set' ];
+  result.get = object[ name + 'Get' ] ? object[ name + 'Get' ] : object[ '_' + name + 'Get' ];
 
   var fieldName = '_' + name;
   var fieldSymbol = Symbol.for( name );
@@ -470,24 +541,63 @@ var _accessorSetterGetterMake = function( o,object,name )
     return src;
   }
 
-  _assert( !result.set || !o.readOnly,'accessor :','readOnly but settter found in',o.object );
-
   /* get */
 
+  // _.assert( !o.readOnlyProduct || !result.get,'not tested' );
+
   if( !result.get )
-  if( o.message )
-  result.get = function get()
   {
-    console.info.apply( console,o.message );
-    return this[ fieldSymbol ];
-  }
-  else
-  result.get = function get()
-  {
-    return this[ fieldSymbol ];
+
+    if( !o.readOnlyProduct )
+    result.get = function get()
+    {
+      return this[ fieldSymbol ];
+    }
+    else if( o.readOnlyProduct )
+    result.get = function get()
+    {
+      var result = this[ fieldSymbol ];
+      debugger;
+      if( !_.atomicIs( result ) )
+      result = _.proxyReadOnly( result );
+      return result;
+    }
+
+    if( o.message )
+    {
+      var message = o.message;
+      var _getWithoutMessage = o.get;
+      o.get = function()
+      {
+        console.info.apply( console,message );
+        return _getWithoutMessage.apply( this,arguments );
+      }
+    }
+
   }
 
-  /* */
+  /* validation */
+
+  _.assert( !result.set || !o.readOnly,'accessor :','read only, but setter found in',o.object );
+
+  return result;
+}
+
+//
+
+function _accessorSetterGetterGet( object,name )
+{
+  var result = Object.create( null );
+
+  _.assert( arguments.length === 2 );
+  _.assert( _.objectIs( object ) );
+  _.assert( _.strIs( name ) );
+
+  result.setName = object[ name + 'Set' ] ? name + 'Set' : '_' + name + 'Set';
+  result.getName = object[ name + 'Get' ] ? name + 'Get' : '_' + name + 'Get';
+
+  result.set = object[ result.setName ];
+  result.get = object[ result.getName ];
 
   return result;
 }
@@ -495,26 +605,9 @@ var _accessorSetterGetterMake = function( o,object,name )
 //
 
 /**
- * Accessor options
- * @typedef{object} wTools~accessorOptions
- * @property{object} [ object=null ] - source object which properties will get getter/setter defined.
- * @property{object} [ names=null ] - properties of that object represent names of fields for which function defines setter/getter.
- * Function uses values( rawName ) of object( o.names ) properties to check if fields of( o.object ) have setter/getter.
- * Example: if( rawName ) is 'a', function searchs for '_aSet' or 'aSet' and same for getter.
- * @property{object} [ methods=null ] - object where function searchs for existing setter/getter of property.
- * @property{array} [ message=null ] - setter/getter prints this message when called.
- * @property{boolean} [ strict=true ] - makes object field private if no getter defined but object must have own constructor.
- * @property{boolean} [ enumerable=true ] - sets property descriptor enumerable option.
- * @property{boolean} [ preserveValues=true ] - saves values of existing object properties.
- * @property{boolean} [ readOnly=false ] - if true function doesn't define setter to property.
- **/
-
-/**
+ * Short-cut for _accessor function.
  * Defines set/get functions on source object( o.object ) properties if they dont have them.
- * If property specified by( o.names ) doesn't exist on source( o.object ) function creates it.
- * If ( o.object.constructor.prototype ) has property with getter defined function forbids set/get access
- * to object( o.object ) property. After that field can be accessed by using Symbol.for( rawName ) function,
- * where( rawName ) is value of property from( o.names ) object.
+ * For more details @see {@link wTools._accessor }.
  * Can be called in three ways:
  * - First by passing all options in one object( o );
  * - Second by passing ( object ) and ( names ) options;
@@ -523,176 +616,183 @@ var _accessorSetterGetterMake = function( o,object,name )
  * @param {wTools~accessorOptions} o - options {@link wTools~accessorOptions}.
  *
  * @example
- * var Alpha = function () { };
- * _.accessor( Alpha,{ a : 'a' }, 'set/get call' )
- * Alpha.a = 1; // set/get call
- * Alpha.a;
+ * var Self = function ClassName( o ) { };
+ * _.accessor( Self,{ a : 'a' }, 'set/get call' )
+ * Self.a = 1; // set/get call
+ * Self.a;
  * // returns
  * // set/get call
  * // 1
  *
- * @example
- * var Alpha = function Alpha() { };
- * Alpha.prototype = Object.create( null );
- * Alpha.prototype.a = 1;
- * Alpha.prototype.constructor = Alpha;
- *
- * _.accessor(
- * {
- *  object : Alpha.prototype,
- *  names : { a : 'a' },
- *  readOnly : true
- * });
- *
- *
- *
- * var obj = new Alpha();
- * console.log( obj.a );// returns 1
- * obj.a = 5; // error property is readonly
- *
  * @method accessor
- * @throws {exception} If( o.object ) is not a Object.
- * @throws {exception} If( o.names ) is not a Object.
- * @throws {exception} If( o.methods ) is not a Object.
- * @throws {exception} If( o.message ) is not a Array.
- * @throws {exception} If( o ) is extented by unknown property.
- * @throws {exception} If( o.strict ) is true and object doesn't have own constructor.
- * @throws {exception} If( o.readOnly ) is true and property has own setter.
  * @memberof wTools
  */
 
-var accessor = function accessor( object,names )
+function accessor( o )
 {
   var o = _accessorOptions.apply( this,arguments );
+
   return _accessor( o );
 }
 
 //
 
-/**
- * Forbids access to fields of object( o.object ) throught getter/setter functions.
- * If property exists function redefines it without saving current value, also field becomes non-enumerable
- * and can be access only using 'direct access'.
- * Direct access to property is allowed by using Symbol.for( rawName ) function value as key,
- * where( rawName ) is a value of property from( o.names ). Example: Self[ Symbol.for( 'a' ) ].
- *
- * @param {wTools~accessorOptions} o - options {@link wTools~accessorOptions}.
- * @param { boolean } [ o.override=false ] - to override existing getter/setter.
- * @param { boolean } [ o.allowMultiple=true ] -
- *
- * @example
- * var Alpha = function () { };
- * _.accessorForbid(  Alpha,{ a : 'a' }, 'use Symbol.for() to access field' );
- * Alpha[ Symbol.for( 'a' ) ] = 1; // ok
- * Alpha['a'] = 1; // throws error
- *
- *
- * @method accessorForbid
- * @throws {exception} If( o.object ) is not a Object.
- * @throws {exception} If( o.object.constructor.name ) property is undefined.
- * @throws {exception} If( o.names ) is not a Object.
- * @throws {exception} If( o.methods ) is not a Object.
- * @throws {exception} If( o.message ) is not a Array.
- * @throws {exception} If( o ) is extented by unknown property.
- * @throws {exception} If( o.strict ) is true and object doesn't have own constructor.
- * @throws {exception} If( o.readOnly ) is true and property has own setter.
- * @memberof wTools
- */
-
-var accessorForbid = function accessorForbid( object,names )
+function accessorForbid()
 {
   var o = _accessorOptions.apply( this,arguments );
   var object = o.object;
   var names = o.names;
 
+  if( _.objectIs( o.names ) )
+  names = _.mapExtend( null,o.names );
+
+  if( o.combining === 'rewrite' && o.strict === undefined )
+  o.strict = 0;
+
+  if( o.prime === undefined )
+  o.prime = _.prototypeIsStandard( o.object );
+
   /* verification */
 
-  _assert( _.objectLike( object ),'_.accessor :','expects object as argument but got', object );
-  _assert( _.objectIs( names ),'_.accessor :','expects object names as argument but got', names );
-  _.assertMapHasOnly( o,accessorForbid.defaults );
-  _.mapComplement( o,accessorForbid.defaults );
-
+  _.assert( _.objectLikeOrRoutine( object ),'_.accessor :','expects object as argument but got', object );
+  _.assert( _.objectIs( names ) || _.arrayIs( names ),'_.accessor :','expects object names as argument but got', names );
+  _.routineOptions( accessorForbid,o );
 
   /* message */
 
-  _assert( object.constructor === null || object.constructor.name || object.constructor._name,'accessorForbid :','object should have name' );
-  var protoName = ( object.constructor ? ( object.constructor.name || object.constructor._name || '' ) : '' ) + '.';
+  var _constructor = object.constructor || Object.getPrototypeOf( object );
+  _.assert( _.routineIs( _constructor ) || _constructor === null );
+  _.assert( _constructor === null || _constructor.name || _constructor._name,'accessorForbid :','object should have name' );
+  var protoName = ( _constructor ? ( _constructor.name || _constructor._name || '' ) : '' ) + '.';
   var message = 'is deprecated';
   if( o.message )
   message = o.message.join( ' : ' );
 
+  /* _accessorForbid */
 
-  /* property */
-
-  var methods = {};
-  for( var n in names )
+  var encodedName,rawName;
+  function _accessorForbid()
   {
-
-    var encodedName = n;
-    var rawName = names[ n ];
 
     var setterName = '_' + rawName + 'Set';
     var getterName = '_' + rawName + 'Get';
 
-    (function _accessorForbid()
+    var messageLine = protoName + rawName + ' : ' + message;
+    var handler = function forbidden()
+    {
+      debugger;
+      throw _.err( messageLine );
+    }
+
+    handler.isForbid = true;
+
+    methods[ setterName ] = handler;
+    methods[ getterName ] = handler;
+
+    /* */
+
+    if( o.prime )
     {
 
-      var messageLine = protoName + rawName + ' : ' + message;
-      var handler = function forbidden()
+      var optionsForRegister = _.mapExtend( null,o );
+      optionsForRegister.names = encodedName;
+      optionsForRegister.object = null;
+
+      _._accessorRegister
+      ({
+        proto : o.object,
+        name : encodedName,
+        declaratorName : 'accessorForbid',
+        declaratorArgs : [ optionsForRegister ],
+        combining : o.combining,
+      });
+
+    }
+
+    /* */
+
+    var propertyDescriptor = _.accessorDescriptorGet( o.object,encodedName );
+    if( propertyDescriptor.descriptor )
+    {
+      _.assert( o.combining,'accessorForbid : if accessor overided expect ( o.combining ) is',Combining.join() );
+
+      if( _.routineIs( propertyDescriptor.descriptor.get ) && propertyDescriptor.descriptor.get.name === 'forbidden' )
       {
-        debugger;
-        throw _.err( messageLine );
+        delete names[ encodedName ];
+        return;
       }
 
-      handler.forbid = true;
+    }
 
-      methods[ setterName ] = handler;
-      methods[ getterName ] = handler;
+    /* field */
 
-      /* */
-
-      var propertyDescriptor = _.propertyDescriptorGet( o.object,encodedName );
-      if( propertyDescriptor.descriptor )
+    if( o.strict )
+    if( _hasOwnProperty.call( object,encodedName ) )
+    {
+      var descriptor = Object.getOwnPropertyDescriptor( object,encodedName );
+      if( _.routineIs( descriptor.get ) && descriptor.get.isForbid )
       {
-        _.assert( o.combining,'accessorForbid : if accessor overided expect ( o.combining ) is',Combining.join() );
-
-        if( _.routineIs( propertyDescriptor.descriptor.get ) && propertyDescriptor.descriptor.get.name === 'forbidden' )
-        {
-          delete names[ n ];
-          return;
-        }
-
+        delete names[ encodedName ];
+        return;
       }
-
-      // if( !o.override || o.allowMultiple )
-      // if( _hasOwnProperty.call( object,encodedName ) )
-      // {
-      //   var descriptor = Object.getOwnPropertyDescriptor( object,encodedName );
-      //   if( _.routineIs( descriptor.get ) && descriptor.get.forbid && o.allowMultiple )
-      //   {
-      //     delete names[ n ];
-      //     return;
-      //   }
-      //   else if( !o.override )
-      //   handler();
-      // }
-
-      if( !Object.isExtensible( object ) )
+      else
       {
-        delete names[ n ];
+        handler();
       }
+    }
 
-    })();
+    /* descendant */
+
+    if( o.strict && _.prototypeIsStandard( o.object ) )
+    if( _.prototypeHasField( o.object,encodedName ) )
+    {
+      handler();
+    }
+
+    /* */
+
+    if( !Object.isExtensible( object ) )
+    {
+      delete names[ encodedName ];
+    }
 
   }
 
-  // o.preserveValues = 0;
-  // o.strict = 0;
-  // o.enumerable = false;
+  /* property */
+
+  var methods = Object.create( null );
+
+  if( _.objectIs( names ) )
+  {
+
+    for( var n in names )
+    {
+      var encodedName = n;
+      var rawName = names[ n ];
+      _accessorForbid();
+    }
+
+  }
+  else
+  {
+
+    var namesArray = names;
+    names = Object.create( null );
+    for( var n = 0 ; n < namesArray.length ; n++ )
+    {
+      var encodedName = namesArray[ n ];
+      var rawName = namesArray[ n ];
+      names[ encodedName ] = rawName;
+      _accessorForbid();
+    }
+
+  }
 
   o.names = names;
   o.object = object;
   o.methods = methods;
+  o.strict = 0;
+  o.prime = 0;
 
   return _accessor( _.mapScreen( _accessor.defaults,o ) );
 }
@@ -700,12 +800,9 @@ var accessorForbid = function accessorForbid( object,names )
 accessorForbid.defaults =
 {
   preserveValues : 0,
-  strict : 0,
   enumerable : 0,
-  prime : 0,
-  //override : 0,
-  //allowMultiple : 1,
-  //rewriting : 1,
+  prime : 1,
+  strict : 1,
   combining : 'rewrite',
 }
 
@@ -713,35 +810,40 @@ accessorForbid.defaults.__proto__ = _accessor.defaults;
 
 //
 
-var accessorReadOnly = function accessorReadOnly( object,names )
+function accessorReadOnly( object,names )
 {
   var o = _accessorOptions.apply( this,arguments );
+
+  _.assert( !o.readOnly );
   o.readOnly = true;
-  return accessor( o );
+
+  // if( o.readOnlyProduct === undefined )
+  // o.readOnlyProduct = true;
+
+  return _accessor( o );
 }
 
 //
 
-var accessorsSupplement = function accessorsSupplement( dst,src )
+function accessorsSupplement( dst,src )
 {
 
+  _.descendantMakeOwnedBy( dst,'_Accessors' );
+
   _.assert( arguments.length === 2 );
-  _.assert( Object.hasOwnProperty.call( dst,'Accessors' ),'accessorsSupplement : dst should has Accessors map' );
-  _.assert( Object.hasOwnProperty.call( src,'Accessors' ),'accessorsSupplement : src should has Accessors map' );
+  _.assert( _hasOwnProperty.call( dst,'_Accessors' ),'accessorsSupplement : dst should has _Accessors map' );
+  _.assert( _hasOwnProperty.call( src,'_Accessors' ),'accessorsSupplement : src should has _Accessors map' );
 
   /* */
 
-  var supplement = function( accessor )
+  function supplement( accessor )
   {
 
     _.assert( _.arrayIs( accessor.declaratorArgs ) );
     _.assert( !accessor.combining || accessor.combining === 'rewrite' || accessor.combining === 'append','not implemented' );
 
-    //if( accessor.combining !== 'append' && accessor.combining !== 'prepend' )
-    if( _.objectIs( dst.Accessors[ a ] ) )
+    if( _.objectIs( dst._Accessors[ a ] ) )
     return;
-
-    // console.log( 'accessorsSupplement',a );
 
     if( accessor.declaratorName )
     {
@@ -751,7 +853,7 @@ var accessorsSupplement = function accessorsSupplement( dst,src )
     else
     {
       _.assert( accessor.declaratorArgs.length === 1 );
-      var optionsForAccessor = _.mapExtend( {},accessor.declaratorArgs[ 0 ] );
+      var optionsForAccessor = _.mapExtend( null,accessor.declaratorArgs[ 0 ] );
       optionsForAccessor.object = dst;
       if( !optionsForAccessor.methods )
       optionsForAccessor.methods = dst;
@@ -762,11 +864,10 @@ var accessorsSupplement = function accessorsSupplement( dst,src )
 
   /* */
 
-  // debugger;
-  for( var a in src.Accessors )
+  for( var a in src._Accessors )
   {
 
-    var accessor = src.Accessors[ a ];
+    var accessor = src._Accessors[ a ];
 
     if( _.objectIs( accessor ) )
     supplement( accessor );
@@ -774,7 +875,6 @@ var accessorsSupplement = function accessorsSupplement( dst,src )
     supplement( accessor[ i ] );
 
   }
-  // debugger;
 
 }
 
@@ -786,11 +886,11 @@ var accessorsSupplement = function accessorsSupplement( dst,src )
  * @param {object} namesObject - name/value map of constants.
  *
  * @example
- * var Alpha = function() { };
+ * var Self = function ClassName( o ) { };
  * var Constants = { num : 100  };
- * _.constant ( Alpha.prototype,Constants );
- * console.log( Alpha.prototype ); // returns { num: 100 }
- * Alpha.prototype.num = 1;// error assign to read only property
+ * _.constant ( Self.prototype,Constants );
+ * console.log( Self.prototype ); // returns { num: 100 }
+ * Self.prototype.num = 1;// error assign to read only property
  *
  * @method constant
  * @throws {exception} If no argument provided.
@@ -799,16 +899,11 @@ var accessorsSupplement = function accessorsSupplement( dst,src )
  * @memberof wTools
  */
 
-var constant = function( dstProto,namesObject )
+function constant( dstProto,namesObject )
 {
 
-  // if( _.strIs( namesObject ) )
-  // {
-  //   namesObject = { [ namesObject ] : namesObject };
-  // }
-
   _assert( arguments.length === 2 );
-  _assert( _.objectLike( dstProto ),'_.constant :','dstProto is needed :', dstProto );
+  _assert( _.objectLikeOrRoutine( dstProto ),'_.constant :','dstProto is needed :', dstProto );
   _assert( _.mapIs( namesObject ),'_.constant :','namesObject is needed :', namesObject );
 
   for( var n in namesObject )
@@ -837,12 +932,12 @@ var constant = function( dstProto,namesObject )
  * @param {object|string} namesObject - property name as string/map with properties.
  *
  * @example
- * var Alpha = function() { };
- * Alpha.prototype.num = 100;
+ * var Self = function ClassName( o ) { };
+ * Self.prototype.num = 100;
  * var ReadOnly = { num : null, num2 : null  };
- * _.restrictReadOnly ( Alpha.prototype,ReadOnly );
- * console.log( Alpha.prototype ); // returns { num: 100, num2: undefined }
- * Alpha.prototype.num2 = 1; // error assign to read only property
+ * _.restrictReadOnly ( Self.prototype,ReadOnly );
+ * console.log( Self.prototype ); // returns { num: 100, num2: undefined }
+ * Self.prototype.num2 = 1; // error assign to read only property
  *
  * @method restrictReadOnly
  * @throws {exception} If no argument provided.
@@ -851,17 +946,17 @@ var constant = function( dstProto,namesObject )
  * @memberof wTools
  */
 
-var restrictReadOnly = function restrictReadOnly( dstProto,namesObject )
+function restrictReadOnly( dstProto,namesObject )
 {
 
   if( _.strIs( namesObject ) )
   {
-    namesObject = {};
+    namesObject = Object.create( null );
     namesObject[ namesObject ] = namesObject;
   }
 
   _assert( arguments.length === 2 );
-  _assert( _.objectLike( dstProto ),'_.constant :','dstProto is needed :', dstProto );
+  _assert( _.objectLikeOrRoutine( dstProto ),'_.constant :','dstProto is needed :', dstProto );
   _assert( _.mapIs( namesObject ),'_.constant :','namesObject is needed :', namesObject );
 
   for( var n in namesObject )
@@ -883,279 +978,388 @@ var restrictReadOnly = function restrictReadOnly( dstProto,namesObject )
 
 //
 
-/**
- * Mixin options
- * @typedef{object} wTools~mixinOptions
- * @property{object} [ o.dst=null ] - class which prototype will get new fields and methods.
- * @property{object} [ o.mixin=null ] - source class with own mixin function,Extend,Supplement and Functor maps.
- * @property{object} [ o.mixin.Extend=null ] - extend prototype by this map
- * @property{object} [ o.mixin.Supplement=null ] - supplement prototype by this map.
- * @property{object} [ o.mixin.Functor=null ] - map that contains functors,their names must be same as fields from( o.dst ) to perform correct call.
- **/
-
-/**
- * Mixin methods and fields from( o.mixin ) into prototype of another object( o.dst ).
- * Supplements and extends prototype with properties and relationships : Composes, Aggregates, Associates, Restricts
- * from( o.mixin.Supplement ) and ( o.mixin.Extend ).
- * If map( o.mixin.Functor ) is provided function calls each functor with two parameters: options object( o ) and value of same named field from( o.dst ).
- * Result of functor call is assigned to that property from( o.dst ).
- * To forbid mixin prototype from same source( o.mixin ) more than once function saves it name into map( dst._mixins ).
- *
- * @param {object} o - options {@link wTools~mixinOptions}.
- *
- * @example
- * var Supplement =
- * {
- *   example : function() { console.log( 'example function' ); },
- *   Composes : { field : 'value1' }
- * }
- * var mixin = function( constructor )
- * {
- *   _.mixin
- *   ({
- *     dst : constructor.prototype,
- *     mixin : ClassMixin,
- *   });
- * }
- *
- * var ClassMixin =
- * {
- *   Supplement : Supplement,
- *   name : 'ClassMixin',
- *   mixin : mixin
- * }
- *
- * var Alpha = function Alpha() { };
- * Alpha.prototype = Object.create( null );
- * Alpha.prototype.field = 'value2';
- * Alpha.prototype.constructor = Alpha;
- *
- * ClassMixin.mixin( Alpha );
- *
- * console.log( Alpha.prototype );
- * //returns
- * // Alpha
- * // {
- * //   field: 'value2',
- * //   constructor: [Function: Alpha],
- * //   example: [Function],
- * //   Composes: { field: 'value1' },
- * //  _mixins: { SelfMixin: 1 }
- * // }
- *
- *
- * @method mixin
- * @throws {exception} If( o.dst ) is not a Object.
- * @throws {exception} If( o.mixin.mixin ) is not a Routine.
- * @throws {exception} If( o.mixin.name ) is not a String.
- * @throws {exception} If( o.mixin.Extend ) is not a Map,null or undefined.
- * @throws {exception} If( o.mixin.Supplement ) is not a Map,null or undefined.
- * @throws {exception} If( o ) is extented by unknown property.
- * @throws {exception} If( o.mixin ) is extented by unknown property.
- * @throws {exception} If( o.dst ) is not a Map and ( dst.constructor.prototype ) is not equal to( o.dst ).
- * @throws {exception} If( o.dst ) is not a Map and ( dst.constructor.name ) is not defined.
- * @throws {exception} If( o.dst ) is already mixed by( o.mixin ).
- * @memberof wTools
- */
-
-var mixin = function( o )
+function accessorToElement( o )
 {
 
-  var dst = o.dst;
-  var mixinDefaults =
+  _.assert( arguments.length === 1 );
+  _.assert( _.objectIs( o.names ) );
+  _.routineOptions( accessorToElement,o );
+
+  var names = Object.create( null );
+  for( var n in o.names ) (function()
   {
-    name : null,
-    mixin : null,
-    Extend : null,
-    Supplement : null,
-    Functor : null,
+    names[ n ] = n;
+
+    var arrayName = o.arrayName;
+    var index = o.names[ n ];
+    _.assert( _.numberIs( index ) );
+    _.assert( index >= 0 );
+
+    var setterGetter = _accessorSetterGetterGet( o.object,n );
+
+    if( !setterGetter.set )
+    o.object[ setterGetter.setName ] = function accessorToElementSet( src )
+    {
+      this[ arrayName ][ index ] = src;
+    }
+
+    if( !setterGetter.get )
+    o.object[ setterGetter.getName ] = function accessorToElementGet()
+    {
+      return this[ arrayName ][ index ];
+    }
+
+  })();
+
+  _.accessor
+  ({
+    object : o.object,
+    names : names,
+  });
+
+}
+
+accessorToElement.defaults =
+{
+  object : null,
+  names : null,
+  arrayName : null,
+}
+
+//
+
+function accessorDescriptorGet( object,name )
+{
+  var result = Object.create( null );
+  result.object = null;
+  result.descriptor = null;
+
+  _.assert( arguments.length === 2 );
+
+  do
+  {
+    result.descriptor = Object.getOwnPropertyDescriptor( object,name );
+
+    // if( result.descriptor )
+    // if( 'value' in result.descriptor )
+    // debugger;
+
+    if( result.descriptor && !( 'value' in result.descriptor ) )
+    {
+      result.object = object;
+      return result;
+    }
+    object = Object.getPrototypeOf( object );
   }
+  while( object );
 
-  _assert( arguments.length === 1 );
-  _assert( _.objectIs( dst ) );
-  _assert( _.routineIs( o.mixin.mixin ) );
-  _assert( _.strIs( o.mixin.name ) );
-  _assert( _.mapIs( o.mixin.Extend ) || o.mixin.Extend === undefined || o.mixin.Extend === null );
-  _assert( _.mapIs( o.mixin.Supplement ) || o.mixin.Supplement === undefined || o.mixin.Supplement === null );
-  //_assert( _.mapIs( o.mixin ) );
-  _.assertMapHasOnly( o,mixin.defaults );
-  _.assertMapOwnOnly( o.mixin,mixinDefaults );
+  return result;
+}
 
-  if( !_.mapIs( dst ) )
+// --
+// mixin
+// --
+
+/**
+ * Make mixin which could be mixed into prototype of another object.
+ * @param {object} o - options.
+ * @method mixinMake
+ * @memberof wTools#
+ */
+
+function mixinMake( o )
+{
+
+  _.assert( arguments.length === 1 );
+  _.assert( _.mapIs( o ) || _.routineIs( o ) );
+  _.assert( _.routineIs( o._mixin ) || o._mixin === undefined,'expects routine ( o._mixin ), but got',_.strTypeOf( o ) );
+  _.assert( _.strIsNotEmpty( o.name ),'mixin should have name' );
+  _.assert( _.objectIs( o.extend ) || o.extend === undefined || o.extend === null );
+  _.assert( _.objectIs( o.extendDstNotOwn ) || o.extendDstNotOwn === undefined || o.extendDstNotOwn === null );
+  _.assert( _.objectIs( o.supplement ) || o.supplement === undefined || o.supplement === null );
+  _.assertOwnNoConstructor( o );
+  _.assertMapOwnOnly( o,mixinMake.defaults );
+
+  if( !o._mixin )
+  o.mixin = function mixin( cls )
   {
-    _assert( dst.constructor.prototype === dst,'mixin :','expects prototype with own constructor field' );
-    _assert( dst.constructor.name.length > 0 || dst.constructor._name.length,'mixin :','constructor should has name' );
-    _assert( _.routineIs( dst.init ) );
+    _.assert( arguments.length === 1 );
+    _.assert( _.routineIs( cls ) );
+    _.assert( cls === cls.prototype.constructor );
+    _.assert( this === o );
+    _.mixinApply({ descriptor : this, dstProto : cls.prototype });
+    return cls;
+  }
+  else
+  o.mixin = function mixin( cls )
+  {
+    _.assert( arguments.length === 1 );
+    _.assert( _.routineIs( cls ) );
+    _.assert( cls === cls.prototype.constructor );
+    _.assert( this === o );
+    o._mixin( cls );
+    return cls;
   }
 
   /* */
 
-  if( o.mixin.Supplement )
-  _.mapSupplement( dst,_.mapBut( o.mixin.Supplement,ClassFacility ) );
-  if( o.mixin.Extend )
-  _.mapExtend( dst,_.mapBut( o.mixin.Extend,ClassFacility ) );
+  o._mixinDetails = _.mapExtend( null,o );
 
-  /* facility */
-
-  if( o.mixin.Supplement )
-  for( var f in ClassFacility )
-  if( o.mixin.Supplement[ f ] )
-  _propertyAddOwnDefaults
-  ({
-    facilityName : f,
-    dstProto : dst,
-    srcDefaults : o.mixin.Supplement[ f ],
-    override : false,
-  });
-
-  if( o.mixin.Extend )
-  for( var f in ClassFacility )
-  if( o.mixin.Extend[ f ] )
-  _propertyAddOwnDefaults
-  ({
-    facilityName : f,
-    dstProto : dst,
-    srcDefaults : o.mixin.Extend[ f ],
-    override : true,
-  });
-
-  /* functor */
-
-  if( o.mixin.Functor )
-  for( var m in o.mixin.Functor )
-  dst[ m ] = o.mixin.Functor[ m ].call( o,dst[ m ] );
-
-  /* field */
-
-  //if( !dst._mixins )
-  if( !_hasOwnProperty.call( dst,'_mixins' ) )
+  if( !o.prototype )
   {
-    //var _mixin = dst._mixins;
-    dst._mixins = Object.create( dst._mixins || null );
-    //if( _mixin )
-    //Object.setPrototypeOf( dst._mixins, _mixin );
+
+    o.prototype = Object.create( null );
+    _.classExtend
+    ({
+
+      cls : null,
+      prototype : o.prototype,
+
+      extend : o.extend,
+      extendDstNotOwn : o.extendDstNotOwn,
+      supplement : o.supplement,
+
+    });
+
   }
 
-  _.assert( !dst._mixins[ o.mixin.name ],'attempt to mixin same mixin same several times : ' + o.mixin.name + ' into ' + dst.constructor.name );
+  Object.freeze( o._mixinDetails );
+  Object.freeze( o );
 
-  dst._mixins[ o.mixin.name ] = 1;
-
+  return o;
 }
 
-mixin.defaults =
+mixinMake.defaults =
 {
-  dst : null,
-  mixin : null,
-  // proto : null,
-  // functors : null,
-  // name : null,
+
+  _mixin : null,
+  name : null,
+  nameShort : null,
+  prototype : null,
+
+  extend : null,
+  extendDstNotOwn : null,
+  supplement : null,
+  functor : null,
 }
 
 //
 
 /**
-* Default options for _propertyAddOwnDefaults function
-* @typedef {object} wTools~propertyAddOwnDefaults
-* @property {object} [ o.facilityName=null ] - object that contains class relationship type name.
-* Example : { Composes : 'Composes' }. See {@link wTools~ClassFacility}
+ * Mixin methods and fields into prototype of another object.
+ * @param {object} o - options.
+ * @method mixinApply
+ * @memberof wTools#
+ */
+
+function mixinApply( o )
+{
+  var dstProto = o.dstProto;
+  var d = o.descriptor._mixinDetails;
+
+  _assert( arguments.length === 1 );
+  _.assertOwnNoConstructor( o );
+  _assert( _.objectIs( dstProto ),'expects ( dstProto ) object, but got',_.strTypeOf( dstProto ) );
+  _assert( _.routineIs( d.mixin ),'looks like mixn descriptor is not made' );
+  _assert( Object.isFrozen( d ),'looks like mixn descriptor is not made' );
+  _.assertMapHasOnly( o,mixinApply.defaults );
+
+  /* mixin into routine */
+
+  if( !_.mapIs( dstProto ) )
+  {
+    _assert( dstProto.constructor.prototype === dstProto,'mixin :','expects prototype with own constructor field' );
+    _assert( dstProto.constructor.name.length || dstProto.constructor._name.length,'mixin :','constructor should has name' );
+    _assert( _.routineIs( dstProto.init ) );
+  }
+
+  /* extend */
+
+  _.assert( _.mapOwnKey( dstProto,'constructor' ) );
+  _.assert( dstProto.constructor.prototype === dstProto );
+  _.classExtend
+  ({
+    cls : dstProto.constructor,
+    extend : d.extend,
+    extendDstNotOwn : d.extendDstNotOwn,
+    supplement : d.supplement,
+    functor : d.functor,
+  });
+
+  /* mixins map */
+
+  if( !_hasOwnProperty.call( dstProto,'_mixinsMap' ) )
+  {
+    dstProto._mixinsMap = Object.create( dstProto._mixinsMap || null );
+  }
+
+  _.assert( !dstProto._mixinsMap[ d.name ],'attempt to mixin same mixin "' + d.name + '" several times into ' + dstProto.constructor.name );
+
+  dstProto._mixinsMap[ d.name ] = 1;
+
+}
+
+mixinApply.defaults =
+{
+  dstProto : null,
+  descriptor : null,
+}
+
+//
+
+function mixinHas( proto,mixin )
+{
+  if( _.constructorIs( proto ) )
+  proto = _.prototypeGet( proto );
+
+  _.assert( _.prototypeIsStandard( proto ) );
+  _.assert( arguments.length === 2 );
+
+  if( _.strIs( mixin ) )
+  {
+    return proto._mixinsMap && proto._mixinsMap[ mixin ];
+  }
+  else
+  {
+    _.assert( _.routineIs( mixin.mixin ),'expects mixin, but got not mixin',_.strTypeOf( mixin ) );
+    _.assert( _.strIsNotEmpty( mixin.name ),'expects mixin, but got not mixin',_.strTypeOf( mixin ) );
+    return proto._mixinsMap && proto._mixinsMap[ mixin.name ];
+  }
+
+}
+
+// --
+// descendant
+// --
+
+function descendantMakeOwnedBy( dst,fieldName )
+{
+
+  _.assert( arguments.length === 2 );
+  _.assert( _.strIs( fieldName ) );
+
+  if( !_hasOwnProperty.call( dst,fieldName ) )
+  {
+    var field = dst[ fieldName ];
+    dst[ fieldName ] = Object.create( null );
+    if( field )
+    Object.setPrototypeOf( dst[ fieldName ], field );
+  }
+
+  if( Config.debug )
+  {
+    var parent = Object.getPrototypeOf( dst );
+    if( parent && parent[ fieldName ] )
+    _.assert( Object.getPrototypeOf( dst[ fieldName ] ) === parent[ fieldName ] );
+  }
+
+  return dst;
+}
+
+//
+
+/**
+* Default options for descendantAdd function
+* @typedef {object} wTools~protoAddDefaults
+* @property {object} [ o.descendantName=null ] - object that contains class relationship type name.
+* Example : { Composes : 'Composes' }. See {@link wTools~ClassFieldFacility}
 * @property {object} [ o.dstProto=null ] - prototype of class which will get new constant property.
-* @property {object} [ o.srcDefaults=null ] - name/value map of defaults.
+* @property {object} [ o.srcMap=null ] - name/value map of defaults.
 * @property {bool} [ o.override=false ] - to override defaults if exist.
 */
 
 /**
  * Adds own defaults to object. Creates new defaults container, if there is no such own.
- * @param {wTools~propertyAddOwnDefaults} o - options {@link wTools~propertyAddOwnDefaults}.
+ * @param {wTools~protoAddDefaults} o - options {@link wTools~protoAddDefaults}.
  * @private
  *
  * @example
- * var Alpha = function() { };
- * _._propertyAddOwnDefaults
+ * var Self = function ClassName( o ) { };
+ * _.descendantAdd
  * ({
- *   facilityName : { Composes : 'Composes' },
- *   dstProto : Alpha.prototype,
- *   srcDefaults : { a : 1, b : 2 },
- *   override : false,
+ *   descendantName : { Composes : 'Composes' },
+ *   dstProto : Self.prototype,
+ *   srcMap : { a : 1, b : 2 },
  * });
- * console.log( Alpha.prototype ); // returns { Composes: { a: 1, b: 2 } }
+ * console.log( Self.prototype ); // returns { Composes: { a: 1, b: 2 } }
  *
- * @method _propertyAddOwnDefaults
+ * @method descendantAdd
  * @throws {exception} If no argument provided.
- * @throws {exception} If( o.srcDefaults ) is not a Object.
+ * @throws {exception} If( o.srcMap ) is not a Object.
  * @throws {exception} If( o ) is extented by unknown property.
  * @memberof wTools
  */
 
-//var _propertyAddOwnDefaults = function( defaultsName,dstProto,srcDefaults,o )
-var _propertyAddOwnDefaults = function( o )
+function descendantAdd( o )
 {
-  var o = o || {};
+  var o = o || Object.create( null );
 
-  _assert( arguments.length === 1 );
-  _assert( _.objectIs( o.srcDefaults ),'expects object ( o.srcDefaults ), got', _.strTypeOf( o.srcDefaults ) );
-  _.routineOptions( _propertyAddOwnDefaults,o );
+  _.routineOptions( descendantAdd,o );
+  _.assert( arguments.length === 1 );
+  _.assert( o.srcMap === null || _.objectIs( o.srcMap ),'expects object ( o.srcMap ), got', _.strTypeOf( o.srcMap ) );
 
-  o.facilityName = _.nameUnfielded( o.facilityName );
+  o.descendantName = _.nameUnfielded( o.descendantName );
 
-  if( !_hasOwnProperty.call( o.dstProto,o.facilityName.coded ) )
-  {
-    var facility = o.dstProto[ o.facilityName.coded ];
-    o.dstProto[ o.facilityName.coded ] = {};
-    if( facility )
-    Object.setPrototypeOf( o.dstProto[ o.facilityName.coded ], facility );
-  }
+  _.descendantMakeOwnedBy( o.dstProto,o.descendantName.coded );
 
-  var facility = o.dstProto[ o.facilityName.coded ];
+  var descendant = o.dstProto[ o.descendantName.coded ];
 
-  for( var n in o.srcDefaults )
+  if( o.srcMap )
+  for( var n in o.srcMap )
   {
 
     if( o.override === false )
-    if( n in facility )
+    if( n in descendant )
     continue;
 
-    facility[ n ] = o.srcDefaults[ n ];
+    if( o.dstNotOwn === true )
+    if( _hasOwnProperty.call( descendant,n ) )
+    continue;
+
+    descendant[ n ] = o.srcMap[ n ];
 
   }
 
 }
 
-_propertyAddOwnDefaults.defaults =
+descendantAdd.defaults =
 {
-  facilityName : null,
+  descendantName : null,
   dstProto : null,
-  srcDefaults : null,
+  srcMap : null,
+
   override : false,
+  dstNotOwn : false,
 }
 
 //
 
 /**
  * Adds own defaults( Composes ) to object. Creates new defaults container, if there is no such own.
- * @param {array-like} arguments - for arguments details see {@link wTools~propertyAddOwnDefaults}.
+ * @param {array-like} arguments - for arguments details see {@link wTools~protoAddDefaults}.
  *
  * @example
- * var Alpha = function() { };
+ * var Self = function ClassName( o ) { };
  * var Composes = { tree : null };
- * _.propertyAddOwnComposes( Alpha.prototype, Composes );
- * console.log( Alpha.prototype ); // returns { Composes: { tree: null } }
+ * _.descendantComposesAddTo( Self.prototype, Composes );
+ * console.log( Self.prototype ); // returns { Composes: { tree: null } }
  *
- * @method propertyAddOwnComposes
+ * @method descendantComposesAddTo
  * @throws {exception} If no arguments provided.
  * @memberof wTools
  */
 
-var propertyAddOwnComposes = function( dstProto,srcDefaults )
+function descendantComposesAddTo( dstProto,srcMap )
 {
 
   _.assert( arguments.length === 2 );
 
-  var facilityName = { Composes : 'Composes' };
-  return _propertyAddOwnDefaults
+  var descendantName = 'Composes';
+  return _.descendantAdd
   ({
-    facilityName : facilityName,
+    descendantName : descendantName,
     dstProto : dstProto,
-    srcDefaults : srcDefaults,
+    srcMap : srcMap,
     override : false,
   });
 
@@ -1165,30 +1369,30 @@ var propertyAddOwnComposes = function( dstProto,srcDefaults )
 
 /**
  * Adds own aggregates to object. Creates new aggregates container, if there is no such own.
- * @param {array-like} arguments - for arguments details see {@link wTools~propertyAddOwnDefaults}.
+ * @param {array-like} arguments - for arguments details see {@link wTools~protoAddDefaults}.
  *
  * @example
- * var Alpha = function () { };
+ * var Self = function ClassName( o ) { };
  * var Aggregates = { tree : null };
- * _.propertyAddOwnAggregates( Alpha.prototype, Aggregates );
- * console.log( Alpha.prototype ); // returns { Aggregates: { tree: null } }
+ * _.descendantAggregatesAddTo( Self.prototype, Aggregates );
+ * console.log( Self.prototype ); // returns { Aggregates: { tree: null } }
  *
- * @method propertyAddOwnAggregates
+ * @method descendantAggregatesAddTo
  * @throws {exception} If no arguments provided.
  * @memberof wTools
  */
 
-var propertyAddOwnAggregates = function( dstProto,srcDefaults )
+function descendantAggregatesAddTo( dstProto,srcMap )
 {
 
   _.assert( arguments.length === 2 );
 
-  var facilityName = { Aggregates : 'Aggregates' };
-  return _propertyAddOwnDefaults
+  var descendantName = 'Aggregates';
+  return _.descendantAdd
   ({
-    facilityName : facilityName,
+    descendantName : descendantName,
     dstProto : dstProto,
-    srcDefaults : srcDefaults,
+    srcMap : srcMap,
     override : false,
   });
 
@@ -1198,30 +1402,30 @@ var propertyAddOwnAggregates = function( dstProto,srcDefaults )
 
 /**
  * Adds own associates to object. Creates new associates container, if there is no such own.
- * @param {array-like} arguments - for arguments details see {@link wTools~propertyAddOwnDefaults}.
+ * @param {array-like} arguments - for arguments details see {@link wTools~protoAddDefaults}.
  *
  * @example
- * var Alpha = function() { };
+ * var Self = function ClassName( o ) { };
  * var Associates = { tree : null };
- * _.propertyAddOwnAssociates( Alpha.prototype, Associates );
- * console.log( Alpha.prototype ); // returns { Associates: { tree: null } }
+ * _.descendantAssociatesAddTo( Self.prototype, Associates );
+ * console.log( Self.prototype ); // returns { Associates: { tree: null } }
  *
- * @method propertyAddOwnAssociates
+ * @method descendantAssociatesAddTo
  * @throws {exception} If no arguments provided.
  * @memberof wTools
  */
 
-var propertyAddOwnAssociates = function( dstProto,srcDefaults )
+function descendantAssociatesAddTo( dstProto,srcMap )
 {
 
   _.assert( arguments.length === 2 );
 
-  var facilityName = { Associates : 'Associates' };
-  return _propertyAddOwnDefaults
+  var descendantName = 'Associates';
+  return _.descendantAdd
   ({
-    facilityName : facilityName,
+    descendantName : descendantName,
     dstProto : dstProto,
-    srcDefaults : srcDefaults,
+    srcMap : srcMap,
     override : false,
   });
 
@@ -1231,43 +1435,186 @@ var propertyAddOwnAssociates = function( dstProto,srcDefaults )
 
 /**
  * Adds own restricts to object. Creates new restricts container, if there is no such own.
- * @param {array-like} arguments - for arguments details see {@link wTools~propertyAddOwnDefaults}.
+ * @param {array-like} arguments - for arguments details see {@link wTools~protoAddDefaults}.
  *
  * @example
- * var Alpha = function () { };
+ * var Self = function ClassName( o ) { };
  * var Restricts = { tree : null };
- * _.propertyAddOwnRestricts( Alpha.prototype, Restricts );
- * console.log( Alpha.prototype ); // returns { Restricts: { tree: null } }
+ * _.descendantRestrictsAddTo( Self.prototype, Restricts );
+ * console.log( Self.prototype ); // returns { Restricts: { tree: null } }
  *
- * @method propertyAddOwnRestricts
+ * @method descendantRestrictsAddTo
  * @throws {exception} If no arguments provided.
  * @memberof wTools
  */
 
-var propertyAddOwnRestricts = function( dstProto,srcDefaults )
+function descendantRestrictsAddTo( dstProto,srcMap )
 {
 
   _.assert( arguments.length === 2 );
 
-  var facilityName = { Restricts : 'Restricts' };
-  return _propertyAddOwnDefaults
+  var descendantName = 'Restricts';
+  return _.descendantAdd
   ({
-    facilityName : facilityName,
+    descendantName : descendantName,
     dstProto : dstProto,
-    srcDefaults : srcDefaults,
+    srcMap : srcMap,
     override : false,
   });
 
 }
 
 // --
-// getter / setter generator
+// type
 // --
 
-var setterMapCollection_gen = function( o )
+/**
+ * Is prototype.
+ * @function prototypeIs
+ * @param {object} src - entity to check
+ * @memberof wTools#
+ */
+
+function prototypeIs( src )
+{
+  _.assert( arguments.length === 1 );
+  if( _.primitiveIs( src ) )
+  return false;
+  return _hasOwnProperty.call( src, 'constructor' );
+}
+
+//
+
+function prototypeIsStandard( src )
 {
 
-  _.assertMapHasOnly( o,setterMapCollection_gen.defaults );
+  if( !_.prototypeIs( src ) )
+  return false;
+
+  if( !_hasOwnProperty.call( src, 'Composes' ) )
+  return false;
+
+  return true;
+}
+
+//
+
+function prototypeGet( src )
+{
+
+  if( !( 'constructor' in src ) )
+  return null;
+
+  // if( _.mapIsPure( src ) )
+  // return null;
+
+  var c = constructorGet( src );
+
+  _.assert( arguments.length === 1 );
+
+  return c.prototype;
+}
+
+//
+
+/**
+ * Is constructor.
+ * @function constructorIs
+ * @param {object} cls - entity to check
+ * @memberof wTools#
+ */
+
+function constructorIs( cls )
+{
+  _.assert( arguments.length === 1 );
+  return _.routineIs( cls ) && !instanceIs( cls );
+}
+
+//
+
+function constructorIsStandard( cls )
+{
+
+  _.assert( _.constructorIs( cls ) );
+
+  var prototype = _.prototypeGet( cls );
+
+  return _.prototypeIsStandard( prototype );
+}
+
+//
+
+function constructorGet( src )
+{
+  var proto;
+
+  _.assert( arguments.length === 1 );
+
+  if( _hasOwnProperty.call( src,'constructor' ) )
+  {
+    proto = src; /* proto */
+  }
+  else if( _hasOwnProperty.call( src,'prototype' )  )
+  {
+    if( src.prototype )
+    proto = src.prototype; /* constructor */
+    else
+    proto = Object.getPrototypeOf( Object.getPrototypeOf( src ) ); /* instance behind ruotine */
+  }
+  else
+  {
+    proto = Object.getPrototypeOf( src ); /* instance */
+  }
+
+  if( proto === null )
+  return null;
+  else
+  return proto.constructor;
+}
+
+//
+
+function subclassIs( cls,subCls )
+{
+
+  _.assert( _.routineIs( cls ) );
+  _.assert( _.routineIs( subCls ) );
+  _.assert( arguments.length === 2 );
+
+  if( cls === subCls )
+  return true;
+
+  return Object.isPrototypeOf.call( cls.prototype, subCls.prototype );
+}
+
+//
+
+/**
+ * Get parent's constructor.
+ * @method parentGet
+ * @memberof wCopyable#
+ */
+
+function parentGet( src )
+{
+  var c = constructorGet( src );
+
+  _.assert( arguments.length === 1 );
+
+  var proto = Object.getPrototypeOf( c.prototype );
+  var result = proto ? proto.constructor : null;
+
+  return result;
+}
+
+// --
+// getter / setter functor
+// --
+
+function setterMapCollection_functor( o )
+{
+
+  _.assertMapHasOnly( o,setterMapCollection_functor.defaults );
   _.assert( _.strIs( o.name ) );
   var symbol = Symbol.for( o.name );
   var elementMaker = o.elementMaker;
@@ -1288,7 +1635,7 @@ var setterMapCollection_gen = function( o )
     else
     {
 
-      self[ symbol ] = {};
+      self[ symbol ] = Object.create( null );
 
     }
 
@@ -1301,7 +1648,7 @@ var setterMapCollection_gen = function( o )
 
 }
 
-setterMapCollection_gen.defaults =
+setterMapCollection_functor.defaults =
 {
   name : null,
   elementMaker : null,
@@ -1309,7 +1656,7 @@ setterMapCollection_gen.defaults =
 
 //
 
-var setterFriend_gen = function( o )
+function setterFriend_functor( o )
 {
 
   var name = _.nameUnfielded( o.name ).coded;
@@ -1321,36 +1668,47 @@ var setterFriend_gen = function( o )
   _.assert( _.strIs( name ) );
   _.assert( _.strIs( nameOfLink ) );
   _.assert( _.routineIs( maker ) );
-  _.assertMapHasOnly( o,setterFriend_gen.defaults );
+  _.assertMapHasOnly( o,setterFriend_functor.defaults );
 
-  return function setterFriend( data )
+  return function setterFriend( src )
   {
 
     var self = this;
-    _.assert( data === null || _.objectIs( data ),'setterFriend : expects null or object, but got ' + _.strTypeOf( data ) );
+    _.assert( src === null || _.objectIs( src ),'setterFriend : expects null or object, but got ' + _.strTypeOf( src ) );
 
-    //console.log( 'setting ' + namename );
-
-    if( !data )
+    if( !src )
     {
 
-      self[ symbol ] = data;
+      self[ symbol ] = src;
       return;
 
     }
     else if( !self[ symbol ] )
     {
 
-      var o = {};
-      o[ nameOfLink ] = self;
-      o.name = name;
-      self[ symbol ] = maker( o );
+      if( _.mapIs( src ) )
+      {
+        var o = Object.create( null );
+        o[ nameOfLink ] = self;
+        o.name = name;
+        self[ symbol ] = maker( o );
+        self[ symbol ].copy( src );
+      }
+      else
+      {
+        self[ symbol ] = src;
+      }
+
+    }
+    else
+    {
+
+      self[ symbol ].copy( src );
 
     }
 
-    self[ symbol ].copy( data );
+    // self[ symbol ].copy( src );
 
-    /*_.assert( self[ symbol ][ nameOfLink ] === null || self[ symbol ][ nameOfLink ] === self );*/
     if( self[ symbol ][ nameOfLink ] !== self )
     self[ symbol ][ nameOfLink ] = self;
 
@@ -1359,7 +1717,7 @@ var setterFriend_gen = function( o )
 
 }
 
-setterFriend_gen.defaults =
+setterFriend_functor.defaults =
 {
   name : null,
   nameOfLink : null,
@@ -1368,7 +1726,7 @@ setterFriend_gen.defaults =
 
 //
 
-var setterCopyable_gen = function( o )
+function setterCopyable_functor( o )
 {
 
   var name = _.nameUnfielded( o.name ).coded;
@@ -1378,7 +1736,7 @@ var setterCopyable_gen = function( o )
   _.assert( arguments.length === 1 );
   _.assert( _.strIs( name ) );
   _.assert( _.routineIs( maker ) );
-  _.assertMapHasOnly( o,setterCopyable_gen.defaults );
+  _.assertMapHasOnly( o,setterCopyable_functor.defaults );
 
   return function setterCopyable( data )
   {
@@ -1403,7 +1761,7 @@ var setterCopyable_gen = function( o )
 
 }
 
-setterCopyable_gen.defaults =
+setterCopyable_functor.defaults =
 {
   name : null,
   maker : null,
@@ -1411,7 +1769,7 @@ setterCopyable_gen.defaults =
 
 //
 
-var setterBufferFrom_gen = function( o )
+function setterBufferFrom_functor( o )
 {
 
   var name = _.nameUnfielded( o.name ).coded;
@@ -1421,7 +1779,7 @@ var setterBufferFrom_gen = function( o )
   _.assert( arguments.length === 1 );
   _.assert( _.strIs( name ) );
   _.assert( _.routineIs( bufferConstructor ) );
-  _.routineOptions( setterBufferFrom_gen,o );
+  _.routineOptions( setterBufferFrom_functor,o );
 
   return function setterBufferFrom( data )
   {
@@ -1442,7 +1800,7 @@ var setterBufferFrom_gen = function( o )
 
 }
 
-setterBufferFrom_gen.defaults =
+setterBufferFrom_functor.defaults =
 {
   name : null,
   bufferConstructor : null,
@@ -1450,14 +1808,14 @@ setterBufferFrom_gen.defaults =
 
 //
 
-var setterChangesTracking_gen = function( o )
+function setterChangesTracking_functor( o )
 {
 
   var name = Symbol.for( _.nameUnfielded( o.name ).coded );
   var nameOfChangeFlag = Symbol.for( _.nameUnfielded( o.nameOfChangeFlag ).coded );
 
   _.assert( arguments.length === 1 );
-  _.routineOptions( setterChangesTracking_gen,o );
+  _.routineOptions( setterChangesTracking_functor,o );
 
   throw _.err( 'not tested' );
 
@@ -1476,11 +1834,79 @@ var setterChangesTracking_gen = function( o )
 
 }
 
-setterChangesTracking_gen.defaults =
+setterChangesTracking_functor.defaults =
 {
   name : null,
   nameOfChangeFlag : 'needsUpdate',
   bufferConstructor : null,
+}
+
+// --
+// etc
+// --
+
+function propertyDescriptorGet( object,name )
+{
+  var result = Object.create( null );
+  result.object = null;
+  result.descriptor = null;
+
+  _.assert( arguments.length === 2 );
+
+  do
+  {
+    result.descriptor = Object.getOwnPropertyDescriptor( object,name );
+    if( result.descriptor )
+    {
+      result.object = object;
+      return result;
+    }
+    object = Object.getPrototypeOf( object );
+  }
+  while( object );
+
+  return result;
+}
+
+//
+
+function propertyGetterSetterGet( object,name )
+{
+  var result = Object.create( null );
+
+  result.set = object[ '_' + name + 'Set' ] || object[ '' + name + 'Set' ];
+  result.get = object[ '_' + name + 'Get' ] || object[ '' + name + 'Get' ];
+
+  return result;
+}
+
+//
+
+function proxyReadOnly( ins )
+{
+
+  var validator =
+  {
+    set : function( obj, k, e )
+    {
+      throw _.err( 'Read only',_.strTypeOf( ins ),ins );
+    }
+  }
+
+  var result = new Proxy( ins, validator );
+
+  return result;
+}
+
+//
+
+function ifDebugProxyReadOnly( ins )
+{
+
+  if( !Config.debug )
+  return ins;
+
+  return _.proxyReadOnly( ins );
 }
 
 // --
@@ -1489,7 +1915,7 @@ setterChangesTracking_gen.defaults =
 
 /**
 * @typedef {object} wTools~prototypeOptions
-* @property {routine} [o.constructor=null] - constructor for which prototype is needed.
+* @property {routine} [o.cls=null] - constructor for which prototype is needed.
 * @property {routine} [o.parent=null] - constructor of parent class.
 * @property {object} [o.extend=null] - extend prototype by this map.
 * @property {object} [o.supplement=null] - supplement prototype by this map.
@@ -1499,7 +1925,7 @@ setterChangesTracking_gen.defaults =
 */
 
 /**
- * Make prototype for constructor repairing relationship : Composes, Aggregates, Associates, Restricts.
+ * Make prototype for constructor repairing relationship : Composes, Aggregates, Associates, Medials, Restricts.
  * Execute optional extend / supplement if such o present.
  * @param {wTools~prototypeOptions} o - options {@link wTools~prototypeOptions}.
  * @returns {object} Returns constructor's prototype based on( o.parent ) prototype and complemented by fields, static and non-static methods.
@@ -1509,19 +1935,19 @@ setterChangesTracking_gen.defaults =
  *  Parent.prototype.init = function(  )
  *  {
  *    var self = this;
- *    self.x = 5;
+ *    self.c = 5;
  *  };
  *
- *  var Self = function Betta()
+ *  var Self = function Betta( o )
  *  {
  *    return Self.prototype.init.apply( this,arguments );
  *  }
  *
- *  var init = function init()
+ *  function init()
  *  {
  *    var self = this;
  *    Parent.prototype.init.call( this );
- *    _.mapExtendFiltering( _.filter.srcOwn(),self,Composes );
+ *    _.mapExtendFiltering( _.field.srcOwn(),self,Composes );
  *  }
  *
  *  var Composes =
@@ -1532,14 +1958,14 @@ setterChangesTracking_gen.defaults =
  *
  *  var Proto =
  *  {
- *   init: init,
+ *   init : init,
  *   constructor : Self,
  *   Composes : Composes
  *  }
  *
- *  var proto = _.protoMake
+ *  var proto = _.classMake
  *  ({
- *    constructor : Self,
+ *    // cls : Self, // xxx
  *    parent : Parent,
  *    extend : Proto,
  *  });
@@ -1547,29 +1973,29 @@ setterChangesTracking_gen.defaults =
  *  var betta = new Betta();
  *  console.log( proto === Self.prototype ); //returns true
  *  console.log( Parent.prototype.isPrototypeOf( betta ) ); //returns true
- *  console.log( betta.a, betta.b, betta.x ); //returns 1 2 5
+ *  console.log( betta.a, betta.b, betta.c ); //returns 1 2 5
  *
- * @method protoMake
+ * @method classMake
  * @throws {exception} If no argument provided.
  * @throws {exception} If( o ) is not a Object.
- * @throws {exception} If( o.constructor ) is not a Routine.
- * @throws {exception} If( o.constructor.name ) is not defined.
- * @throws {exception} If( o.constructor.prototype ) has not own constructor.
- * @throws {exception} If( o.constructor.prototype ) has restricted properties.
+ * @throws {exception} If( o.cls ) is not a Routine.
+ * @throws {exception} If( o.cls.name ) is not defined.
+ * @throws {exception} If( o.cls.prototype ) has not own constructor.
+ * @throws {exception} If( o.cls.prototype ) has restricted properties.
  * @throws {exception} If( o.parent ) is not a Routine.
  * @throws {exception} If( o.extend ) is not a Object.
  * @throws {exception} If( o.supplement ) is not a Object.
  * @throws {exception} If( o.parent ) is equal to( o.extend ).
  * @throws {exception} If function cant rewrite constructor using original prototype.
- * @throws {exception} If( o.usingOriginalPrototype ) is false and ( o.constructor.prototype ) has manually defined properties.
- * @throws {exception} If( o.constructor.prototype.constructor ) is not equal( o.constructor  ).
+ * @throws {exception} If( o.usingOriginalPrototype ) is false and ( o.cls.prototype ) has manually defined properties.
+ * @throws {exception} If( o.cls.prototype.constructor ) is not equal( o.cls  ).
  * @memberof wTools
  */
 
 /*
-_.protoMake
+_.classMake
 ({
-  constructor : Self,
+  cls : Self,
   parent : Parent,
   extend : Proto,
   supplement : Original.prototype,
@@ -1577,8 +2003,20 @@ _.protoMake
 });
 */
 
-var protoMake = function protoMake( o )
+function classMake( o )
 {
+  var result;
+
+  if( o.withClass === undefined )
+  o.withClass = true;
+
+  if( o.cls && !o.name )
+  o.name = o.cls.name;
+
+  if( o.cls && !o.nameShort )
+  o.nameShort = o.cls.nameShort;
+
+  /* */
 
   var has =
   {
@@ -1589,277 +2027,506 @@ var protoMake = function protoMake( o )
   {
     Parent : 'Parent',
     Self : 'Self',
-    Type : 'Type',
-    type : 'type',
   }
 
-  /**/
+  _.assert( arguments.length === 1 );
+  _.assert( _.objectIs( o ) );
+  _.assertOwnNoConstructor( o,'options for classMake should have no constructor' );
 
-  _assert( arguments.length === 1 );
-  _assert( _.objectIs( o ) );
+  if( o.withClass )
+  {
 
-  _assert( _.routineIs( o.constructor ),'protoMake expects constructor' );
-  _assert( o.constructor.name || o.constructor._name,'constructor should have name' );
-  _assert( _hasOwnProperty.call( o.constructor.prototype,'constructor' ) );
+    _.assert( o.cls );
+    _.assert( _.routineIs( o.cls ),'classMake expects constructor' );
+    _.assert( o.cls.name || o.cls._name,'constructor should have name' );
+    _.assert( _hasOwnProperty.call( o.cls.prototype,'constructor' ) );
+    _.assert( !o.name || o.cls.name === o.name || o.cls._name === o.name,'class has name',o.cls.name + ', but options',o.name );
+    _.assert( !o.nameShort || !o.cls.nameShort|| o.cls.nameShort === o.nameShort,'class has short name',o.cls.nameShort + ', but options',o.nameShort );
 
-  _.assertMapOwnAll( o.constructor.prototype,has );
-  _.assertMapOwnNone( o.constructor.prototype,hasNot );
+    _.assertMapOwnAll( o.cls.prototype,has,'classMake : expects constructor' );
+    _.assertMapOwnNone( o.cls.prototype,hasNot );
+    _.assertMapOwnNone( o.cls.prototype,ClassForbiddenFacility );
 
-  _assert( _.routineIs( o.parent ) || o.parent === undefined || o.parent === null,'wrong type of parent :',_.strTypeOf( 'o.parent' ) );
-  _assert( _.objectIs( o.extend ) || o.extend === undefined );
-  _assert( _.objectIs( o.supplement ) || o.supplement === undefined );
+    if( o.extend && _hasOwnProperty.call( o.extend,'constructor' ) )
+    _.assert( o.extend.constructor === o.cls );
+
+  }
+  else
+  {
+    _.assert( !o.cls );
+  }
+
+  _.assert( _.routineIs( o.parent ) || o.parent === undefined || o.parent === null,'wrong type of parent :',_.strTypeOf( 'o.parent' ) );
+  _.assert( _.objectIs( o.extend ) || o.extend === undefined );
+  _.assert( _.objectIs( o.supplement ) || o.supplement === undefined );
   _.assert( o.parent !== o.extend );
 
-  _.routineOptions( protoMake,o );
+  _.routineOptions( classMake,o );
 
-  /**/
+  /* */
 
   var prototype;
 
   if( !o.parent )
   o.parent = null;
 
+  // if( o.withMixin && o.withClass )
+  // debugger;
+
   /* make prototype */
 
-  if( o.usingOriginalPrototype )
+  if( o.withClass )
   {
-    prototype = o.constructor.prototype;
 
-    if( _hasOwnProperty.call( o.constructor.prototype,'constructor' ) )
+    if( o.usingOriginalPrototype )
     {
-      if( o.extend )
-      _assert( !o.extend.constructor || o.extend.constructor === o.constructor,'cant rewrite constructor, using original prototype' );
-      if( o.supplement )
-      _assert( !o.supplement.constructor || o.supplement.constructor === o.constructor,'cant rewrite constructor, using original prototype' );
+
+      prototype = o.cls.prototype;
+
+      // if( _hasOwnProperty.call( o.cls.prototype,'constructor' ) )
+      // {
+      //   // debugger;
+      //   // // throw _.err( 'not tested' );
+      //   // if( o.extend )
+      //   // _assert( !o.extend.constructor || o.extend.constructor === o.cls,'cant rewrite constructor, using original prototype' );
+      //   // if( o.extendDstNotOwn )
+      //   // _assert( !o.extendDstNotOwn.constructor || o.extendDstNotOwn.constructor === o.cls,'cant rewrite constructor, using original prototype' );
+      //   // if( o.supplement )
+      //   // _assert( !o.supplement.constructor || o.supplement.constructor === o.cls,'cant rewrite constructor, using original prototype' );
+      // }
+
+    }
+    else
+    {
+      if( o.cls.prototype )
+      {
+        _.assert( Object.keys( o.cls.prototype ).length === 0,'misuse of classMake, prototype of constructor has properties which where put there manually',Object.keys( o.cls.prototype ) );
+        _.assert( o.cls.prototype.constructor === o.cls );
+      }
+      if( o.parent )
+      {
+        prototype = o.cls.prototype = Object.create( o.parent.prototype );
+      }
+      else
+      {
+        prototype = o.cls.prototype = Object.create( null );
+      }
     }
 
-  }
-  else
-  {
-    if( o.constructor.prototype )
+    /* constructor */
+
+    prototype.constructor = o.cls;
+
+    if( o.parent )
     {
-      _.assert( Object.keys( o.constructor.prototype ).length === 0,'misuse of protoMake, prototype of constructor has properties put there manually.' );
-      _.assert( o.constructor.prototype.constructor === o.constructor );
+      Object.setPrototypeOf( o.cls,o.parent );
     }
-    prototype = o.constructor.prototype = Object.create( o.parent ? o.parent.prototype : null );
-    prototype.constructor = null;
+
+    /* extend */
+
+    _.classExtend
+    ({
+      cls : o.cls,
+      extend : o.extend,
+      extendDstNotOwn : o.extendDstNotOwn,
+      supplement : o.supplement,
+      usingAtomicExtension : o.usingAtomicExtension,
+      usingStatics : 0,
+    });
+
+    /* statics */
+
+    /*
+      !!! implement accessor for static properties
+    */
+
+    _.assert( prototype.constructor );
+    _.assert( prototype.Statics );
+
+    _.mapExtendFiltering( _.field.dstNotOwnSrcOwn(),prototype,prototype.Statics ); // xxx
+    _.mapExtendFiltering( _.field.dstNotOwnSrcOwn(),prototype.constructor,prototype.Statics ); // xxx
+
+    _.assert( prototype === o.cls.prototype );
+    _.assert( _hasOwnProperty.call( prototype,'constructor' ),'prototype should has own constructor' );
+    _.assert( _.routineIs( prototype.constructor ),'prototype should has own constructor' );
+
+    /* mixin tracking */
+
+    if( !_hasOwnProperty.call( prototype,'_mixinsMap' ) )
+    {
+      prototype._mixinsMap = Object.create( prototype._mixinsMap || null );
+    }
+
+    _.assert( !prototype._mixinsMap[ o.cls.name ] );
+
+    prototype._mixinsMap[ o.cls.name ] = 1;
+
+    result = o.cls;
   }
-
-  /**/
-
-/*
-  if( o.constructor.name.indexOf( 'FileProvider' ) != -1 )
-  debugger;
-*/
-
-  /* extend */
-
-  _.protoExtend
-  ({
-    constructor : o.constructor,
-    extend : o.extend,
-    supplement : o.supplement,
-    static : o.static,
-    usingAtomicExtension : o.usingAtomicExtension,
-  });
 
   /* */
 
-  return prototype;
+  if( o.withMixin )
+  {
+
+    o = _.mapExtend( null,o );
+
+    _.assert( !o.usingAtomicExtension );
+    _.assert( !o.usingOriginalPrototype );
+    _.assert( !o.parent );
+    _.assert( !o.cls || o.withClass );
+
+    if( o.withClass )
+    o = _.mapSupplement( o.cls,o );
+
+    delete o.usingAtomicExtension;
+    delete o.usingOriginalPrototype;
+    delete o.parent;
+    delete o.cls;
+    delete o.withMixin;
+    delete o.withClass;
+
+    o.prototype = prototype;
+
+    result = _.mixinMake( o );
+
+  }
+
+  /* handler */
+
+  if( prototype.onClassMakeEnd )
+  prototype.onClassMakeEnd( o );
+
+  /* */
+
+  if( Config.debug )
+  if( prototype )
+  {
+    var descriptor = Object.getOwnPropertyDescriptor( prototype,'constructor' );
+    _.assert( descriptor.writable );
+    _.assert( descriptor.configurable );
+  }
+
+  return result;
 }
 
-protoMake.defaults =
+classMake.defaults =
 {
-  constructor : null,
+  cls : null,
   parent : null,
+
   extend : null,
+  extendDstNotOwn : null,
   supplement : null,
-  static : null,
+
+  name : null,
+  nameShort : null,
+
   usingAtomicExtension : false,
   usingOriginalPrototype : false,
+
+  withMixin : false,
+  withClass : true,
 }
 
 //
 
 /**
- * Extends and supplements( o.constructor ) prototype by fields and methods repairing relationship : Composes, Aggregates, Associates, Restricts.
+ * Extends and supplements( o.cls ) prototype by fields and methods repairing relationship : Composes, Aggregates, Associates, Medials, Restricts.
  *
  * @param {wTools~prototypeOptions} o - options {@link wTools~prototypeOptions}.
  * @returns {object} Returns constructor's prototype complemented by fields, static and non-static methods.
  *
  * @example
- * var Alpha = function Alpha() { };
- * var Static = { staticFunction : function staticFunction(){ } };
+ * var Self = function Betta( o ) { };
+ * var Statics = { staticFunction : function staticFunction(){ } };
  * var Composes = { a : 1, b : 2 };
- * var Proto = { constructor: Alpha, Composes: Composes };
+ * var Proto = { constructor : Self, Composes : Composes, Statics : Statics };
  *
- * var proto =  _.protoExtend({
- *     constructor: Alpha,
- *     extend: Proto,
- *     static : Static
+ * var proto =  _.classExtend
+ * ({
+ *     cls : Self,
+ *     extend : Proto,
  * });
- * console.log( Alpha.prototype === proto ); //returns true
+ * console.log( Self.prototype === proto ); //returns true
  *
- * @method protoExtend
+ * @method classExtend
  * @throws {exception} If no argument provided.
  * @throws {exception} If( o ) is not a Object.
- * @throws {exception} If( o.constructor ) is not a Routine.
- * @throws {exception} If( prototype.constructor ) is not a Routine.
- * @throws {exception} If( o.constructor.name ) is not defined.
- * @throws {exception} If( o.constructor.prototype ) has not own constructor.
+ * @throws {exception} If( o.cls ) is not a Routine.
+ * @throws {exception} If( prototype.cls ) is not a Routine.
+ * @throws {exception} If( o.cls.name ) is not defined.
+ * @throws {exception} If( o.cls.prototype ) has not own constructor.
  * @throws {exception} If( o.parent ) is not a Routine.
  * @throws {exception} If( o.extend ) is not a Object.
  * @throws {exception} If( o.supplement ) is not a Object.
  * @throws {exception} If( o.static) is not a Object.
- * @throws {exception} If( o.constructor.prototype.Constitutes ) is defined.
- * @throws {exception} If( o.constructor.prototype ) is not equal( prototype ).
+ * @throws {exception} If( o.cls.prototype.Constitutes ) is defined.
+ * @throws {exception} If( o.cls.prototype ) is not equal( prototype ).
  * @memberof wTools
  */
 
-var protoExtend = function protoExtend( o )
+function classExtend( o )
 {
 
   if( arguments.length === 2 )
-  o = { constructor : arguments[ 0 ], extend : arguments[ 1 ] };
+  o = { cls : arguments[ 0 ], extend : arguments[ 1 ] };
 
-  _assert( arguments.length === 1 || arguments.length === 2 );
-  _assert( _.objectIs( o ) );
+  _.assert( arguments.length === 1 || arguments.length === 2 );
+  _.assert( _.objectIs( o ) );
+  _.assert( !_hasOwnProperty.call( o,'constructor' ) );
+  _.assertOwnNoConstructor( o );
+  _.assert( _.objectIs( o.extend ) || o.extend === undefined || o.extend === null );
+  _.assert( _.objectIs( o.extendDstNotOwn ) || o.extendDstNotOwn === undefined || o.extendDstNotOwn === null );
+  _.assert( _.objectIs( o.supplement ) || o.supplement === undefined || o.supplement === null );
 
-  _assert( _.routineIs( o.constructor ),'expects constructor o.constructor' );
-  _assert( o.constructor.name || o.constructor._name,'class constructor should have name' );
-
-  _assert( _.objectIs( o.extend ) || o.extend === undefined || o.extend === null );
-  _assert( _.objectIs( o.supplement ) || o.supplement === undefined || o.supplement === null );
-  _assert( _.objectIs( o.static ) || o.static === undefined || o.static === null );
-
-  _.routineOptions( protoExtend,o );
-
-  var prototype = o.constructor.prototype;
-
-  /* extend relationships */
+  if( o.cls || !o.prototype )
+  {
+    _.assert( _.routineIs( o.cls ),'expects constructor of class ( o.cls )' );
+    _.assert( o.cls.name || o.cls._name,'class constructor should have name' );
+  }
 
   if( o.extend )
-  for( var f in ClassFacility )
-  _propertyAddOwnDefaults
+  {
+    _.assert( o.extend.cls === undefined );
+    _.assertOwnNoConstructor( o.extend );
+  }
+  if( o.extendDstNotOwn )
+  {
+    _.assert( o.extendDstNotOwn.cls === undefined );
+    _.assertOwnNoConstructor( o.extendDstNotOwn );
+  }
+  if( o.supplement )
+  {
+    _.assert( o.supplement.cls === undefined );
+    _.assertOwnNoConstructor( o.supplement );
+  }
+
+  _.routineOptions( classExtend,o );
+
+  if( !o.prototype )
+  o.prototype = o.cls.prototype;
+
+  _.assert( _.objectIs( o.prototype ) );
+
+  /* adjust relationships */
+
+  for( var f in _.ClassAllowedFacility )
+  _.descendantAdd
   ({
-    facilityName : f,
-    dstProto : prototype,
-    srcDefaults : o.extend[ f ] || {},
+    descendantName : f,
+    dstProto : o.prototype,
     override : true,
   });
 
-  if( o.supplement )
-  for( var f in ClassFacility )
-  _propertyAddOwnDefaults
-  ({
-    facilityName : f,
-    dstProto : prototype,
-    srcDefaults : o.supplement[ f ] || {},
-    override : false,
-  });
+  function descendantAdd( src,override,dstNotOwn )
+  {
+    if( !src )
+    return;
 
-  /* extend fields and methods */
+    for( var f in _.ClassAllowedFacility )
+    {
+
+      if( !src[ f ] )
+      continue;
+
+      _.descendantAdd
+      ({
+        descendantName : f,
+        dstProto : o.prototype,
+        srcMap : src[ f ],
+        override : override,
+        dstNotOwn : dstNotOwn,
+      });
+
+      if( f === 'Events' )
+      continue;
+
+      if( f === 'Statics' )
+      continue;
+
+      if( Config.debug )
+      for( var f2 in _.ClassAllowedFacility )
+      if( f2 === f || f2 === 'Events' || ( f2 === 'Restricts' && f === 'Medials' ) || ( f2 === 'Medials' && f === 'Restricts' ) )
+      continue;
+      else for( var k in src[ f ] )
+      {
+        _.assert( o.prototype[ f2 ][ k ] === undefined,'facility group','"'+f2+'"','already has facility','"'+k+'"','facility group','"'+f+'"','should not have the same' );
+      }
+
+    }
+
+  }
+
+  descendantAdd( o.extend,true,false );
+  descendantAdd( o.extendDstNotOwn,true,true );
+  descendantAdd( o.supplement,false,false );
+
+  // if( o.extend )
+  // for( var f in _.ClassAllowedFacility )
+  // _.descendantAdd
+  // ({
+  //   descendantName : f,
+  //   dstProto : o.prototype,
+  //   srcMap : o.extend[ f ] || Object.create( null ),
+  //   override : true,
+  // });
+  //
+  // if( o.extendDstNotOwn )
+  // for( var f in _.ClassAllowedFacility )
+  // _.descendantAdd
+  // ({
+  //   descendantName : f,
+  //   dstProto : o.prototype,
+  //   srcMap : o.extendDstNotOwn[ f ] || Object.create( null ),
+  //   override : false,
+  //   dstNotOwn : true,
+  // });
+  //
+  // if( o.supplement )
+  // for( var f in _.ClassAllowedFacility )
+  // _.descendantAdd
+  // ({
+  //   descendantName : f,
+  //   dstProto : o.prototype,
+  //   srcMap : o.supplement[ f ] || Object.create( null ),
+  //   override : false,
+  // });
+
+/*
+
+to prioritize ordinary facets adjustment order should be
+
+- static extend
+- ordinary extend
+- ordinary supplement
+- static supplement
+
+*/
+
+  /* static extend */
+
+  if( o.usingStatics && o.extend && o.extend.Statics )
+  {
+    _.mapExtend( o.prototype,o.extend.Statics );
+    if( o.cls )
+    _.mapExtend( o.cls,o.extend.Statics );
+  }
+
+  /* ordinary extend */
 
   if( o.extend )
   {
-    var extend = _.mapBut( o.extend,ClassFacility );
-    _.mapExtend( prototype,extend );
+    var extend = _.mapBut( o.extend,_.ClassAllowedFacility );
+    _.mapExtend( o.prototype,extend );
+    if( o.cls )
     if( _hasOwnProperty.call( o.extend,'constructor' ) )
-    prototype.constructor = o.extend.constructor;
+    o.prototype.constructor = o.extend.constructor;
   }
+
+  /* ordinary extend dst not own */
+
+  if( o.extendDstNotOwn )
+  {
+    var extend = _.mapBut( o.extendDstNotOwn,_.ClassAllowedFacility );
+    _.mapExtendFiltering( _.field.dstNotOwn(),o.prototype,extend );
+    if( o.cls )
+    if( _hasOwnProperty.call( o.extendDstNotOwn,'constructor' ) )
+    o.prototype.constructor = o.extendDstNotOwn.constructor;
+  }
+
+  /* ordinary supplement */
 
   if( o.supplement )
   {
-    var supplement = _.mapBut( o.supplement,ClassFacility );
-    _.mapSupplement( prototype,supplement );
-    if( !prototype.constructor )
+    var supplement = _.mapBut( o.supplement,_.ClassAllowedFacility );
+    _.mapSupplement( o.prototype,supplement );
+    if( o.cls )
+    if( !_hasOwnProperty.call( o.prototype,'constructor' ) )
     if( _hasOwnProperty.call( o.supplement,'constructor' ) )
-    prototype.constructor = o.supplement.constructor;
+    o.prototype.constructor = o.supplement.constructor;
   }
 
-  /* static */
+  /* static extend dst not own */
 
-  var addStatic = function( _static )
+  if( o.usingStatics && o.extendDstNotOwn && o.extendDstNotOwn.Statics )
   {
-    _.mapSupplement( prototype,_static );
-    _.mapSupplement( o.constructor,_static );
+    _.mapExtendFiltering( _.field.dstNotOwn(), o.prototype, o.extendDstNotOwn.Statics );
+    if( o.cls )
+    _.mapExtendFiltering( _.field.dstNotOwn(), o.cls, o.extendDstNotOwn.Statics );
   }
 
-  if( o.static )
-  addStatic( o.static );
+  /* static supplement */
 
-  if( o.extend && o.extend.Static )
-  addStatic( o.extend.Static );
+  if( o.usingStatics && o.supplement && o.supplement.Statics )
+  {
+    _.mapSupplement( o.prototype, o.supplement.Statics );
+    if( o.cls )
+    _.mapSupplement( o.cls, o.supplement.Statics );
+  }
 
-  if( o.supplement && o.supplement.Static )
-  addStatic( o.supplement.Static );
-
-  /* atomic extension */
+  /* atomic extend */
 
   if( o.usingAtomicExtension )
   {
-    if( _.mapOwn( prototype,{ Composes : 'Composes' } ) )
-    _.mapExtendFiltering( _.filter.atomicSrcOwn(),prototype,prototype.Composes );
-    if( _.mapOwn( prototype,{ Aggregates : 'Aggregates' } ) )
-    _.mapExtendFiltering( _.filter.atomicSrcOwn(),prototype,prototype.Aggregates );
-    if( _.mapOwn( prototype,{ Associates : 'Associates' } ) )
-    _.mapExtendFiltering( _.filter.atomicSrcOwn(),prototype,prototype.Associates );
-    if( _.mapOwn( prototype,{ Restricts : 'Restricts' } ) )
-    _.mapExtendFiltering( _.filter.atomicSrcOwn(),prototype,prototype.Restricts );
+    for( var f in _.ClassAllowedFacility )
+    if( f !== 'Statics' )
+    if( _.mapOwnKey( o.prototype,f ) )
+    _.mapExtendFiltering( _.field.atomicSrcOwn(),o.prototype,o.prototype.Composes );
+  }
+
+  /* accessors */
+
+  function declareAccessors( src )
+  {
+    for( var d in GenericAccessorDeclaratorsMap )
+    if( src[ d ] )
+    {
+      GenericAccessorDeclaratorsMap[ d ]( o.prototype,src[ d ] );
+    }
+  }
+
+  if( o.supplement )
+  declareAccessors( o.supplement );
+  if( o.extendDstNotOwn )
+  declareAccessors( o.extendDstNotOwn );
+  if( o.extend )
+  declareAccessors( o.extend );
+
+  /* functor */
+
+  if( o.functor )
+  for( var m in o.functor )
+  {
+    var func = o.functor[ m ].call( o,o.prototype[ m ] );
+    _.assert( _.routineIs( func ),'not tested' );
+    o.prototype[ m ] = func;
   }
 
   /* validation */
 
-  _assert( prototype === o.constructor.prototype );
-  _assert( _hasOwnProperty.call( prototype,'constructor' ),'prototype should has own constructor' );
-  _assert( _.routineIs( prototype.constructor ),'prototype should has own constructor' );
-  _assert( o.constructor.prototype.Constitutes === undefined );
+  if( o.cls )
+  {
+    _.assert( o.prototype === o.cls.prototype );
+    _.assert( _hasOwnProperty.call( o.prototype,'constructor' ),'prototype should has own constructor' );
+    _.assert( _.routineIs( o.prototype.constructor ),'prototype should has own constructor' );
+  }
 
-  return prototype;
+  return o.prototype;
 }
 
-protoExtend.defaults =
+classExtend.defaults =
 {
-  constructor : null,
+  cls : null,
+  prototype : null,
+
   extend : null,
+  extendDstNotOwn : null,
   supplement : null,
-  static : null,
-  usingAtomicExtension : false,
-}
+  functor : null,
 
-//
-
-/**
- * Complements instance by its semantic relationships : Composes,Aggregates,Associates and Restricts.
- * @param {object} instance - instance to complement.
- *
- * @example
- * var Alpha = function Alpha() { };
- *
- * var Proto = { constructor: Alpha, Composes : { a : 1, b : 2 } };
- *
- * _.protoMake
- * ({
- *     constructor: Alpha,
- *     extend: Proto,
- * });
- * var obj = new Alpha();
- * console.log( _.protoComplementInstance( obj ) ); //returns Alpha { a: 1, b: 2 }
- *
- * @return {object} Returns complemented instance.
- * @method protoComplementInstance
- * @memberof wTools
- */
-
-var protoComplementInstance = function protoComplementInstance( instance )
-{
-
-  _.mapComplement( instance,instance.Composes );
-  _.mapComplement( instance,instance.Aggregates );
-  _.mapComplement( instance,instance.Associates );
-  _.mapComplement( instance,instance.Restricts );
-
-  return instance;
+  usingStatics : 1,
+  usingAtomicExtension : 0,
 }
 
 //
@@ -1872,26 +2539,26 @@ var protoComplementInstance = function protoComplementInstance( instance )
  * @memberof wTools
  */
 
-var protoUnitedInterface = function( protos )
+function protoUnitedInterface( protos )
 {
-  var result = {};
+  var result = Object.create( null );
   var unitedArraySymbol = Symbol.for( '_unitedArray_' );
   var unitedMapSymbol = Symbol.for( '_unitedMap_' );
-  var protoMap = {};
+  var protoMap = Object.create( null );
 
   _assert( arguments.length === 1 );
   _assert( _.arrayIs( protos ) );
 
   //
 
-  var get = function( fieldName )
+  function get( fieldName )
   {
     return function unitedGet()
     {
       return this[ unitedMapSymbol ][ fieldName ][ fieldName ];
     }
   }
-  var set = function( fieldName )
+  function set( fieldName )
   {
     return function unitedSet( value )
     {
@@ -1910,10 +2577,10 @@ var protoUnitedInterface = function( protos )
       throw _.err( 'protoUnitedInterface :','several objects try to unite have same field :',f );
       protoMap[ f ] = proto;
 
-      var methods = {}
+      var methods = Object.create( null )
       methods[ f + 'Get' ] = get( f );
       methods[ f + 'Set' ] = set( f );
-      var names = {};
+      var names = Object.create( null );
       names[ f ] = f;
       _.accessor
       ({
@@ -1933,14 +2600,16 @@ var protoUnitedInterface = function( protos )
   return result;
 }
 
+//
+
 /**
  * Append prototype to object. Find archi parent and replace its proto.
  * @param {object} dstObject - dst object to append proto.
- * @method protoAppend
+ * @method prototypeAppend
  * @memberof wTools
  */
 
-var protoAppend = function( dstObject )
+function prototypeAppend( dstObject )
 {
 
   _assert( _.objectIs( dstObject ) );
@@ -1951,7 +2620,7 @@ var protoAppend = function( dstObject )
 
     _assert( _.objectIs( proto ) );
 
-    var parent = _.protoArchy( dstObject );
+    var parent = _.prototypeArchyGet( dstObject );
     Object.setPrototypeOf( parent, proto );
 
   }
@@ -1965,11 +2634,11 @@ var protoAppend = function( dstObject )
  * Does srcProto has insProto as prototype.
  * @param {object} srcProto - proto stack to investigate.
  * @param {object} insProto - proto to look for.
- * @method protoHas
+ * @method prototypeHas
  * @memberof wTools
  */
 
-var protoHas = function( srcProto,insProto )
+function prototypeHas( srcProto,insProto )
 {
 
   do
@@ -1988,11 +2657,11 @@ var protoHas = function( srcProto,insProto )
 /**
  * Return proto owning names.
  * @param {object} srcObject - src object to investigate proto stack.
- * @method protoOwning
+ * @method prototypeHasPrototype
  * @memberof wTools
  */
 
-var protoOwning = function( srcObject,names )
+function prototypeHasPrototype( srcObject,names )
 {
   var names = _nameFielded( names );
   _assert( _.objectIs( srcObject ) );
@@ -2021,11 +2690,11 @@ var protoOwning = function( srcObject,names )
 /**
  * Returns parent which has default proto.
  * @param {object} srcObject - dst object to append proto.
- * @method protoArchy
+ * @method prototypeArchyGet
  * @memberof wTools
  */
 
-var protoArchy = function( srcObject )
+function prototypeArchyGet( srcObject )
 {
 
   _assert( _.objectIs( srcObject ) );
@@ -2038,57 +2707,470 @@ var protoArchy = function( srcObject )
 
 //
 
-var propertyDescriptorGet = function( object,name )
+var _protoCrossReferAssociations = Object.create( null );
+function prototypeCrossRefer( o )
 {
-  var result = { object : null, descriptor : null }
+  var names = _.mapKeys( o.entities );
+  var length = names.length;
 
-  _.assert( arguments.length === 2 );
+  var association = _protoCrossReferAssociations[ o.name ];
+  if( !association )
+  {
+    _.assert( _protoCrossReferAssociations[ o.name ] === undefined );
+    association = _protoCrossReferAssociations[ o.name ] = Object.create( null );
+    association.name = o.name;
+    association.length = length;
+    association.have = 0;
+    association.entities = _.mapExtend( null,o.entities );
+  }
+
+  _.assert( association.name === o.name );
+  _.assert( association.length === length );
+
+  for( var e in o.entities )
+  {
+    if( !association.entities[ e ] )
+    association.entities[ e ] = o.entities[ e ];
+    else if( o.entities[ e ] )
+    _.assert( association.entities[ e ] === o.entities[ e ] );
+  }
+
+  association.have = 0;
+  for( var e in association.entities )
+  if( association.entities[ e ] )
+  association.have += 1;
+
+  if( association.have === association.length )
+  {
+
+    for( var src in association.entities )
+    for( var dst in association.entities )
+    {
+      if( src === dst )
+      continue;
+      var dstEntity = association.entities[ dst ];
+      var srcEntity = association.entities[ src ];
+      _.assert( !dstEntity[ src ] || dstEntity[ src ] === srcEntity );
+      _.assert( !dstEntity.prototype[ src ] || dstEntity.prototype[ src ] === srcEntity );
+      _.classExtend( dstEntity,{ Statics : { [ src ] : srcEntity } } );
+      _.assert( dstEntity[ src ] === srcEntity );
+      _.assert( dstEntity.prototype[ src ] === srcEntity );
+    }
+
+    _protoCrossReferAssociations[ o.name ] = null;
+
+    return true;
+  }
+
+  return false;
+}
+
+prototypeCrossRefer.defaults =
+{
+  entities : null,
+  name : null,
+}
+
+// _.prototypeCrossRefer
+// ({
+//   namespace : _,
+//   entities :
+//   {
+//     System : Self,
+//   },
+//   names :
+//   {
+//     System : 'LiveSystem',
+//     Node : 'LiveNode',
+//   },
+// });
+
+//
+
+/**
+ * Iterate through prototypes.
+ * @param {object} proto - prototype
+ * @method prototypeEach
+ * @memberof wTools
+ */
+
+function prototypeEach( proto,onEach )
+{
+  var result = [];
+
+  _.assert( _.routineIs( onEach ) || !onEach );
+  _.assert( _.prototypeIs( proto ) );
+  _.assert( arguments.length === 1 || arguments.length === 2 );
 
   do
   {
-    result.descriptor = Object.getOwnPropertyDescriptor( object,name );
-    if( result.descriptor && !( 'value' in result.descriptor ) )
-    {
-      result.object = object;
-      return result;
-    }
-    object = Object.getPrototypeOf( object );
+
+    if( onEach )
+    onEach.call( this,proto );
+
+    result.push( proto );
+
+    var parent = _.parentGet( proto );
+
+    proto = parent ? parent.prototype : null;
+
+    if( proto && proto.constructor === Object )
+    proto = null;
+
   }
-  while( object );
+  while( proto );
 
   return result;
 }
 
 //
 
-var propertyGetterSetterGet = function( object,name )
+function prototypeAllFieldsGet( src )
 {
-  var result = {};
+  var prototype = _.prototypeGet( src );
+  var result = Object.create( null );
 
-  result.set = object[ '_' + name + 'Set' ] || object[ '' + name + 'Set' ];
-  result.get = object[ '_' + name + 'Get' ] || object[ '' + name + 'Get' ];
+  _.assert( _.prototypeIs( src ) || _.constructorIs( src ) );
+  _.assert( _.prototypeIsStandard( prototype ) );
+  _.assert( arguments.length === 1 );
+
+  if( prototype.Composes )
+  _.mapExtend( result,prototype.Composes );
+  if( prototype.Aggregates )
+  _.mapExtend( result,prototype.Aggregates );
+  if( prototype.Associates )
+  _.mapExtend( result,prototype.Associates );
+  if( prototype.Medials )
+  _.mapExtend( result,prototype.Medials );
+  if( prototype.Restricts )
+  _.mapExtend( result,prototype.Restricts );
 
   return result;
 }
+
+//
+
+function prototypeCopyableFieldsGet( src )
+{
+  var prototype = _.prototypeGet( src );
+  var result = Object.create( null );
+
+  _.assert( _.prototypeIs( src ) || _.constructorIs( src ) );
+  _.assert( _.prototypeIsStandard( prototype ) );
+  _.assert( arguments.length === 1 );
+
+  if( prototype.Composes )
+  _.mapExtend( result,prototype.Composes );
+  if( prototype.Aggregates )
+  _.mapExtend( result,prototype.Aggregates );
+  if( prototype.Associates )
+  _.mapExtend( result,prototype.Associates );
+
+  return result;
+}
+
+//
+
+function prototypeHasField( src,fieldName )
+{
+  var prototype = _.prototypeGet( src );
+
+  _.assert( _.prototypeIs( src ) || _.constructorIs( src ) );
+  _.assert( _.prototypeIsStandard( prototype ) );
+  _.assert( arguments.length === 2 );
+
+  for( var f in _.ClassFieldFacility )
+  if( prototype[ f ][ fieldName ] )
+  return true;
+
+  return false;
+}
+
+// --
+// instance
+// --
+
+/**
+ * Is instance.
+ * @function instanceIs
+ * @param {object} src - entity to check
+ * @memberof wTools#
+ */
+
+function instanceIs( src )
+{
+  _.assert( arguments.length === 1 );
+
+  if( _.primitiveIs( src ) )
+  return false;
+
+  if( _hasOwnProperty.call( src,'constructor' ) )
+  return false;
+  else if( _hasOwnProperty.call( src,'prototype' ) && src.prototype )
+  return false;
+
+  if( Object.getPrototypeOf( src ) === Object.prototype )
+  return false;
+  if( Object.getPrototypeOf( src ) === null )
+  return false;
+
+  return true;
+}
+
+//
+
+function instanceIsStandard( src )
+{
+  _.assert( arguments.length === 1 );
+
+  // if( _.mapIsPure( src ) )
+  // debugger;
+
+  if( !_.instanceIs( src ) )
+  return false;
+
+  var proto = _.prototypeGet( src );
+
+  if( !proto )
+  return false;
+
+  return _.prototypeIsStandard( proto );
+}
+
+//
+
+/**
+ * Is this instance finited.
+ * @method instanceIsFinited
+ * @param {object} src - instance of any class
+ * @memberof wCopyable#
+ */
+
+function instanceIsFinited( src )
+{
+  _.assert( _.instanceIs( src ) )
+  _.assert( _.objectLikeOrRoutine( src ) );
+  return Object.isFrozen( src );
+}
+
+//
+
+function instanceFinit( src )
+{
+
+  _.assert( !Object.isFrozen( src ) );
+  _.assert( _.objectLikeOrRoutine( src ) );
+  _.assert( arguments.length === 1 );
+
+  // var validator =
+  // {
+  //   set : function( obj, k, e )
+  //   {
+  //     debugger;
+  //     throw _.err( 'Attempt ot access to finited instance with field',k );
+  //     return false;
+  //   },
+  //   get : function( obj, k, e )
+  //   {
+  //     debugger;
+  //     throw _.err( 'Attempt ot access to finited instance with field',k );
+  //     return false;
+  //   },
+  // }
+  // var result = new Proxy( src, validator );
+
+  Object.freeze( src );
+
+}
+
+//
+
+/**
+ * Complements instance by its semantic relationships : Composes, Aggregates, Associates, Medials, Restricts.
+ * @param {object} instance - instance to complement.
+ *
+ * @example
+ * var Self = function Alpha( o ) { };
+ *
+ * var Proto = { constructor: Self, Composes : { a : 1, b : 2 } };
+ *
+ * _.classMake
+ * ({
+ *     constructor: Self,
+ *     extend: Proto,
+ * });
+ * var obj = new Self();
+ * console.log( _.instanceInit( obj ) ); //returns Alpha { a: 1, b: 2 }
+ *
+ * @return {object} Returns complemented instance.
+ * @method instanceInit
+ * @memberof wTools
+ */
+
+function instanceInit( instance,prototype )
+{
+
+  _.assert( arguments.length === 1 || arguments.length === 2 );
+
+  if( prototype === undefined )
+  prototype = instance;
+
+  _.mapComplement( instance,prototype.Restricts );
+  _.mapComplement( instance,prototype.Composes );
+  _.mapComplement( instance,prototype.Aggregates );
+  _.mapSupplementOrComplementPureContainers( instance,prototype.Associates );
+
+  return instance;
+}
+
+//
+
+function instanceInitExtending( instance,prototype )
+{
+
+  _.assert( arguments.length === 1 || arguments.length === 2 );
+
+  if( prototype === undefined )
+  prototype = instance;
+
+  _.mapExtendFiltering( _.field.cloning(),instance,prototype.Restricts );
+  _.mapExtendFiltering( _.field.cloning(),instance,prototype.Composes );
+  _.mapExtendFiltering( _.field.cloning(),instance,prototype.Aggregates );
+  _.mapExtend( instance,prototype.Associates );
+
+  return instance;
+}
+
+//
+
+function instanceFilterInit( o )
+{
+
+  _.routineOptions( instanceFilterInit,o );
+
+  // var self = _.instanceFilterInit
+  // ({
+  //   cls : Self,
+  //   parent : Parent,
+  //   extend : Extend,
+  // });
+
+  _.assertOwnNoConstructor( o );
+  _.assert( _.routineIs( o.cls ) );
+  _.assert( !o.args || o.args.length === 0 || o.args.length === 1 );
+
+  var result = Object.create( null );
+
+  _.instanceInit( result,o.cls.prototype );
+
+  if( o.args[ 0 ] )
+  wCopyable.prototype.copyCustom.call( result,
+  {
+    proto : o.cls.prototype,
+    src : o.args[ 0 ],
+    technique : 'object',
+  });
+
+  if( !result.original )
+  result.original = _.FileProvider.Default();
+
+  _.mapExtend( result,o.extend );
+
+  Object.setPrototypeOf( result,result.original );
+
+  if( o.strict )
+  Object.preventExtensions( result );
+
+  return result;
+}
+
+instanceFilterInit.defaults =
+{
+  cls : null,
+  parent : null,
+  extend : null,
+  args : null,
+  strict : 1,
+}
+
+//
+
+/**
+ * Make sure src does not have redundant fields.
+ * @param {object} src - source object of the class.
+ * @method assertInstanceDoesNotHaveReduntantFields
+ * @memberof wTools
+ */
+
+function assertInstanceDoesNotHaveReduntantFields( src )
+{
+
+  var Composes = src.Composes || Object.create( null );
+  var Aggregates = src.Aggregates || Object.create( null );
+  var Associates = src.Associates || Object.create( null );
+  var Restricts = src.Restricts || Object.create( null );
+
+  _.assert( _.ojbectIs( src ) )
+  _.assertMapOwnOnly( src, Composes, Aggregates, Associates, Restricts );
+
+  return dst;
+}
+
+// --
+// type
+// --
+
+class wCallableObject extends Function
+{
+  constructor()
+  {
+    super( 'return this.self.__call__.apply( this.self,arguments );' );
+
+    var context = Object.create( null );
+    var self = this.bind( context );
+    context.self = self;
+    Object.freeze( context );
+
+    return self;
+  }
+}
+
+wCallableObject.nameShort = 'CallableObject';
 
 // --
 // var
 // --
 
 /**
- * @global {Object} wTools~ClassFacility - contains predefined class relationship types.
+ * @global {Object} wTools~ClassFieldFacility - contains predefined class relationship types.
  * @memberof wTools
  */
 
-var ClassFacility =
-{
-  Composes : 'Composes',
-  Aggregates : 'Aggregates',
-  Associates : 'Associates',
-  Restricts : 'Restricts',
-  Static : 'Static',
-  Accessors : 'Accessors',
-}
+var ClassFieldFacility = Object.create( null );
+ClassFieldFacility.Composes = 'Composes';
+ClassFieldFacility.Aggregates = 'Aggregates';
+ClassFieldFacility.Associates = 'Associates';
+ClassFieldFacility.Restricts = 'Restricts';
+
+var ClassAllowedFacility = Object.create( null );
+ClassAllowedFacility.Composes = 'Composes';
+ClassAllowedFacility.Aggregates = 'Aggregates';
+ClassAllowedFacility.Associates = 'Associates';
+ClassAllowedFacility.Medials = 'Medials';
+ClassAllowedFacility.Restricts = 'Restricts';
+ClassAllowedFacility.Statics = 'Statics';
+
+var ClassForbiddenFacility = Object.create( null );
+ClassForbiddenFacility.Static = 'Static';
+ClassForbiddenFacility.Type = 'Type';
+ClassForbiddenFacility.type = 'type';
+Object.freeze( ClassForbiddenFacility );
+
+var Combining = [ 'rewrite','supplement','apppend','prepend' ];
+
+var GenericAccessorDeclaratorsMap = Object.create( null );
+GenericAccessorDeclaratorsMap.Accessors = accessor;
+GenericAccessorDeclaratorsMap.Forbids = accessorForbid;
 
 // --
 // prototype
@@ -2104,55 +3186,117 @@ var Proto =
 
   _accessor : _accessor,
   _accessorProperty : _accessorProperty,
+
   _accessorSetterGetterMake : _accessorSetterGetterMake,
+  _accessorSetterGetterGet : _accessorSetterGetterGet,
 
   accessor : accessor,
   accessorForbid : accessorForbid,
   accessorReadOnly : accessorReadOnly,
+
   accessorsSupplement : accessorsSupplement,
 
   constant : constant,
   restrictReadOnly : restrictReadOnly,
 
-  mixin : mixin,
-
-  _propertyAddOwnDefaults : _propertyAddOwnDefaults,
-  propertyAddOwnComposes : propertyAddOwnComposes,
-  propertyAddOwnAggregates : propertyAddOwnAggregates,
-  propertyAddOwnAssociates : propertyAddOwnAssociates,
-  propertyAddOwnRestricts : propertyAddOwnRestricts,
+  accessorToElement : accessorToElement,
+  accessorDescriptorGet : accessorDescriptorGet,
 
 
-  // getter / setter generator
+  // mixin
 
-  setterMapCollection_gen : setterMapCollection_gen,
-  setterFriend_gen : setterFriend_gen,
-  setterCopyable_gen : setterCopyable_gen,
-  setterBufferFrom_gen : setterBufferFrom_gen,
-  setterChangesTracking_gen : setterChangesTracking_gen,
+  mixinMake : mixinMake,
+  mixinApply : mixinApply,
+  mixinHas : mixinHas,
 
 
-  // prototype
+  // descendant
 
-  protoMake : protoMake,
-  protoExtend : protoExtend,
+  descendantMakeOwnedBy : descendantMakeOwnedBy, /* experimental */
+  descendantAdd : descendantAdd,  /* experimental */
 
-  protoComplementInstance : protoComplementInstance,
+  descendantComposesAddTo : descendantComposesAddTo, /* experimental */
+  descendantAggregatesAddTo : descendantAggregatesAddTo, /* experimental */
+  descendantAssociatesAddTo : descendantAssociatesAddTo, /* experimental */
+  descendantRestrictsAddTo : descendantRestrictsAddTo, /* experimental */
 
-  protoUnitedInterface : protoUnitedInterface, /* experimental */
 
-  protoAppend : protoAppend, /* experimental */
-  protoHas : protoHas, /* experimental */
-  protoOwning : protoOwning, /* experimental */
-  protoArchy : protoArchy, /* experimental */
+  // type
+
+  prototypeIs : prototypeIs,
+  prototypeIsStandard : prototypeIsStandard,
+  prototypeGet : prototypeGet,
+
+  constructorIs : constructorIs,
+  constructorIsStandard : constructorIsStandard,
+  constructorGet : constructorGet,
+
+  subclassIs : subclassIs,
+  parentGet : parentGet,
+
+
+  // getter / setter functor
+
+  setterMapCollection_functor : setterMapCollection_functor,
+  setterFriend_functor : setterFriend_functor,
+  setterCopyable_functor : setterCopyable_functor,
+  setterBufferFrom_functor : setterBufferFrom_functor,
+  setterChangesTracking_functor : setterChangesTracking_functor,
+
+
+  // etc
 
   propertyDescriptorGet : propertyDescriptorGet,
   propertyGetterSetterGet : propertyGetterSetterGet,
 
+  proxyReadOnly : proxyReadOnly,
+  ifDebugProxyReadOnly : ifDebugProxyReadOnly,
+
+
+  // prototype
+
+  /* split the section !!! */
+
+  classMake : classMake,
+  classExtend : classExtend,
+
+  protoUnitedInterface : protoUnitedInterface, /* experimental */
+
+  prototypeAppend : prototypeAppend, /* experimental */
+  prototypeHas : prototypeHas, /* experimental */
+  prototypeHasPrototype : prototypeHasPrototype, /* experimental */
+  prototypeArchyGet : prototypeArchyGet, /* experimental */
+
+  prototypeCrossRefer : prototypeCrossRefer,
+  prototypeEach : prototypeEach,
+
+  prototypeAllFieldsGet : prototypeAllFieldsGet,
+  prototypeCopyableFieldsGet : prototypeCopyableFieldsGet,
+  prototypeHasField : prototypeHasField,
+
+
+  // instance
+
+  instanceIs : instanceIs,
+  instanceIsStandard : instanceIsStandard,
+  instanceIsFinited : instanceIsFinited,
+  instanceFinit : instanceFinit,
+
+  instanceInit : instanceInit,
+  instanceInitExtending : instanceInitExtending,
+  instanceFilterInit : instanceFilterInit,
+
+  assertInstanceDoesNotHaveReduntantFields : assertInstanceDoesNotHaveReduntantFields,
+
 
   // var
 
-  ClassFacility : ClassFacility,
+  CallableObject : wCallableObject,
+  ClassFieldFacility : ClassFieldFacility,
+  ClassAllowedFacility : ClassAllowedFacility,
+  ClassForbiddenFacility : ClassForbiddenFacility,
+  Combining : Combining,
+  GenericAccessorDeclaratorsMap : GenericAccessorDeclaratorsMap,
 
 }
 
@@ -2160,13 +3304,35 @@ _global_.wProto = Proto;
 
 _.mapExtend( Self, Proto );
 
+_.accessorForbid( wTools,
+{
+  _ArrayDescriptor : '_ArrayDescriptor',
+  ArrayDescriptor : 'ArrayDescriptor',
+  _ArrayDescriptors : '_ArrayDescriptors',
+  ArrayDescriptors : 'ArrayDescriptors',
+  arrays : 'arrays',
+  arrayOf : 'arrayOf',
+});
+
 // --
 // export
 // --
 
-if( typeof module !== 'undefined' && module !== null )
+if( typeof module !== 'undefined' )
 {
-  module[ 'exports' ] = Self;
+
+  require( './ProtoLike.s' );
+  try
+  {
+    require( '../../abase/akernel/aKernelWithComponents.s' );
+  }
+  catch( err )
+  {
+  }
+
 }
+
+if( typeof module !== 'undefined' && module !== null )
+module[ 'exports' ] = Self;
 
 })();
