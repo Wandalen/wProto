@@ -1308,12 +1308,12 @@ function descendantAdd( o )
   for( var n in o.srcMap )
   {
 
-    if( o.dstNotOwn === true )
-    if( _hasOwnProperty.call( descendant,n ) )
-    continue;
-
     if( o.override === false )
     if( n in descendant )
+    continue;
+
+    if( o.dstNotOwn === true )
+    if( _hasOwnProperty.call( descendant,n ) )
     continue;
 
     descendant[ n ] = o.srcMap[ n ];
@@ -1327,6 +1327,7 @@ descendantAdd.defaults =
   descendantName : null,
   dstProto : null,
   srcMap : null,
+
   override : false,
   dstNotOwn : false,
 }
@@ -1354,7 +1355,7 @@ function descendantComposesAddTo( dstProto,srcMap )
   _.assert( arguments.length === 2 );
 
   var descendantName = 'Composes';
-  return descendantAdd
+  return _.descendantAdd
   ({
     descendantName : descendantName,
     dstProto : dstProto,
@@ -1387,7 +1388,7 @@ function descendantAggregatesAddTo( dstProto,srcMap )
   _.assert( arguments.length === 2 );
 
   var descendantName = 'Aggregates';
-  return descendantAdd
+  return _.descendantAdd
   ({
     descendantName : descendantName,
     dstProto : dstProto,
@@ -1420,7 +1421,7 @@ function descendantAssociatesAddTo( dstProto,srcMap )
   _.assert( arguments.length === 2 );
 
   var descendantName = 'Associates';
-  return descendantAdd
+  return _.descendantAdd
   ({
     descendantName : descendantName,
     dstProto : dstProto,
@@ -1453,7 +1454,7 @@ function descendantRestrictsAddTo( dstProto,srcMap )
   _.assert( arguments.length === 2 );
 
   var descendantName = 'Restricts';
-  return descendantAdd
+  return _.descendantAdd
   ({
     descendantName : descendantName,
     dstProto : dstProto,
@@ -2311,43 +2312,86 @@ function classExtend( o )
   /* adjust relationships */
 
   for( var f in _.ClassAllowedFacility )
-  descendantAdd
+  _.descendantAdd
   ({
     descendantName : f,
     dstProto : o.prototype,
     override : true,
   });
 
-  if( o.extend )
-  for( var f in _.ClassAllowedFacility )
-  descendantAdd
-  ({
-    descendantName : f,
-    dstProto : o.prototype,
-    srcMap : o.extend[ f ] || Object.create( null ),
-    override : true,
-  });
+  function descendantAdd( src,override,dstNotOwn )
+  {
+    if( !src )
+    return;
 
-  if( o.extendDstNotOwn )
-  for( var f in _.ClassAllowedFacility )
-  descendantAdd
-  ({
-    descendantName : f,
-    dstProto : o.prototype,
-    srcMap : o.extendDstNotOwn[ f ] || Object.create( null ),
-    override : false,
-    dstNotOwn : true,
-  });
+    for( var f in _.ClassAllowedFacility )
+    {
 
-  if( o.supplement )
-  for( var f in _.ClassAllowedFacility )
-  descendantAdd
-  ({
-    descendantName : f,
-    dstProto : o.prototype,
-    srcMap : o.supplement[ f ] || Object.create( null ),
-    override : false,
-  });
+      if( !src[ f ] )
+      continue;
+
+      _.descendantAdd
+      ({
+        descendantName : f,
+        dstProto : o.prototype,
+        srcMap : src[ f ],
+        override : override,
+        dstNotOwn : dstNotOwn,
+      });
+
+      if( f === 'Events' )
+      continue;
+
+      if( f === 'Statics' )
+      continue;
+
+      if( Config.debug )
+      for( var f2 in _.ClassAllowedFacility )
+      if( f2 === f || f2 === 'Events' || ( f2 === 'Restricts' && f === 'Medials' ) || ( f2 === 'Medials' && f === 'Restricts' ) )
+      continue;
+      else for( var k in src[ f ] )
+      {
+        _.assert( o.prototype[ f2 ][ k ] === undefined,'facility group','"'+f2+'"','already has facility','"'+k+'"','facility group','"'+f+'"','should not have the same' );
+      }
+
+    }
+
+  }
+
+  descendantAdd( o.extend,true,false );
+  descendantAdd( o.extendDstNotOwn,true,true );
+  descendantAdd( o.supplement,false,false );
+
+  // if( o.extend )
+  // for( var f in _.ClassAllowedFacility )
+  // _.descendantAdd
+  // ({
+  //   descendantName : f,
+  //   dstProto : o.prototype,
+  //   srcMap : o.extend[ f ] || Object.create( null ),
+  //   override : true,
+  // });
+  //
+  // if( o.extendDstNotOwn )
+  // for( var f in _.ClassAllowedFacility )
+  // _.descendantAdd
+  // ({
+  //   descendantName : f,
+  //   dstProto : o.prototype,
+  //   srcMap : o.extendDstNotOwn[ f ] || Object.create( null ),
+  //   override : false,
+  //   dstNotOwn : true,
+  // });
+  //
+  // if( o.supplement )
+  // for( var f in _.ClassAllowedFacility )
+  // _.descendantAdd
+  // ({
+  //   descendantName : f,
+  //   dstProto : o.prototype,
+  //   srcMap : o.supplement[ f ] || Object.create( null ),
+  //   override : false,
+  // });
 
 /*
 
