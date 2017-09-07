@@ -521,8 +521,8 @@ var Self =
 {
 
   name : 'Proto.test',
-  sourceFilePath : _.diagnosticLocation().full,
-  verbosity : 7,
+  silencing : 1,
+  // verbosity : 7,
 
   tests :
   {
