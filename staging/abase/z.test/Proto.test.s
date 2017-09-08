@@ -20,6 +20,7 @@ if( typeof module !== 'undefined' )
 
   _.include( 'wTesting' );
 
+
 }
 
 var _ = wTools;
@@ -280,54 +281,72 @@ function accessor( test )
 {
 
   test.description = 'setter'; /**/
-  var Alpha =
-  {
-    _aSet : function( src )
+  var Alpha = function _Alpha(){}
+  _.classMake
+  ({
+    cls : Alpha,
+    parent : null,
+    extend :
     {
-      this[ Symbol.for( 'a' ) ] = src * 2;
-    },
-    Composes : {},
-    constructor : function(){},
-  };
-  _.accessor( Alpha, { a : 'a' } );
-  Alpha.a = 5;
-  var got = Alpha.a;
+      _aSet : function( src )
+      {
+        this[ Symbol.for( 'a' ) ] = src * 2;
+      },
+      Composes : {}
+    }
+  });
+  _.accessor( Alpha.prototype, { a : 'a' } );
+  var x = new Alpha();
+  x.a = 5;
+  var got = x.a;
   var expected = 10;
   test.identical( got, expected );
 
   test.description = 'getter'; /**/
-  var Alpha =
-  {
-    _aGet : function( )
+  var Alpha = function _Alpha(){}
+  _.classMake
+  ({
+    cls : Alpha,
+    parent : null,
+    extend :
     {
-      return this[ Symbol.for( 'a' ) ] * 2;
-    },
-    Composes : {},
-    constructor : function(){},
-  };
-  _.accessor( Alpha, { a : 'a' } );
-  Alpha.a = 5;
-  var got = Alpha.a;
+      _aGet : function()
+      {
+        return this[ Symbol.for( 'a' ) ] * 2;
+      },
+      Composes : {}
+    }
+  });
+  _.accessor( Alpha.prototype, { a : 'a' } );
+  var x = new Alpha();
+  x.a = 5;
+  var got = x.a;
   var expected = 10;
   test.identical( got, expected );
 
   test.description = 'getter & setter'; /**/
-  var Alpha =
-  {
-    _aSet : function( src )
+  var Alpha = function _Alpha(){}
+  _.classMake
+  ({
+    cls : Alpha,
+    parent : null,
+    extend :
     {
-      this[ Symbol.for( 'a' ) ] = src * 2;
-    },
-    _aGet : function( )
-    {
-      return this[ Symbol.for( 'a' ) ] / 2;
-    },
-    Composes : {},
-    constructor : function(){},
-  };
-  _.accessor( Alpha, { a : 'a' } );
-  Alpha.a = 5;
-  var got = Alpha.a;
+      _aSet : function( src )
+      {
+        this[ Symbol.for( 'a' ) ] = src * 2;
+      },
+      _aGet : function()
+      {
+        return this[ Symbol.for( 'a' ) ] / 2;
+      },
+      Composes : {}
+    }
+  });
+  _.accessor( Alpha.prototype, { a : 'a' } );
+  var x = new Alpha();
+  x.a = 5;
+  var got = x.a;
   var expected = 5;
   test.identical( got, expected );
 
@@ -427,7 +446,7 @@ function accessorForbid( test )
     test.description = 'invalid second argument type';
     test.shouldThrowError( function()
     {
-      _.accessorForbid( {}, [] );
+      _.accessorForbid( {}, 1 );
     });
 
   }
@@ -438,18 +457,38 @@ function accessorForbid( test )
 function accessorReadOnly( test )
 {
   test.description = 'readOnly';
-  var Alpha = { };
-  _.accessorReadOnly( Alpha, { a : 'a' } );
-  var descriptor = Object.getOwnPropertyDescriptor( Alpha, 'a' );
+
+  var Alpha = function _Alpha(){}
+  _.classMake
+  ({
+    cls : Alpha,
+    parent : null,
+    extend : { Composes : { a : null } }
+  });
+  _.accessorReadOnly( Alpha.prototype,{ a : 'a' });
+  var x = new Alpha();
+  test.shouldThrowError( () => x.a = 1 );
+  var descriptor = Object.getOwnPropertyDescriptor( Alpha.prototype, 'a' );
   var got = descriptor.set ? true : false;
   var expected = false;
   test.identical( got, expected );
 
   test.description = 'saves field value';
-  var Alpha = { a : 5};
-  _.accessorReadOnly( Alpha, { a : 'a' } );
-  var descriptor = Object.getOwnPropertyDescriptor( Alpha, 'a' );
-  var got = !descriptor.set && Alpha.a === 5;
+  var Alpha = function _Alpha( a )
+  {
+    this[ Symbol.for( 'a' ) ] = a;
+  }
+  _.classMake
+  ({
+    cls : Alpha,
+    parent : null,
+    extend : { Composes : { a : 6 } }
+  });
+  _.accessorReadOnly( Alpha.prototype, { a : 'a' } );
+  var x = new Alpha( 5 );
+  test.shouldThrowError( () => x.a = 1 );
+  var descriptor = Object.getOwnPropertyDescriptor( Alpha.prototype, 'a' );
+  var got = !descriptor.set && x.a === 5;
   var expected = true;
   test.identical( got, expected );
 
