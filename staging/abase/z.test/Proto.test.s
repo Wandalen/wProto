@@ -505,7 +505,7 @@ function accessorReadOnly( test )
     test.description = 'setter defined';
     test.shouldThrowError( function()
     {
-      var Alpha = { _aSet : function () { } };
+      var Alpha = { _aSet : function() { } };
       _.accessorReadOnly( Alpha, { a : 'a' } );
     });
 
