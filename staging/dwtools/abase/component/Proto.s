@@ -2065,7 +2065,7 @@ function classMake( o )
   if( o.withClass )
   {
 
-    _.assert( o.cls );
+    _.assert( o.cls,'expects ( o.cls )' );
     _.assert( _.routineIs( o.cls ),'classMake expects constructor' );
     _.assert( o.cls.name || o.cls._name,'constructor should have name' );
     _.assert( _hasOwnProperty.call( o.cls.prototype,'constructor' ) );
