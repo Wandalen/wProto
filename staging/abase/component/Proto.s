@@ -47,7 +47,7 @@ if( typeof module !== 'undefined' )
   if( typeof wBase === 'undefined' )
   try
   {
-    require( '../../abase/akernel/aKernel.s' );
+    require( '../../abase/layer1/aFundamental.s' );
   }
   catch( err )
   {
@@ -73,8 +73,8 @@ var _propertyIsEumerable = Object.propertyIsEnumerable;
 var _assert = _.assert;
 var _nameFielded = _.nameFielded;
 
-_.assert( _.objectIs( _.field ),'wProto needs wTools/staging/abase/akernel/FieldMapper.s' );
-_.assert( _.routineIs( _nameFielded ),'wProto needs wTools/staging/abase/component/NameTools.s' );
+_.assert( _.objectIs( _.field ),'wProto needs wTools/staging/abase/layer1/FieldMapper.s' );
+_.assert( _.routineIs( _nameFielded ),'wProto needs wTools/staging/abase/layer3/NameTools.s' );
 
 // --
 // property
@@ -1882,6 +1882,35 @@ function propertyGetterSetterGet( object,name )
 
 //
 
+function proxyNoUndefined( ins )
+{
+
+  var validator =
+  {
+    set : function( obj, k, e )
+    {
+      if( obj[ k ] === undefined )
+      throw _.err( 'Map does not have field',k );
+      obj[ k ] = e;
+      return true;
+    },
+    get : function( obj, k )
+    {
+      if( !_.symbolIs( k ) )
+      if( obj[ k ] === undefined )
+      throw _.err( 'Map does not have field',k );
+      return obj[ k ];
+    },
+
+  }
+
+  var result = new Proxy( ins, validator );
+
+  return result;
+}
+
+//
+
 function proxyReadOnly( ins )
 {
 
@@ -3117,6 +3146,121 @@ function assertInstanceDoesNotHaveReduntantFields( src )
 }
 
 // --
+// default
+// --
+
+/*
+apply default to each element of map, if present
+*/
+
+function defaultApply( src )
+{
+
+  _.assert( _.objectIs( src ) || _.arrayLike( src ) );
+
+  var def = src[ _default_ ];
+
+  if( !def )
+  return src;
+
+  _.assert( _.objectIs( src ) );
+
+  if( _.objectIs( src ) )
+  {
+
+    for( var s in src )
+    {
+      if( !_.objectIs( src[ s ] ) )
+      continue;
+      _.mapSupplement( src[ s ],def );
+    }
+
+  }
+  else
+  {
+
+    for( var s = 0 ; s < src.length ; s++ )
+    {
+      if( !_.objectIs( src[ s ] ) )
+      continue;
+      _.mapSupplement( src[ s ],def );
+    }
+
+  }
+
+  return src;
+}
+
+//
+
+/*
+activate default proxy
+*/
+
+function defaultProxy( map )
+{
+
+  _.assert( _.objectIs( map ) );
+  _.assert( arguments.length === 1 );
+
+  var validator =
+  {
+    set : function( obj, k, e )
+    {
+      obj[ k ] = _.defaultApply( e );
+      return true;
+    }
+  }
+
+  var result = new Proxy( map, validator );
+  // var result = new Proxy( [], validator );
+
+  for( var k in map )
+  {
+    _.defaultApply( map[ k ] );
+  }
+
+  // debugger;
+  // var is = _.mapIs( result );
+  // var is = _.strTypeOf( result );
+  // debugger;
+
+  return result;
+}
+
+//
+
+function defaultProxyFlatteningToArray( src )
+{
+  var result = [];
+
+  _.assert( arguments.length === 1 );
+  _.assert( _.objectIs( src ) || _.arrayIs( src ) );
+
+  function flatten( src )
+  {
+
+    if( _.arrayIs( src ) )
+    {
+      for( var s = 0 ; s < src.length ; s++ )
+      flatten( src[ s ] );
+    }
+    else
+    {
+      if( _.objectIs( src ) )
+      result.push( defaultApply( src ) );
+      else
+      result.push( src );
+    }
+
+  }
+
+  flatten( src );
+
+  return result;
+}
+
+// --
 // type
 // --
 
@@ -3249,6 +3393,7 @@ var Proto =
   propertyDescriptorGet : propertyDescriptorGet,
   propertyGetterSetterGet : propertyGetterSetterGet,
 
+  proxyNoUndefined : proxyNoUndefined,
   proxyReadOnly : proxyReadOnly,
   ifDebugProxyReadOnly : ifDebugProxyReadOnly,
 
@@ -3289,6 +3434,13 @@ var Proto =
   assertInstanceDoesNotHaveReduntantFields : assertInstanceDoesNotHaveReduntantFields,
 
 
+  // default
+
+  defaultApply : defaultApply,
+  defaultProxy : defaultProxy,
+  defaultProxyFlatteningToArray : defaultProxyFlatteningToArray,
+
+
   // var
 
   CallableObject : wCallableObject,
@@ -3324,7 +3476,7 @@ if( typeof module !== 'undefined' )
   require( './ProtoLike.s' );
   try
   {
-    require( '../../abase/akernel/aKernelWithComponents.s' );
+    require( '../../abase/zKernelWithComponents.s' );
   }
   catch( err )
   {
