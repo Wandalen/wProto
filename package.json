@@ -15,9 +15,9 @@
       "email": "volodymyr.migdal@gmail.com"
     }
   ],
-  "main": "staging/abase/component/Proto.s",
+  "main": "staging/dwtools/abase/component/Proto.s",
   "files": [
-    "staging/abase",
+    "staging/dwtools/abase",
     "production"
   ],
   "scripts": {

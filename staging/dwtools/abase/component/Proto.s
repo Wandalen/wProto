@@ -73,8 +73,8 @@ var _propertyIsEumerable = Object.propertyIsEnumerable;
 var _assert = _.assert;
 var _nameFielded = _.nameFielded;
 
-_.assert( _.objectIs( _.field ),'wProto needs wTools/staging/abase/layer1/FieldMapper.s' );
-_.assert( _.routineIs( _nameFielded ),'wProto needs wTools/staging/abase/layer3/NameTools.s' );
+_.assert( _.objectIs( _.field ),'wProto needs wTools/staging/dwtools/abase/layer1/FieldMapper.s' );
+_.assert( _.routineIs( _nameFielded ),'wProto needs wTools/staging/dwtools/abase/layer3/NameTools.s' );
 
 // --
 // property
