@@ -17,7 +17,7 @@
   ],
   "main": "staging/dwtools/abase/layer3/Proto.s",
   "files": [
-    "staging/dwtools/abase",
+    "staging/dwtools/abase/layer3",
     "production"
   ],
   "scripts": {
