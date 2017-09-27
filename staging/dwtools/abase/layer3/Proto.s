@@ -1976,7 +1976,7 @@ function ifDebugProxyReadOnly( ins )
  *  {
  *    var self = this;
  *    Parent.prototype.init.call( this );
- *    _.mapExtendFiltering( _.field.srcOwn(),self,Composes );
+ *    _.mapExtendConditional( _.field.srcOwn(),self,Composes );
  *  }
  *
  *  var Composes =
@@ -2172,8 +2172,8 @@ function classMake( o )
     _.assert( prototype.constructor );
     _.assert( prototype.Statics );
 
-    _.mapExtendFiltering( _.field.dstNotOwnSrcOwn(),prototype,prototype.Statics ); // xxx
-    _.mapExtendFiltering( _.field.dstNotOwnSrcOwn(),prototype.constructor,prototype.Statics ); // xxx
+    _.mapExtendConditional( _.field.dstNotOwnSrcOwn(),prototype,prototype.Statics ); // xxx
+    _.mapExtendConditional( _.field.dstNotOwnSrcOwn(),prototype.constructor,prototype.Statics ); // xxx
 
     _.assert( prototype === o.cls.prototype );
     _.assert( _hasOwnProperty.call( prototype,'constructor' ),'prototype should has own constructor' );
@@ -2458,7 +2458,7 @@ to prioritize ordinary facets adjustment order should be
   if( o.extendDstNotOwn )
   {
     var extend = _.mapBut( o.extendDstNotOwn,_.ClassAllowedFacility );
-    _.mapExtendFiltering( _.field.dstNotOwn(),o.prototype,extend );
+    _.mapExtendConditional( _.field.dstNotOwn(),o.prototype,extend );
     if( o.cls )
     if( _hasOwnProperty.call( o.extendDstNotOwn,'constructor' ) )
     o.prototype.constructor = o.extendDstNotOwn.constructor;
@@ -2480,9 +2480,9 @@ to prioritize ordinary facets adjustment order should be
 
   if( o.usingStatics && o.extendDstNotOwn && o.extendDstNotOwn.Statics )
   {
-    _.mapExtendFiltering( _.field.dstNotOwn(), o.prototype, o.extendDstNotOwn.Statics );
+    _.mapExtendConditional( _.field.dstNotOwn(), o.prototype, o.extendDstNotOwn.Statics );
     if( o.cls )
-    _.mapExtendFiltering( _.field.dstNotOwn(), o.cls, o.extendDstNotOwn.Statics );
+    _.mapExtendConditional( _.field.dstNotOwn(), o.cls, o.extendDstNotOwn.Statics );
   }
 
   /* static supplement */
@@ -2501,7 +2501,7 @@ to prioritize ordinary facets adjustment order should be
     for( var f in _.ClassAllowedFacility )
     if( f !== 'Statics' )
     if( _.mapOwnKey( o.prototype,f ) )
-    _.mapExtendFiltering( _.field.atomicSrcOwn(),o.prototype,o.prototype.Composes );
+    _.mapExtendConditional( _.field.atomicSrcOwn(),o.prototype,o.prototype.Composes );
   }
 
   /* accessors */
@@ -3062,9 +3062,9 @@ function instanceInitExtending( instance,prototype )
   if( prototype === undefined )
   prototype = instance;
 
-  _.mapExtendFiltering( _.field.cloning(),instance,prototype.Restricts );
-  _.mapExtendFiltering( _.field.cloning(),instance,prototype.Composes );
-  _.mapExtendFiltering( _.field.cloning(),instance,prototype.Aggregates );
+  _.mapExtendConditional( _.field.cloning(),instance,prototype.Restricts );
+  _.mapExtendConditional( _.field.cloning(),instance,prototype.Composes );
+  _.mapExtendConditional( _.field.cloning(),instance,prototype.Aggregates );
   _.mapExtend( instance,prototype.Associates );
 
   return instance;
