@@ -154,7 +154,7 @@ function _accessorRegister( o )
 
   var accessors = o.proto._Accessors;
 
-  if( o.combining && o.combining !== 'rewrite' )
+  if( o.combining && o.combining !== 'rewrite' && o.combining !== 'supplement' )
   debugger;
 
   if( Config.debug )
@@ -172,8 +172,11 @@ function _accessorRegister( o )
     debugger;
   }
 
-  _.assert( !o.combining || o.combining === 'rewrite' || o.combining === 'append', 'not supported ( o.combinng )',o.combinng );
+  _.assert( !o.combining || o.combining === 'rewrite' || o.combining === 'append' || o.combining === 'supplement', 'not supported ( o.combining )',o.combining );
   _.assert( _.strIs( o.name ) );
+
+  if( accessors[ o.name ] && o.combining === 'supplement' )
+  return;
 
   var descriptor =
   {
@@ -381,7 +384,7 @@ function _accessorProperty( o,name )
     _.assert
     (
       o.combining,
-      'overridin of property',encodedName + '\n' +
+      'overriding of property',encodedName + '\n' +
       '( o.combining ) suppose to be',Combining.join(),'if accessor overided'
     );
 
@@ -677,6 +680,9 @@ function accessorForbid()
     var setterName = '_' + rawName + 'Set';
     var getterName = '_' + rawName + 'Get';
 
+    // if( rawName === 'type' )
+    // debugger;
+
     var messageLine = protoName + rawName + ' : ' + message;
     var handler = function forbidden()
     {
@@ -840,7 +846,7 @@ function accessorsSupplement( dst,src )
   {
 
     _.assert( _.arrayIs( accessor.declaratorArgs ) );
-    _.assert( !accessor.combining || accessor.combining === 'rewrite' || accessor.combining === 'append','not implemented' );
+    _.assert( !accessor.combining || accessor.combining === 'rewrite' || accessor.combining === 'supplement' || accessor.combining === 'append','not implemented' );
 
     if( _.objectIs( dst._Accessors[ a ] ) )
     return;
@@ -1938,6 +1944,45 @@ function ifDebugProxyReadOnly( ins )
   return _.proxyReadOnly( ins );
 }
 
+//
+
+function synchronizerFor( instance )
+{
+  var cls = instance.Self;
+
+  _.assert( _.instanceIs( instance ) );
+  _.assert( _.classIs( cls ) );
+
+  debugger;
+
+  _.Consequence._synchronizerRoutinesFor( cls );
+
+  var result = new cls._Synchronizer();
+  Object.prevenExtensions( result );
+
+  var handler =
+  {
+    set : function( obj, k, e )
+    {
+      instance[ k ] = e;
+      return true;
+    },
+    get : function( obj, k )
+    {
+      if( obj[ k ] !== undefined )
+      return instance[ k ];
+      return true;
+    },
+  }
+
+  var result = new Proxy( instance , validator );
+  if( o.verbosity > 1 )
+  console.log( 'watching for',instance );
+
+  xxx
+
+}
+
 // --
 // prototype
 // --
@@ -2686,11 +2731,11 @@ function prototypeHas( srcProto,insProto )
 /**
  * Return proto owning names.
  * @param {object} srcObject - src object to investigate proto stack.
- * @method prototypeHasPrototype
+ * @method prototypeHasProperty
  * @memberof wTools
  */
 
-function prototypeHasPrototype( srcObject,names )
+function prototypeHasProperty( srcObject,names )
 {
   var names = _nameFielded( names );
   _assert( _.objectIs( srcObject ) );
@@ -2709,7 +2754,7 @@ function prototypeHasPrototype( srcObject,names )
 
     srcObject = Object.getPrototypeOf( srcObject );
   }
-  while( srcObject !== Object.prototype );
+  while( srcObject !== Object.prototype && srcObject );
 
   return null;
 }
@@ -2752,6 +2797,10 @@ function prototypeCrossRefer( o )
     association.have = 0;
     association.entities = _.mapExtend( null,o.entities );
   }
+  else
+  {
+    _.assert( _.arraySetIdentical( _.mapKeys( association.entities ), _.mapKeys( o.entities ) ),'cross reference should have same associations' );
+  }
 
   _.assert( association.name === o.name );
   _.assert( association.length === length );
@@ -2779,7 +2828,7 @@ function prototypeCrossRefer( o )
       continue;
       var dstEntity = association.entities[ dst ];
       var srcEntity = association.entities[ src ];
-      _.assert( !dstEntity[ src ] || dstEntity[ src ] === srcEntity );
+      _.assert( !dstEntity[ src ] || dstEntity[ src ] === srcEntity,'override of entity',src );
       _.assert( !dstEntity.prototype[ src ] || dstEntity.prototype[ src ] === srcEntity );
       _.classExtend( dstEntity,{ Statics : { [ src ] : srcEntity } } );
       _.assert( dstEntity[ src ] === srcEntity );
@@ -3157,10 +3206,11 @@ function defaultApply( src )
 {
 
   _.assert( _.objectIs( src ) || _.arrayLike( src ) );
+  _.assert( def === wTools.def );
 
-  var def = src[ _default_ ];
+  var defVal = src[ def ];
 
-  if( !def )
+  if( !defVal )
   return src;
 
   _.assert( _.objectIs( src ) );
@@ -3172,7 +3222,7 @@ function defaultApply( src )
     {
       if( !_.objectIs( src[ s ] ) )
       continue;
-      _.mapSupplement( src[ s ],def );
+      _.mapSupplement( src[ s ],defVal );
     }
 
   }
@@ -3183,7 +3233,7 @@ function defaultApply( src )
     {
       if( !_.objectIs( src[ s ] ) )
       continue;
-      _.mapSupplement( src[ s ],def );
+      _.mapSupplement( src[ s ],defVal );
     }
 
   }
@@ -3307,7 +3357,7 @@ ClassAllowedFacility.Statics = 'Statics';
 var ClassForbiddenFacility = Object.create( null );
 ClassForbiddenFacility.Static = 'Static';
 ClassForbiddenFacility.Type = 'Type';
-ClassForbiddenFacility.type = 'type';
+// ClassForbiddenFacility.type = 'type';
 Object.freeze( ClassForbiddenFacility );
 
 var Combining = [ 'rewrite','supplement','apppend','prepend' ];
@@ -3409,7 +3459,7 @@ var Proto =
 
   prototypeAppend : prototypeAppend, /* experimental */
   prototypeHas : prototypeHas, /* experimental */
-  prototypeHasPrototype : prototypeHasPrototype, /* experimental */
+  prototypeHasProperty : prototypeHasProperty, /* experimental */
   prototypeArchyGet : prototypeArchyGet, /* experimental */
 
   prototypeCrossRefer : prototypeCrossRefer,
