@@ -85,7 +85,7 @@ var Self =
 
   name : 'ProtoLike',
   silencing : 1,
-  // sourceFilePath : _.diagnosticLocation().full,
+  // suiteFileLocation : _.diagnosticLocation().full,
 
   tests :
   {

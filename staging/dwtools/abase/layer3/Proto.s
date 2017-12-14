@@ -326,7 +326,7 @@ function _accessor( o )
 
     if( _.strIs( individual ) )
     {
-      _.assert( individual === n );
+      _.assert( individual === n,'map for forbid should have same key and value' );
       individual = o;
     }
     else
@@ -1092,7 +1092,7 @@ function mixinMake( o )
     _.assert( arguments.length === 1 );
     _.assert( _.routineIs( cls ) );
     _.assert( cls === cls.prototype.constructor );
-    _.assert( this === o );
+    // _.assert( this === o );
     _.mixinApply({ descriptor : this, dstProto : cls.prototype });
     return cls;
   }
@@ -1102,8 +1102,8 @@ function mixinMake( o )
     _.assert( arguments.length === 1 );
     _.assert( _.routineIs( cls ) );
     _.assert( cls === cls.prototype.constructor );
-    _.assert( this === o );
-    o._mixin( cls );
+    // _.assert( this === o );
+    this._mixin( cls );
     return cls;
   }
 
@@ -1114,19 +1114,33 @@ function mixinMake( o )
   if( !o.prototype )
   {
 
+    var got = _._classConstructorAndPrototypeGet( o );
+
+    if( got.prototype )
+    o.prototype = got.prototype;
+    else
     o.prototype = Object.create( null );
+
     _.classExtend
     ({
-
-      cls : null,
+      cls : got.cls,
       prototype : o.prototype,
-
       extend : o.extend,
       extendDstNotOwn : o.extendDstNotOwn,
       supplement : o.supplement,
-
     });
 
+  }
+
+  if( o.prototype )
+  {
+    _.assert( !o.prototype.mixin,'not tested' );
+    o.prototype.mixin = o.mixin;
+    if( o.prototype.constructor )
+    {
+      _.assert( !o.prototype.constructor.mixin || o.prototype.constructor.mixin === o.mixin,'not tested' );
+      o.prototype.constructor.mixin = o.mixin;
+    }
   }
 
   Object.freeze( o._mixinDetails );
@@ -1147,6 +1161,7 @@ mixinMake.defaults =
   extendDstNotOwn : null,
   supplement : null,
   functor : null,
+
 }
 
 //
@@ -2106,6 +2121,7 @@ function classMake( o )
   _.assert( arguments.length === 1 );
   _.assert( _.objectIs( o ) );
   _.assertOwnNoConstructor( o,'options for classMake should have no constructor' );
+  _.assert( !( 'parent' in o ) || o.parent !== undefined,'parent is "undefined", something is wrong' );
 
   if( o.withClass )
   {
@@ -2243,26 +2259,31 @@ function classMake( o )
   if( o.withMixin )
   {
 
-    o = _.mapExtend( null,o );
+    var mixinOptions = _.mapExtend( null,o );
 
     _.assert( !o.usingAtomicExtension );
     _.assert( !o.usingOriginalPrototype );
     _.assert( !o.parent );
     _.assert( !o.cls || o.withClass );
 
+    // if( o.withClass )
+    // mixinOptions = _.mapSupplement( mixinOptions.cls,mixinOptions );
+
+    delete mixinOptions.usingAtomicExtension;
+    delete mixinOptions.usingOriginalPrototype;
+    delete mixinOptions.parent;
+    delete mixinOptions.cls;
+    delete mixinOptions.withMixin;
+    delete mixinOptions.withClass;
+
+    mixinOptions.prototype = prototype;
+
+    result = _.mixinMake( mixinOptions );
+
     if( o.withClass )
-    o = _.mapSupplement( o.cls,o );
-
-    delete o.usingAtomicExtension;
-    delete o.usingOriginalPrototype;
-    delete o.parent;
-    delete o.cls;
-    delete o.withMixin;
-    delete o.withClass;
-
-    o.prototype = prototype;
-
-    result = _.mixinMake( o );
+    {
+      result = _.mapSupplement( o.cls,result );
+    }
 
   }
 
@@ -2436,36 +2457,10 @@ function classExtend( o )
   descendantAdd( o.extendDstNotOwn,true,true );
   descendantAdd( o.supplement,false,false );
 
-  // if( o.extend )
-  // for( var f in _.ClassAllowedFacility )
-  // _.descendantAdd
-  // ({
-  //   descendantName : f,
-  //   dstProto : o.prototype,
-  //   srcMap : o.extend[ f ] || Object.create( null ),
-  //   override : true,
-  // });
-  //
-  // if( o.extendDstNotOwn )
-  // for( var f in _.ClassAllowedFacility )
-  // _.descendantAdd
-  // ({
-  //   descendantName : f,
-  //   dstProto : o.prototype,
-  //   srcMap : o.extendDstNotOwn[ f ] || Object.create( null ),
-  //   override : false,
-  //   dstNotOwn : true,
-  // });
-  //
-  // if( o.supplement )
-  // for( var f in _.ClassAllowedFacility )
-  // _.descendantAdd
-  // ({
-  //   descendantName : f,
-  //   dstProto : o.prototype,
-  //   srcMap : o.supplement[ f ] || Object.create( null ),
-  //   override : false,
-  // });
+  /* get constructor */
+
+  if( !o.cls )
+  o.cls = _._classConstructorAndPrototypeGet( o ).cls;
 
 /*
 
@@ -2601,6 +2596,47 @@ classExtend.defaults =
 
   usingStatics : 1,
   usingAtomicExtension : 0,
+}
+
+//
+
+function _classConstructorAndPrototypeGet( o )
+{
+  var result = Object.create( null );
+
+  if( !result.cls )
+  if( o.prototype )
+  result.cls = o.prototype.constructor;
+
+  if( !result.cls )
+  if( o.extend )
+  if( o.extend.constructor !== Object.prototype.constructor )
+  result.cls = o.extend.constructor;
+
+  if( !result.cls )
+  if( o.usingStatics && o.extend && o.extend.Statics )
+  if( o.extend.Statics.constructor !== Object.prototype.constructor )
+  result.cls = o.extend.Statics.constructor;
+
+  if( !result.cls )
+  if( o.supplement )
+  if( o.supplement.constructor !== Object.prototype.constructor )
+  result.cls = o.supplement.constructor;
+
+  if( !result.cls )
+  if( o.usingStatics && o.supplement && o.supplement.Statics )
+  if( o.supplement.Statics.constructor !== Object.prototype.constructor )
+  result.cls = o.supplement.Statics.constructor;
+
+  if( o.prototype )
+  result.prototype = o.prototype;
+  else if( result.cls )
+  result.prototype = result.cls.prototype;
+
+  if( o.prototype )
+  _.assert( result.cls === o.prototype.constructor );
+
+  return result;
 }
 
 //
@@ -2962,6 +2998,38 @@ function prototypeHasField( src,fieldName )
   return true;
 
   return false;
+}
+
+//
+
+function protoProxy( dst,src )
+{
+
+  _.assert( arguments.length === 2 );
+  _.assert( dst );
+  _.assert( src );
+
+  var handler =
+  {
+    get : function( obj, k )
+    {
+      if( obj[ k ] !== undefined )
+      return obj[ k ];
+      return src[ k ];
+    },
+    set : function( obj, k, val, target )
+    {
+      if( obj[ k ] !== undefined )
+      obj[ k ] = val;
+      else
+      src[ k ] = val;
+      return true;
+    },
+  }
+
+  var result = new Proxy( dst, handler );
+
+  return result;
 }
 
 // --
@@ -3455,6 +3523,8 @@ var Proto =
   classMake : classMake,
   classExtend : classExtend,
 
+  _classConstructorAndPrototypeGet : _classConstructorAndPrototypeGet,
+
   protoUnitedInterface : protoUnitedInterface, /* experimental */
 
   prototypeAppend : prototypeAppend, /* experimental */
@@ -3469,6 +3539,8 @@ var Proto =
   prototypeCopyableFieldsGet : prototypeCopyableFieldsGet,
   prototypeHasField : prototypeHasField,
 
+  protoProxy : protoProxy,
+
 
   // instance
 
@@ -3479,7 +3551,7 @@ var Proto =
 
   instanceInit : instanceInit,
   instanceInitExtending : instanceInitExtending,
-  instanceFilterInit : instanceFilterInit,
+  instanceFilterInit : instanceFilterInit, /* deprecated */
 
   assertInstanceDoesNotHaveReduntantFields : assertInstanceDoesNotHaveReduntantFields,
 
