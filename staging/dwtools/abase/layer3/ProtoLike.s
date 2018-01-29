@@ -5,14 +5,21 @@
 if( typeof module !== 'undefined' )
 {
 
-  if( typeof wBase === 'undefined' )
-  try
+  if( typeof _global_ === 'undefined' || !_global_.wBase )
   {
-    require( '../../Base.s' );
-  }
-  catch( err )
-  {
-    require( 'wTools' );
+    let toolsPath = '../../../dwtools/Base.s';
+    let toolsExternal = 0;
+    try
+    {
+      require.resolve( toolsPath )/*hhh*/;
+    }
+    catch( err )
+    {
+      toolsExternal = 1;
+      require( 'wTools' );
+    }
+    if( !toolsExternal )
+    require( toolsPath )/*hhh*/;
   }
 
   require( './Proto.s' );
@@ -27,12 +34,13 @@ if( typeof module !== 'undefined' )
 
 */
 
-var _ = wTools;
+var _ = _global_.wTools;
 var _hasOwnProperty = Object.hasOwnProperty;
-var _assert = wTools.assert;
-var _nameFielded = wTools.nameFielded;
+var _assert = _.assert;
+var _nameFielded = _.nameFielded;
 
-if( wTools.construction )
+_.assert( !_.construction )
+if( _.construction )
 return;
 
 //
@@ -53,10 +61,10 @@ function like()
   var helper = new Self();
   var proto = Object.create( null );
   var location;
-  var _ = wTools;
+  // var _ = _global_.wTools;
 
   // if( Config.debug )
-  // location = wTools.diagnosticLocation( 1 ).full;
+  // location = _.diagnosticLocation( 1 ).full;
 
   Object.defineProperty( proto, 'constructor',
   {
@@ -65,24 +73,24 @@ function like()
     writable : false,
     value : function Construction( o )
     {
-      wTools.assert( arguments.length === 0 || arguments.length === 1,'construction expects one or none argument' );
+      _.assert( arguments.length === 0 || arguments.length === 1,'construction expects one or none argument' );
 
       if( !( this instanceof proto.constructor ) )
       if( o instanceof proto.constructor )
       return o;
       else
-      return new( wTools.routineJoin( proto.constructor, proto.constructor, arguments ) );
+      return new( _.routineJoin( proto.constructor, proto.constructor, arguments ) );
 
-      wTools.assertMapHasOnly( this,proto,'Prototype of the object ' + ( location ? 'defined at\n' + location + '\n' : '' ) + 'does not have requested fields.' );
+      _.assertMapHasOnly( this,proto,'Prototype of the object ' + ( location ? 'defined at\n' + location + '\n' : '' ) + 'does not have requested fields.' );
 
-      wTools.mapComplement( this,proto );
+      _.mapComplement( this,proto );
       Object.preventExtensions( this );
 
       // if( !o )
       // debugger;
 
       if( o )
-      wTools.mapExtend( this,o );
+      _.mapExtend( this,o );
 
       return this;
     }
@@ -92,11 +100,11 @@ function like()
   for( var a = 0 ; a < arguments.length ; a++ )
   {
     var arg = arguments[ a ];
-    wTools.assert( arg[ symbolForAllClasses ] );
+    _.assert( arg[ symbolForAllClasses ] );
     // if( arg[ symbolForAllClasses ] )
     // debugger;
     if( arg[ symbolForAllClasses ] )
-    wTools.arrayAppendArrayOnce( allClasses,arg[ symbolForAllClasses ] );
+    _.arrayAppendArrayOnce( allClasses,arg[ symbolForAllClasses ] );
   }
 
   proto.constructor.prototype = proto;
@@ -106,7 +114,7 @@ function like()
     enumerable : false,
     configurable : false,
     writable : false,
-    value : wTools.arraySlice( arguments ),
+    value : _.arraySlice( arguments ),
   });
 
   Object.defineProperty( proto, symbolForAllClasses,
@@ -133,7 +141,7 @@ function like()
   Object.freeze( helper );
 
   if( arguments.length > 0 )
-  wTools.mapExtend.apply( wTools,Array.prototype.concat.apply( [ proto ],arguments ) );
+  _.mapExtend.apply( _,Array.prototype.concat.apply( [ proto ],arguments ) );
 
   return helper;
 }
@@ -142,7 +150,7 @@ function like()
 
 function name( src )
 {
-  wTools.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1 );
   return this;
 }
 
@@ -150,8 +158,8 @@ function name( src )
 
 function also( src )
 {
-  wTools.assert( arguments.length === 1 );
-  wTools.mapExtend( this.proto,src );
+  _.assert( arguments.length === 1 );
+  _.mapExtend( this.proto,src );
   return this;
 }
 
@@ -159,8 +167,8 @@ function also( src )
 
 function but( src )
 {
-  wTools.assert( arguments.length === 1 );
-  wTools.mapDelete( this.proto,src );
+  _.assert( arguments.length === 1 );
+  _.mapDelete( this.proto,src );
   return this;
 }
 
@@ -197,9 +205,9 @@ var Proto =
   isLike : isLike,
 }
 
-wTools.assert( !wTools.construction );
-wTools.construction = Object.create( null );
-wTools.mapExtend( wTools.construction, Proto );
+_.assert( !_.construction );
+_.construction = Object.create( null );
+_.mapExtend( _.construction, Proto );
 
 // --
 // prototype
@@ -210,7 +218,7 @@ var Proto =
   like : like,
 }
 
-wTools.mapExtend( wTools, Proto );
+_.mapExtend( _, Proto );
 
 // --
 // prototype
@@ -224,14 +232,14 @@ var Proto =
   _endGet : _endGet,
 }
 
-wTools.classMake
+_.classMake
 ({
   cls : Self,
   parent : Parent,
   extend : Proto,
 });
 
-wTools.accessorReadOnly
+_.accessorReadOnly
 ({
   object : Self.prototype,
   names : { end : { readOnlyProduct : 0 } },
@@ -241,13 +249,11 @@ wTools.accessorReadOnly
 // export
 // --
 
-if( typeof module !== 'undefined' && module !== null )
-{
-  module[ 'exports' ] = Self;
-}
+if( typeof module !== 'undefined' )
+if( _global_._UsingWtoolsPrivately_ )
+delete require.cache[ module.id ];
 
-// --
-// assert
-// --
+if( typeof module !== 'undefined' && module !== null )
+module[ 'exports' ] = Self;
 
 })();

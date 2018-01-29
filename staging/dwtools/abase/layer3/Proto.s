@@ -44,17 +44,24 @@
 if( typeof module !== 'undefined' )
 {
 
-  if( typeof wBase === 'undefined' )
-  try
+  if( typeof _global_ === 'undefined' || !_global_.wBase )
   {
-    require( '../../abase/layer1/aFundamental.s' );
-  }
-  catch( err )
-  {
-    require( 'wTools' );
+    let toolsPath = '../../../dwtools/Base.s';
+    let toolsExternal = 0;
+    try
+    {
+      require.resolve( toolsPath )/*hhh*/;
+    }
+    catch( err )
+    {
+      toolsExternal = 1;
+      require( 'wTools' );
+    }
+    if( !toolsExternal )
+    require( toolsPath )/*hhh*/;
   }
 
-  if( !wTools.nameFielded )
+  if( !_global_.wTools.nameFielded )
   try
   {
     require( './NameTools.s' );
@@ -65,8 +72,8 @@ if( typeof module !== 'undefined' )
 
 }
 
-var Self = wTools;
-var _ = wTools;
+var Self = _global_.wTools;
+var _ = _global_.wTools;
 
 var _hasOwnProperty = Object.hasOwnProperty;
 var _propertyIsEumerable = Object.propertyIsEnumerable;
@@ -3210,7 +3217,7 @@ function instanceFilterInit( o )
   _.instanceInit( result,o.cls.prototype );
 
   if( o.args[ 0 ] )
-  wCopyable.prototype.copyCustom.call( result,
+  _.Copyable.prototype.copyCustom.call( result,
   {
     proto : o.cls.prototype,
     src : o.args[ 0 ],
@@ -3274,7 +3281,7 @@ function defaultApply( src )
 {
 
   _.assert( _.objectIs( src ) || _.arrayLike( src ) );
-  _.assert( def === wTools.def );
+  _.assert( def === _.def );
 
   var defVal = src[ def ];
 
@@ -3578,7 +3585,7 @@ _global_.wProto = Proto;
 
 _.mapExtend( Self, Proto );
 
-_.accessorForbid( wTools,
+_.accessorForbid( _,
 {
   _ArrayDescriptor : '_ArrayDescriptor',
   ArrayDescriptor : 'ArrayDescriptor',
@@ -3595,16 +3602,26 @@ _.accessorForbid( wTools,
 if( typeof module !== 'undefined' )
 {
 
+  if( !_.construction )
   require( './ProtoLike.s' );
-  try
-  {
-    require( '../../abase/zKernelWithComponents.s' );
-  }
-  catch( err )
-  {
-  }
+
+  // try
+  // {
+  //   require( '../../abase/zKernelWithComponents.s' );
+  // }
+  // catch( err )
+  // {
+  // }
 
 }
+
+// --
+// export
+// --
+
+if( typeof module !== 'undefined' )
+if( _global_._UsingWtoolsPrivately_ )
+delete require.cache[ module.id ];
 
 if( typeof module !== 'undefined' && module !== null )
 module[ 'exports' ] = Self;
