@@ -299,7 +299,7 @@ function _accessor( o )
     _.accessorForbid
     ({
       object : o.object,
-      names : ClassForbiddenFacility,
+      names : ClassForbiddenNames,
       prime : 0,
       strict : 0,
     });
@@ -1053,10 +1053,6 @@ function accessorDescriptorGet( object,name )
   {
     result.descriptor = Object.getOwnPropertyDescriptor( object,name );
 
-    // if( result.descriptor )
-    // if( 'value' in result.descriptor )
-    // debugger;
-
     if( result.descriptor && !( 'value' in result.descriptor ) )
     {
       result.object = object;
@@ -1088,7 +1084,7 @@ function mixinMake( o )
   _.assert( _.routineIs( o._mixin ) || o._mixin === undefined,'expects routine ( o._mixin ), but got',_.strTypeOf( o ) );
   _.assert( _.strIsNotEmpty( o.name ),'mixin should have name' );
   _.assert( _.objectIs( o.extend ) || o.extend === undefined || o.extend === null );
-  _.assert( _.objectIs( o.extendDstNotOwn ) || o.extendDstNotOwn === undefined || o.extendDstNotOwn === null );
+  _.assert( _.objectIs( o.stretch ) || o.stretch === undefined || o.stretch === null );
   _.assert( _.objectIs( o.supplement ) || o.supplement === undefined || o.supplement === null );
   _.assertOwnNoConstructor( o );
   _.assertMapOwnOnly( o,mixinMake.defaults );
@@ -1133,7 +1129,7 @@ function mixinMake( o )
       cls : got.cls,
       prototype : o.prototype,
       extend : o.extend,
-      extendDstNotOwn : o.extendDstNotOwn,
+      stretch : o.stretch,
       supplement : o.supplement,
     });
 
@@ -1165,7 +1161,7 @@ mixinMake.defaults =
   prototype : null,
 
   extend : null,
-  extendDstNotOwn : null,
+  stretch : null,
   supplement : null,
   functor : null,
 
@@ -1209,7 +1205,7 @@ function mixinApply( o )
   ({
     cls : dstProto.constructor,
     extend : d.extend,
-    extendDstNotOwn : d.extendDstNotOwn,
+    stretch : d.stretch,
     supplement : d.supplement,
     functor : d.functor,
   });
@@ -1290,7 +1286,7 @@ function descendantMakeOwnedBy( dst,fieldName )
 * Default options for descendantAdd function
 * @typedef {object} wTools~protoAddDefaults
 * @property {object} [ o.descendantName=null ] - object that contains class relationship type name.
-* Example : { Composes : 'Composes' }. See {@link wTools~ClassFieldFacility}
+* Example : { Composes : 'Composes' }. See {@link wTools~ClassSubfieldsGroupsRelationships}
 * @property {object} [ o.dstProto=null ] - prototype of class which will get new constant property.
 * @property {object} [ o.srcMap=null ] - name/value map of defaults.
 * @property {bool} [ o.override=false ] - to override defaults if exist.
@@ -2142,7 +2138,7 @@ function classMake( o )
 
     _.assertMapOwnAll( o.cls.prototype,has,'classMake : expects constructor' );
     _.assertMapOwnNone( o.cls.prototype,hasNot );
-    _.assertMapOwnNone( o.cls.prototype,ClassForbiddenFacility );
+    _.assertMapOwnNone( o.cls.prototype,ClassForbiddenNames );
 
     if( o.extend && _hasOwnProperty.call( o.extend,'constructor' ) )
     _.assert( o.extend.constructor === o.cls );
@@ -2186,8 +2182,8 @@ function classMake( o )
       //   // // throw _.err( 'not tested' );
       //   // if( o.extend )
       //   // _assert( !o.extend.constructor || o.extend.constructor === o.cls,'cant rewrite constructor, using original prototype' );
-      //   // if( o.extendDstNotOwn )
-      //   // _assert( !o.extendDstNotOwn.constructor || o.extendDstNotOwn.constructor === o.cls,'cant rewrite constructor, using original prototype' );
+      //   // if( o.stretch )
+      //   // _assert( !o.stretch.constructor || o.stretch.constructor === o.cls,'cant rewrite constructor, using original prototype' );
       //   // if( o.supplement )
       //   // _assert( !o.supplement.constructor || o.supplement.constructor === o.cls,'cant rewrite constructor, using original prototype' );
       // }
@@ -2225,7 +2221,7 @@ function classMake( o )
     ({
       cls : o.cls,
       extend : o.extend,
-      extendDstNotOwn : o.extendDstNotOwn,
+      stretch : o.stretch,
       supplement : o.supplement,
       usingAtomicExtension : o.usingAtomicExtension,
       usingStatics : 0,
@@ -2305,7 +2301,7 @@ function classMake( o )
   if( prototype )
   {
     var descriptor = Object.getOwnPropertyDescriptor( prototype,'constructor' );
-    _.assert( descriptor.writable );
+    _.assert( descriptor.writable || descriptor.set );
     _.assert( descriptor.configurable );
   }
 
@@ -2318,7 +2314,7 @@ classMake.defaults =
   parent : null,
 
   extend : null,
-  extendDstNotOwn : null,
+  stretch : null,
   supplement : null,
 
   name : null,
@@ -2379,7 +2375,7 @@ function classExtend( o )
   _.assert( !_hasOwnProperty.call( o,'constructor' ) );
   _.assertOwnNoConstructor( o );
   _.assert( _.objectIs( o.extend ) || o.extend === undefined || o.extend === null );
-  _.assert( _.objectIs( o.extendDstNotOwn ) || o.extendDstNotOwn === undefined || o.extendDstNotOwn === null );
+  _.assert( _.objectIs( o.stretch ) || o.stretch === undefined || o.stretch === null );
   _.assert( _.objectIs( o.supplement ) || o.supplement === undefined || o.supplement === null );
 
   if( o.cls || !o.prototype )
@@ -2393,10 +2389,10 @@ function classExtend( o )
     _.assert( o.extend.cls === undefined );
     _.assertOwnNoConstructor( o.extend );
   }
-  if( o.extendDstNotOwn )
+  if( o.stretch )
   {
-    _.assert( o.extendDstNotOwn.cls === undefined );
-    _.assertOwnNoConstructor( o.extendDstNotOwn );
+    _.assert( o.stretch.cls === undefined );
+    _.assertOwnNoConstructor( o.stretch );
   }
   if( o.supplement )
   {
@@ -2413,7 +2409,7 @@ function classExtend( o )
 
   /* adjust relationships */
 
-  for( var f in _.ClassAllowedFacility )
+  for( var f in _.ClassSubfieldsGroups )
   _.descendantAdd
   ({
     descendantName : f,
@@ -2426,7 +2422,7 @@ function classExtend( o )
     if( !src )
     return;
 
-    for( var f in _.ClassAllowedFacility )
+    for( var f in _.ClassSubfieldsGroups )
     {
 
       if( !src[ f ] )
@@ -2441,15 +2437,19 @@ function classExtend( o )
         dstNotOwn : dstNotOwn,
       });
 
-      if( f === 'Events' )
-      continue;
+      // if( f === 'Events' )
+      // continue;
+      //
+      // if( f === 'Statics' )
+      // continue;
 
-      if( f === 'Statics' )
+      if( !_.ClassSubfieldsGroupsRelationships[ f ] )
       continue;
 
       if( Config.debug )
-      for( var f2 in _.ClassAllowedFacility )
-      if( f2 === f || f2 === 'Events' || ( f2 === 'Restricts' && f === 'Medials' ) || ( f2 === 'Medials' && f === 'Restricts' ) )
+      for( var f2 in _.ClassSubfieldsGroupsRelationships )
+      if( f2 === f )
+      // if( f2 === f || f2 === 'Events' || ( f2 === 'Restricts' && f === 'Medials' ) || ( f2 === 'Medials' && f === 'Restricts' ) )
       continue;
       else for( var k in src[ f ] )
       {
@@ -2461,7 +2461,7 @@ function classExtend( o )
   }
 
   descendantAdd( o.extend,true,false );
-  descendantAdd( o.extendDstNotOwn,true,true );
+  descendantAdd( o.stretch,true,true );
   descendantAdd( o.supplement,false,false );
 
   /* get constructor */
@@ -2482,6 +2482,7 @@ to prioritize ordinary facets adjustment order should be
 
   /* static extend */
 
+  if( !o.prototype.constructor )
   if( o.usingStatics && o.extend && o.extend.Statics )
   {
     _.mapExtend( o.prototype,o.extend.Statics );
@@ -2493,29 +2494,31 @@ to prioritize ordinary facets adjustment order should be
 
   if( o.extend )
   {
-    var extend = _.mapBut( o.extend,_.ClassAllowedFacility );
+    if( o.extend.f2 )
+    debugger;
+    var extend = _.mapBut( o.extend,_.ClassSubfieldsGroups );
     _.mapExtend( o.prototype,extend );
     if( o.cls )
     if( _hasOwnProperty.call( o.extend,'constructor' ) )
     o.prototype.constructor = o.extend.constructor;
   }
 
-  /* ordinary extend dst not own */
+  /* ordinary stretch */
 
-  if( o.extendDstNotOwn )
+  if( o.stretch )
   {
-    var extend = _.mapBut( o.extendDstNotOwn,_.ClassAllowedFacility );
-    _.mapExtendConditional( _.field.mapper.dstNotOwn,o.prototype,extend );
+    var extend = _.mapBut( o.stretch,_.ClassSubfieldsGroups );
+    _.mapStretch( o.prototype,extend );
     if( o.cls )
-    if( _hasOwnProperty.call( o.extendDstNotOwn,'constructor' ) )
-    o.prototype.constructor = o.extendDstNotOwn.constructor;
+    if( _hasOwnProperty.call( o.stretch,'constructor' ) )
+    o.prototype.constructor = o.stretch.constructor;
   }
 
   /* ordinary supplement */
 
   if( o.supplement )
   {
-    var supplement = _.mapBut( o.supplement,_.ClassAllowedFacility );
+    var supplement = _.mapBut( o.supplement,_.ClassSubfieldsGroups );
     _.mapSupplement( o.prototype,supplement );
     if( o.cls )
     if( !_hasOwnProperty.call( o.prototype,'constructor' ) )
@@ -2525,15 +2528,16 @@ to prioritize ordinary facets adjustment order should be
 
   /* static extend dst not own */
 
-  if( o.usingStatics && o.extendDstNotOwn && o.extendDstNotOwn.Statics )
+  if( o.usingStatics && o.stretch && o.stretch.Statics )
   {
-    _.mapExtendConditional( _.field.mapper.dstNotOwn, o.prototype, o.extendDstNotOwn.Statics );
+    _.mapExtendConditional( _.field.mapper.dstNotOwn, o.prototype, o.stretch.Statics );
     if( o.cls )
-    _.mapExtendConditional( _.field.mapper.dstNotOwn, o.cls, o.extendDstNotOwn.Statics );
+    _.mapExtendConditional( _.field.mapper.dstNotOwn, o.cls, o.stretch.Statics );
   }
 
   /* static supplement */
 
+  if( !o.prototype.constructor )
   if( o.usingStatics && o.supplement && o.supplement.Statics )
   {
     _.mapSupplement( o.prototype, o.supplement.Statics );
@@ -2545,7 +2549,7 @@ to prioritize ordinary facets adjustment order should be
 
   if( o.usingAtomicExtension )
   {
-    for( var f in _.ClassAllowedFacility )
+    for( var f in _.ClassSubfieldsGroups )
     if( f !== 'Statics' )
     if( _.mapOwnKey( o.prototype,f ) )
     _.mapExtendConditional( _.field.mapper.atomicSrcOwn, o.prototype, o.prototype.Composes );
@@ -2555,21 +2559,94 @@ to prioritize ordinary facets adjustment order should be
 
   function declareAccessors( src )
   {
-    for( var d in GenericAccessorDeclaratorsMap )
+    for( var d in ClassAccessorsMap )
     if( src[ d ] )
     {
-      GenericAccessorDeclaratorsMap[ d ]( o.prototype,src[ d ] );
+      ClassAccessorsMap[ d ]( o.prototype,src[ d ] );
     }
   }
 
   if( o.supplement )
   declareAccessors( o.supplement );
-  if( o.extendDstNotOwn )
-  declareAccessors( o.extendDstNotOwn );
+  if( o.stretch )
+  declareAccessors( o.stretch );
   if( o.extend )
   declareAccessors( o.extend );
 
-  /* functor */
+  /* statics */
+
+  if( o.prototype.constructor )
+  for( var _s in o.prototype.Statics ) (function()
+  {
+    var s = _s;
+    var prototype = o.prototype;
+    var value = o.prototype.Statics[ s ];
+
+    // if( s === '_allFieldsGet' )
+    // debugger;
+
+    if( !_hasOwnProperty.call( o.prototype.Statics,s ) )
+    return;
+
+    var pd = _.propertyDescriptorGet( o.prototype,s );
+    var cd = _.propertyDescriptorGet( o.prototype.constructor,s );
+
+    // if( pd.descriptor && pd.descriptor.value !== undefined )
+    // {
+    //   if( pd.descriptor.value === value )
+    //   pd.descriptor = null;
+    // }
+    //
+    // if( cd.descriptor && cd.descriptor.value !== undefined )
+    // {
+    //   if( cd.descriptor.value === value )
+    //   cd.descriptor = null;
+    // }
+
+    if( pd.object !== prototype )
+    pd.descriptor = null;
+
+    if( cd.object !== prototype.constructor )
+    cd.descriptor = null;
+
+    if( s === 'constructor' )
+    return;
+
+    // _.assert( !pd ^ !!cd.descriptor );
+    _.assert( s !== 'constructor' );
+
+    // if( pd.descriptor || cd.descriptor )
+    // return;
+
+    var symbol = Symbol.for( s );
+
+    if( !pd.descriptor )
+    {
+      o.prototype[ symbol ] = value;
+      Object.defineProperty( o.prototype, s,
+      {
+        set : function( src ){ prototype[ symbol ] = src; prototype.constructor[ symbol] = src; },
+        get : function(){ return this[ symbol ]; },
+        enumerable : false,
+        configurable : true,
+      });
+    }
+
+    if( !cd.descriptor )
+    {
+      o.prototype.constructor[ symbol ] = value;
+      Object.defineProperty( o.prototype.constructor, s,
+      {
+        set : function( src ){ prototype[ symbol ] = src; prototype.constructor[ symbol] = src; },
+        get : function(){ return this[ symbol ]; },
+        enumerable : false,
+        configurable : true,
+      });
+    }
+
+  })();
+
+  /* functors */
 
   if( o.functor )
   for( var m in o.functor )
@@ -2597,7 +2674,7 @@ classExtend.defaults =
   prototype : null,
 
   extend : null,
-  extendDstNotOwn : null,
+  stretch : null,
   supplement : null,
   functor : null,
 
@@ -3000,7 +3077,7 @@ function prototypeHasField( src,fieldName )
   _.assert( _.prototypeIsStandard( prototype ),'expects standard prototype' );
   _.assert( arguments.length === 2 );
 
-  for( var f in _.ClassFieldFacility )
+  for( var f in _.ClassSubfieldsGroupsRelationships )
   if( prototype[ f ][ fieldName ] )
   return true;
 
@@ -3410,36 +3487,35 @@ wCallableObject.nameShort = 'CallableObject';
 // var
 // --
 
+var Combining = [ 'rewrite','supplement','apppend','prepend' ];
+
 /**
- * @global {Object} wTools~ClassFieldFacility - contains predefined class relationship types.
+ * @global {Object} wTools~ClassSubfieldsGroupsRelationships - contains predefined class relationship types.
  * @memberof wTools
  */
 
-var ClassFieldFacility = Object.create( null );
-ClassFieldFacility.Composes = 'Composes';
-ClassFieldFacility.Aggregates = 'Aggregates';
-ClassFieldFacility.Associates = 'Associates';
-ClassFieldFacility.Restricts = 'Restricts';
+var ClassSubfieldsGroupsRelationships = Object.create( null );
+ClassSubfieldsGroupsRelationships.Composes = 'Composes';
+ClassSubfieldsGroupsRelationships.Aggregates = 'Aggregates';
+ClassSubfieldsGroupsRelationships.Associates = 'Associates';
+ClassSubfieldsGroupsRelationships.Restricts = 'Restricts';
 
-var ClassAllowedFacility = Object.create( null );
-ClassAllowedFacility.Composes = 'Composes';
-ClassAllowedFacility.Aggregates = 'Aggregates';
-ClassAllowedFacility.Associates = 'Associates';
-ClassAllowedFacility.Medials = 'Medials';
-ClassAllowedFacility.Restricts = 'Restricts';
-ClassAllowedFacility.Statics = 'Statics';
+var ClassSubfieldsGroups = Object.create( null );
+ClassSubfieldsGroups.Composes = 'Composes';
+ClassSubfieldsGroups.Aggregates = 'Aggregates';
+ClassSubfieldsGroups.Associates = 'Associates';
+ClassSubfieldsGroups.Medials = 'Medials';
+ClassSubfieldsGroups.Restricts = 'Restricts';
+ClassSubfieldsGroups.Statics = 'Statics';
 
-var ClassForbiddenFacility = Object.create( null );
-ClassForbiddenFacility.Static = 'Static';
-ClassForbiddenFacility.Type = 'Type';
-// ClassForbiddenFacility.type = 'type';
-Object.freeze( ClassForbiddenFacility );
+var ClassForbiddenNames = Object.create( null );
+ClassForbiddenNames.Static = 'Static';
+ClassForbiddenNames.Type = 'Type';
+Object.freeze( ClassForbiddenNames );
 
-var Combining = [ 'rewrite','supplement','apppend','prepend' ];
-
-var GenericAccessorDeclaratorsMap = Object.create( null );
-GenericAccessorDeclaratorsMap.Accessors = accessor;
-GenericAccessorDeclaratorsMap.Forbids = accessorForbid;
+var ClassAccessorsMap = Object.create( null );
+ClassAccessorsMap.Accessors = accessor;
+ClassAccessorsMap.Forbids = accessorForbid;
 
 // --
 // prototype
@@ -3458,6 +3534,8 @@ var Proto =
 
   _accessorSetterGetterMake : _accessorSetterGetterMake,
   _accessorSetterGetterGet : _accessorSetterGetterGet,
+
+  // accessorOwn : accessorOwn,
 
   accessor : accessor,
   accessorForbid : accessorForbid,
@@ -3573,11 +3651,11 @@ var Proto =
   // var
 
   CallableObject : wCallableObject,
-  ClassFieldFacility : ClassFieldFacility,
-  ClassAllowedFacility : ClassAllowedFacility,
-  ClassForbiddenFacility : ClassForbiddenFacility,
   Combining : Combining,
-  GenericAccessorDeclaratorsMap : GenericAccessorDeclaratorsMap,
+  ClassSubfieldsGroupsRelationships : ClassSubfieldsGroupsRelationships,
+  ClassSubfieldsGroups : ClassSubfieldsGroups,
+  ClassForbiddenNames : ClassForbiddenNames,
+  ClassAccessorsMap : ClassAccessorsMap,
 
 }
 

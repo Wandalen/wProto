@@ -218,70 +218,70 @@ function prototypeIsStandard( t )
 
 //
 
-function _accessorOptions( test )
-{
-
-  test.description = 'one args call';
-  var Alpha = { };
-  var o =
-  {
-    object : Alpha,
-    names : { a : '_a' },
-    message : [ 'set/get call' ],
-  }
-  var got = _._accessorOptions( o );
-  var expected =
-  {
-    object : o.object,
-    names : _.nameFielded( o.names ),
-    message : o.message,
-    methods : o.object,
-  };
-  test.identical( got, expected );
-
-  test.description = 'two args call';
-  var Alpha = function Alpha( ){ };
-  var names = { a : '_a' };
-  var got = _.toStr( _._accessorOptions( Alpha, names ), { levels : 2 } );
-  var expected =
-  [
-    '{',
-    '  object : [ routine Alpha ], ',
-    '  methods : [ routine Alpha ], ',
-    '  names : { a : "_a" }',
-    '}',
-  ].join( '\n' );
-  test.identical( got, expected );
-
-  test.description = 'three args call';
-  var Alpha = function Alpha( ){ };
-  var names = { a : '_a' };
-  var message = [ 'set/get call' ];
-  var got = _.toStr( _._accessorOptions( Alpha, names, message ), { levels : 3 } );
-  var expected =
-  [
-    '{',
-    '  object : [ routine Alpha ], ',
-    '  methods : [ routine Alpha ], ',
-    '  names : { a : "_a" }, ',
-    '  message : ',
-    '  [',
-    '    [ "set/get call" ]',
-    '  ]',
-    '}',
-
-  ].join( '\n' );
-  test.identical( got, expected );
-
-  if( Config.debug )
-  {
-    test.description = 'empty call';
-    test.shouldThrowError( function()
-      {
-        _._accessorOptions( );
-      });
-  }
-}
+// function _accessorOptions( test )
+// {
+//
+//   test.description = 'one args call';
+//   var Alpha = { };
+//   var o =
+//   {
+//     object : Alpha,
+//     names : { a : '_a' },
+//     message : [ 'set/get call' ],
+//   }
+//   var got = _._accessorOptions( o );
+//   var expected =
+//   {
+//     object : o.object,
+//     names : _.nameFielded( o.names ),
+//     message : o.message,
+//     methods : o.object,
+//   };
+//   test.identical( got, expected );
+//
+//   test.description = 'two args call';
+//   var Alpha = function Alpha( ){ };
+//   var names = { a : '_a' };
+//   var got = _.toStr( _._accessorOptions( Alpha, names ), { levels : 2 } );
+//   var expected =
+//   [
+//     '{',
+//     '  object : [ routine Alpha ], ',
+//     '  methods : [ routine Alpha ], ',
+//     '  names : { a : "_a" }',
+//     '}',
+//   ].join( '\n' );
+//   test.identical( got, expected );
+//
+//   test.description = 'three args call';
+//   var Alpha = function Alpha( ){ };
+//   var names = { a : '_a' };
+//   var message = [ 'set/get call' ];
+//   var got = _.toStr( _._accessorOptions( Alpha, names, message ), { levels : 3 } );
+//   var expected =
+//   [
+//     '{',
+//     '  object : [ routine Alpha ], ',
+//     '  methods : [ routine Alpha ], ',
+//     '  names : { a : "_a" }, ',
+//     '  message : ',
+//     '  [',
+//     '    [ "set/get call" ]',
+//     '  ]',
+//     '}',
+//
+//   ].join( '\n' );
+//   test.identical( got, expected );
+//
+//   if( Config.debug )
+//   {
+//     test.description = 'empty call';
+//     test.shouldThrowError( function()
+//       {
+//         _._accessorOptions( );
+//       });
+//   }
+// }
 
 //
 
@@ -421,43 +421,43 @@ function accessorForbid( test )
   var expected = 5;
   test.identical( got, expected );
 
-  if( Config.debug )
+  if( !Config.debug ) /* */
+  return;
+
+  test.description = 'forbid get';
+  test.shouldThrowError( function()
   {
-    test.description = 'forbid get';
-    test.shouldThrowError( function()
-    {
-      var Alpha = { };
-      _.accessorForbid( Alpha, { a : 'a' } );
-      Alpha.a;
-    });
+    var Alpha = { };
+    _.accessorForbid( Alpha, { a : 'a' } );
+    Alpha.a;
+  });
 
-    test.description = 'forbid set';
-    test.shouldThrowError( function()
-    {
-      var Alpha = { };
-      _.accessorForbid( Alpha, { a : 'a' } );
-      Alpha.a = 5;
-    });
+  test.description = 'forbid set';
+  test.shouldThrowError( function()
+  {
+    var Alpha = { };
+    _.accessorForbid( Alpha, { a : 'a' } );
+    Alpha.a = 5;
+  });
 
-    test.description = 'empty call';
-    test.shouldThrowError( function()
-    {
-      _.accessorForbid( );
-    });
+  test.description = 'empty call';
+  test.shouldThrowError( function()
+  {
+    _.accessorForbid( );
+  });
 
-    test.description = 'invalid first argument type';
-    test.shouldThrowError( function()
-    {
-      _.accessorForbid( 1, { a : 'a' } );
-    });
+  test.description = 'invalid first argument type';
+  test.shouldThrowError( function()
+  {
+    _.accessorForbid( 1, { a : 'a' } );
+  });
 
-    test.description = 'invalid second argument type';
-    test.shouldThrowError( function()
-    {
-      _.accessorForbid( {}, 1 );
-    });
+  test.description = 'invalid second argument type';
+  test.shouldThrowError( function()
+  {
+    _.accessorForbid( {}, 1 );
+  });
 
-  }
 }
 
 //
@@ -500,41 +500,42 @@ function accessorReadOnly( test )
   var expected = true;
   test.identical( got, expected );
 
-  if( Config.debug )
+  if( !Config.debug )
+  return;
+
+  test.description = 'readonly';
+  test.shouldThrowError( function()
   {
-    test.description = 'readonly';
-    test.shouldThrowError( function()
-    {
-      var Alpha = { };
-      _.accessorReadOnly( Alpha, { a : 'a' } );
-      Alpha.a = 5;
-    });
+    var Alpha = { };
+    _.accessorReadOnly( Alpha, { a : 'a' } );
+    Alpha.a = 5;
+  });
 
-    test.description = 'setter defined';
-    test.shouldThrowError( function()
-    {
-      var Alpha = { _aSet : function() { } };
-      _.accessorReadOnly( Alpha, { a : 'a' } );
-    });
+  test.description = 'setter defined';
+  test.shouldThrowError( function()
+  {
+    var Alpha = { _aSet : function() { } };
+    _.accessorReadOnly( Alpha, { a : 'a' } );
+  });
 
-    test.description = 'empty call';
-    test.shouldThrowError( function()
-    {
-      _.accessorReadOnly( );
-    });
+  test.description = 'empty call';
+  test.shouldThrowError( function()
+  {
+    _.accessorReadOnly( );
+  });
 
-    test.description = 'invalid first argument type';
-    test.shouldThrowError( function()
-    {
-      _.accessorReadOnly( 1, { a : 'a' } );
-    });
+  test.description = 'invalid first argument type';
+  test.shouldThrowError( function()
+  {
+    _.accessorReadOnly( 1, { a : 'a' } );
+  });
 
-    test.description = 'invalid second argument type';
-    test.shouldThrowError( function()
-    {
-      _.accessorReadOnly( {}, [] );
-    });
-  }
+  test.description = 'invalid second argument type';
+  test.shouldThrowError( function()
+  {
+    _.accessorReadOnly( {}, [] );
+  });
+
 }
 
 //
@@ -557,26 +558,452 @@ function constant( test )
   var expected = true;
   test.identical( got, expected );
 
-  if( Config.debug )
+  if( !Config.debug )
+  return;
+
+  test.description = 'empty call';
+  test.shouldThrowError( function()
   {
-    test.description = 'empty call';
-    test.shouldThrowError( function()
-    {
-      _.constant( );
-    });
+    _.constant( );
+  });
 
-    test.description = 'invalid first argument type';
-    test.shouldThrowError( function()
-    {
-      _.constant( 1, { a : 'a' } );
-    });
+  test.description = 'invalid first argument type';
+  test.shouldThrowError( function()
+  {
+    _.constant( 1, { a : 'a' } );
+  });
 
-    test.description = 'invalid second argument type';
-    test.shouldThrowError( function()
+  test.description = 'invalid second argument type';
+  test.shouldThrowError( function()
+  {
+    _.constant( {}, [] );
+  });
+
+}
+
+//
+
+function classMake( test )
+{
+  var context = this;
+
+  function test1( o )
+  {
+
+    if( o.ownStatics === undefined )
+    o.ownStatics = 1;
+
+    if( !o.Statics )
+    o.Statics = Statics1;
+
+    if( !o.Extend )
+    o.Extend = Extend1;
+
+    if( !o.keys )
+    o.keys = _.mapKeys( o.Statics );
+
+    if( !o.vals )
+    o.vals = _.mapVals( o.Statics );
+
+    var C0proto = null;
+    if( !o.Class0 )
     {
-      _.constant( {}, [] );
-    });
+      o.Class0 = Function.prototype;
+    }
+    else
+    {
+      C0proto = o.Class0.prototype;
+    }
+
+    test.description = 'presence of valid prototype and constructor fields on class and prototype';
+
+    test.identical( o.Class, o.Class.prototype.constructor );
+    test.identical( Object.getPrototypeOf( o.Class ), o.Class0 );
+    test.identical( Object.getPrototypeOf( o.Class.prototype ), C0proto );
+
+
+    test.description = 'presence of valid static field on class and prototype';
+
+    test.identical( o.Class.instances, o.Class.prototype.instances );
+
+    test.description = 'getting property descriptor of static field from constructor';
+
+    var cd = Object.getOwnPropertyDescriptor( o.Class,'instances' );
+    if( !o.ownStatics )
+    {
+      test.identical( cd, undefined );
+    }
+    else
+    {
+      test.identical( cd.configurable, true );
+      test.identical( cd.enumerable, false );
+      test.shouldBe( !!cd.get );
+      test.shouldBe( !!cd.set );
+    }
+
+    var pd = Object.getOwnPropertyDescriptor( o.Class.prototype,'instances' );
+
+    if( !o.ownStatics )
+    {
+      test.identical( pd, undefined );
+    }
+    else
+    {
+      test.identical( pd.configurable, true );
+      test.identical( pd.enumerable, false );
+      test.shouldBe( !!pd.get );
+      test.shouldBe( !!pd.set );
+    }
+
+    test.description = 'making the first instance';
+
+    var c1a = new o.Class();
+
+    test.description = 'presence of valid static field on all';
+
+    if( o.Class !== C1 && !o.ownStatics )
+    test.shouldBe( o.Class.instances === C1.instances );
+    test.shouldBe( o.Class.instances === o.Class.prototype.instances );
+    test.shouldBe( o.Class.instances === c1a.instances );
+    test.shouldBe( o.Class.instances === o.Statics.instances );
+    test.identical( o.Class.instances.length, o.Statics.instances.length );
+    test.identical( o.Class.instances[ o.Statics.instances.length-1 ], c1a );
+
+    test.description = 'presence of valid prototype and constructor fields on instance';
+
+    test.identical( Object.getPrototypeOf( c1a ), o.Class.prototype );
+    test.identical( c1a.constructor, o.Class );
+
+    test.description = 'presence of valid Statics descriptor';
+
+    test.shouldBe( o.Statics !== o.Class.prototype.Statics );
+    test.shouldBe( o.Statics !== c1a.Statics );
+
+    test.identical( _.mapKeys( c1a.Statics ), o.keys );
+    test.identical( _.mapVals( c1a.Statics ), o.vals );
+    test.identical( o.Class.Statics, undefined );
+    if( !C0proto )
+    {
+      test.identical( o.Class.prototype.Statics, o.Statics );
+      test.identical( c1a.Statics, o.Statics );
+    }
+
+    test.description = 'presence of conflicting fields';
+
+    test.shouldBe( o.Class.prototype.f1 === c1a.f1 );
+    test.shouldBe( o.Class.prototype.f2 === c1a.f2 );
+    test.shouldBe( o.Class.prototype.f3 === c1a.f3 );
+    test.shouldBe( o.Class.prototype.f4 === c1a.f4 );
+
+    test.description = 'making the second instance';
+
+    var c1b = new o.Class();
+    test.identical( o.Class.instances, o.Class.prototype.instances );
+    test.identical( o.Class.instances, c1a.instances );
+    test.identical( o.Class.instances.length, o.Statics.instances.length );
+    test.identical( o.Class.instances[ o.Statics.instances.length-2 ], c1a );
+    test.identical( o.Class.instances[ o.Statics.instances.length-1 ], c1b );
+
+    test.description = 'setting static field with constructor';
+
+    o.Class.instances = o.Class.instances.slice();
+    if( o.Class !== C1 && !o.ownStatics )
+    test.shouldBe( o.Class.instances === C1.instances );
+    test.shouldBe( o.Class.instances === o.Class.prototype.instances );
+    test.shouldBe( o.Class.instances === c1a.instances );
+    test.shouldBe( o.Class.instances === c1b.instances );
+    test.shouldBe( o.Class.instances !== o.Statics.instances );
+    o.Class.instances = Statics1.instances;
+
+    test.description = 'setting static field with prototype';
+
+    o.Class.prototype.instances = o.Class.prototype.instances.slice();
+    if( o.Class !== C1 && !o.ownStatics )
+    test.shouldBe( o.Class.instances === C1.instances );
+    test.shouldBe( o.Class.instances === o.Class.prototype.instances );
+    test.shouldBe( o.Class.instances === c1a.instances );
+    test.shouldBe( o.Class.instances === c1b.instances );
+    test.shouldBe( o.Class.instances !== o.Statics.instances );
+    o.Class.instances = Statics1.instances;
+
+    test.description = 'setting static field with instance';
+
+    c1a.instances = o.Class.instances.slice();
+    if( o.Class !== C1 && !o.ownStatics )
+    test.shouldBe( o.Class.instances === C1.instances );
+    test.shouldBe( o.Class.instances === o.Class.prototype.instances );
+    test.shouldBe( o.Class.instances === c1a.instances );
+    test.shouldBe( o.Class.instances === c1b.instances );
+    test.shouldBe( o.Class.instances !== o.Statics.instances );
+    o.Class.instances = Statics1.instances;
+
   }
+
+  /* */
+
+  function testFields( f3 )
+  {
+
+    test.description = 'presence of conflicting fields in the first class';
+
+    test.shouldBe( Statics1.f1 === C1.f1 );
+    test.shouldBe( Extend1.f1 === C1.prototype.f1 );
+
+    test.shouldBe( Statics1.f2 === C1.f2 );
+    test.shouldBe( Extend1.f2 === C1.prototype.f2 );
+
+    test.shouldBe( f3 === C1.f3 );
+    test.shouldBe( f3 === C1.prototype.f3 );
+
+    test.shouldBe( Statics1.f4 === undefined );
+    test.shouldBe( Statics1.f4 === C1.f4 );
+    test.shouldBe( Extend1.f4 === C1.prototype.f4 );
+
+    var d = Object.getOwnPropertyDescriptor( C1,'f1' );
+    test.shouldBe( d.enumerable === false );
+    test.shouldBe( d.configurable === true );
+    test.shouldBe( !!d.get );
+    test.shouldBe( !!d.set );
+
+    var d = Object.getOwnPropertyDescriptor( C1.prototype,'f1' );
+    test.shouldBe( d.enumerable === true );
+    test.shouldBe( d.configurable === true );
+    test.shouldBe( d.writable === true );
+    test.shouldBe( !!d.value );
+
+    var d = Object.getOwnPropertyDescriptor( C1,'f2' );
+    test.shouldBe( d.enumerable === false );
+    test.shouldBe( d.configurable === true );
+    test.shouldBe( !!d.get );
+    test.shouldBe( !!d.set );
+
+    var d = Object.getOwnPropertyDescriptor( C1.prototype,'f2' );
+    test.shouldBe( d.enumerable === true );
+    test.shouldBe( d.configurable === true );
+    test.shouldBe( d.writable === true );
+    test.shouldBe( !!d.value );
+
+    var d = Object.getOwnPropertyDescriptor( C1,'f3' );
+    test.shouldBe( d.enumerable === false );
+    test.shouldBe( d.configurable === true );
+    test.shouldBe( !!d.get );
+    test.shouldBe( !!d.set );
+
+    var d = Object.getOwnPropertyDescriptor( C1.prototype,'f3' );
+    test.shouldBe( d.enumerable === false );
+    test.shouldBe( d.configurable === true );
+    test.shouldBe( !!d.get );
+    test.shouldBe( !!d.set );
+
+    var d = Object.getOwnPropertyDescriptor( C1,'f4' );
+    test.shouldBe( !d );
+
+    var d = Object.getOwnPropertyDescriptor( C1.prototype,'f4' );
+    test.shouldBe( d.enumerable === true );
+    test.shouldBe( d.configurable === true );
+    test.shouldBe( d.writable === true );
+    test.shouldBe( !!d.value );
+
+  }
+
+  /* */
+/*
+  var Statics2 =
+  {
+    instances : [],
+    f1 : [],
+    f4 : [],
+  }
+  var Extend2 =
+  {
+    Statics : Statics2,
+    Associates : Associates,
+    f2 : [],
+    f3 : [],
+  }
+*/
+  function testFields2()
+  {
+
+    test.description = 'presence of conflicting fields in the second class';
+
+    test.shouldBe( Statics2.f1 === Cextend.f1 );
+    test.shouldBe( Statics2.f1 === Cextend.prototype.f1 );
+
+    test.shouldBe( Statics1.f2 === Cextend.f2 );
+    test.shouldBe( Extend2.f2 === Cextend.prototype.f2 );
+
+    test.shouldBe( Extend2.f3 === Cextend.f3 );
+    test.shouldBe( Extend2.f3 === Cextend.prototype.f3 );
+
+    test.shouldBe( Statics2.f4 === Cextend.f4 );
+    test.shouldBe( Statics2.f4 === Cextend.prototype.f4 );
+
+    var d = Object.getOwnPropertyDescriptor( Cextend,'f1' );
+    test.shouldBe( d.enumerable === false );
+    test.shouldBe( d.configurable === true );
+    test.shouldBe( !!d.get );
+    test.shouldBe( !!d.set );
+
+    var d = Object.getOwnPropertyDescriptor( Cextend.prototype,'f1' );
+    test.shouldBe( d.enumerable === false );
+    test.shouldBe( d.configurable === true );
+    test.shouldBe( !!d.get );
+    test.shouldBe( !!d.set );
+
+    var d = Object.getOwnPropertyDescriptor( Cextend,'f2' );
+    test.shouldBe( !d );
+
+    var d = Object.getOwnPropertyDescriptor( Cextend.prototype,'f2' );
+    test.shouldBe( d.enumerable === true );
+    test.shouldBe( d.configurable === true );
+    test.shouldBe( d.writable === true );
+    test.shouldBe( !!d.value );
+
+    var d = Object.getOwnPropertyDescriptor( Cextend,'f3' );
+    test.shouldBe( !d );
+
+    var d = Object.getOwnPropertyDescriptor( Cextend.prototype,'f3' );
+    test.shouldBe( !d );
+
+    var d = Object.getOwnPropertyDescriptor( Cextend,'f4' );
+    test.shouldBe( d.enumerable === false );
+    test.shouldBe( d.configurable === true );
+    test.shouldBe( !!d.get );
+    test.shouldBe( !!d.set );
+
+    var d = Object.getOwnPropertyDescriptor( Cextend.prototype,'f4' );
+    test.shouldBe( d.enumerable === false );
+    test.shouldBe( d.configurable === true );
+    test.shouldBe( !!d.get );
+    test.shouldBe( !!d.set );
+
+  }
+
+  /* */
+
+  test.description = 'first classMake';
+
+  function C1()
+  {
+    this.instances.push( this );
+  }
+  var Statics1 =
+  {
+    instances : [],
+    f1 : [],
+    f2 : [],
+    f3 : [],
+  }
+  var Extend1 =
+  {
+    Statics : Statics1,
+    f1 : [],
+    f2 : [],
+    f4 : [],
+  }
+  var classMade = _.classMake
+  ({
+    cls : C1,
+    parent : null,
+    extend : Extend1,
+  });
+
+  test.identical( C1,classMade );
+  test.shouldBe( C1.instances === Statics1.instances );
+  test1({ Class : C1 });
+  testFields( Statics1.f3 );
+
+  /* */
+
+  test.description = 'classMake with parent';
+
+  function C2()
+  {
+    C1.call( this );
+  }
+  var classMade = _.classMake
+  ({
+    cls : C2,
+    parent : C1,
+  });
+
+  test.identical( C2,classMade );
+
+  test1({ Class : C1, Statics : Statics1 });
+  test1({ Class : C2, Class0 : C1, Statics : Statics1, ownStatics : 0 });
+
+  /* */
+
+  test.description = 'classMake with supplement';
+
+  function Csupplement()
+  {
+    C1.call( this );
+  }
+  var Statics2 =
+  {
+    instances : [],
+  }
+  var classMade = _.classMake
+  ({
+    cls : Csupplement,
+    parent : C1,
+    supplement : { Statics : Statics2 },
+  });
+
+  test.identical( Csupplement,classMade );
+
+  test1({ Class : C1, Statics : Statics1 });
+  test1({ Class : Csupplement, Class0 : C1, Statics : Statics1, ownStatics : 0 });
+
+  /* */
+
+  test.description = 'classMake with extend';
+
+  function Cextend()
+  {
+    C1.call( this );
+  }
+  var Associates =
+  {
+  }
+  var Statics2 =
+  {
+    instances : [],
+    f1 : [],
+    f4 : [],
+  }
+  var Extend2 =
+  {
+    Statics : Statics2,
+    Associates : Associates,
+    f2 : [],
+    f3 : [],
+  }
+  var classMade = _.classMake
+  ({
+    cls : Cextend,
+    parent : C1,
+    extend : Extend2,
+  });
+
+  test.identical( Cextend,classMade );
+
+  testFields( Extend2.f3 );
+  testFields2();
+
+  test1({ Class : C1, Statics : Statics1 });
+  test1
+  ({
+    Class : Cextend,
+    Class0 : C1,
+    Statics : Statics2,
+    Extend : Extend2,
+    keys : [ 'instances', 'f1', 'f4', 'f2', 'f3' ],
+    vals : [ Cextend.instances, Cextend.f1, Cextend.f4, C1.f2, C1.f3 ],
+  });
+
 }
 
 // --
@@ -598,11 +1025,12 @@ var Self =
     constructorIs : constructorIs,
     prototypeIsStandard : prototypeIsStandard,
 
-    _accessorOptions : _accessorOptions,
     accessor : accessor,
     accessorForbid : accessorForbid,
     accessorReadOnly : accessorReadOnly,
-    constant : constant
+    constant : constant,
+
+    classMake : classMake,
 
   },
 
@@ -614,4 +1042,4 @@ Self = wTestSuit( Self );
 if( typeof module !== 'undefined' && !module.parent )
 _.Tester.test( Self.name );
 
-} )( );
+})();
