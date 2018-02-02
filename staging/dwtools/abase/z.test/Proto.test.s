@@ -636,7 +636,7 @@ function classMake( test )
     else
     {
       test.identical( cd.configurable, true );
-      test.identical( cd.enumerable, false );
+      test.identical( cd.enumerable, true );
       test.shouldBe( !!cd.get );
       test.shouldBe( !!cd.set );
     }
@@ -760,10 +760,10 @@ function classMake( test )
     test.shouldBe( Extend1.f4 === C1.prototype.f4 );
 
     var d = Object.getOwnPropertyDescriptor( C1,'f1' );
-    test.shouldBe( d.enumerable === false );
+    test.shouldBe( d.enumerable === true );
     test.shouldBe( d.configurable === true );
-    test.shouldBe( !!d.get );
-    test.shouldBe( !!d.set );
+    test.shouldBe( d.writable === true );
+    test.shouldBe( !!d.value );
 
     var d = Object.getOwnPropertyDescriptor( C1.prototype,'f1' );
     test.shouldBe( d.enumerable === true );
@@ -772,10 +772,10 @@ function classMake( test )
     test.shouldBe( !!d.value );
 
     var d = Object.getOwnPropertyDescriptor( C1,'f2' );
-    test.shouldBe( d.enumerable === false );
+    test.shouldBe( d.enumerable === true );
     test.shouldBe( d.configurable === true );
-    test.shouldBe( !!d.get );
-    test.shouldBe( !!d.set );
+    test.shouldBe( d.writable === true );
+    test.shouldBe( !!d.value );
 
     var d = Object.getOwnPropertyDescriptor( C1.prototype,'f2' );
     test.shouldBe( d.enumerable === true );
@@ -784,7 +784,7 @@ function classMake( test )
     test.shouldBe( !!d.value );
 
     var d = Object.getOwnPropertyDescriptor( C1,'f3' );
-    test.shouldBe( d.enumerable === false );
+    test.shouldBe( d.enumerable === true );
     test.shouldBe( d.configurable === true );
     test.shouldBe( !!d.get );
     test.shouldBe( !!d.set );
@@ -807,6 +807,107 @@ function classMake( test )
   }
 
   /* */
+
+  function testFields2()
+  {
+
+    test.description = 'presence of conflicting fields in the second class';
+
+    test.shouldBe( Statics2.f1 === C3.f1 );
+    test.shouldBe( Statics2.f1 === C3.prototype.f1 );
+
+    test.shouldBe( Statics1.f2 === C3.f2 );
+    test.shouldBe( Extend2.f2 === C3.prototype.f2 );
+
+    test.shouldBe( Extend2.f3 === C3.f3 );
+    test.shouldBe( Extend2.f3 === C3.prototype.f3 );
+
+    test.shouldBe( Statics2.f4 === C3.f4 );
+    test.shouldBe( Statics2.f4 === C3.prototype.f4 );
+
+    var d = Object.getOwnPropertyDescriptor( C3,'f1' );
+    test.shouldBe( d.enumerable === true );
+    test.shouldBe( d.configurable === true );
+    test.shouldBe( !!d.get );
+    test.shouldBe( !!d.set );
+
+    var d = Object.getOwnPropertyDescriptor( C3.prototype,'f1' );
+    test.shouldBe( d.enumerable === false );
+    test.shouldBe( d.configurable === true );
+    test.shouldBe( !!d.get );
+    test.shouldBe( !!d.set );
+
+    var d = Object.getOwnPropertyDescriptor( C3,'f2' );
+    test.shouldBe( !d );
+
+    var d = Object.getOwnPropertyDescriptor( C3.prototype,'f2' );
+    test.shouldBe( d.enumerable === true );
+    test.shouldBe( d.configurable === true );
+    test.shouldBe( d.writable === true );
+    test.shouldBe( !!d.value );
+
+    var d = Object.getOwnPropertyDescriptor( C3,'f3' );
+    test.shouldBe( !d );
+
+    var d = Object.getOwnPropertyDescriptor( C3.prototype,'f3' );
+    test.shouldBe( !d );
+
+    var d = Object.getOwnPropertyDescriptor( C3,'f4' );
+    test.shouldBe( d.enumerable === true );
+    test.shouldBe( d.configurable === true );
+    test.shouldBe( !!d.get );
+    test.shouldBe( !!d.set );
+
+    var d = Object.getOwnPropertyDescriptor( C3.prototype,'f4' );
+    test.shouldBe( d.enumerable === false );
+    test.shouldBe( d.configurable === true );
+    test.shouldBe( !!d.get );
+    test.shouldBe( !!d.set );
+
+    test.description = 'assigning static fields';
+
+    C1.f1 = 1;
+    C1.f2 = 2;
+    C1.f3 = 3;
+    C1.f4 = 4;
+
+    C1.prototype.f1 = 11;
+    C1.prototype.f2 = 12;
+    C1.prototype.f3 = 13;
+    C1.prototype.f4 = 14;
+
+    C2.f1 = 21;
+    C2.f2 = 22;
+    C2.f3 = 23;
+    C2.f4 = 24;
+
+    C2.prototype.f1 = 31;
+    C2.prototype.f2 = 32;
+    C2.prototype.f3 = 33;
+    C2.prototype.f4 = 34;
+
+    test.identical( C1.f1,1 );
+    test.identical( C1.f2,2 );
+    test.identical( C1.f3,33 );
+    test.identical( C1.f4,4 );
+
+    test.identical( C1.prototype.f1,11 );
+    test.identical( C1.prototype.f2,12 );
+    test.identical( C1.prototype.f3,33 );
+    test.identical( C1.prototype.f4,14 );
+
+    test.identical( C2.f1,21 );
+    test.identical( C2.f2,22 );
+    test.identical( C2.f3,33 );
+    test.identical( C2.f4,24 );
+
+    test.identical( C2.prototype.f1,31 );
+    test.identical( C2.prototype.f2,32 );
+    test.identical( C2.prototype.f3,33 );
+    test.identical( C2.prototype.f4,34 );
+
+  }
+
 /*
   var Statics2 =
   {
@@ -822,63 +923,6 @@ function classMake( test )
     f3 : [],
   }
 */
-  function testFields2()
-  {
-
-    test.description = 'presence of conflicting fields in the second class';
-
-    test.shouldBe( Statics2.f1 === Cextend.f1 );
-    test.shouldBe( Statics2.f1 === Cextend.prototype.f1 );
-
-    test.shouldBe( Statics1.f2 === Cextend.f2 );
-    test.shouldBe( Extend2.f2 === Cextend.prototype.f2 );
-
-    test.shouldBe( Extend2.f3 === Cextend.f3 );
-    test.shouldBe( Extend2.f3 === Cextend.prototype.f3 );
-
-    test.shouldBe( Statics2.f4 === Cextend.f4 );
-    test.shouldBe( Statics2.f4 === Cextend.prototype.f4 );
-
-    var d = Object.getOwnPropertyDescriptor( Cextend,'f1' );
-    test.shouldBe( d.enumerable === false );
-    test.shouldBe( d.configurable === true );
-    test.shouldBe( !!d.get );
-    test.shouldBe( !!d.set );
-
-    var d = Object.getOwnPropertyDescriptor( Cextend.prototype,'f1' );
-    test.shouldBe( d.enumerable === false );
-    test.shouldBe( d.configurable === true );
-    test.shouldBe( !!d.get );
-    test.shouldBe( !!d.set );
-
-    var d = Object.getOwnPropertyDescriptor( Cextend,'f2' );
-    test.shouldBe( !d );
-
-    var d = Object.getOwnPropertyDescriptor( Cextend.prototype,'f2' );
-    test.shouldBe( d.enumerable === true );
-    test.shouldBe( d.configurable === true );
-    test.shouldBe( d.writable === true );
-    test.shouldBe( !!d.value );
-
-    var d = Object.getOwnPropertyDescriptor( Cextend,'f3' );
-    test.shouldBe( !d );
-
-    var d = Object.getOwnPropertyDescriptor( Cextend.prototype,'f3' );
-    test.shouldBe( !d );
-
-    var d = Object.getOwnPropertyDescriptor( Cextend,'f4' );
-    test.shouldBe( d.enumerable === false );
-    test.shouldBe( d.configurable === true );
-    test.shouldBe( !!d.get );
-    test.shouldBe( !!d.set );
-
-    var d = Object.getOwnPropertyDescriptor( Cextend.prototype,'f4' );
-    test.shouldBe( d.enumerable === false );
-    test.shouldBe( d.configurable === true );
-    test.shouldBe( !!d.get );
-    test.shouldBe( !!d.set );
-
-  }
 
   /* */
 
@@ -961,7 +1005,7 @@ function classMake( test )
 
   test.description = 'classMake with extend';
 
-  function Cextend()
+  function C3()
   {
     C1.call( this );
   }
@@ -983,25 +1027,63 @@ function classMake( test )
   }
   var classMade = _.classMake
   ({
-    cls : Cextend,
+    cls : C3,
     parent : C1,
     extend : Extend2,
+    allowingExtendStatics : 1,
   });
 
-  test.identical( Cextend,classMade );
-
-  testFields( Extend2.f3 );
-  testFields2();
+  test.identical( C3,classMade );
 
   test1({ Class : C1, Statics : Statics1 });
   test1
   ({
-    Class : Cextend,
+    Class : C3,
     Class0 : C1,
     Statics : Statics2,
     Extend : Extend2,
     keys : [ 'instances', 'f1', 'f4', 'f2', 'f3' ],
-    vals : [ Cextend.instances, Cextend.f1, Cextend.f4, C1.f2, C1.f3 ],
+    vals : [ C3.instances, C3.f1, C3.f4, C1.f2, C1.f3 ],
+  });
+
+  testFields( Extend2.f3 );
+  testFields2();
+
+  if( !Config.debug )
+  return;
+
+  test.description = 'attempt to extend statics without order';
+
+  test.shouldThrowError( function()
+  {
+
+    function C3()
+    {
+      C1.call( this );
+    }
+    var Associates =
+    {
+    }
+    var Statics2 =
+    {
+      instances : [],
+      f1 : [],
+      f4 : [],
+    }
+    var Extend2 =
+    {
+      Statics : Statics2,
+      Associates : Associates,
+      f2 : [],
+      f3 : [],
+    }
+    var classMade = _.classMake
+    ({
+      cls : C3,
+      parent : C1,
+      extend : Extend2,
+    });
+
   });
 
 }

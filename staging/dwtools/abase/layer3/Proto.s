@@ -2224,7 +2224,8 @@ function classMake( o )
       stretch : o.stretch,
       supplement : o.supplement,
       usingAtomicExtension : o.usingAtomicExtension,
-      usingStatics : 0,
+      usingStatics : 1,
+      allowingExtendStatics : o.allowingExtendStatics,
     });
 
     /* statics */
@@ -2272,12 +2273,13 @@ function classMake( o )
     // if( o.withClass )
     // mixinOptions = _.mapSupplement( mixinOptions.cls,mixinOptions );
 
-    delete mixinOptions.usingAtomicExtension;
-    delete mixinOptions.usingOriginalPrototype;
     delete mixinOptions.parent;
     delete mixinOptions.cls;
     delete mixinOptions.withMixin;
     delete mixinOptions.withClass;
+    delete mixinOptions.usingAtomicExtension;
+    delete mixinOptions.usingOriginalPrototype;
+    delete mixinOptions.allowingExtendStatics;
 
     mixinOptions.prototype = prototype;
 
@@ -2322,6 +2324,7 @@ classMake.defaults =
 
   usingAtomicExtension : false,
   usingOriginalPrototype : false,
+  allowingExtendStatics : false,
 
   withMixin : false,
   withClass : true,
@@ -2437,12 +2440,6 @@ function classExtend( o )
         dstNotOwn : dstNotOwn,
       });
 
-      // if( f === 'Events' )
-      // continue;
-      //
-      // if( f === 'Statics' )
-      // continue;
-
       if( !_.ClassSubfieldsGroupsRelationships[ f ] )
       continue;
 
@@ -2469,6 +2466,24 @@ function classExtend( o )
   if( !o.cls )
   o.cls = _._classConstructorAndPrototypeGet( o ).cls;
 
+  var StaticsOwn = _.mapOwnProperties( o.prototype.Statics );
+  function ordinaryExtend( extend,src )
+  {
+    var map = _.mapBut( src,_.ClassSubfieldsGroups );
+    extend( o.prototype,map );
+    if( Config.debug )
+    if( !o.allowingExtendStatics )
+    if( Object.getPrototypeOf( o.prototype.Statics ) )
+    {
+      map = _.mapBut( map,StaticsOwn );
+      var keys = _.mapKeys( _.mapScreen( Object.getPrototypeOf( o.prototype.Statics ), map ) );
+      if( keys.length )
+      {
+        _.assert( 0,'attempt to extend static field',keys );
+      }
+    }
+  }
+
 /*
 
 to prioritize ordinary facets adjustment order should be
@@ -2494,45 +2509,44 @@ to prioritize ordinary facets adjustment order should be
 
   if( o.extend )
   {
-    if( o.extend.f2 )
-    debugger;
-    var extend = _.mapBut( o.extend,_.ClassSubfieldsGroups );
-    _.mapExtend( o.prototype,extend );
-    if( o.cls )
-    if( _hasOwnProperty.call( o.extend,'constructor' ) )
-    o.prototype.constructor = o.extend.constructor;
+    ordinaryExtend( _.mapExtend, o.extend );
+    // if( o.cls )
+    // if( _hasOwnProperty.call( o.extend,'constructor' ) )
+    // o.prototype.constructor = o.extend.constructor;
   }
 
   /* ordinary stretch */
 
   if( o.stretch )
   {
-    var extend = _.mapBut( o.stretch,_.ClassSubfieldsGroups );
-    _.mapStretch( o.prototype,extend );
-    if( o.cls )
-    if( _hasOwnProperty.call( o.stretch,'constructor' ) )
-    o.prototype.constructor = o.stretch.constructor;
+    ordinaryExtend( _.mapStretch, o.stretch );
+    // if( o.cls )
+    // if( _hasOwnProperty.call( o.stretch,'constructor' ) )
+    // if( !_hasOwnProperty.call( o.prototype,'constructor' ) )
+    // o.prototype.constructor = o.stretch.constructor;
   }
 
   /* ordinary supplement */
 
   if( o.supplement )
   {
-    var supplement = _.mapBut( o.supplement,_.ClassSubfieldsGroups );
-    _.mapSupplement( o.prototype,supplement );
-    if( o.cls )
-    if( !_hasOwnProperty.call( o.prototype,'constructor' ) )
-    if( _hasOwnProperty.call( o.supplement,'constructor' ) )
-    o.prototype.constructor = o.supplement.constructor;
+    // if( o.prototype.className === 'gScene' )
+    // debugger;
+    ordinaryExtend( _.mapSupplement, o.supplement );
+    // if( o.cls )
+    // if( _hasOwnProperty.call( o.stretch,'constructor' ) )
+    // if( !o.prototype.constructor )
+    // o.prototype.constructor = o.stretch.constructor;
   }
 
-  /* static extend dst not own */
+  /* static stretch */
 
+  if( !o.prototype.constructor )
   if( o.usingStatics && o.stretch && o.stretch.Statics )
   {
-    _.mapExtendConditional( _.field.mapper.dstNotOwn, o.prototype, o.stretch.Statics );
+    _.mapStretch( o.prototype, o.stretch.Statics );
     if( o.cls )
-    _.mapExtendConditional( _.field.mapper.dstNotOwn, o.cls, o.stretch.Statics );
+    _.mapStretch( o.cls, o.stretch.Statics );
   }
 
   /* static supplement */
@@ -2575,6 +2589,7 @@ to prioritize ordinary facets adjustment order should be
 
   /* statics */
 
+  if( o.usingStatics )
   if( o.prototype.constructor )
   for( var _s in o.prototype.Statics ) (function()
   {
@@ -2622,26 +2637,40 @@ to prioritize ordinary facets adjustment order should be
 
     if( !pd.descriptor )
     {
-      o.prototype[ symbol ] = value;
-      Object.defineProperty( o.prototype, s,
+      if( cd.descriptor )
       {
-        set : function( src ){ prototype[ symbol ] = src; prototype.constructor[ symbol] = src; },
-        get : function(){ return this[ symbol ]; },
-        enumerable : false,
-        configurable : true,
-      });
+        o.prototype[ s ] = value;
+      }
+      else
+      {
+        o.prototype[ symbol ] = value;
+        Object.defineProperty( o.prototype, s,
+        {
+          set : function( src ){ prototype[ symbol ] = src; prototype.constructor[ symbol] = src; },
+          get : function(){ return this[ symbol ]; },
+          enumerable : false,
+          configurable : true,
+        });
+      }
     }
 
     if( !cd.descriptor )
     {
-      o.prototype.constructor[ symbol ] = value;
-      Object.defineProperty( o.prototype.constructor, s,
+      if( pd.descriptor )
       {
-        set : function( src ){ prototype[ symbol ] = src; prototype.constructor[ symbol] = src; },
-        get : function(){ return this[ symbol ]; },
-        enumerable : false,
-        configurable : true,
-      });
+        o.prototype.constructor[ s ] = value;
+      }
+      else
+      {
+        o.prototype.constructor[ symbol ] = value;
+        Object.defineProperty( o.prototype.constructor, s,
+        {
+          set : function( src ){ prototype[ symbol ] = src; prototype.constructor[ symbol] = src; },
+          get : function(){ return this[ symbol ]; },
+          enumerable : true,
+          configurable : true,
+        });
+      }
     }
 
   })();
@@ -2678,8 +2707,9 @@ classExtend.defaults =
   supplement : null,
   functor : null,
 
-  usingStatics : 1,
-  usingAtomicExtension : 0,
+  usingStatics : true,
+  usingAtomicExtension : false,
+  allowingExtendStatics : false,
 }
 
 //
