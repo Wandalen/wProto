@@ -1643,11 +1643,11 @@ function setterMapCollection_functor( o )
   var symbol = Symbol.for( o.name );
   var elementMaker = o.elementMaker;
 
-  return function _setterMapCollection( data )
+  return function _setterMapCollection( src )
   {
     var self = this;
 
-    _.assert( _.objectIs( data ) );
+    _.assert( _.objectIs( src ) );
 
     if( self[ symbol ] )
     {
@@ -1663,16 +1663,65 @@ function setterMapCollection_functor( o )
 
     }
 
-    for( var d in data )
+    for( var d in src )
     {
-      self[ symbol ][ d ] = elementMaker.call( self,data[ d ] );
+      self[ symbol ][ d ] = elementMaker.call( self,src[ d ] );
     }
 
+    return self[ symbol ];
   }
 
 }
 
 setterMapCollection_functor.defaults =
+{
+  name : null,
+  elementMaker : null,
+}
+
+//
+
+function setterArrayCollection_functor( o )
+{
+
+  _.assertMapHasOnly( o,setterArrayCollection_functor.defaults );
+  _.assert( _.strIs( o.name ) );
+  var symbol = Symbol.for( o.name );
+  var elementMaker = o.elementMaker;
+
+  return function _setterMapCollection( src )
+  {
+    var self = this;
+
+    _.assert( _.arrayIs( src ) );
+
+    if( self[ symbol ] === src )
+    return;
+
+    if( self[ symbol ] )
+    {
+
+      self[ symbol ].splice( 0,self[ symbol ].length );
+
+    }
+    else
+    {
+
+      self[ symbol ] = [];
+
+    }
+
+    for( var d = 0 ; d < src.length ; d++ )
+    {
+      self[ symbol ].push( elementMaker.call( self,src[ d ] ) );
+    }
+
+    return self[ symbol ];
+  }
+
+}
+
+setterArrayCollection_functor.defaults =
 {
   name : null,
   elementMaker : null,
@@ -1727,11 +1776,10 @@ function setterFriend_functor( o )
     else
     {
 
+      if( self[ symbol ] !== src )
       self[ symbol ].copy( src );
 
     }
-
-    // self[ symbol ].copy( src );
 
     if( self[ symbol ][ nameOfLink ] !== self )
     self[ symbol ][ nameOfLink ] = self;
@@ -1764,8 +1812,15 @@ function setterCopyable_functor( o )
 
   return function setterCopyable( data )
   {
-
     var self = this;
+
+    if( data === null )
+    {
+      if( self[ symbol ] && self[ symbol ].finit )
+      self[ symbol ].finit();
+      self[ symbol ] = null;
+      return self[ symbol ];
+    }
 
     if( !_.objectIs( self[ symbol ] ) )
     {
@@ -1776,6 +1831,7 @@ function setterCopyable_functor( o )
     else
     {
 
+      if( self[ symbol ] !== data )
       self[ symbol ].copy( data );
 
     }
@@ -3078,6 +3134,25 @@ function prototypeAllFieldsGet( src )
 
 //
 
+function prototypePrintableFieldsGet( src )
+{
+  var prototype = _.prototypeGet( src );
+  var result = Object.create( null );
+
+  _.assert( _.prototypeIs( src ) || _.constructorIs( src ) );
+  _.assert( _.prototypeIsStandard( prototype ),'expects standard prototype' );
+  _.assert( arguments.length === 1 );
+
+  if( prototype.Composes )
+  _.mapExtend( result,prototype.Composes );
+  if( prototype.Aggregates )
+  _.mapExtend( result,prototype.Aggregates );
+
+  return result;
+}
+
+//
+
 function prototypeCopyableFieldsGet( src )
 {
   var prototype = _.prototypeGet( src );
@@ -3324,10 +3399,11 @@ function instanceFilterInit( o )
   _.instanceInit( result,o.cls.prototype );
 
   if( o.args[ 0 ] )
-  _.Copyable.prototype.copyCustom.call( result,
+  _.Copyable.prototype.copyCustom.call( o.cls.prototype,
   {
     proto : o.cls.prototype,
     src : o.args[ 0 ],
+    dst : result,
     technique : 'object',
   });
 
@@ -3615,6 +3691,8 @@ var Proto =
   // getter / setter functor
 
   setterMapCollection_functor : setterMapCollection_functor,
+  setterArrayCollection_functor : setterArrayCollection_functor,
+
   setterFriend_functor : setterFriend_functor,
   setterCopyable_functor : setterCopyable_functor,
   setterBufferFrom_functor : setterBufferFrom_functor,
@@ -3651,6 +3729,7 @@ var Proto =
   prototypeEach : prototypeEach,
 
   prototypeAllFieldsGet : prototypeAllFieldsGet,
+  prototypePrintableFieldsGet : prototypePrintableFieldsGet,
   prototypeCopyableFieldsGet : prototypeCopyableFieldsGet,
   prototypeHasField : prototypeHasField,
 
