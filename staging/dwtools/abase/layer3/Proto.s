@@ -50,7 +50,7 @@ if( typeof module !== 'undefined' )
     let toolsExternal = 0;
     try
     {
-      require.resolve( toolsPath )/*hhh*/;
+      require.resolve( toolsPath );
     }
     catch( err )
     {
@@ -58,7 +58,7 @@ if( typeof module !== 'undefined' )
       require( 'wTools' );
     }
     if( !toolsExternal )
-    require( toolsPath )/*hhh*/;
+    require( toolsPath );
   }
 
   if( !_global_.wTools.nameFielded )
@@ -742,8 +742,7 @@ function accessorForbid()
     if( o.strict )
     if( _hasOwnProperty.call( object,encodedName ) )
     {
-      var descriptor = Object.getOwnPropertyDescriptor( object,encodedName );
-      if( _.routineIs( descriptor.get ) && descriptor.get.isForbid )
+      if( _.accessorForbidOwn( object,encodedName ) )
       {
         delete names[ encodedName ];
         return;
@@ -753,6 +752,32 @@ function accessorForbid()
         handler();
       }
     }
+
+    // if( o.strict )
+    // if( _.accessorForbidOwn( object,encodedName ) )
+    // {
+    //   delete names[ encodedName ];
+    //   return;
+    // }
+    // else
+    // {
+    //   handler();
+    // }
+
+    // if( o.strict )
+    // if( _hasOwnProperty.call( object,encodedName ) )
+    // {
+    //   var descriptor = Object.getOwnPropertyDescriptor( object,encodedName );
+    //   if( _.routineIs( descriptor.get ) && descriptor.get.isForbid )
+    //   {
+    //     delete names[ encodedName ];
+    //     return;
+    //   }
+    //   else
+    //   {
+    //     handler();
+    //   }
+    // }
 
     /* descendant */
 
@@ -820,6 +845,25 @@ accessorForbid.defaults =
 }
 
 accessorForbid.defaults.__proto__ = _accessor.defaults;
+
+//
+
+function accessorForbidOwn( object,name )
+{
+  if( !_hasOwnProperty.call( object,name ) )
+  return false;
+
+  var descriptor = Object.getOwnPropertyDescriptor( object,name );
+  if( _.routineIs( descriptor.get ) && descriptor.get.isForbid )
+  {
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+
+}
 
 //
 
@@ -1640,8 +1684,18 @@ function setterMapCollection_functor( o )
 
   _.assertMapHasOnly( o,setterMapCollection_functor.defaults );
   _.assert( _.strIs( o.name ) );
+  _.assert( _.routineIs( o.elementMaker ) );
   var symbol = Symbol.for( o.name );
+  var elementMakerOriginal = o.elementMaker;
   var elementMaker = o.elementMaker;
+  var friendField = o.friendField;
+
+  if( friendField )
+  elementMaker = function elementMaker( src )
+  {
+    src[ friendField ] = this;
+    return elementMakerOriginal.call( this,src );
+  }
 
   return function _setterMapCollection( src )
   {
@@ -1652,6 +1706,7 @@ function setterMapCollection_functor( o )
     if( self[ symbol ] )
     {
 
+      if( src !== self[ symbol ] )
       for( var d in self[ symbol ] )
       delete self[ symbol ][ d ];
 
@@ -1665,6 +1720,7 @@ function setterMapCollection_functor( o )
 
     for( var d in src )
     {
+      if( src[ d ] !== null )
       self[ symbol ][ d ] = elementMaker.call( self,src[ d ] );
     }
 
@@ -1677,6 +1733,7 @@ setterMapCollection_functor.defaults =
 {
   name : null,
   elementMaker : null,
+  friendField : null,
 }
 
 //
@@ -1684,10 +1741,20 @@ setterMapCollection_functor.defaults =
 function setterArrayCollection_functor( o )
 {
 
-  _.assertMapHasOnly( o,setterArrayCollection_functor.defaults );
+  _.assertMapHasOnly( o,setterMapCollection_functor.defaults );
   _.assert( _.strIs( o.name ) );
+  _.assert( _.routineIs( o.elementMaker ) );
   var symbol = Symbol.for( o.name );
+  var elementMakerOriginal = o.elementMaker;
   var elementMaker = o.elementMaker;
+  var friendField = o.friendField;
+
+  if( friendField )
+  elementMaker = function elementMaker( src )
+  {
+    src[ friendField ] = this;
+    return elementMakerOriginal.call( this,src );
+  }
 
   return function _setterMapCollection( src )
   {
@@ -1695,12 +1762,10 @@ function setterArrayCollection_functor( o )
 
     _.assert( _.arrayIs( src ) );
 
-    if( self[ symbol ] === src )
-    return;
-
     if( self[ symbol ] )
     {
 
+      if( src !== self[ symbol ] )
       self[ symbol ].splice( 0,self[ symbol ].length );
 
     }
@@ -1711,9 +1776,16 @@ function setterArrayCollection_functor( o )
 
     }
 
+    if( src !== self[ symbol ] )
     for( var d = 0 ; d < src.length ; d++ )
     {
+      if( src[ d ] !== null )
       self[ symbol ].push( elementMaker.call( self,src[ d ] ) );
+    }
+    else for( var d = 0 ; d < src.length ; d++ )
+    {
+      if( src[ d ] !== null )
+      src[ d ] = elementMaker.call( self,src[ d ] );
     }
 
     return self[ symbol ];
@@ -1725,6 +1797,7 @@ setterArrayCollection_functor.defaults =
 {
   name : null,
   elementMaker : null,
+  friendField : null,
 }
 
 //
@@ -3134,25 +3207,6 @@ function prototypeAllFieldsGet( src )
 
 //
 
-function prototypePrintableFieldsGet( src )
-{
-  var prototype = _.prototypeGet( src );
-  var result = Object.create( null );
-
-  _.assert( _.prototypeIs( src ) || _.constructorIs( src ) );
-  _.assert( _.prototypeIsStandard( prototype ),'expects standard prototype' );
-  _.assert( arguments.length === 1 );
-
-  if( prototype.Composes )
-  _.mapExtend( result,prototype.Composes );
-  if( prototype.Aggregates )
-  _.mapExtend( result,prototype.Aggregates );
-
-  return result;
-}
-
-//
-
 function prototypeCopyableFieldsGet( src )
 {
   var prototype = _.prototypeGet( src );
@@ -3168,6 +3222,25 @@ function prototypeCopyableFieldsGet( src )
   _.mapExtend( result,prototype.Aggregates );
   if( prototype.Associates )
   _.mapExtend( result,prototype.Associates );
+
+  return result;
+}
+
+//
+
+function prototypeLoggableFieldsGet( src )
+{
+  var prototype = _.prototypeGet( src );
+  var result = Object.create( null );
+
+  _.assert( _.prototypeIs( src ) || _.constructorIs( src ) );
+  _.assert( _.prototypeIsStandard( prototype ),'expects standard prototype' );
+  _.assert( arguments.length === 1 );
+
+  if( prototype.Composes )
+  _.mapExtend( result,prototype.Composes );
+  if( prototype.Aggregates )
+  _.mapExtend( result,prototype.Aggregates );
 
   return result;
 }
@@ -3645,6 +3718,7 @@ var Proto =
 
   accessor : accessor,
   accessorForbid : accessorForbid,
+  accessorForbidOwn : accessorForbidOwn,
   accessorReadOnly : accessorReadOnly,
 
   accessorsSupplement : accessorsSupplement,
@@ -3729,10 +3803,10 @@ var Proto =
   prototypeEach : prototypeEach,
 
   prototypeAllFieldsGet : prototypeAllFieldsGet,
-  prototypePrintableFieldsGet : prototypePrintableFieldsGet,
   prototypeCopyableFieldsGet : prototypeCopyableFieldsGet,
-  prototypeHasField : prototypeHasField,
+  prototypeLoggableFieldsGet : prototypeLoggableFieldsGet,
 
+  prototypeHasField : prototypeHasField,
   protoProxy : protoProxy,
 
 
@@ -3791,14 +3865,6 @@ if( typeof module !== 'undefined' )
 
   if( !_.construction )
   require( './ProtoLike.s' );
-
-  // try
-  // {
-  //   require( '../../abase/zKernelWithComponents.s' );
-  // }
-  // catch( err )
-  // {
-  // }
 
 }
 
