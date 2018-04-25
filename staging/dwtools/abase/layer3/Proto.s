@@ -1877,6 +1877,7 @@ function setterCopyable_functor( o )
   var name = _.nameUnfielded( o.name ).coded;
   var maker = o.maker;
   var symbol = Symbol.for( name );
+  var debug = o.debug;
 
   _.assert( arguments.length === 1 );
   _.assert( _.strIs( name ) );
@@ -1886,6 +1887,9 @@ function setterCopyable_functor( o )
   return function setterCopyable( data )
   {
     var self = this;
+
+    if( debug )
+    debugger;
 
     if( data === null )
     {
@@ -1905,7 +1909,10 @@ function setterCopyable_functor( o )
     {
 
       if( self[ symbol ] !== data )
-      self[ symbol ].copy( data );
+      {
+        _.assert( self[ symbol ].copy );
+        self[ symbol ].copy( data );
+      }
 
     }
 
@@ -1918,6 +1925,7 @@ setterCopyable_functor.defaults =
 {
   name : null,
   maker : null,
+  debug : 0,
 }
 
 //

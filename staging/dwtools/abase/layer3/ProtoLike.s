@@ -61,10 +61,20 @@ function like()
   var helper = new Self();
   var proto = Object.create( null );
   var location;
-  // var _ = _global_.wTools;
 
-  // if( Config.debug )
-  // location = _.diagnosticLocation( 1 ).full;
+  Object.defineProperty( proto, 'copy',
+  {
+    enumerable : false,
+    configurable : false,
+    writable : false,
+    value : function copy( o )
+    {
+      // debugger;
+      _.assert( arguments.length === 1 );
+      _.mapExtend( this,o );
+      return this;
+    }
+  });
 
   Object.defineProperty( proto, 'constructor',
   {
@@ -86,9 +96,6 @@ function like()
       _.mapComplement( this,proto );
       Object.preventExtensions( this );
 
-      // if( !o )
-      // debugger;
-
       if( o )
       _.mapExtend( this,o );
 
@@ -101,8 +108,6 @@ function like()
   {
     var arg = arguments[ a ];
     _.assert( arg[ symbolForAllClasses ] );
-    // if( arg[ symbolForAllClasses ] )
-    // debugger;
     if( arg[ symbolForAllClasses ] )
     _.arrayAppendArrayOnce( allClasses,arg[ symbolForAllClasses ] );
   }
@@ -183,9 +188,23 @@ function _endGet()
 
 function isLike( instance,parent )
 {
+  _.assert( arguments.length === 2 );
   if( !instance[ symbolForAllClasses ] )
   return false;
   return instance[ symbolForAllClasses ].indexOf( parent ) !== -1;
+}
+
+//
+
+function is( instance )
+{
+  _.assert( arguments.length === 1 );
+  if( !instance )
+  return false;
+  if( !instance.constructor )
+  return false;
+  if( instance.constructor.name === 'Construction' )
+  return true;
 }
 
 // --
@@ -202,6 +221,7 @@ var symbolForAllClasses = Symbol.for( 'allClasses' );
 
 var Proto =
 {
+  is : is,
   isLike : isLike,
 }
 
