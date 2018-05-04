@@ -3272,12 +3272,12 @@ function prototypeHasField( src,fieldName )
 
 //
 
-function protoProxy( dst,src )
+function protoProxy( dst,original )
 {
 
   _.assert( arguments.length === 2 );
   _.assert( dst );
-  _.assert( src );
+  _.assert( original );
 
   var handler =
   {
@@ -3285,14 +3285,16 @@ function protoProxy( dst,src )
     {
       if( obj[ k ] !== undefined )
       return obj[ k ];
-      return src[ k ];
+      return original[ k ];
     },
     set : function( obj, k, val, target )
     {
       if( obj[ k ] !== undefined )
       obj[ k ] = val;
+      else if( original[ k ] !== undefined )
+      original[ k ] = val;
       else
-      src[ k ] = val;
+      obj[ k ] = val;
       return true;
     },
   }
@@ -3703,6 +3705,8 @@ Object.freeze( ClassForbiddenNames );
 var ClassAccessorsMap = Object.create( null );
 ClassAccessorsMap.Accessors = accessor;
 ClassAccessorsMap.Forbids = accessorForbid;
+ClassAccessorsMap.AccessorsForbid = accessorForbid;
+ClassAccessorsMap.AccessorsReadOnly = accessorReadOnly;
 
 // --
 // prototype
