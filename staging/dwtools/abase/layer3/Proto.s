@@ -3205,6 +3205,7 @@ function prototypeAllFieldsGet( src )
   _.mapExtend( result,prototype.Aggregates );
   if( prototype.Associates )
   _.mapExtend( result,prototype.Associates );
+
   if( prototype.Medials )
   _.mapExtend( result,prototype.Medials );
   if( prototype.Restricts )
