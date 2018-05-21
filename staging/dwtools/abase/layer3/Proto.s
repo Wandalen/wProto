@@ -2002,6 +2002,59 @@ setterChangesTracking_functor.defaults =
   bufferConstructor : null,
 }
 
+//
+
+function setterAlias_functor( o )
+{
+
+  var original = o.original;
+  var alias = o.alias;
+
+  _.assert( arguments.length === 1 );
+  _.routineOptions( setterAlias_functor,o );
+
+  return function setterAlias( src )
+  {
+    var self = this;
+
+    self[ original ] = src;
+
+    return self[ original ];
+  }
+
+}
+
+setterAlias_functor.defaults =
+{
+  original : null,
+  alias : null,
+}
+
+//
+
+function getterAlias_functor( o )
+{
+
+  var original = o.original;
+  var alias = o.alias;
+
+  _.assert( arguments.length === 1 );
+  _.routineOptions( getterAlias_functor,o );
+
+  return function getterAlias( src )
+  {
+    var self = this;
+    return self[ original ];
+  }
+
+}
+
+getterAlias_functor.defaults =
+{
+  original : null,
+  alias : null,
+}
+
 // --
 // etc
 // --
@@ -3784,6 +3837,9 @@ var Proto =
   setterCopyable_functor : setterCopyable_functor,
   setterBufferFrom_functor : setterBufferFrom_functor,
   setterChangesTracking_functor : setterChangesTracking_functor,
+
+  setterAlias_functor : setterAlias_functor,
+  getterAlias_functor : getterAlias_functor,
 
 
   // etc
