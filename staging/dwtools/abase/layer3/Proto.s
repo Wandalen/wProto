@@ -1139,7 +1139,6 @@ function mixinMake( o )
     _.assert( arguments.length === 1 );
     _.assert( _.routineIs( cls ) );
     _.assert( cls === cls.prototype.constructor );
-    // _.assert( this === o );
     _.mixinApply({ descriptor : this, dstProto : cls.prototype });
     return cls;
   }
@@ -1149,7 +1148,6 @@ function mixinMake( o )
     _.assert( arguments.length === 1 );
     _.assert( _.routineIs( cls ) );
     _.assert( cls === cls.prototype.constructor );
-    // _.assert( this === o );
     this._mixin( cls );
     return cls;
   }
@@ -2695,40 +2693,6 @@ to prioritize ordinary facets adjustment order should be
     _.mapExtend( o.cls,o.extend.Statics );
   }
 
-  /* ordinary extend */
-
-  if( o.extend )
-  {
-    ordinaryExtend( _.mapExtend, o.extend );
-    // if( o.cls )
-    // if( _hasOwnProperty.call( o.extend,'constructor' ) )
-    // o.prototype.constructor = o.extend.constructor;
-  }
-
-  /* ordinary stretch */
-
-  if( o.stretch )
-  {
-    ordinaryExtend( _.mapStretch, o.stretch );
-    // if( o.cls )
-    // if( _hasOwnProperty.call( o.stretch,'constructor' ) )
-    // if( !_hasOwnProperty.call( o.prototype,'constructor' ) )
-    // o.prototype.constructor = o.stretch.constructor;
-  }
-
-  /* ordinary supplement */
-
-  if( o.supplement )
-  {
-    // if( o.prototype.className === 'gScene' )
-    // debugger;
-    ordinaryExtend( _.mapSupplement, o.supplement );
-    // if( o.cls )
-    // if( _hasOwnProperty.call( o.stretch,'constructor' ) )
-    // if( !o.prototype.constructor )
-    // o.prototype.constructor = o.stretch.constructor;
-  }
-
   /* static stretch */
 
   if( !o.prototype.constructor )
@@ -2747,6 +2711,27 @@ to prioritize ordinary facets adjustment order should be
     _.mapSupplement( o.prototype, o.supplement.Statics );
     if( o.cls )
     _.mapSupplement( o.cls, o.supplement.Statics );
+  }
+
+  /* ordinary extend */
+
+  if( o.extend )
+  {
+    ordinaryExtend( _.mapExtend, o.extend );
+  }
+
+  /* ordinary stretch */
+
+  if( o.stretch )
+  {
+    ordinaryExtend( _.mapStretch, o.stretch );
+  }
+
+  /* ordinary supplement */
+
+  if( o.supplement )
+  {
+    ordinaryExtend( _.mapSupplement, o.supplement );
   }
 
   /* atomic extend */
@@ -3248,7 +3233,7 @@ function prototypeAllFieldsGet( src )
   var prototype = _.prototypeGet( src );
   var result = Object.create( null );
 
-  _.assert( _.prototypeIs( src ) || _.constructorIs( src ) );
+  _.assert( _.prototypeIs( prototype ) || _.constructorIs( prototype ) );
   _.assert( _.prototypeIsStandard( prototype ),'expects standard prototype' );
   _.assert( arguments.length === 1 );
 
@@ -3274,7 +3259,7 @@ function prototypeCopyableFieldsGet( src )
   var prototype = _.prototypeGet( src );
   var result = Object.create( null );
 
-  _.assert( _.prototypeIs( src ) || _.constructorIs( src ) );
+  _.assert( _.prototypeIs( prototype ) || _.constructorIs( prototype ) );
   _.assert( _.prototypeIsStandard( prototype ),'expects standard prototype' );
   _.assert( arguments.length === 1 );
 
@@ -3295,7 +3280,7 @@ function prototypeLoggableFieldsGet( src )
   var prototype = _.prototypeGet( src );
   var result = Object.create( null );
 
-  _.assert( _.prototypeIs( src ) || _.constructorIs( src ) );
+  _.assert( _.prototypeIs( prototype ) || _.constructorIs( prototype ) );
   _.assert( _.prototypeIsStandard( prototype ),'expects standard prototype' );
   _.assert( arguments.length === 1 );
 
@@ -3313,7 +3298,7 @@ function prototypeHasField( src,fieldName )
 {
   var prototype = _.prototypeGet( src );
 
-  _.assert( _.prototypeIs( src ) || _.constructorIs( src ) );
+  _.assert( _.prototypeIs( prototype ) || _.constructorIs( prototype ) );
   _.assert( _.prototypeIsStandard( prototype ),'expects standard prototype' );
   _.assert( arguments.length === 2 );
 

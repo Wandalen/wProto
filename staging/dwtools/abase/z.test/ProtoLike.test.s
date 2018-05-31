@@ -96,7 +96,6 @@ var Self =
 
   name : 'ProtoLike',
   silencing : 1,
-  // suitFileLocation : _.diagnosticLocation().full,
 
   tests :
   {
