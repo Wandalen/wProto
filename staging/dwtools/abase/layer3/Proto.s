@@ -281,8 +281,8 @@ function _accessor( o )
 
   /* verification */
 
-  _assert( !_.atomicIs( o.object ) );
-  _assert( !_.atomicIs( o.methods ) );
+  _assert( !_.primitiveIs( o.object ) );
+  _assert( !_.primitiveIs( o.methods ) );
   _assert( !o.message || _.arrayIs( o.message ) );
   _.assertMapHasOnly( o,_accessor.defaults );
   _.mapComplement( o,_accessor.defaults );
@@ -568,7 +568,7 @@ function _accessorSetterGetterMake( o,object,name )
     {
       var result = this[ fieldSymbol ];
       debugger;
-      if( !_.atomicIs( result ) )
+      if( !_.primitiveIs( result ) )
       result = _.proxyReadOnly( result );
       return result;
     }
@@ -1531,149 +1531,6 @@ function descendantRestrictsAddTo( dstProto,srcMap )
 }
 
 // --
-// type
-// --
-
-/**
- * Is prototype.
- * @function prototypeIs
- * @param {object} src - entity to check
- * @memberof wTools#
- */
-
-function prototypeIs( src )
-{
-  _.assert( arguments.length === 1 );
-  if( _.primitiveIs( src ) )
-  return false;
-  return _hasOwnProperty.call( src, 'constructor' );
-}
-
-//
-
-function prototypeIsStandard( src )
-{
-
-  if( !_.prototypeIs( src ) )
-  return false;
-
-  if( !_hasOwnProperty.call( src, 'Composes' ) )
-  return false;
-
-  return true;
-}
-
-//
-
-function prototypeGet( src )
-{
-
-  if( !( 'constructor' in src ) )
-  return null;
-
-  // if( _.mapIsPure( src ) )
-  // return null;
-
-  var c = constructorGet( src );
-
-  _.assert( arguments.length === 1 );
-
-  return c.prototype;
-}
-
-//
-
-/**
- * Is constructor.
- * @function constructorIs
- * @param {object} cls - entity to check
- * @memberof wTools#
- */
-
-function constructorIs( cls )
-{
-  _.assert( arguments.length === 1 );
-  return _.routineIs( cls ) && !instanceIs( cls );
-}
-
-//
-
-function constructorIsStandard( cls )
-{
-
-  _.assert( _.constructorIs( cls ) );
-
-  var prototype = _.prototypeGet( cls );
-
-  return _.prototypeIsStandard( prototype );
-}
-
-//
-
-function constructorGet( src )
-{
-  var proto;
-
-  _.assert( arguments.length === 1 );
-
-  if( _hasOwnProperty.call( src,'constructor' ) )
-  {
-    proto = src; /* proto */
-  }
-  else if( _hasOwnProperty.call( src,'prototype' )  )
-  {
-    if( src.prototype )
-    proto = src.prototype; /* constructor */
-    else
-    proto = Object.getPrototypeOf( Object.getPrototypeOf( src ) ); /* instance behind ruotine */
-  }
-  else
-  {
-    proto = Object.getPrototypeOf( src ); /* instance */
-  }
-
-  if( proto === null )
-  return null;
-  else
-  return proto.constructor;
-}
-
-//
-
-function subclassIs( cls,subCls )
-{
-
-  _.assert( _.routineIs( cls ) );
-  _.assert( _.routineIs( subCls ) );
-  _.assert( arguments.length === 2 );
-
-  if( cls === subCls )
-  return true;
-
-  return Object.isPrototypeOf.call( cls.prototype, subCls.prototype );
-}
-
-//
-
-/**
- * Get parent's constructor.
- * @method parentGet
- * @memberof wCopyable#
- */
-
-function parentGet( src )
-{
-  var c = constructorGet( src );
-
-  _.assert( arguments.length === 1 );
-
-  var proto = Object.getPrototypeOf( c.prototype );
-  var result = proto ? proto.constructor : null;
-
-  return result;
-}
-
-// --
 // getter / setter functor
 // --
 
@@ -2092,7 +1949,9 @@ function propertyGetterSetterGet( object,name )
   return result;
 }
 
-//
+// --
+// proxy
+// --
 
 function proxyNoUndefined( ins )
 {
@@ -2152,45 +2011,79 @@ function ifDebugProxyReadOnly( ins )
 
 //
 
-function synchronizerFor( instance )
+function proxyMap( dst,original )
 {
-  var cls = instance.Self;
 
-  _.assert( _.instanceIs( instance ) );
-  _.assert( _.classIs( cls ) );
-
-  debugger;
-
-  _.Consequence._synchronizerRoutinesFor( cls );
-
-  var result = new cls._Synchronizer();
-  Object.prevenExtensions( result );
+  _.assert( arguments.length === 2 );
+  _.assert( dst );
+  _.assert( original );
 
   var handler =
   {
-    set : function( obj, k, e )
-    {
-      instance[ k ] = e;
-      return true;
-    },
     get : function( obj, k )
     {
       if( obj[ k ] !== undefined )
-      return instance[ k ];
+      return obj[ k ];
+      return original[ k ];
+    },
+    set : function( obj, k, val, target )
+    {
+      if( obj[ k ] !== undefined )
+      obj[ k ] = val;
+      else if( original[ k ] !== undefined )
+      original[ k ] = val;
+      else
+      obj[ k ] = val;
       return true;
     },
   }
 
-  var result = new Proxy( instance , validator );
-  if( o.verbosity > 1 )
-  console.log( 'watching for',instance );
+  var result = new Proxy( dst, handler );
 
-  xxx
-
+  return result;
 }
 
+//
+//
+// function synchronizerFor( instance )
+// {
+//   var cls = instance.Self;
+//
+//   _.assert( _.instanceIs( instance ) );
+//   _.assert( _.classIs( cls ) );
+//
+//   debugger;
+//
+//   _.Consequence._synchronizerRoutinesFor( cls );
+//
+//   var result = new cls._Synchronizer();
+//   Object.prevenExtensions( result );
+//
+//   var handler =
+//   {
+//     set : function( obj, k, e )
+//     {
+//       instance[ k ] = e;
+//       return true;
+//     },
+//     get : function( obj, k )
+//     {
+//       if( obj[ k ] !== undefined )
+//       return instance[ k ];
+//       return true;
+//     },
+//   }
+//
+//   var result = new Proxy( instance , validator );
+//   if( o.verbosity > 1 )
+//   console.log( 'watching for',instance );
+//
+//   xxx
+//
+// }
+
 // --
-// prototype
+// class
 // --
 
 /**
@@ -2634,7 +2527,6 @@ function classExtend( o )
       if( Config.debug )
       for( var f2 in _.ClassSubfieldsGroupsRelationships )
       if( f2 === f )
-      // if( f2 === f || f2 === 'Events' || ( f2 === 'Restricts' && f === 'Medials' ) || ( f2 === 'Medials' && f === 'Restricts' ) )
       continue;
       else for( var k in src[ f ] )
       {
@@ -2693,26 +2585,6 @@ to prioritize ordinary facets adjustment order should be
     _.mapExtend( o.cls,o.extend.Statics );
   }
 
-  /* static stretch */
-
-  if( !o.prototype.constructor )
-  if( o.usingStatics && o.stretch && o.stretch.Statics )
-  {
-    _.mapStretch( o.prototype, o.stretch.Statics );
-    if( o.cls )
-    _.mapStretch( o.cls, o.stretch.Statics );
-  }
-
-  /* static supplement */
-
-  if( !o.prototype.constructor )
-  if( o.usingStatics && o.supplement && o.supplement.Statics )
-  {
-    _.mapSupplement( o.prototype, o.supplement.Statics );
-    if( o.cls )
-    _.mapSupplement( o.cls, o.supplement.Statics );
-  }
-
   /* ordinary extend */
 
   if( o.extend )
@@ -2732,6 +2604,26 @@ to prioritize ordinary facets adjustment order should be
   if( o.supplement )
   {
     ordinaryExtend( _.mapSupplement, o.supplement );
+  }
+
+  /* static stretch */
+
+  if( !o.prototype.constructor )
+  if( o.usingStatics && o.stretch && o.stretch.Statics )
+  {
+    _.mapStretch( o.prototype, o.stretch.Statics );
+    if( o.cls )
+    _.mapStretch( o.cls, o.stretch.Statics );
+  }
+
+  /* static supplement */
+
+  if( !o.prototype.constructor )
+  if( o.usingStatics && o.supplement && o.supplement.Statics )
+  {
+    _.mapSupplement( o.prototype, o.supplement.Statics );
+    if( o.cls )
+    _.mapSupplement( o.cls, o.supplement.Statics );
   }
 
   /* atomic extend */
@@ -2889,6 +2781,71 @@ classExtend.defaults =
 
 //
 
+function constructorGet( src )
+{
+  var proto;
+
+  _.assert( arguments.length === 1 );
+
+  if( _hasOwnProperty.call( src,'constructor' ) )
+  {
+    proto = src; /* proto */
+  }
+  else if( _hasOwnProperty.call( src,'prototype' )  )
+  {
+    if( src.prototype )
+    proto = src.prototype; /* constructor */
+    else
+    proto = Object.getPrototypeOf( Object.getPrototypeOf( src ) ); /* instance behind ruotine */
+  }
+  else
+  {
+    proto = Object.getPrototypeOf( src ); /* instance */
+  }
+
+  if( proto === null )
+  return null;
+  else
+  return proto.constructor;
+}
+
+//
+
+function subclassIs( cls,subCls )
+{
+
+  _.assert( _.routineIs( cls ) );
+  _.assert( _.routineIs( subCls ) );
+  _.assert( arguments.length === 2 );
+
+  if( cls === subCls )
+  return true;
+
+  return Object.isPrototypeOf.call( cls.prototype, subCls.prototype );
+}
+
+//
+
+/**
+ * Get parent's constructor.
+ * @method parentGet
+ * @memberof wCopyable#
+ */
+
+function parentGet( src )
+{
+  var c = constructorGet( src );
+
+  _.assert( arguments.length === 1 );
+
+  var proto = Object.getPrototypeOf( c.prototype );
+  var result = proto ? proto.constructor : null;
+
+  return result;
+}
+
+//
+
 function _classConstructorAndPrototypeGet( o )
 {
   var result = Object.create( null );
@@ -2928,17 +2885,34 @@ function _classConstructorAndPrototypeGet( o )
   return result;
 }
 
+// --
+// prototype
+// --
+
+function prototypeGet( src )
+{
+
+  if( !( 'constructor' in src ) )
+  return null;
+
+  var c = constructorGet( src );
+
+  _.assert( arguments.length === 1 );
+
+  return c.prototype;
+}
+
 //
 
 /**
  * Make united interface for several maps. Access to single map cause read and write to original maps.
  * @param {array} protos - maps to united.
  * @return {object} united interface.
- * @method protoUnitedInterface
+ * @method prototypeUnitedInterface
  * @memberof wTools
  */
 
-function protoUnitedInterface( protos )
+function prototypeUnitedInterface( protos )
 {
   var result = Object.create( null );
   var unitedArraySymbol = Symbol.for( '_unitedArray_' );
@@ -2973,7 +2947,7 @@ function protoUnitedInterface( protos )
     for( var f in proto )
     {
       if( f in protoMap )
-      throw _.err( 'protoUnitedInterface :','several objects try to unite have same field :',f );
+      throw _.err( 'prototypeUnitedInterface :','several objects try to unite have same field :',f );
       protoMap[ f ] = proto;
 
       var methods = Object.create( null )
@@ -3309,92 +3283,9 @@ function prototypeHasField( src,fieldName )
   return false;
 }
 
-//
-
-function protoProxy( dst,original )
-{
-
-  _.assert( arguments.length === 2 );
-  _.assert( dst );
-  _.assert( original );
-
-  var handler =
-  {
-    get : function( obj, k )
-    {
-      if( obj[ k ] !== undefined )
-      return obj[ k ];
-      return original[ k ];
-    },
-    set : function( obj, k, val, target )
-    {
-      if( obj[ k ] !== undefined )
-      obj[ k ] = val;
-      else if( original[ k ] !== undefined )
-      original[ k ] = val;
-      else
-      obj[ k ] = val;
-      return true;
-    },
-  }
-
-  var result = new Proxy( dst, handler );
-
-  return result;
-}
-
 // --
 // instance
 // --
-
-/**
- * Is instance.
- * @function instanceIs
- * @param {object} src - entity to check
- * @memberof wTools#
- */
-
-function instanceIs( src )
-{
-  _.assert( arguments.length === 1 );
-
-  if( _.primitiveIs( src ) )
-  return false;
-
-  if( _hasOwnProperty.call( src,'constructor' ) )
-  return false;
-  else if( _hasOwnProperty.call( src,'prototype' ) && src.prototype )
-  return false;
-
-  if( Object.getPrototypeOf( src ) === Object.prototype )
-  return false;
-  if( Object.getPrototypeOf( src ) === null )
-  return false;
-
-  return true;
-}
-
-//
-
-function instanceIsStandard( src )
-{
-  _.assert( arguments.length === 1 );
-
-  // if( _.mapIsPure( src ) )
-  // debugger;
-
-  if( !_.instanceIs( src ) )
-  return false;
-
-  var proto = _.prototypeGet( src );
-
-  if( !proto )
-  return false;
-
-  return _.prototypeIsStandard( proto );
-}
-
-//
 
 /**
  * Is this instance finited.
@@ -3799,20 +3690,6 @@ var Proto =
   descendantRestrictsAddTo : descendantRestrictsAddTo, /* experimental */
 
 
-  // type
-
-  prototypeIs : prototypeIs,
-  prototypeIsStandard : prototypeIsStandard,
-  prototypeGet : prototypeGet,
-
-  constructorIs : constructorIs,
-  constructorIsStandard : constructorIsStandard,
-  constructorGet : constructorGet,
-
-  subclassIs : subclassIs,
-  parentGet : parentGet,
-
-
   // getter / setter functor
 
   setterMapCollection_functor : setterMapCollection_functor,
@@ -3832,21 +3709,32 @@ var Proto =
   propertyDescriptorGet : propertyDescriptorGet,
   propertyGetterSetterGet : propertyGetterSetterGet,
 
+
+  // proxy
+
   proxyNoUndefined : proxyNoUndefined,
   proxyReadOnly : proxyReadOnly,
   ifDebugProxyReadOnly : ifDebugProxyReadOnly,
+  proxyMap : proxyMap,
 
 
-  // prototype
-
-  /* split the section !!! */
+  // class
 
   classMake : classMake,
   classExtend : classExtend,
 
+  constructorGet : constructorGet,
+
+  subclassIs : subclassIs,
+  parentGet : parentGet,
   _classConstructorAndPrototypeGet : _classConstructorAndPrototypeGet,
 
-  protoUnitedInterface : protoUnitedInterface, /* experimental */
+
+  // prototype
+
+  prototypeGet : prototypeGet,
+
+  prototypeUnitedInterface : prototypeUnitedInterface, /* experimental */
 
   prototypeAppend : prototypeAppend, /* experimental */
   prototypeHas : prototypeHas, /* experimental */
@@ -3861,13 +3749,10 @@ var Proto =
   prototypeLoggableFieldsGet : prototypeLoggableFieldsGet,
 
   prototypeHasField : prototypeHasField,
-  protoProxy : protoProxy,
 
 
   // instance
 
-  instanceIs : instanceIs,
-  instanceIsStandard : instanceIsStandard,
   instanceIsFinited : instanceIsFinited,
   instanceFinit : instanceFinit,
 
