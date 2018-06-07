@@ -9,7 +9,7 @@ if( typeof module !== 'undefined' )
 
 }
 
-var _ = _global_.wTools;
+var _global = _global_; var _ = _global_.wTools;
 var _hasOwnProperty = Object.hasOwnProperty;
 var _assert = _.assert;
 var _nameFielded = _.nameFielded;
@@ -245,7 +245,7 @@ _.accessorReadOnly
 // --
 
 if( typeof module !== 'undefined' )
-if( _global_._UsingWtoolsPrivately_ )
+if( _global_.WTOOLS_PRIVATE )
 delete require.cache[ module.id ];
 
 if( typeof module !== 'undefined' && module !== null )
