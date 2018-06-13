@@ -112,33 +112,38 @@ _.assert( _.routineIs( _nameFielded ),'wProto needs wTools/staging/dwtools/abase
  * @memberof wTools
  */
 
-function _accessorOptions( object,names )
+// function _accessorOptions( object,names )
+function _accessorOptions( routine, args )
 {
-  var o = arguments.length === 1 ? arguments[ 0 ] : Object.create( null );
+  var o;
 
-  if( arguments.length === 1 )
+  if( args.length === 1 )
   {
-    object = o.object;
-    names = o.names;
+    o = args[ 0 ];
   }
   else
   {
-    o.object = object;
+    o = Object.create( null );
+    o.object = args[ 0 ];
+    o.names = args[ 1 ];
   }
 
   if( !o.methods )
-  o.methods = object;
+  o.methods = o.object;
   else
   o.methods = _.mapExtend( null,o.methods );
 
-  if( !_.arrayIs( names ) )
-  o.names = _nameFielded( names );
-  else
-  o.names = names;
+  // if( _.arrayIs( o.names ) )
+  // debugger;
 
-  if( arguments.length > 2 )
+  if( !_.arrayIs( o.names ) )
+  o.names = _nameFielded( o.names );
+  else
+  o.names = o.names;
+
+  if( args.length > 2 )
   {
-    o.message = _.arraySlice( arguments,2 );
+    o.message = _.arraySlice( args,2 );
   }
 
   return o;
@@ -640,7 +645,7 @@ function _accessorSetterGetterGet( object,name )
 
 function accessor( o )
 {
-  var o = _accessorOptions.apply( this,arguments );
+  var o = _accessorOptions( accessor, arguments );
 
   return _accessor( o );
 }
@@ -649,7 +654,7 @@ function accessor( o )
 
 function accessorForbid()
 {
-  var o = _accessorOptions.apply( this,arguments );
+  var o = _accessorOptions( accessorForbid, arguments );
   var object = o.object;
   var names = o.names;
 
@@ -869,7 +874,7 @@ function accessorForbidOwn( object,name )
 
 function accessorReadOnly( object,names )
 {
-  var o = _accessorOptions.apply( this,arguments );
+  var o = _accessorOptions( accessorReadOnly, arguments );
 
   _.assert( !o.readOnly );
   o.readOnly = true;
