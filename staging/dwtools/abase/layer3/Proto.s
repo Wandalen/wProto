@@ -2891,7 +2891,7 @@ function _classConstructorAndPrototypeGet( o )
 }
 
 // --
-// prototype
+// define class
 // --
 
 function prototypeGet( src )
@@ -3644,7 +3644,7 @@ ClassAccessorsMap.AccessorsForbid = accessorForbid;
 ClassAccessorsMap.AccessorsReadOnly = accessorReadOnly;
 
 // --
-// prototype
+// define class
 // --
 
 var Proto =
@@ -3735,7 +3735,7 @@ var Proto =
   _classConstructorAndPrototypeGet : _classConstructorAndPrototypeGet,
 
 
-  // prototype
+  // define class
 
   prototypeGet : prototypeGet,
 
