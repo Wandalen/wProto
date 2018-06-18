@@ -1133,7 +1133,7 @@ function mixinMake( o )
   _.assert( _.routineIs( o._mixin ) || o._mixin === undefined,'expects routine ( o._mixin ), but got',_.strTypeOf( o ) );
   _.assert( _.strIsNotEmpty( o.name ),'mixin should have name' );
   _.assert( _.objectIs( o.extend ) || o.extend === undefined || o.extend === null );
-  _.assert( _.objectIs( o.stretch ) || o.stretch === undefined || o.stretch === null );
+  _.assert( _.objectIs( o.supplementOwn ) || o.supplementOwn === undefined || o.supplementOwn === null );
   _.assert( _.objectIs( o.supplement ) || o.supplement === undefined || o.supplement === null );
   _.assertOwnNoConstructor( o );
   _.assertMapOwnOnly( o,mixinMake.defaults );
@@ -1176,7 +1176,7 @@ function mixinMake( o )
       cls : got.cls,
       prototype : o.prototype,
       extend : o.extend,
-      stretch : o.stretch,
+      supplementOwn : o.supplementOwn,
       supplement : o.supplement,
     });
 
@@ -1208,7 +1208,7 @@ mixinMake.defaults =
   prototype : null,
 
   extend : null,
-  stretch : null,
+  supplementOwn : null,
   supplement : null,
   functor : null,
 
@@ -1252,7 +1252,7 @@ function mixinApply( o )
   ({
     cls : dstProto.constructor,
     extend : d.extend,
-    stretch : d.stretch,
+    supplementOwn : d.supplementOwn,
     supplement : d.supplement,
     functor : d.functor,
   });
@@ -2268,8 +2268,8 @@ function classMake( o )
       //   // // throw _.err( 'not tested' );
       //   // if( o.extend )
       //   // _assert( !o.extend.constructor || o.extend.constructor === o.cls,'cant rewrite constructor, using original prototype' );
-      //   // if( o.stretch )
-      //   // _assert( !o.stretch.constructor || o.stretch.constructor === o.cls,'cant rewrite constructor, using original prototype' );
+      //   // if( o.supplementOwn )
+      //   // _assert( !o.supplementOwn.constructor || o.supplementOwn.constructor === o.cls,'cant rewrite constructor, using original prototype' );
       //   // if( o.supplement )
       //   // _assert( !o.supplement.constructor || o.supplement.constructor === o.cls,'cant rewrite constructor, using original prototype' );
       // }
@@ -2307,7 +2307,7 @@ function classMake( o )
     ({
       cls : o.cls,
       extend : o.extend,
-      stretch : o.stretch,
+      supplementOwn : o.supplementOwn,
       supplement : o.supplement,
       usingAtomicExtension : o.usingAtomicExtension,
       usingStatics : 1,
@@ -2402,7 +2402,7 @@ classMake.defaults =
   parent : null,
 
   extend : null,
-  stretch : null,
+  supplementOwn : null,
   supplement : null,
 
   name : null,
@@ -2464,7 +2464,7 @@ function classExtend( o )
   _.assert( !_hasOwnProperty.call( o,'constructor' ) );
   _.assertOwnNoConstructor( o );
   _.assert( _.objectIs( o.extend ) || o.extend === undefined || o.extend === null );
-  _.assert( _.objectIs( o.stretch ) || o.stretch === undefined || o.stretch === null );
+  _.assert( _.objectIs( o.supplementOwn ) || o.supplementOwn === undefined || o.supplementOwn === null );
   _.assert( _.objectIs( o.supplement ) || o.supplement === undefined || o.supplement === null );
 
   if( o.cls || !o.prototype )
@@ -2478,10 +2478,10 @@ function classExtend( o )
     _.assert( o.extend.cls === undefined );
     _.assertOwnNoConstructor( o.extend );
   }
-  if( o.stretch )
+  if( o.supplementOwn )
   {
-    _.assert( o.stretch.cls === undefined );
-    _.assertOwnNoConstructor( o.stretch );
+    _.assert( o.supplementOwn.cls === undefined );
+    _.assertOwnNoConstructor( o.supplementOwn );
   }
   if( o.supplement )
   {
@@ -2543,7 +2543,7 @@ function classExtend( o )
   }
 
   descendantAdd( o.extend,true,false );
-  descendantAdd( o.stretch,true,true );
+  descendantAdd( o.supplementOwn,true,true );
   descendantAdd( o.supplement,false,false );
 
   /* get constructor */
@@ -2597,11 +2597,11 @@ to prioritize ordinary facets adjustment order should be
     ordinaryExtend( _.mapExtend, o.extend );
   }
 
-  /* ordinary stretch */
+  /* ordinary supplementOwn */
 
-  if( o.stretch )
+  if( o.supplementOwn )
   {
-    ordinaryExtend( _.mapStretch, o.stretch );
+    ordinaryExtend( _.mapSupplementOwn, o.supplementOwn );
   }
 
   /* ordinary supplement */
@@ -2611,14 +2611,14 @@ to prioritize ordinary facets adjustment order should be
     ordinaryExtend( _.mapSupplement, o.supplement );
   }
 
-  /* static stretch */
+  /* static supplementOwn */
 
   if( !o.prototype.constructor )
-  if( o.usingStatics && o.stretch && o.stretch.Statics )
+  if( o.usingStatics && o.supplementOwn && o.supplementOwn.Statics )
   {
-    _.mapStretch( o.prototype, o.stretch.Statics );
+    _.mapSupplementOwn( o.prototype, o.supplementOwn.Statics );
     if( o.cls )
-    _.mapStretch( o.cls, o.stretch.Statics );
+    _.mapSupplementOwn( o.cls, o.supplementOwn.Statics );
   }
 
   /* static supplement */
@@ -2638,7 +2638,7 @@ to prioritize ordinary facets adjustment order should be
     for( var f in _.ClassSubfieldsGroups )
     if( f !== 'Statics' )
     if( _.mapOwnKey( o.prototype,f ) )
-    _.mapExtendConditional( _.field.mapper.atomicSrcOwn, o.prototype, o.prototype.Composes );
+    _.mapExtendConditional( _.field.mapper.srcOwnPrimitive, o.prototype, o.prototype.Composes );
   }
 
   /* accessors */
@@ -2654,8 +2654,8 @@ to prioritize ordinary facets adjustment order should be
 
   if( o.supplement )
   declareAccessors( o.supplement );
-  if( o.stretch )
-  declareAccessors( o.stretch );
+  if( o.supplementOwn )
+  declareAccessors( o.supplementOwn );
   if( o.extend )
   declareAccessors( o.extend );
 
@@ -2775,7 +2775,7 @@ classExtend.defaults =
   prototype : null,
 
   extend : null,
-  stretch : null,
+  supplementOwn : null,
   supplement : null,
   functor : null,
 
@@ -2982,15 +2982,15 @@ function prototypeUnitedInterface( protos )
 
 /**
  * Append prototype to object. Find archi parent and replace its proto.
- * @param {object} dstObject - dst object to append proto.
+ * @param {object} dstMap - dst object to append proto.
  * @method prototypeAppend
  * @memberof wTools
  */
 
-function prototypeAppend( dstObject )
+function prototypeAppend( dstMap )
 {
 
-  _assert( _.objectIs( dstObject ) );
+  _assert( _.objectIs( dstMap ) );
 
   for( var a = 1 ; a < arguments.length ; a++ )
   {
@@ -2998,12 +2998,12 @@ function prototypeAppend( dstObject )
 
     _assert( _.objectIs( proto ) );
 
-    var parent = _.prototypeArchyGet( dstObject );
+    var parent = _.prototypeArchyGet( dstMap );
     Object.setPrototypeOf( parent, proto );
 
   }
 
-  return dstObject;
+  return dstMap;
 }
 
 //
@@ -3034,31 +3034,31 @@ function prototypeHas( srcProto,insProto )
 
 /**
  * Return proto owning names.
- * @param {object} srcObject - src object to investigate proto stack.
+ * @param {object} srcPrototype - src object to investigate proto stack.
  * @method prototypeHasProperty
  * @memberof wTools
  */
 
-function prototypeHasProperty( srcObject,names )
+function prototypeHasProperty( srcPrototype,names )
 {
   var names = _nameFielded( names );
-  _assert( _.objectIs( srcObject ) );
+  _assert( _.objectIs( srcPrototype ) );
 
   do
   {
     var has = true;
     for( var n in names )
-    if( !_hasOwnProperty.call( srcObject,n ) )
+    if( !_hasOwnProperty.call( srcPrototype,n ) )
     {
       has = false;
       break;
     }
     if( has )
-    return srcObject;
+    return srcPrototype;
 
-    srcObject = Object.getPrototypeOf( srcObject );
+    srcPrototype = Object.getPrototypeOf( srcPrototype );
   }
-  while( srcObject !== Object.prototype && srcObject );
+  while( srcPrototype !== Object.prototype && srcPrototype );
 
   return null;
 }
@@ -3067,20 +3067,20 @@ function prototypeHasProperty( srcObject,names )
 
 /**
  * Returns parent which has default proto.
- * @param {object} srcObject - dst object to append proto.
+ * @param {object} srcPrototype - dst object to append proto.
  * @method prototypeArchyGet
  * @memberof wTools
  */
 
-function prototypeArchyGet( srcObject )
+function prototypeArchyGet( srcPrototype )
 {
 
-  _assert( _.objectIs( srcObject ) );
+  _assert( _.objectIs( srcPrototype ) );
 
-  while( Object.getPrototypeOf( srcObject ) !== Object.prototype )
-  srcObject = Object.getPrototypeOf( srcObject );
+  while( Object.getPrototypeOf( srcPrototype ) !== Object.prototype )
+  srcPrototype = Object.getPrototypeOf( srcPrototype );
 
-  return srcObject;
+  return srcPrototype;
 }
 
 //
@@ -3371,7 +3371,7 @@ function instanceInit( instance,prototype )
   _.mapComplement( instance,prototype.Restricts );
   _.mapComplement( instance,prototype.Composes );
   _.mapComplement( instance,prototype.Aggregates );
-  _.mapSupplementOrComplementPureContainers( instance,prototype.Associates );
+  _.mapSupplementOwnAssigning( instance,prototype.Associates );
 
   return instance;
 }
@@ -3386,9 +3386,9 @@ function instanceInitExtending( instance,prototype )
   if( prototype === undefined )
   prototype = instance;
 
-  _.mapExtendConditional( _.field.mapper.cloning,instance,prototype.Restricts );
-  _.mapExtendConditional( _.field.mapper.cloning,instance,prototype.Composes );
-  _.mapExtendConditional( _.field.mapper.cloning,instance,prototype.Aggregates );
+  _.mapExtendConditional( _.field.mapper.assigning, instance, prototype.Restricts );
+  _.mapExtendConditional( _.field.mapper.assigning, instance, prototype.Composes );
+  _.mapExtendConditional( _.field.mapper.assigning, instance, prototype.Aggregates );
   _.mapExtend( instance,prototype.Associates );
 
   return instance;
