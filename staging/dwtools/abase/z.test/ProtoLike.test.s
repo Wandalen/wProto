@@ -50,17 +50,17 @@ function isLike( test )
 
   test.description = 'Base1 class like itself';
   var is = _.construction.isLike( Base1,Base1 );
-  test.shouldBe( is );
+  test.is( is );
 
   test.description = 'Mid class like itself';
   var is = _.construction.isLike( Mid,Mid );
-  test.shouldBe( is );
+  test.is( is );
 
   test.description = 'Mid class like one of parent';
   var is = _.construction.isLike( Mid,Base1 );
-  test.shouldBe( is );
+  test.is( is );
   var is = _.construction.isLike( Mid,Base2 );
-  test.shouldBe( is );
+  test.is( is );
 
   /* */
 
@@ -69,21 +69,21 @@ function isLike( test )
   var base1 = Base1.constructor();
   debugger;
   var is = _.construction.isLike( base1,Base1 );
-  test.shouldBe( is );
+  test.is( is );
 
   test.description = 'base instance like another base class';
   var base1 = Base1.constructor();
   var is = _.construction.isLike( base1,Base2 );
-  test.shouldBe( !is );
+  test.is( !is );
 
   test.description = 'mid instance like one of class';
   var mid = Mid.constructor();
   var is = _.construction.isLike( mid,Mid );
-  test.shouldBe( is );
+  test.is( is );
   var is = _.construction.isLike( mid,Base1 );
-  test.shouldBe( is );
+  test.is( is );
   var is = _.construction.isLike( mid,Base2 );
-  test.shouldBe( is );
+  test.is( is );
 
 }
 
@@ -94,7 +94,7 @@ function isLike( test )
 var Self =
 {
 
-  name : 'ProtoLike',
+  name : 'Tools/base/layer3/ProtoLike',
   silencing : 1,
 
   tests :

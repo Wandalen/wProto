@@ -377,7 +377,7 @@ _accessor.defaults =
 function _accessorProperty( o,name )
 {
 
-  _.assert( arguments.length === 2 );
+  _.assert( arguments.length === 2, 'expects exactly two argument' );
   _.assert( _.strIs( name ) );
 
   var encodedName = name;
@@ -525,7 +525,7 @@ function _accessorSetterGetterMake( o,object,name )
 {
   var result = Object.create( null );
 
-  _.assert( arguments.length === 3 );
+  _.assert( arguments.length === 3, 'expects exactly three argument' );
   _.assert( _.objectLikeOrRoutine( object ) );
   _.assert( _.strIs( name ) );
 
@@ -604,7 +604,7 @@ function _accessorSetterGetterGet( object,name )
 {
   var result = Object.create( null );
 
-  _.assert( arguments.length === 2 );
+  _.assert( arguments.length === 2, 'expects exactly two argument' );
   _.assert( _.objectIs( object ) );
   _.assert( _.strIs( name ) );
 
@@ -892,7 +892,7 @@ function accessorsSupplement( dst,src )
 
   _.descendantMakeOwnedBy( dst,'_Accessors' );
 
-  _.assert( arguments.length === 2 );
+  _.assert( arguments.length === 2, 'expects exactly two argument' );
   _.assert( _hasOwnProperty.call( dst,'_Accessors' ),'accessorsSupplement : dst should has _Accessors map' );
   _.assert( _hasOwnProperty.call( src,'_Accessors' ),'accessorsSupplement : src should has _Accessors map' );
 
@@ -1043,7 +1043,7 @@ function restrictReadOnly( dstProto,namesObject )
 function accessorToElement( o )
 {
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.objectIs( o.names ) );
   _.routineOptions( accessorToElement,o );
 
@@ -1096,7 +1096,7 @@ function accessorDescriptorGet( object,name )
   result.object = null;
   result.descriptor = null;
 
-  _.assert( arguments.length === 2 );
+  _.assert( arguments.length === 2, 'expects exactly two argument' );
 
   do
   {
@@ -1128,7 +1128,7 @@ function accessorDescriptorGet( object,name )
 function mixinMake( o )
 {
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.mapIs( o ) || _.routineIs( o ) );
   _.assert( _.routineIs( o._mixin ) || o._mixin === undefined,'expects routine ( o._mixin ), but got',_.strTypeOf( o ) );
   _.assert( _.strIsNotEmpty( o.name ),'mixin should have name' );
@@ -1141,7 +1141,7 @@ function mixinMake( o )
   if( !o._mixin )
   o.mixin = function mixin( cls )
   {
-    _.assert( arguments.length === 1 );
+    _.assert( arguments.length === 1, 'expects single argument' );
     _.assert( _.routineIs( cls ) );
     _.assert( cls === cls.prototype.constructor );
     _.mixinApply({ descriptor : this, dstProto : cls.prototype });
@@ -1150,7 +1150,7 @@ function mixinMake( o )
   else
   o.mixin = function mixin( cls )
   {
-    _.assert( arguments.length === 1 );
+    _.assert( arguments.length === 1, 'expects single argument' );
     _.assert( _.routineIs( cls ) );
     _.assert( cls === cls.prototype.constructor );
     this._mixin( cls );
@@ -1284,7 +1284,7 @@ function mixinHas( proto,mixin )
   proto = _.prototypeGet( proto );
 
   _.assert( _.prototypeIsStandard( proto ) );
-  _.assert( arguments.length === 2 );
+  _.assert( arguments.length === 2, 'expects exactly two argument' );
 
   if( _.strIs( mixin ) )
   {
@@ -1306,7 +1306,7 @@ function mixinHas( proto,mixin )
 function descendantMakeOwnedBy( dst,fieldName )
 {
 
-  _.assert( arguments.length === 2 );
+  _.assert( arguments.length === 2, 'expects exactly two argument' );
   _.assert( _.strIs( fieldName ) );
 
   if( !_hasOwnProperty.call( dst,fieldName ) )
@@ -1366,7 +1366,7 @@ function descendantAdd( o )
   var o = o || Object.create( null );
 
   _.routineOptions( descendantAdd,o );
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( o.srcMap === null || _.objectIs( o.srcMap ),'expects object ( o.srcMap ), got', _.strTypeOf( o.srcMap ) );
 
   o.descendantName = _.nameUnfielded( o.descendantName );
@@ -1423,7 +1423,7 @@ descendantAdd.defaults =
 function descendantComposesAddTo( dstProto,srcMap )
 {
 
-  _.assert( arguments.length === 2 );
+  _.assert( arguments.length === 2, 'expects exactly two argument' );
 
   var descendantName = 'Composes';
   return _.descendantAdd
@@ -1456,7 +1456,7 @@ function descendantComposesAddTo( dstProto,srcMap )
 function descendantAggregatesAddTo( dstProto,srcMap )
 {
 
-  _.assert( arguments.length === 2 );
+  _.assert( arguments.length === 2, 'expects exactly two argument' );
 
   var descendantName = 'Aggregates';
   return _.descendantAdd
@@ -1489,7 +1489,7 @@ function descendantAggregatesAddTo( dstProto,srcMap )
 function descendantAssociatesAddTo( dstProto,srcMap )
 {
 
-  _.assert( arguments.length === 2 );
+  _.assert( arguments.length === 2, 'expects exactly two argument' );
 
   var descendantName = 'Associates';
   return _.descendantAdd
@@ -1522,7 +1522,7 @@ function descendantAssociatesAddTo( dstProto,srcMap )
 function descendantRestrictsAddTo( dstProto,srcMap )
 {
 
-  _.assert( arguments.length === 2 );
+  _.assert( arguments.length === 2, 'expects exactly two argument' );
 
   var descendantName = 'Restricts';
   return _.descendantAdd
@@ -1670,7 +1670,7 @@ function setterFriend_functor( o )
   var maker = o.maker;
   var symbol = Symbol.for( name );
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.strIs( name ) );
   _.assert( _.strIs( nameOfLink ) );
   _.assert( _.routineIs( maker ) );
@@ -1739,7 +1739,7 @@ function setterCopyable_functor( o )
   var symbol = Symbol.for( name );
   var debug = o.debug;
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.strIs( name ) );
   _.assert( _.routineIs( maker ) );
   _.assertMapHasOnly( o,setterCopyable_functor.defaults );
@@ -1797,7 +1797,7 @@ function setterBufferFrom_functor( o )
   var bufferConstructor = o.bufferConstructor;
   var symbol = Symbol.for( name );
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.strIs( name ) );
   _.assert( _.routineIs( bufferConstructor ) );
   _.routineOptions( setterBufferFrom_functor,o );
@@ -1835,7 +1835,7 @@ function setterChangesTracking_functor( o )
   var name = Symbol.for( _.nameUnfielded( o.name ).coded );
   var nameOfChangeFlag = Symbol.for( _.nameUnfielded( o.nameOfChangeFlag ).coded );
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
   _.routineOptions( setterChangesTracking_functor,o );
 
   throw _.err( 'not tested' );
@@ -1870,7 +1870,7 @@ function setterAlias_functor( o )
   var original = o.original;
   var alias = o.alias;
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
   _.routineOptions( setterAlias_functor,o );
 
   return function setterAlias( src )
@@ -1898,7 +1898,7 @@ function getterAlias_functor( o )
   var original = o.original;
   var alias = o.alias;
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
   _.routineOptions( getterAlias_functor,o );
 
   return function getterAlias( src )
@@ -1925,7 +1925,7 @@ function propertyDescriptorGet( object,name )
   result.object = null;
   result.descriptor = null;
 
-  _.assert( arguments.length === 2 );
+  _.assert( arguments.length === 2, 'expects exactly two argument' );
 
   do
   {
@@ -2019,7 +2019,7 @@ function ifDebugProxyReadOnly( ins )
 function proxyMap( dst,original )
 {
 
-  _.assert( arguments.length === 2 );
+  _.assert( arguments.length === 2, 'expects exactly two argument' );
   _.assert( dst );
   _.assert( original );
 
@@ -2207,7 +2207,7 @@ function classMake( o )
     Self : 'Self',
   }
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.objectIs( o ) );
   _.assertOwnNoConstructor( o,'options for classMake should have no constructor' );
   _.assert( !( 'parent' in o ) || o.parent !== undefined,'parent is "undefined", something is wrong' );
@@ -2790,7 +2790,7 @@ function constructorGet( src )
 {
   var proto;
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
 
   if( _hasOwnProperty.call( src,'constructor' ) )
   {
@@ -2821,7 +2821,7 @@ function subclassIs( cls,subCls )
 
   _.assert( _.routineIs( cls ) );
   _.assert( _.routineIs( subCls ) );
-  _.assert( arguments.length === 2 );
+  _.assert( arguments.length === 2, 'expects exactly two argument' );
 
   if( cls === subCls )
   return true;
@@ -2841,7 +2841,7 @@ function parentGet( src )
 {
   var c = constructorGet( src );
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
 
   var proto = Object.getPrototypeOf( c.prototype );
   var result = proto ? proto.constructor : null;
@@ -2902,7 +2902,7 @@ function prototypeGet( src )
 
   var c = constructorGet( src );
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
 
   return c.prototype;
 }
@@ -3214,7 +3214,7 @@ function prototypeAllFieldsGet( src )
 
   _.assert( _.prototypeIs( prototype ) || _.constructorIs( prototype ) );
   _.assert( _.prototypeIsStandard( prototype ),'expects standard prototype' );
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
 
   if( prototype.Composes )
   _.mapExtend( result,prototype.Composes );
@@ -3240,7 +3240,7 @@ function prototypeCopyableFieldsGet( src )
 
   _.assert( _.prototypeIs( prototype ) || _.constructorIs( prototype ) );
   _.assert( _.prototypeIsStandard( prototype ),'expects standard prototype' );
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
 
   if( prototype.Composes )
   _.mapExtend( result,prototype.Composes );
@@ -3261,7 +3261,7 @@ function prototypeLoggableFieldsGet( src )
 
   _.assert( _.prototypeIs( prototype ) || _.constructorIs( prototype ) );
   _.assert( _.prototypeIsStandard( prototype ),'expects standard prototype' );
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
 
   if( prototype.Composes )
   _.mapExtend( result,prototype.Composes );
@@ -3279,7 +3279,7 @@ function prototypeHasField( src,fieldName )
 
   _.assert( _.prototypeIs( prototype ) || _.constructorIs( prototype ) );
   _.assert( _.prototypeIsStandard( prototype ),'expects standard prototype' );
-  _.assert( arguments.length === 2 );
+  _.assert( arguments.length === 2, 'expects exactly two argument' );
 
   for( var f in _.ClassSubfieldsGroupsRelationships )
   if( prototype[ f ][ fieldName ] )
@@ -3313,7 +3313,7 @@ function instanceFinit( src )
 
   _.assert( !Object.isFrozen( src ) );
   _.assert( _.objectLikeOrRoutine( src ) );
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
 
   // var validator =
   // {
@@ -3527,7 +3527,7 @@ function defaultProxy( map )
 {
 
   _.assert( _.objectIs( map ) );
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
 
   var validator =
   {
@@ -3560,7 +3560,7 @@ function defaultProxyFlatteningToArray( src )
 {
   var result = [];
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.objectIs( src ) || _.arrayIs( src ) );
 
   function flatten( src )
@@ -3676,13 +3676,11 @@ var Proto =
   accessorToElement : accessorToElement,
   accessorDescriptorGet : accessorDescriptorGet,
 
-
   // mixin
 
   mixinMake : mixinMake,
   mixinApply : mixinApply,
   mixinHas : mixinHas,
-
 
   // descendant
 
@@ -3693,7 +3691,6 @@ var Proto =
   descendantAggregatesAddTo : descendantAggregatesAddTo, /* experimental */
   descendantAssociatesAddTo : descendantAssociatesAddTo, /* experimental */
   descendantRestrictsAddTo : descendantRestrictsAddTo, /* experimental */
-
 
   // getter / setter functor
 
@@ -3708,12 +3705,10 @@ var Proto =
   setterAlias_functor : setterAlias_functor,
   getterAlias_functor : getterAlias_functor,
 
-
   // etc
 
   propertyDescriptorGet : propertyDescriptorGet,
   propertyGetterSetterGet : propertyGetterSetterGet,
-
 
   // proxy
 
@@ -3721,7 +3716,6 @@ var Proto =
   proxyReadOnly : proxyReadOnly,
   ifDebugProxyReadOnly : ifDebugProxyReadOnly,
   proxyMap : proxyMap,
-
 
   // class
 
@@ -3733,7 +3727,6 @@ var Proto =
   subclassIs : subclassIs,
   parentGet : parentGet,
   _classConstructorAndPrototypeGet : _classConstructorAndPrototypeGet,
-
 
   // define class
 
@@ -3755,7 +3748,6 @@ var Proto =
 
   prototypeHasField : prototypeHasField,
 
-
   // instance
 
   instanceIsFinited : instanceIsFinited,
@@ -3767,13 +3759,11 @@ var Proto =
 
   assertInstanceDoesNotHaveReduntantFields : assertInstanceDoesNotHaveReduntantFields,
 
-
   // default
 
   defaultApply : defaultApply,
   defaultProxy : defaultProxy,
   defaultProxyFlatteningToArray : defaultProxyFlatteningToArray,
-
 
   // var
 
