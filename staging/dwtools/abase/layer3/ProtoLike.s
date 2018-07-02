@@ -163,7 +163,7 @@ function _endGet()
 
 function isLike( instance,parent )
 {
-  _.assert( arguments.length === 2, 'expects exactly two argument' );
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
   if( !instance[ symbolForAllClasses ] )
   return false;
   return instance[ symbolForAllClasses ].indexOf( parent ) !== -1;

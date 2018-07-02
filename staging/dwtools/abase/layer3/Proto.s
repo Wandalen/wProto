@@ -377,7 +377,7 @@ _accessor.defaults =
 function _accessorProperty( o,name )
 {
 
-  _.assert( arguments.length === 2, 'expects exactly two argument' );
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
   _.assert( _.strIs( name ) );
 
   var encodedName = name;
@@ -604,7 +604,7 @@ function _accessorSetterGetterGet( object,name )
 {
   var result = Object.create( null );
 
-  _.assert( arguments.length === 2, 'expects exactly two argument' );
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
   _.assert( _.objectIs( object ) );
   _.assert( _.strIs( name ) );
 
@@ -892,7 +892,7 @@ function accessorsSupplement( dst,src )
 
   _.descendantMakeOwnedBy( dst,'_Accessors' );
 
-  _.assert( arguments.length === 2, 'expects exactly two argument' );
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
   _.assert( _hasOwnProperty.call( dst,'_Accessors' ),'accessorsSupplement : dst should has _Accessors map' );
   _.assert( _hasOwnProperty.call( src,'_Accessors' ),'accessorsSupplement : src should has _Accessors map' );
 
@@ -1096,7 +1096,7 @@ function accessorDescriptorGet( object,name )
   result.object = null;
   result.descriptor = null;
 
-  _.assert( arguments.length === 2, 'expects exactly two argument' );
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
 
   do
   {
@@ -1284,7 +1284,7 @@ function mixinHas( proto,mixin )
   proto = _.prototypeGet( proto );
 
   _.assert( _.prototypeIsStandard( proto ) );
-  _.assert( arguments.length === 2, 'expects exactly two argument' );
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
 
   if( _.strIs( mixin ) )
   {
@@ -1306,7 +1306,7 @@ function mixinHas( proto,mixin )
 function descendantMakeOwnedBy( dst,fieldName )
 {
 
-  _.assert( arguments.length === 2, 'expects exactly two argument' );
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
   _.assert( _.strIs( fieldName ) );
 
   if( !_hasOwnProperty.call( dst,fieldName ) )
@@ -1423,7 +1423,7 @@ descendantAdd.defaults =
 function descendantComposesAddTo( dstProto,srcMap )
 {
 
-  _.assert( arguments.length === 2, 'expects exactly two argument' );
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
 
   var descendantName = 'Composes';
   return _.descendantAdd
@@ -1456,7 +1456,7 @@ function descendantComposesAddTo( dstProto,srcMap )
 function descendantAggregatesAddTo( dstProto,srcMap )
 {
 
-  _.assert( arguments.length === 2, 'expects exactly two argument' );
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
 
   var descendantName = 'Aggregates';
   return _.descendantAdd
@@ -1489,7 +1489,7 @@ function descendantAggregatesAddTo( dstProto,srcMap )
 function descendantAssociatesAddTo( dstProto,srcMap )
 {
 
-  _.assert( arguments.length === 2, 'expects exactly two argument' );
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
 
   var descendantName = 'Associates';
   return _.descendantAdd
@@ -1522,7 +1522,7 @@ function descendantAssociatesAddTo( dstProto,srcMap )
 function descendantRestrictsAddTo( dstProto,srcMap )
 {
 
-  _.assert( arguments.length === 2, 'expects exactly two argument' );
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
 
   var descendantName = 'Restricts';
   return _.descendantAdd
@@ -1925,7 +1925,7 @@ function propertyDescriptorGet( object,name )
   result.object = null;
   result.descriptor = null;
 
-  _.assert( arguments.length === 2, 'expects exactly two argument' );
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
 
   do
   {
@@ -2019,7 +2019,7 @@ function ifDebugProxyReadOnly( ins )
 function proxyMap( dst,original )
 {
 
-  _.assert( arguments.length === 2, 'expects exactly two argument' );
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
   _.assert( dst );
   _.assert( original );
 
@@ -2821,7 +2821,7 @@ function subclassIs( cls,subCls )
 
   _.assert( _.routineIs( cls ) );
   _.assert( _.routineIs( subCls ) );
-  _.assert( arguments.length === 2, 'expects exactly two argument' );
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
 
   if( cls === subCls )
   return true;
@@ -3279,7 +3279,7 @@ function prototypeHasField( src,fieldName )
 
   _.assert( _.prototypeIs( prototype ) || _.constructorIs( prototype ) );
   _.assert( _.prototypeIsStandard( prototype ),'expects standard prototype' );
-  _.assert( arguments.length === 2, 'expects exactly two argument' );
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
 
   for( var f in _.ClassSubfieldsGroupsRelationships )
   if( prototype[ f ][ fieldName ] )
