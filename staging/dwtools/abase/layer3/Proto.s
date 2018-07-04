@@ -837,7 +837,7 @@ function accessorForbid()
   o.strict = 0;
   o.prime = 0;
 
-  return _accessor( _.mapScreen( _accessor.defaults,o ) );
+  return _accessor( _.mapOnly( o, _accessor.defaults ) );
 }
 
 accessorForbid.defaults =
@@ -1333,7 +1333,7 @@ function descendantMakeOwnedBy( dst,fieldName )
 * Default options for descendantAdd function
 * @typedef {object} wTools~protoAddDefaults
 * @property {object} [ o.descendantName=null ] - object that contains class relationship type name.
-* Example : { Composes : 'Composes' }. See {@link wTools~ClassSubfieldsGroupsRelationships}
+* Example : { Composes : 'Composes' }. See {@link wTools~ClassFieldsGroupsRelationships}
 * @property {object} [ o.dstProto=null ] - prototype of class which will get new constant property.
 * @property {object} [ o.srcMap=null ] - name/value map of defaults.
 * @property {bool} [ o.override=false ] - to override defaults if exist.
@@ -2048,45 +2048,6 @@ function proxyMap( dst,original )
   return result;
 }
 
-//
-//
-// function synchronizerFor( instance )
-// {
-//   var cls = instance.Self;
-//
-//   _.assert( _.instanceIs( instance ) );
-//   _.assert( _.classIs( cls ) );
-//
-//   debugger;
-//
-//   _.Consequence._synchronizerRoutinesFor( cls );
-//
-//   var result = new cls._Synchronizer();
-//   Object.prevenExtensions( result );
-//
-//   var handler =
-//   {
-//     set : function( obj, k, e )
-//     {
-//       instance[ k ] = e;
-//       return true;
-//     },
-//     get : function( obj, k )
-//     {
-//       if( obj[ k ] !== undefined )
-//       return instance[ k ];
-//       return true;
-//     },
-//   }
-//
-//   var result = new Proxy( instance , validator );
-//   if( o.verbosity > 1 )
-//   console.log( 'watching for',instance );
-//
-//   xxx
-//
-// }
-
 // --
 // class
 // --
@@ -2141,9 +2102,9 @@ function proxyMap( dst,original )
  *   Composes : Composes
  *  }
  *
- *  var proto = _.classMake
+ *  _.classMake
  *  ({
- *    // cls : Self, // xxx
+ *    cls : Self,
  *    parent : Parent,
  *    extend : Proto,
  *  });
@@ -2323,8 +2284,8 @@ function classMake( o )
     _.assert( prototype.constructor );
     _.assert( prototype.Statics );
 
-    _.mapExtendConditional( _.field.mapper.dstNotOwnSrcOwn,prototype,prototype.Statics ); // xxx
-    _.mapExtendConditional( _.field.mapper.dstNotOwnSrcOwn,prototype.constructor,prototype.Statics ); // xxx
+    _.mapExtendConditional( _.field.mapper.dstNotOwnSrcOwn, prototype,prototype.Statics );
+    _.mapExtendConditional( _.field.mapper.dstNotOwnSrcOwn, prototype.constructor,prototype.Statics );
 
     _.assert( prototype === o.cls.prototype );
     _.assert( _hasOwnProperty.call( prototype,'constructor' ),'prototype should has own constructor' );
@@ -2498,7 +2459,7 @@ function classExtend( o )
 
   /* adjust relationships */
 
-  for( var f in _.ClassSubfieldsGroups )
+  for( var f in _.ClassFieldsGroups )
   _.descendantAdd
   ({
     descendantName : f,
@@ -2511,7 +2472,7 @@ function classExtend( o )
     if( !src )
     return;
 
-    for( var f in _.ClassSubfieldsGroups )
+    for( var f in _.ClassFieldsGroups )
     {
 
       if( !src[ f ] )
@@ -2526,11 +2487,11 @@ function classExtend( o )
         dstNotOwn : dstNotOwn,
       });
 
-      if( !_.ClassSubfieldsGroupsRelationships[ f ] )
+      if( !_.ClassFieldsGroupsRelationships[ f ] )
       continue;
 
       if( Config.debug )
-      for( var f2 in _.ClassSubfieldsGroupsRelationships )
+      for( var f2 in _.ClassFieldsGroupsRelationships )
       if( f2 === f )
       continue;
       else for( var k in src[ f ] )
@@ -2554,14 +2515,14 @@ function classExtend( o )
   var StaticsOwn = _.mapOwnProperties( o.prototype.Statics );
   function ordinaryExtend( extend,src )
   {
-    var map = _.mapBut( src,_.ClassSubfieldsGroups );
+    var map = _.mapBut( src,_.ClassFieldsGroups );
     extend( o.prototype,map );
     if( Config.debug )
     if( !o.allowingExtendStatics )
     if( Object.getPrototypeOf( o.prototype.Statics ) )
     {
       map = _.mapBut( map,StaticsOwn );
-      var keys = _.mapKeys( _.mapScreen( Object.getPrototypeOf( o.prototype.Statics ), map ) );
+      var keys = _.mapKeys( _.mapOnly( map, Object.getPrototypeOf( o.prototype.Statics ) ) );
       if( keys.length )
       {
         _.assert( 0,'attempt to extend static field',keys );
@@ -2635,7 +2596,7 @@ to prioritize ordinary facets adjustment order should be
 
   if( o.usingAtomicExtension )
   {
-    for( var f in _.ClassSubfieldsGroups )
+    for( var f in _.ClassFieldsGroups )
     if( f !== 'Statics' )
     if( _.mapOwnKey( o.prototype,f ) )
     _.mapExtendConditional( _.field.mapper.srcOwnPrimitive, o.prototype, o.prototype.Composes );
@@ -3242,19 +3203,20 @@ function prototypeCopyableFieldsGet( src )
   _.assert( _.prototypeIsStandard( prototype ),'expects standard prototype' );
   _.assert( arguments.length === 1, 'expects single argument' );
 
-  if( prototype.Composes )
-  _.mapExtend( result,prototype.Composes );
-  if( prototype.Aggregates )
-  _.mapExtend( result,prototype.Aggregates );
-  if( prototype.Associates )
-  _.mapExtend( result,prototype.Associates );
+  for( var g in _.ClassFieldsGroupsCopyable )
+  {
+
+    if( prototype[ g ] )
+    _.mapExtend( result,prototype[ g ] );
+
+  }
 
   return result;
 }
 
 //
 
-function prototypeLoggableFieldsGet( src )
+function prototypeFieldsTightGet( src )
 {
   var prototype = _.prototypeGet( src );
   var result = Object.create( null );
@@ -3263,10 +3225,13 @@ function prototypeLoggableFieldsGet( src )
   _.assert( _.prototypeIsStandard( prototype ),'expects standard prototype' );
   _.assert( arguments.length === 1, 'expects single argument' );
 
-  if( prototype.Composes )
-  _.mapExtend( result,prototype.Composes );
-  if( prototype.Aggregates )
-  _.mapExtend( result,prototype.Aggregates );
+  for( var g in _.ClassFieldsGroupsTight )
+  {
+
+    if( prototype[ g ] )
+    _.mapExtend( result,prototype[ g ] );
+
+  }
 
   return result;
 }
@@ -3281,7 +3246,7 @@ function prototypeHasField( src,fieldName )
   _.assert( _.prototypeIsStandard( prototype ),'expects standard prototype' );
   _.assert( arguments.length === 2, 'expects exactly two arguments' );
 
-  for( var f in _.ClassSubfieldsGroupsRelationships )
+  for( var f in _.ClassFieldsGroupsRelationships )
   if( prototype[ f ][ fieldName ] )
   return true;
 
@@ -3614,23 +3579,32 @@ wCallableObject.nameShort = 'CallableObject';
 var Combining = [ 'rewrite','supplement','apppend','prepend' ];
 
 /**
- * @global {Object} wTools~ClassSubfieldsGroupsRelationships - contains predefined class relationship types.
+ * @global {Object} wTools~ClassFieldsGroupsRelationships - contains predefined class relationship types.
  * @memberof wTools
  */
 
-var ClassSubfieldsGroupsRelationships = Object.create( null );
-ClassSubfieldsGroupsRelationships.Composes = 'Composes';
-ClassSubfieldsGroupsRelationships.Aggregates = 'Aggregates';
-ClassSubfieldsGroupsRelationships.Associates = 'Associates';
-ClassSubfieldsGroupsRelationships.Restricts = 'Restricts';
+var ClassFieldsGroups = Object.create( null );
+ClassFieldsGroups.Composes = 'Composes';
+ClassFieldsGroups.Aggregates = 'Aggregates';
+ClassFieldsGroups.Associates = 'Associates';
+ClassFieldsGroups.Restricts = 'Restricts';
+ClassFieldsGroups.Medials = 'Medials';
+ClassFieldsGroups.Statics = 'Statics';
 
-var ClassSubfieldsGroups = Object.create( null );
-ClassSubfieldsGroups.Composes = 'Composes';
-ClassSubfieldsGroups.Aggregates = 'Aggregates';
-ClassSubfieldsGroups.Associates = 'Associates';
-ClassSubfieldsGroups.Medials = 'Medials';
-ClassSubfieldsGroups.Restricts = 'Restricts';
-ClassSubfieldsGroups.Statics = 'Statics';
+var ClassFieldsGroupsRelationships = Object.create( null );
+ClassFieldsGroupsRelationships.Composes = 'Composes';
+ClassFieldsGroupsRelationships.Aggregates = 'Aggregates';
+ClassFieldsGroupsRelationships.Associates = 'Associates';
+ClassFieldsGroupsRelationships.Restricts = 'Restricts';
+
+var ClassFieldsGroupsCopyable = Object.create( null );
+ClassFieldsGroupsCopyable.Composes = 'Composes';
+ClassFieldsGroupsCopyable.Aggregates = 'Aggregates';
+ClassFieldsGroupsCopyable.Associates = 'Associates';
+
+var ClassFieldsGroupsTight = Object.create( null );
+ClassFieldsGroupsTight.Composes = 'Composes';
+ClassFieldsGroupsTight.Aggregates = 'Aggregates';
 
 var ClassForbiddenNames = Object.create( null );
 ClassForbiddenNames.Static = 'Static';
@@ -3642,6 +3616,16 @@ ClassAccessorsMap.Accessors = accessor;
 ClassAccessorsMap.Forbids = accessorForbid;
 ClassAccessorsMap.AccessorsForbid = accessorForbid;
 ClassAccessorsMap.AccessorsReadOnly = accessorReadOnly;
+
+var Forbids =
+{
+  _ArrayDescriptor : '_ArrayDescriptor',
+  ArrayDescriptor : 'ArrayDescriptor',
+  _ArrayDescriptors : '_ArrayDescriptors',
+  ArrayDescriptors : 'ArrayDescriptors',
+  arrays : 'arrays',
+  arrayOf : 'arrayOf',
+}
 
 // --
 // define class
@@ -3744,7 +3728,7 @@ var Proto =
 
   prototypeAllFieldsGet : prototypeAllFieldsGet,
   prototypeCopyableFieldsGet : prototypeCopyableFieldsGet,
-  prototypeLoggableFieldsGet : prototypeLoggableFieldsGet,
+  prototypeFieldsTightGet : prototypeFieldsTightGet,
 
   prototypeHasField : prototypeHasField,
 
@@ -3769,26 +3753,20 @@ var Proto =
 
   CallableObject : wCallableObject,
   Combining : Combining,
-  ClassSubfieldsGroupsRelationships : ClassSubfieldsGroupsRelationships,
-  ClassSubfieldsGroups : ClassSubfieldsGroups,
+
+  ClassFieldsGroups : ClassFieldsGroups,
+  ClassFieldsGroupsRelationships : ClassFieldsGroupsRelationships,
+  ClassFieldsGroupsCopyable : ClassFieldsGroupsCopyable,
+  ClassFieldsGroupsTight : ClassFieldsGroupsTight,
+
   ClassForbiddenNames : ClassForbiddenNames,
   ClassAccessorsMap : ClassAccessorsMap,
 
 }
 
-_global_.wProto = Proto;
-
-_.mapExtend( Self, Proto );
-
-_.accessorForbid( _,
-{
-  _ArrayDescriptor : '_ArrayDescriptor',
-  ArrayDescriptor : 'ArrayDescriptor',
-  _ArrayDescriptors : '_ArrayDescriptors',
-  ArrayDescriptors : 'ArrayDescriptors',
-  arrays : 'arrays',
-  arrayOf : 'arrayOf',
-});
+_.proto = Proto;
+_.mapExtend( _, Proto );
+_.accessorForbid( _, Forbids );
 
 // --
 // export
