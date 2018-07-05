@@ -2630,7 +2630,7 @@ to prioritize ordinary facets adjustment order should be
     var prototype = o.prototype;
     var value = o.prototype.Statics[ s ];
 
-    // if( s === '_allFieldsGet' )
+    // if( s === '_fieldsOfRelationshipsGroupsGet' )
     // debugger;
 
     if( !_hasOwnProperty.call( o.prototype.Statics,s ) )
@@ -3168,38 +3168,34 @@ function prototypeEach( proto,onEach )
 
 //
 
-function prototypeAllFieldsGet( src )
+function fieldsOfRelationshipsGroups( src )
 {
   var prototype = _.prototypeGet( src );
   var result = Object.create( null );
 
-  _.assert( _.prototypeIs( prototype ) || _.constructorIs( prototype ) );
+  _.assert( _.prototypeIs( prototype ) );
   _.assert( _.prototypeIsStandard( prototype ),'expects standard prototype' );
   _.assert( arguments.length === 1, 'expects single argument' );
 
-  if( prototype.Composes )
-  _.mapExtend( result,prototype.Composes );
-  if( prototype.Aggregates )
-  _.mapExtend( result,prototype.Aggregates );
-  if( prototype.Associates )
-  _.mapExtend( result,prototype.Associates );
+  for( var g in _.ClassFieldsGroupsRelationships )
+  {
 
-  if( prototype.Medials )
-  _.mapExtend( result,prototype.Medials );
-  if( prototype.Restricts )
-  _.mapExtend( result,prototype.Restricts );
+    if( prototype[ g ] )
+    _.mapExtend( result,prototype[ g ] );
+
+  }
 
   return result;
 }
 
 //
 
-function prototypeCopyableFieldsGet( src )
+function fieldsOfCopyableGroups( src )
 {
   var prototype = _.prototypeGet( src );
   var result = Object.create( null );
 
-  _.assert( _.prototypeIs( prototype ) || _.constructorIs( prototype ) );
+  _.assert( _.prototypeIs( prototype ) );
   _.assert( _.prototypeIsStandard( prototype ),'expects standard prototype' );
   _.assert( arguments.length === 1, 'expects single argument' );
 
@@ -3216,12 +3212,12 @@ function prototypeCopyableFieldsGet( src )
 
 //
 
-function prototypeFieldsTightGet( src )
+function fieldsOfTightGroups( src )
 {
   var prototype = _.prototypeGet( src );
   var result = Object.create( null );
 
-  _.assert( _.prototypeIs( prototype ) || _.constructorIs( prototype ) );
+  _.assert( _.prototypeIs( prototype ) );
   _.assert( _.prototypeIsStandard( prototype ),'expects standard prototype' );
   _.assert( arguments.length === 1, 'expects single argument' );
 
@@ -3238,13 +3234,58 @@ function prototypeFieldsTightGet( src )
 
 //
 
-function prototypeHasField( src,fieldName )
+function fieldsOfInputGroups( src )
+{
+  var prototype = _.prototypeGet( src );
+  var result = Object.create( null );
+
+  _.assert( _.prototypeIs( prototype ) );
+  _.assert( _.prototypeIsStandard( prototype ),'expects standard prototype' );
+  _.assert( arguments.length === 1, 'expects single argument' );
+
+  for( var g in _.ClassFieldsGroupsInput )
+  {
+
+    if( prototype[ g ] )
+    _.mapExtend( result,prototype[ g ] );
+
+  }
+
+  return result;
+}
+
+//
+//
+// function fieldsOfTightGroups( src )
+// {
+//   var prototype = _.prototypeGet( src );
+//   var result = Object.create( null );
+//
+//   _.assert( _.prototypeIs( prototype ) || _.constructorIs( prototype ) );
+//   _.assert( _.prototypeIsStandard( prototype ),'expects standard prototype' );
+//   _.assert( arguments.length === 1, 'expects single argument' );
+//
+//   for( var g in _.ClassFieldsGroupsTight )
+//   {
+//
+//     if( prototype[ g ] )
+//     _.mapExtend( result,prototype[ g ] );
+//
+//   }
+//
+//   return result;
+// }
+
+//
+
+function prototypeHasField( src, fieldName )
 {
   var prototype = _.prototypeGet( src );
 
-  _.assert( _.prototypeIs( prototype ) || _.constructorIs( prototype ) );
+  _.assert( _.prototypeIs( prototype ) );
   _.assert( _.prototypeIsStandard( prototype ),'expects standard prototype' );
   _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( _.strIs( fieldName ) );
 
   for( var f in _.ClassFieldsGroupsRelationships )
   if( prototype[ f ][ fieldName ] )
@@ -3430,7 +3471,7 @@ function assertInstanceDoesNotHaveReduntantFields( src )
   var Restricts = src.Restricts || Object.create( null );
 
   _.assert( _.ojbectIs( src ) )
-  _.assertMapOwnOnly( src, Composes, Aggregates, Associates, Restricts );
+  _.assertMapOwnOnly( src, [ Composes, Aggregates, Associates, Restricts ] );
 
   return dst;
 }
@@ -3606,6 +3647,12 @@ var ClassFieldsGroupsTight = Object.create( null );
 ClassFieldsGroupsTight.Composes = 'Composes';
 ClassFieldsGroupsTight.Aggregates = 'Aggregates';
 
+var ClassFieldsGroupsInput = Object.create( null );
+ClassFieldsGroupsInput.Composes = 'Composes';
+ClassFieldsGroupsInput.Aggregates = 'Aggregates';
+ClassFieldsGroupsInput.Associates = 'Associates';
+ClassFieldsGroupsInput.Medials = 'Medials';
+
 var ClassForbiddenNames = Object.create( null );
 ClassForbiddenNames.Static = 'Static';
 ClassForbiddenNames.Type = 'Type';
@@ -3726,9 +3773,10 @@ var Proto =
   prototypeCrossRefer : prototypeCrossRefer,
   prototypeEach : prototypeEach,
 
-  prototypeAllFieldsGet : prototypeAllFieldsGet,
-  prototypeCopyableFieldsGet : prototypeCopyableFieldsGet,
-  prototypeFieldsTightGet : prototypeFieldsTightGet,
+  fieldsOfRelationshipsGroups : fieldsOfRelationshipsGroups,
+  fieldsOfCopyableGroups : fieldsOfCopyableGroups,
+  fieldsOfTightGroups : fieldsOfTightGroups,
+  fieldsOfInputGroups : fieldsOfInputGroups,
 
   prototypeHasField : prototypeHasField,
 
@@ -3758,6 +3806,7 @@ var Proto =
   ClassFieldsGroupsRelationships : ClassFieldsGroupsRelationships,
   ClassFieldsGroupsCopyable : ClassFieldsGroupsCopyable,
   ClassFieldsGroupsTight : ClassFieldsGroupsTight,
+  ClassFieldsGroupsInput : ClassFieldsGroupsInput,
 
   ClassForbiddenNames : ClassForbiddenNames,
   ClassAccessorsMap : ClassAccessorsMap,
