@@ -1,6 +1,6 @@
 {
   "name": "wProto",
-  "version": "0.4.54",
+  "version": "0.4.55",
   "engine": "node >= 6.0.0",
   "description": "Little library of base level helping with defining classes and mixins in Java Script.",
   "author": "Kostiantyn Wandalen <wtory.net@domainsbyproxy.com>",
@@ -15,7 +15,6 @@
       "email": "volodymyr.migdal@gmail.com"
     }
   ],
-
   "main": "staging/dwtools/abase/layer3/Proto.s",
   "files": [
     "npm-shrinkwrap.json",
