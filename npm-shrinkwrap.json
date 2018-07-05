@@ -46,14 +46,14 @@
       "integrity": "sha512-Z3FnIwh3kxXIm7fxXelOr7LBPZsjLOEpAvDzFMzVpkPaXirDFyGY32q3JFY93tvXUh00uFZi2yfD1HydGFieCg==",
       "requires": {
         "wCopyable": "^0.4.32",
-        "wProto": "^0.4.46",
+        "wProto": "^0.4.48",
         "wTools": "^0.8.61"
       },
       "dependencies": {
         "wProto": {
-          "version": "0.4.46",
-          "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.46.tgz",
-          "integrity": "sha1-yobZy+HedM43qgnB0YbhCgGe4t0=",
+          "version": "0.4.48",
+          "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.48.tgz",
+          "integrity": "sha512-/v1czgomqg03u46ouk9PqzbOqQRqac5r5hC1CMEp0DufHO9On4K0BeMpD4wmCOqYEWYTIMM5nurmCs2HgzYQrA==",
           "requires": {
             "wTools": "^0.8.61"
           }
@@ -65,15 +65,15 @@
       "resolved": "https://registry.npmjs.org/wCopyable/-/wCopyable-0.4.32.tgz",
       "integrity": "sha512-Qs4W3Nw9V+g/DpZEPlZABHcAsjAxjmwpximuYuV7xvtyQuTAP1l/pJJD72gH6G9jEDWqKw8BJOEJfzQFlmzhvA==",
       "requires": {
-        "wProto": "^0.4.46",
+        "wProto": "^0.4.48",
         "wTools": "^0.8.61",
         "wcloner": "^0.3.29"
       },
       "dependencies": {
         "wProto": {
-          "version": "0.4.46",
-          "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.46.tgz",
-          "integrity": "sha1-yobZy+HedM43qgnB0YbhCgGe4t0=",
+          "version": "0.4.48",
+          "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.48.tgz",
+          "integrity": "sha512-/v1czgomqg03u46ouk9PqzbOqQRqac5r5hC1CMEp0DufHO9On4K0BeMpD4wmCOqYEWYTIMM5nurmCs2HgzYQrA==",
           "requires": {
             "wTools": "^0.8.61"
           }
@@ -85,14 +85,14 @@
       "resolved": "https://registry.npmjs.org/wEventHandler/-/wEventHandler-0.4.22.tgz",
       "integrity": "sha512-bAy+7m13xwsCUr46s8F5x4a/1MSLQ/DwUHnRp0B+erKRQJOUFssC9goLjlDe9eC5A7HGwwEN+C+I0taiJIqzNw==",
       "requires": {
-        "wProto": "^0.4.46",
+        "wProto": "^0.4.48",
         "wTools": "^0.8.61"
       },
       "dependencies": {
         "wProto": {
-          "version": "0.4.46",
-          "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.46.tgz",
-          "integrity": "sha1-yobZy+HedM43qgnB0YbhCgGe4t0=",
+          "version": "0.4.48",
+          "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.48.tgz",
+          "integrity": "sha512-/v1czgomqg03u46ouk9PqzbOqQRqac5r5hC1CMEp0DufHO9On4K0BeMpD4wmCOqYEWYTIMM5nurmCs2HgzYQrA==",
           "requires": {
             "wTools": "^0.8.61"
           }
@@ -161,16 +161,16 @@
         "wEventHandler": "^0.4.22",
         "wFiles": "^0.6.79",
         "wLogger": "^0.5.51",
-        "wProto": "^0.4.46",
+        "wProto": "^0.4.48",
         "wTools": "^0.8.61",
         "wexectools": "^0.3.22",
         "winstancing": "^0.4.9"
       },
       "dependencies": {
         "wProto": {
-          "version": "0.4.46",
-          "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.46.tgz",
-          "integrity": "sha1-yobZy+HedM43qgnB0YbhCgGe4t0=",
+          "version": "0.4.48",
+          "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.48.tgz",
+          "integrity": "sha512-/v1czgomqg03u46ouk9PqzbOqQRqac5r5hC1CMEp0DufHO9On4K0BeMpD4wmCOqYEWYTIMM5nurmCs2HgzYQrA==",
           "requires": {
             "wTools": "^0.8.61"
           }
@@ -205,14 +205,14 @@
       "resolved": "https://registry.npmjs.org/wfieldsstack/-/wfieldsstack-0.3.10.tgz",
       "integrity": "sha512-vhxp2QusYHep+ferJEsoi/sPs6I4XH42IXI3sHeNBkVl0lrIbch8/294HZowGaybZLBX+vqhD5k30XsaaVzLbA==",
       "requires": {
-        "wProto": "^0.4.46",
+        "wProto": "^0.4.48",
         "wTools": "^0.8.61"
       },
       "dependencies": {
         "wProto": {
-          "version": "0.4.46",
-          "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.46.tgz",
-          "integrity": "sha1-yobZy+HedM43qgnB0YbhCgGe4t0=",
+          "version": "0.4.48",
+          "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.48.tgz",
+          "integrity": "sha512-/v1czgomqg03u46ouk9PqzbOqQRqac5r5hC1CMEp0DufHO9On4K0BeMpD4wmCOqYEWYTIMM5nurmCs2HgzYQrA==",
           "requires": {
             "wTools": "^0.8.61"
           }
@@ -224,15 +224,15 @@
       "resolved": "https://registry.npmjs.org/winstancing/-/winstancing-0.4.9.tgz",
       "integrity": "sha512-bkaEVvGoEmHJA8i1W+/NuyBtaAllmnfRtpJrTyBQ5uSRl/7icUReIFol6hw0nTSCFyxMAkqFQWQdmOxZvA4Xwg==",
       "requires": {
-        "wProto": "^0.4.46",
+        "wProto": "^0.4.48",
         "wTools": "^0.8.61",
         "wcloner": "^0.3.29"
       },
       "dependencies": {
         "wProto": {
-          "version": "0.4.46",
-          "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.46.tgz",
-          "integrity": "sha1-yobZy+HedM43qgnB0YbhCgGe4t0=",
+          "version": "0.4.48",
+          "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.48.tgz",
+          "integrity": "sha512-/v1czgomqg03u46ouk9PqzbOqQRqac5r5hC1CMEp0DufHO9On4K0BeMpD4wmCOqYEWYTIMM5nurmCs2HgzYQrA==",
           "requires": {
             "wTools": "^0.8.61"
           }

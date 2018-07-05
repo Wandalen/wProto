@@ -17,6 +17,7 @@
   ],
   "main": "staging/dwtools/abase/layer3/Proto.s",
   "files": [
+    "npm-shrinkwrap.json",
     "staging/dwtools/abase/layer3",
     "production"
   ],
