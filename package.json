@@ -1,6 +1,6 @@
 {
   "name": "wProto",
-  "version": "0.4.40",
+  "version": "0.4.41",
   "engine": "node >= 6.0.0",
   "description": "Little library of base level helping with defining classes and mixins in Java Script.",
   "author": "Kostiantyn Wandalen <wtory.net@domainsbyproxy.com>",
@@ -46,6 +46,5 @@
     "Object",
     "Prototype",
     "Incapsulation"
-    
   ]
 }
