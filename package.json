@@ -33,11 +33,10 @@
     "url": "https://github.com/Wandalen/wProto/issues"
   },
   "dependencies": {
-    "wTools": ""
+    "wTools": "0.8.66"
   },
   "devDependencies": {
     "wProto": "file:.",
-    "wTesting": ""
   },
   "keywords": [
     "wTools",
