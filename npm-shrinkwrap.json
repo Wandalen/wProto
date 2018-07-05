@@ -9,9 +9,9 @@
       "resolved": "https://registry.npmjs.org/fs-extra/-/fs-extra-6.0.1.tgz",
       "integrity": "sha512-GnyIkKhhzXZUWFCaJzvyDLEEgDkPfb4/TPvJCJVuS8MWZgoSsErf++QpiAlDnKFcqhRlm+tIOcencCjyJE6ZCA==",
       "requires": {
-        "graceful-fs": "^4.1.2",
-        "jsonfile": "^4.0.0",
-        "universalify": "^0.1.0"
+        "graceful-fs": "4.1.2",
+        "jsonfile": "4.0.0",
+        "universalify": "0.1.0"
       }
     },
     "graceful-fs": {
@@ -24,7 +24,7 @@
       "resolved": "https://registry.npmjs.org/jsonfile/-/jsonfile-4.0.0.tgz",
       "integrity": "sha1-h3Gq4HmbZAdrdmQPygWPnBDjPss=",
       "requires": {
-        "graceful-fs": "^4.1.6"
+        "graceful-fs": "4.1.6"
       }
     },
     "universalify": {
@@ -37,7 +37,7 @@
       "resolved": "https://registry.npmjs.org/wColor/-/wColor-0.3.37.tgz",
       "integrity": "sha512-vDH7Qsu4yNzjo2Rti77WZjrCJJ+fnkOxqI9gyZb7OgHTDf381h4E5KFbz+oaIQsM0Cw/bckuxo6pOxGokvRb9Q==",
       "requires": {
-        "wTools": "^0.8.63"
+        "wTools": "0.8.63"
       }
     },
     "wConsequence": {
@@ -45,9 +45,9 @@
       "resolved": "https://registry.npmjs.org/wConsequence/-/wConsequence-0.4.36.tgz",
       "integrity": "sha512-Z3FnIwh3kxXIm7fxXelOr7LBPZsjLOEpAvDzFMzVpkPaXirDFyGY32q3JFY93tvXUh00uFZi2yfD1HydGFieCg==",
       "requires": {
-        "wCopyable": "^0.4.32",
-        "wProto": "^0.4.51",
-        "wTools": "^0.8.63"
+        "wCopyable": "0.4.32",
+        "wProto": "0.4.51",
+        "wTools": "0.8.63"
       },
       "dependencies": {
         "wProto": {
@@ -55,7 +55,7 @@
           "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.51.tgz",
           "integrity": "sha512-EfiA4qs/p0Y2zVkJJ4ctLEU5qHSKsD/+hl9rA2R42UIruRZbAeJzKagrIlBDkgvWXjzyNbo4q9udORP8gBWcXw==",
           "requires": {
-            "wTools": "^0.8.63"
+            "wTools": "0.8.63"
           },
           "dependencies": {
             "fs-extra": {
@@ -63,9 +63,9 @@
               "resolved": "https://registry.npmjs.org/fs-extra/-/fs-extra-6.0.1.tgz",
               "integrity": "sha512-GnyIkKhhzXZUWFCaJzvyDLEEgDkPfb4/TPvJCJVuS8MWZgoSsErf++QpiAlDnKFcqhRlm+tIOcencCjyJE6ZCA==",
               "requires": {
-                "graceful-fs": "^4.1.2",
-                "jsonfile": "^4.0.0",
-                "universalify": "^0.1.0"
+                "graceful-fs": "4.1.2",
+                "jsonfile": "4.0.0",
+                "universalify": "0.1.0"
               }
             },
             "graceful-fs": {
@@ -78,7 +78,7 @@
               "resolved": "https://registry.npmjs.org/jsonfile/-/jsonfile-4.0.0.tgz",
               "integrity": "sha1-h3Gq4HmbZAdrdmQPygWPnBDjPss=",
               "requires": {
-                "graceful-fs": "^4.1.6"
+                "graceful-fs": "4.1.6"
               }
             },
             "universalify": {
@@ -91,7 +91,7 @@
               "resolved": "https://registry.npmjs.org/wColor/-/wColor-0.3.37.tgz",
               "integrity": "sha512-vDH7Qsu4yNzjo2Rti77WZjrCJJ+fnkOxqI9gyZb7OgHTDf381h4E5KFbz+oaIQsM0Cw/bckuxo6pOxGokvRb9Q==",
               "requires": {
-                "wTools": "^0.8.63"
+                "wTools": "0.8.63"
               }
             },
             "wConsequence": {
@@ -99,9 +99,9 @@
               "resolved": "https://registry.npmjs.org/wConsequence/-/wConsequence-0.4.36.tgz",
               "integrity": "sha512-Z3FnIwh3kxXIm7fxXelOr7LBPZsjLOEpAvDzFMzVpkPaXirDFyGY32q3JFY93tvXUh00uFZi2yfD1HydGFieCg==",
               "requires": {
-                "wCopyable": "^0.4.32",
-                "wProto": "^0.4.48",
-                "wTools": "^0.8.63"
+                "wCopyable": "0.4.32",
+                "wProto": "0.4.48",
+                "wTools": "0.8.63"
               },
               "dependencies": {
                 "wProto": {
@@ -109,7 +109,7 @@
                   "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.48.tgz",
                   "integrity": "sha512-/v1czgomqg03u46ouk9PqzbOqQRqac5r5hC1CMEp0DufHO9On4K0BeMpD4wmCOqYEWYTIMM5nurmCs2HgzYQrA==",
                   "requires": {
-                    "wTools": "^0.8.63"
+                    "wTools": "0.8.63"
                   }
                 }
               }
@@ -119,9 +119,9 @@
               "resolved": "https://registry.npmjs.org/wCopyable/-/wCopyable-0.4.32.tgz",
               "integrity": "sha512-Qs4W3Nw9V+g/DpZEPlZABHcAsjAxjmwpximuYuV7xvtyQuTAP1l/pJJD72gH6G9jEDWqKw8BJOEJfzQFlmzhvA==",
               "requires": {
-                "wProto": "^0.4.48",
-                "wTools": "^0.8.63",
-                "wcloner": "^0.3.29"
+                "wProto": "0.4.48",
+                "wTools": "0.8.63",
+                "wcloner": "0.3.29"
               },
               "dependencies": {
                 "wProto": {
@@ -129,7 +129,7 @@
                   "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.48.tgz",
                   "integrity": "sha512-/v1czgomqg03u46ouk9PqzbOqQRqac5r5hC1CMEp0DufHO9On4K0BeMpD4wmCOqYEWYTIMM5nurmCs2HgzYQrA==",
                   "requires": {
-                    "wTools": "^0.8.63"
+                    "wTools": "0.8.63"
                   }
                 }
               }
@@ -139,8 +139,8 @@
               "resolved": "https://registry.npmjs.org/wEventHandler/-/wEventHandler-0.4.22.tgz",
               "integrity": "sha512-bAy+7m13xwsCUr46s8F5x4a/1MSLQ/DwUHnRp0B+erKRQJOUFssC9goLjlDe9eC5A7HGwwEN+C+I0taiJIqzNw==",
               "requires": {
-                "wProto": "^0.4.48",
-                "wTools": "^0.8.63"
+                "wProto": "0.4.48",
+                "wTools": "0.8.63"
               },
               "dependencies": {
                 "wProto": {
@@ -148,7 +148,7 @@
                   "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.48.tgz",
                   "integrity": "sha512-/v1czgomqg03u46ouk9PqzbOqQRqac5r5hC1CMEp0DufHO9On4K0BeMpD4wmCOqYEWYTIMM5nurmCs2HgzYQrA==",
                   "requires": {
-                    "wTools": "^0.8.63"
+                    "wTools": "0.8.63"
                   }
                 }
               }
@@ -158,16 +158,16 @@
               "resolved": "https://registry.npmjs.org/wFiles/-/wFiles-0.6.79.tgz",
               "integrity": "sha512-YP7gaI+rF3I1OqkOtn/BnYl+VbykNKV1I/2OFG2/ew0x7VTKaX6Q1c45nBY/FcN+usyfS/1P21IF9yknYodBFA==",
               "requires": {
-                "fs-extra": "^6.0.1",
-                "wConsequence": "^0.4.36",
-                "wCopyable": "^0.4.32",
-                "wPath": "^0.5.51",
-                "wRegexpObject": "^0.4.40",
-                "wTools": "^0.8.63",
-                "wexectools": "^0.3.22",
-                "wfieldsstack": "^0.3.10",
-                "wstringer": "^0.3.14",
-                "wstringsextra": "^0.3.15"
+                "fs-extra": "6.0.1",
+                "wConsequence": "0.4.36",
+                "wCopyable": "0.4.32",
+                "wPath": "0.5.51",
+                "wRegexpObject": "0.4.40",
+                "wTools": "0.8.63",
+                "wexectools": "0.3.22",
+                "wfieldsstack": "0.3.10",
+                "wstringer": "0.3.14",
+                "wstringsextra": "0.3.15"
               }
             },
             "wLogger": {
@@ -175,11 +175,11 @@
               "resolved": "https://registry.npmjs.org/wLogger/-/wLogger-0.5.51.tgz",
               "integrity": "sha512-XwdVGorZzkDF424UqVVav8LMLTHyevcWkSHZ8Qz1PrLgsw8xLSPi7lWlNwIdj/xWj8AdIrh6qKsaoL4O47g8YQ==",
               "requires": {
-                "wColor": "^0.3.37",
-                "wCopyable": "^0.4.32",
-                "wTools": "^0.8.63",
-                "wstringer": "^0.3.14",
-                "wstringsextra": "^0.3.15"
+                "wColor": "0.3.37",
+                "wCopyable": "0.4.32",
+                "wTools": "0.8.63",
+                "wstringer": "0.3.14",
+                "wstringsextra": "0.3.15"
               }
             },
             "wPath": {
@@ -187,14 +187,14 @@
               "resolved": "https://registry.npmjs.org/wPath/-/wPath-0.5.51.tgz",
               "integrity": "sha512-77x2ijrQuVxstXbdS70TCNSQ9pIyo9pEE6WvZx/rf5B+19O2WoYFqEuopJ6hglOUMsCyIaTsMP8zeQuplhedVQ==",
               "requires": {
-                "wTools": "^0.8.63"
+                "wTools": "0.8.63"
               }
             },
             "wProto": {
               "version": "file:node_modules/wConsequence/node_modules/wProto",
               "integrity": "sha512-EfiA4qs/p0Y2zVkJJ4ctLEU5qHSKsD/+hl9rA2R42UIruRZbAeJzKagrIlBDkgvWXjzyNbo4q9udORP8gBWcXw==",
               "requires": {
-                "wTools": "^0.8.63"
+                "wTools": "0.8.63"
               }
             },
             "wRegexpObject": {
@@ -202,7 +202,7 @@
               "resolved": "https://registry.npmjs.org/wRegexpObject/-/wRegexpObject-0.4.40.tgz",
               "integrity": "sha512-I8BrH4cMSwwcGesPAstlkGqOD5OzGc1uanj3m/f+jOhK1t0AbrCTQDQUEWwTO6u6gnElsBMFxPTvIowYV58cgw==",
               "requires": {
-                "wTools": "^0.8.63"
+                "wTools": "0.8.63"
               }
             },
             "wTesting": {
@@ -210,15 +210,15 @@
               "resolved": "https://registry.npmjs.org/wTesting/-/wTesting-0.4.102.tgz",
               "integrity": "sha512-uwYt0RyxRIXVifSwb6KoHpB1edpUXhd6WOimGSw5QCVuBVL2P8OvIV1CyYsVEBePuREEoKkdl9h3o7j5fdtzmg==",
               "requires": {
-                "wConsequence": "^0.4.36",
-                "wCopyable": "^0.4.32",
-                "wEventHandler": "^0.4.22",
-                "wFiles": "^0.6.79",
-                "wLogger": "^0.5.51",
-                "wProto": "^0.4.48",
-                "wTools": "^0.8.63",
-                "wexectools": "^0.3.22",
-                "winstancing": "^0.4.9"
+                "wConsequence": "0.4.36",
+                "wCopyable": "0.4.32",
+                "wEventHandler": "0.4.22",
+                "wFiles": "0.6.79",
+                "wLogger": "0.5.51",
+                "wProto": "0.4.48",
+                "wTools": "0.8.63",
+                "wexectools": "0.3.22",
+                "winstancing": "0.4.9"
               },
               "dependencies": {
                 "wProto": {
@@ -226,7 +226,7 @@
                   "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.48.tgz",
                   "integrity": "sha512-/v1czgomqg03u46ouk9PqzbOqQRqac5r5hC1CMEp0DufHO9On4K0BeMpD4wmCOqYEWYTIMM5nurmCs2HgzYQrA==",
                   "requires": {
-                    "wTools": "^0.8.63"
+                    "wTools": "0.8.63"
                   }
                 }
               }
@@ -236,8 +236,8 @@
               "resolved": "https://registry.npmjs.org/wcloner/-/wcloner-0.3.29.tgz",
               "integrity": "sha512-NWpdGT2nh2fAoSXtC2MsSzLqLGn1iK8YfeQxZvbLGWc7gMYHqbBiQngd0/RsH/yEmzmt1iCewy9XxGxoV1N78A==",
               "requires": {
-                "wTools": "^0.8.63",
-                "wtraverser": "^0.3.14"
+                "wTools": "0.8.63",
+                "wtraverser": "0.3.14"
               }
             },
             "wexectools": {
@@ -245,8 +245,8 @@
               "resolved": "https://registry.npmjs.org/wexectools/-/wexectools-0.3.22.tgz",
               "integrity": "sha512-zM8L9jS/aP9KzU+zyvgrUHn5U86Oxoofpw4Od/gFa5HALanUaAKB1+Wp8RCyBp9o5rmEsAep0/W+VTxvY1KYgw==",
               "requires": {
-                "wPath": "^0.5.51",
-                "wTools": "^0.8.63"
+                "wPath": "0.5.51",
+                "wTools": "0.8.63"
               }
             },
             "wfieldsstack": {
@@ -254,8 +254,8 @@
               "resolved": "https://registry.npmjs.org/wfieldsstack/-/wfieldsstack-0.3.10.tgz",
               "integrity": "sha512-vhxp2QusYHep+ferJEsoi/sPs6I4XH42IXI3sHeNBkVl0lrIbch8/294HZowGaybZLBX+vqhD5k30XsaaVzLbA==",
               "requires": {
-                "wProto": "^0.4.48",
-                "wTools": "^0.8.63"
+                "wProto": "0.4.48",
+                "wTools": "0.8.63"
               },
               "dependencies": {
                 "wProto": {
@@ -263,7 +263,7 @@
                   "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.48.tgz",
                   "integrity": "sha512-/v1czgomqg03u46ouk9PqzbOqQRqac5r5hC1CMEp0DufHO9On4K0BeMpD4wmCOqYEWYTIMM5nurmCs2HgzYQrA==",
                   "requires": {
-                    "wTools": "^0.8.63"
+                    "wTools": "0.8.63"
                   }
                 }
               }
@@ -273,9 +273,9 @@
               "resolved": "https://registry.npmjs.org/winstancing/-/winstancing-0.4.9.tgz",
               "integrity": "sha512-bkaEVvGoEmHJA8i1W+/NuyBtaAllmnfRtpJrTyBQ5uSRl/7icUReIFol6hw0nTSCFyxMAkqFQWQdmOxZvA4Xwg==",
               "requires": {
-                "wProto": "^0.4.48",
-                "wTools": "^0.8.63",
-                "wcloner": "^0.3.29"
+                "wProto": "0.4.48",
+                "wTools": "0.8.63",
+                "wcloner": "0.3.29"
               },
               "dependencies": {
                 "wProto": {
@@ -283,7 +283,7 @@
                   "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.48.tgz",
                   "integrity": "sha512-/v1czgomqg03u46ouk9PqzbOqQRqac5r5hC1CMEp0DufHO9On4K0BeMpD4wmCOqYEWYTIMM5nurmCs2HgzYQrA==",
                   "requires": {
-                    "wTools": "^0.8.63"
+                    "wTools": "0.8.63"
                   }
                 }
               }
@@ -293,7 +293,7 @@
               "resolved": "https://registry.npmjs.org/wstringer/-/wstringer-0.3.14.tgz",
               "integrity": "sha512-KWB9K5eBpcgWmHW0VoNIrEObILwjHIEjKQ03CyUh05zyVbtEjYvBc3xeq9JMi363GOhb8vfANzfe5oazdPXrzQ==",
               "requires": {
-                "wTools": "^0.8.63"
+                "wTools": "0.8.63"
               }
             },
             "wstringsextra": {
@@ -301,8 +301,8 @@
               "resolved": "https://registry.npmjs.org/wstringsextra/-/wstringsextra-0.3.15.tgz",
               "integrity": "sha512-4tkMHip9VV+b54K5cOQBK3Q6zw1C4TdttNDL1Mc3GKdhxpAy+9YnqF5B+NJ/ym1QsIQS9KvWvdgsJNPN17uYFA==",
               "requires": {
-                "wTools": "^0.8.63",
-                "wstringer": "^0.3.14"
+                "wTools": "0.8.63",
+                "wstringer": "0.3.14"
               }
             },
             "wtraverser": {
@@ -310,7 +310,7 @@
               "resolved": "https://registry.npmjs.org/wtraverser/-/wtraverser-0.3.14.tgz",
               "integrity": "sha512-zkwZQjiY5tgEhFY30yrhf3RlGXX7GoC8taVyGYorIoekWvWvh2n0EOjy0oRJZKSxv5xe62I5Y1mzqcfNZB+9+g==",
               "requires": {
-                "wTools": "^0.8.63"
+                "wTools": "0.8.63"
               }
             }
           }
@@ -327,9 +327,9 @@
       "resolved": "https://registry.npmjs.org/wCopyable/-/wCopyable-0.4.32.tgz",
       "integrity": "sha512-Qs4W3Nw9V+g/DpZEPlZABHcAsjAxjmwpximuYuV7xvtyQuTAP1l/pJJD72gH6G9jEDWqKw8BJOEJfzQFlmzhvA==",
       "requires": {
-        "wProto": "^0.4.51",
-        "wTools": "^0.8.63",
-        "wcloner": "^0.3.29"
+        "wProto": "0.4.51",
+        "wTools": "0.8.63",
+        "wcloner": "0.3.29"
       },
       "dependencies": {
         "wProto": {
@@ -337,7 +337,7 @@
           "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.51.tgz",
           "integrity": "sha512-EfiA4qs/p0Y2zVkJJ4ctLEU5qHSKsD/+hl9rA2R42UIruRZbAeJzKagrIlBDkgvWXjzyNbo4q9udORP8gBWcXw==",
           "requires": {
-            "wTools": "^0.8.63"
+            "wTools": "0.8.63"
           },
           "dependencies": {
             "fs-extra": {
@@ -345,9 +345,9 @@
               "resolved": "https://registry.npmjs.org/fs-extra/-/fs-extra-6.0.1.tgz",
               "integrity": "sha512-GnyIkKhhzXZUWFCaJzvyDLEEgDkPfb4/TPvJCJVuS8MWZgoSsErf++QpiAlDnKFcqhRlm+tIOcencCjyJE6ZCA==",
               "requires": {
-                "graceful-fs": "^4.1.2",
-                "jsonfile": "^4.0.0",
-                "universalify": "^0.1.0"
+                "graceful-fs": "4.1.2",
+                "jsonfile": "4.0.0",
+                "universalify": "0.1.0"
               }
             },
             "graceful-fs": {
@@ -360,7 +360,7 @@
               "resolved": "https://registry.npmjs.org/jsonfile/-/jsonfile-4.0.0.tgz",
               "integrity": "sha1-h3Gq4HmbZAdrdmQPygWPnBDjPss=",
               "requires": {
-                "graceful-fs": "^4.1.6"
+                "graceful-fs": "4.1.6"
               }
             },
             "universalify": {
@@ -373,7 +373,7 @@
               "resolved": "https://registry.npmjs.org/wColor/-/wColor-0.3.37.tgz",
               "integrity": "sha512-vDH7Qsu4yNzjo2Rti77WZjrCJJ+fnkOxqI9gyZb7OgHTDf381h4E5KFbz+oaIQsM0Cw/bckuxo6pOxGokvRb9Q==",
               "requires": {
-                "wTools": "^0.8.63"
+                "wTools": "0.8.63"
               }
             },
             "wConsequence": {
@@ -381,9 +381,9 @@
               "resolved": "https://registry.npmjs.org/wConsequence/-/wConsequence-0.4.36.tgz",
               "integrity": "sha512-Z3FnIwh3kxXIm7fxXelOr7LBPZsjLOEpAvDzFMzVpkPaXirDFyGY32q3JFY93tvXUh00uFZi2yfD1HydGFieCg==",
               "requires": {
-                "wCopyable": "^0.4.32",
-                "wProto": "^0.4.48",
-                "wTools": "^0.8.63"
+                "wCopyable": "0.4.32",
+                "wProto": "0.4.48",
+                "wTools": "0.8.63"
               },
               "dependencies": {
                 "wProto": {
@@ -391,7 +391,7 @@
                   "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.48.tgz",
                   "integrity": "sha512-/v1czgomqg03u46ouk9PqzbOqQRqac5r5hC1CMEp0DufHO9On4K0BeMpD4wmCOqYEWYTIMM5nurmCs2HgzYQrA==",
                   "requires": {
-                    "wTools": "^0.8.63"
+                    "wTools": "0.8.63"
                   }
                 }
               }
@@ -401,9 +401,9 @@
               "resolved": "https://registry.npmjs.org/wCopyable/-/wCopyable-0.4.32.tgz",
               "integrity": "sha512-Qs4W3Nw9V+g/DpZEPlZABHcAsjAxjmwpximuYuV7xvtyQuTAP1l/pJJD72gH6G9jEDWqKw8BJOEJfzQFlmzhvA==",
               "requires": {
-                "wProto": "^0.4.48",
-                "wTools": "^0.8.63",
-                "wcloner": "^0.3.29"
+                "wProto": "0.4.48",
+                "wTools": "0.8.63",
+                "wcloner": "0.3.29"
               },
               "dependencies": {
                 "wProto": {
@@ -411,7 +411,7 @@
                   "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.48.tgz",
                   "integrity": "sha512-/v1czgomqg03u46ouk9PqzbOqQRqac5r5hC1CMEp0DufHO9On4K0BeMpD4wmCOqYEWYTIMM5nurmCs2HgzYQrA==",
                   "requires": {
-                    "wTools": "^0.8.63"
+                    "wTools": "0.8.63"
                   }
                 }
               }
@@ -421,8 +421,8 @@
               "resolved": "https://registry.npmjs.org/wEventHandler/-/wEventHandler-0.4.22.tgz",
               "integrity": "sha512-bAy+7m13xwsCUr46s8F5x4a/1MSLQ/DwUHnRp0B+erKRQJOUFssC9goLjlDe9eC5A7HGwwEN+C+I0taiJIqzNw==",
               "requires": {
-                "wProto": "^0.4.48",
-                "wTools": "^0.8.63"
+                "wProto": "0.4.48",
+                "wTools": "0.8.63"
               },
               "dependencies": {
                 "wProto": {
@@ -430,7 +430,7 @@
                   "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.48.tgz",
                   "integrity": "sha512-/v1czgomqg03u46ouk9PqzbOqQRqac5r5hC1CMEp0DufHO9On4K0BeMpD4wmCOqYEWYTIMM5nurmCs2HgzYQrA==",
                   "requires": {
-                    "wTools": "^0.8.63"
+                    "wTools": "0.8.63"
                   }
                 }
               }
@@ -440,16 +440,16 @@
               "resolved": "https://registry.npmjs.org/wFiles/-/wFiles-0.6.79.tgz",
               "integrity": "sha512-YP7gaI+rF3I1OqkOtn/BnYl+VbykNKV1I/2OFG2/ew0x7VTKaX6Q1c45nBY/FcN+usyfS/1P21IF9yknYodBFA==",
               "requires": {
-                "fs-extra": "^6.0.1",
-                "wConsequence": "^0.4.36",
-                "wCopyable": "^0.4.32",
-                "wPath": "^0.5.51",
-                "wRegexpObject": "^0.4.40",
-                "wTools": "^0.8.63",
-                "wexectools": "^0.3.22",
-                "wfieldsstack": "^0.3.10",
-                "wstringer": "^0.3.14",
-                "wstringsextra": "^0.3.15"
+                "fs-extra": "6.0.1",
+                "wConsequence": "0.4.36",
+                "wCopyable": "0.4.32",
+                "wPath": "0.5.51",
+                "wRegexpObject": "0.4.40",
+                "wTools": "0.8.63",
+                "wexectools": "0.3.22",
+                "wfieldsstack": "0.3.10",
+                "wstringer": "0.3.14",
+                "wstringsextra": "0.3.15"
               }
             },
             "wLogger": {
@@ -457,11 +457,11 @@
               "resolved": "https://registry.npmjs.org/wLogger/-/wLogger-0.5.51.tgz",
               "integrity": "sha512-XwdVGorZzkDF424UqVVav8LMLTHyevcWkSHZ8Qz1PrLgsw8xLSPi7lWlNwIdj/xWj8AdIrh6qKsaoL4O47g8YQ==",
               "requires": {
-                "wColor": "^0.3.37",
-                "wCopyable": "^0.4.32",
-                "wTools": "^0.8.63",
-                "wstringer": "^0.3.14",
-                "wstringsextra": "^0.3.15"
+                "wColor": "0.3.37",
+                "wCopyable": "0.4.32",
+                "wTools": "0.8.63",
+                "wstringer": "0.3.14",
+                "wstringsextra": "0.3.15"
               }
             },
             "wPath": {
@@ -469,14 +469,14 @@
               "resolved": "https://registry.npmjs.org/wPath/-/wPath-0.5.51.tgz",
               "integrity": "sha512-77x2ijrQuVxstXbdS70TCNSQ9pIyo9pEE6WvZx/rf5B+19O2WoYFqEuopJ6hglOUMsCyIaTsMP8zeQuplhedVQ==",
               "requires": {
-                "wTools": "^0.8.63"
+                "wTools": "0.8.63"
               }
             },
             "wProto": {
               "version": "file:node_modules/wCopyable/node_modules/wProto",
               "integrity": "sha512-EfiA4qs/p0Y2zVkJJ4ctLEU5qHSKsD/+hl9rA2R42UIruRZbAeJzKagrIlBDkgvWXjzyNbo4q9udORP8gBWcXw==",
               "requires": {
-                "wTools": "^0.8.63"
+                "wTools": "0.8.63"
               }
             },
             "wRegexpObject": {
@@ -484,7 +484,7 @@
               "resolved": "https://registry.npmjs.org/wRegexpObject/-/wRegexpObject-0.4.40.tgz",
               "integrity": "sha512-I8BrH4cMSwwcGesPAstlkGqOD5OzGc1uanj3m/f+jOhK1t0AbrCTQDQUEWwTO6u6gnElsBMFxPTvIowYV58cgw==",
               "requires": {
-                "wTools": "^0.8.63"
+                "wTools": "0.8.63"
               }
             },
             "wTesting": {
@@ -492,15 +492,15 @@
               "resolved": "https://registry.npmjs.org/wTesting/-/wTesting-0.4.102.tgz",
               "integrity": "sha512-uwYt0RyxRIXVifSwb6KoHpB1edpUXhd6WOimGSw5QCVuBVL2P8OvIV1CyYsVEBePuREEoKkdl9h3o7j5fdtzmg==",
               "requires": {
-                "wConsequence": "^0.4.36",
-                "wCopyable": "^0.4.32",
-                "wEventHandler": "^0.4.22",
-                "wFiles": "^0.6.79",
-                "wLogger": "^0.5.51",
-                "wProto": "^0.4.48",
-                "wTools": "^0.8.63",
-                "wexectools": "^0.3.22",
-                "winstancing": "^0.4.9"
+                "wConsequence": "0.4.36",
+                "wCopyable": "0.4.32",
+                "wEventHandler": "0.4.22",
+                "wFiles": "0.6.79",
+                "wLogger": "0.5.51",
+                "wProto": "0.4.48",
+                "wTools": "0.8.63",
+                "wexectools": "0.3.22",
+                "winstancing": "0.4.9"
               },
               "dependencies": {
                 "wProto": {
@@ -508,7 +508,7 @@
                   "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.48.tgz",
                   "integrity": "sha512-/v1czgomqg03u46ouk9PqzbOqQRqac5r5hC1CMEp0DufHO9On4K0BeMpD4wmCOqYEWYTIMM5nurmCs2HgzYQrA==",
                   "requires": {
-                    "wTools": "^0.8.63"
+                    "wTools": "0.8.63"
                   }
                 }
               }
@@ -518,8 +518,8 @@
               "resolved": "https://registry.npmjs.org/wcloner/-/wcloner-0.3.29.tgz",
               "integrity": "sha512-NWpdGT2nh2fAoSXtC2MsSzLqLGn1iK8YfeQxZvbLGWc7gMYHqbBiQngd0/RsH/yEmzmt1iCewy9XxGxoV1N78A==",
               "requires": {
-                "wTools": "^0.8.63",
-                "wtraverser": "^0.3.14"
+                "wTools": "0.8.63",
+                "wtraverser": "0.3.14"
               }
             },
             "wexectools": {
@@ -527,8 +527,8 @@
               "resolved": "https://registry.npmjs.org/wexectools/-/wexectools-0.3.22.tgz",
               "integrity": "sha512-zM8L9jS/aP9KzU+zyvgrUHn5U86Oxoofpw4Od/gFa5HALanUaAKB1+Wp8RCyBp9o5rmEsAep0/W+VTxvY1KYgw==",
               "requires": {
-                "wPath": "^0.5.51",
-                "wTools": "^0.8.63"
+                "wPath": "0.5.51",
+                "wTools": "0.8.63"
               }
             },
             "wfieldsstack": {
@@ -536,8 +536,8 @@
               "resolved": "https://registry.npmjs.org/wfieldsstack/-/wfieldsstack-0.3.10.tgz",
               "integrity": "sha512-vhxp2QusYHep+ferJEsoi/sPs6I4XH42IXI3sHeNBkVl0lrIbch8/294HZowGaybZLBX+vqhD5k30XsaaVzLbA==",
               "requires": {
-                "wProto": "^0.4.48",
-                "wTools": "^0.8.63"
+                "wProto": "0.4.48",
+                "wTools": "0.8.63"
               },
               "dependencies": {
                 "wProto": {
@@ -545,7 +545,7 @@
                   "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.48.tgz",
                   "integrity": "sha512-/v1czgomqg03u46ouk9PqzbOqQRqac5r5hC1CMEp0DufHO9On4K0BeMpD4wmCOqYEWYTIMM5nurmCs2HgzYQrA==",
                   "requires": {
-                    "wTools": "^0.8.63"
+                    "wTools": "0.8.63"
                   }
                 }
               }
@@ -555,9 +555,9 @@
               "resolved": "https://registry.npmjs.org/winstancing/-/winstancing-0.4.9.tgz",
               "integrity": "sha512-bkaEVvGoEmHJA8i1W+/NuyBtaAllmnfRtpJrTyBQ5uSRl/7icUReIFol6hw0nTSCFyxMAkqFQWQdmOxZvA4Xwg==",
               "requires": {
-                "wProto": "^0.4.48",
-                "wTools": "^0.8.63",
-                "wcloner": "^0.3.29"
+                "wProto": "0.4.48",
+                "wTools": "0.8.63",
+                "wcloner": "0.3.29"
               },
               "dependencies": {
                 "wProto": {
@@ -565,7 +565,7 @@
                   "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.48.tgz",
                   "integrity": "sha512-/v1czgomqg03u46ouk9PqzbOqQRqac5r5hC1CMEp0DufHO9On4K0BeMpD4wmCOqYEWYTIMM5nurmCs2HgzYQrA==",
                   "requires": {
-                    "wTools": "^0.8.63"
+                    "wTools": "0.8.63"
                   }
                 }
               }
@@ -575,7 +575,7 @@
               "resolved": "https://registry.npmjs.org/wstringer/-/wstringer-0.3.14.tgz",
               "integrity": "sha512-KWB9K5eBpcgWmHW0VoNIrEObILwjHIEjKQ03CyUh05zyVbtEjYvBc3xeq9JMi363GOhb8vfANzfe5oazdPXrzQ==",
               "requires": {
-                "wTools": "^0.8.63"
+                "wTools": "0.8.63"
               }
             },
             "wstringsextra": {
@@ -583,8 +583,8 @@
               "resolved": "https://registry.npmjs.org/wstringsextra/-/wstringsextra-0.3.15.tgz",
               "integrity": "sha512-4tkMHip9VV+b54K5cOQBK3Q6zw1C4TdttNDL1Mc3GKdhxpAy+9YnqF5B+NJ/ym1QsIQS9KvWvdgsJNPN17uYFA==",
               "requires": {
-                "wTools": "^0.8.63",
-                "wstringer": "^0.3.14"
+                "wTools": "0.8.63",
+                "wstringer": "0.3.14"
               }
             },
             "wtraverser": {
@@ -592,7 +592,7 @@
               "resolved": "https://registry.npmjs.org/wtraverser/-/wtraverser-0.3.14.tgz",
               "integrity": "sha512-zkwZQjiY5tgEhFY30yrhf3RlGXX7GoC8taVyGYorIoekWvWvh2n0EOjy0oRJZKSxv5xe62I5Y1mzqcfNZB+9+g==",
               "requires": {
-                "wTools": "^0.8.63"
+                "wTools": "0.8.63"
               }
             }
           }
@@ -609,8 +609,8 @@
       "resolved": "https://registry.npmjs.org/wEventHandler/-/wEventHandler-0.4.22.tgz",
       "integrity": "sha512-bAy+7m13xwsCUr46s8F5x4a/1MSLQ/DwUHnRp0B+erKRQJOUFssC9goLjlDe9eC5A7HGwwEN+C+I0taiJIqzNw==",
       "requires": {
-        "wProto": "^0.4.51",
-        "wTools": "^0.8.63"
+        "wProto": "0.4.51",
+        "wTools": "0.8.63"
       },
       "dependencies": {
         "wProto": {
@@ -618,7 +618,7 @@
           "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.51.tgz",
           "integrity": "sha512-EfiA4qs/p0Y2zVkJJ4ctLEU5qHSKsD/+hl9rA2R42UIruRZbAeJzKagrIlBDkgvWXjzyNbo4q9udORP8gBWcXw==",
           "requires": {
-            "wTools": "^0.8.63"
+            "wTools": "0.8.63"
           },
           "dependencies": {
             "fs-extra": {
@@ -626,9 +626,9 @@
               "resolved": "https://registry.npmjs.org/fs-extra/-/fs-extra-6.0.1.tgz",
               "integrity": "sha512-GnyIkKhhzXZUWFCaJzvyDLEEgDkPfb4/TPvJCJVuS8MWZgoSsErf++QpiAlDnKFcqhRlm+tIOcencCjyJE6ZCA==",
               "requires": {
-                "graceful-fs": "^4.1.2",
-                "jsonfile": "^4.0.0",
-                "universalify": "^0.1.0"
+                "graceful-fs": "4.1.2",
+                "jsonfile": "4.0.0",
+                "universalify": "0.1.0"
               }
             },
             "graceful-fs": {
@@ -641,7 +641,7 @@
               "resolved": "https://registry.npmjs.org/jsonfile/-/jsonfile-4.0.0.tgz",
               "integrity": "sha1-h3Gq4HmbZAdrdmQPygWPnBDjPss=",
               "requires": {
-                "graceful-fs": "^4.1.6"
+                "graceful-fs": "4.1.6"
               }
             },
             "universalify": {
@@ -654,7 +654,7 @@
               "resolved": "https://registry.npmjs.org/wColor/-/wColor-0.3.37.tgz",
               "integrity": "sha512-vDH7Qsu4yNzjo2Rti77WZjrCJJ+fnkOxqI9gyZb7OgHTDf381h4E5KFbz+oaIQsM0Cw/bckuxo6pOxGokvRb9Q==",
               "requires": {
-                "wTools": "^0.8.63"
+                "wTools": "0.8.63"
               }
             },
             "wConsequence": {
@@ -662,9 +662,9 @@
               "resolved": "https://registry.npmjs.org/wConsequence/-/wConsequence-0.4.36.tgz",
               "integrity": "sha512-Z3FnIwh3kxXIm7fxXelOr7LBPZsjLOEpAvDzFMzVpkPaXirDFyGY32q3JFY93tvXUh00uFZi2yfD1HydGFieCg==",
               "requires": {
-                "wCopyable": "^0.4.32",
-                "wProto": "^0.4.48",
-                "wTools": "^0.8.63"
+                "wCopyable": "0.4.32",
+                "wProto": "0.4.48",
+                "wTools": "0.8.63"
               },
               "dependencies": {
                 "wProto": {
@@ -672,7 +672,7 @@
                   "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.48.tgz",
                   "integrity": "sha512-/v1czgomqg03u46ouk9PqzbOqQRqac5r5hC1CMEp0DufHO9On4K0BeMpD4wmCOqYEWYTIMM5nurmCs2HgzYQrA==",
                   "requires": {
-                    "wTools": "^0.8.63"
+                    "wTools": "0.8.63"
                   }
                 }
               }
@@ -682,9 +682,9 @@
               "resolved": "https://registry.npmjs.org/wCopyable/-/wCopyable-0.4.32.tgz",
               "integrity": "sha512-Qs4W3Nw9V+g/DpZEPlZABHcAsjAxjmwpximuYuV7xvtyQuTAP1l/pJJD72gH6G9jEDWqKw8BJOEJfzQFlmzhvA==",
               "requires": {
-                "wProto": "^0.4.48",
-                "wTools": "^0.8.63",
-                "wcloner": "^0.3.29"
+                "wProto": "0.4.48",
+                "wTools": "0.8.63",
+                "wcloner": "0.3.29"
               },
               "dependencies": {
                 "wProto": {
@@ -692,7 +692,7 @@
                   "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.48.tgz",
                   "integrity": "sha512-/v1czgomqg03u46ouk9PqzbOqQRqac5r5hC1CMEp0DufHO9On4K0BeMpD4wmCOqYEWYTIMM5nurmCs2HgzYQrA==",
                   "requires": {
-                    "wTools": "^0.8.63"
+                    "wTools": "0.8.63"
                   }
                 }
               }
@@ -702,8 +702,8 @@
               "resolved": "https://registry.npmjs.org/wEventHandler/-/wEventHandler-0.4.22.tgz",
               "integrity": "sha512-bAy+7m13xwsCUr46s8F5x4a/1MSLQ/DwUHnRp0B+erKRQJOUFssC9goLjlDe9eC5A7HGwwEN+C+I0taiJIqzNw==",
               "requires": {
-                "wProto": "^0.4.48",
-                "wTools": "^0.8.63"
+                "wProto": "0.4.48",
+                "wTools": "0.8.63"
               },
               "dependencies": {
                 "wProto": {
@@ -711,7 +711,7 @@
                   "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.48.tgz",
                   "integrity": "sha512-/v1czgomqg03u46ouk9PqzbOqQRqac5r5hC1CMEp0DufHO9On4K0BeMpD4wmCOqYEWYTIMM5nurmCs2HgzYQrA==",
                   "requires": {
-                    "wTools": "^0.8.63"
+                    "wTools": "0.8.63"
                   }
                 }
               }
@@ -721,16 +721,16 @@
               "resolved": "https://registry.npmjs.org/wFiles/-/wFiles-0.6.79.tgz",
               "integrity": "sha512-YP7gaI+rF3I1OqkOtn/BnYl+VbykNKV1I/2OFG2/ew0x7VTKaX6Q1c45nBY/FcN+usyfS/1P21IF9yknYodBFA==",
               "requires": {
-                "fs-extra": "^6.0.1",
-                "wConsequence": "^0.4.36",
-                "wCopyable": "^0.4.32",
-                "wPath": "^0.5.51",
-                "wRegexpObject": "^0.4.40",
-                "wTools": "^0.8.63",
-                "wexectools": "^0.3.22",
-                "wfieldsstack": "^0.3.10",
-                "wstringer": "^0.3.14",
-                "wstringsextra": "^0.3.15"
+                "fs-extra": "6.0.1",
+                "wConsequence": "0.4.36",
+                "wCopyable": "0.4.32",
+                "wPath": "0.5.51",
+                "wRegexpObject": "0.4.40",
+                "wTools": "0.8.63",
+                "wexectools": "0.3.22",
+                "wfieldsstack": "0.3.10",
+                "wstringer": "0.3.14",
+                "wstringsextra": "0.3.15"
               }
             },
             "wLogger": {
@@ -738,11 +738,11 @@
               "resolved": "https://registry.npmjs.org/wLogger/-/wLogger-0.5.51.tgz",
               "integrity": "sha512-XwdVGorZzkDF424UqVVav8LMLTHyevcWkSHZ8Qz1PrLgsw8xLSPi7lWlNwIdj/xWj8AdIrh6qKsaoL4O47g8YQ==",
               "requires": {
-                "wColor": "^0.3.37",
-                "wCopyable": "^0.4.32",
-                "wTools": "^0.8.63",
-                "wstringer": "^0.3.14",
-                "wstringsextra": "^0.3.15"
+                "wColor": "0.3.37",
+                "wCopyable": "0.4.32",
+                "wTools": "0.8.63",
+                "wstringer": "0.3.14",
+                "wstringsextra": "0.3.15"
               }
             },
             "wPath": {
@@ -750,14 +750,14 @@
               "resolved": "https://registry.npmjs.org/wPath/-/wPath-0.5.51.tgz",
               "integrity": "sha512-77x2ijrQuVxstXbdS70TCNSQ9pIyo9pEE6WvZx/rf5B+19O2WoYFqEuopJ6hglOUMsCyIaTsMP8zeQuplhedVQ==",
               "requires": {
-                "wTools": "^0.8.63"
+                "wTools": "0.8.63"
               }
             },
             "wProto": {
               "version": "file:node_modules/wEventHandler/node_modules/wProto",
               "integrity": "sha512-EfiA4qs/p0Y2zVkJJ4ctLEU5qHSKsD/+hl9rA2R42UIruRZbAeJzKagrIlBDkgvWXjzyNbo4q9udORP8gBWcXw==",
               "requires": {
-                "wTools": "^0.8.63"
+                "wTools": "0.8.63"
               }
             },
             "wRegexpObject": {
@@ -765,7 +765,7 @@
               "resolved": "https://registry.npmjs.org/wRegexpObject/-/wRegexpObject-0.4.40.tgz",
               "integrity": "sha512-I8BrH4cMSwwcGesPAstlkGqOD5OzGc1uanj3m/f+jOhK1t0AbrCTQDQUEWwTO6u6gnElsBMFxPTvIowYV58cgw==",
               "requires": {
-                "wTools": "^0.8.63"
+                "wTools": "0.8.63"
               }
             },
             "wTesting": {
@@ -773,15 +773,15 @@
               "resolved": "https://registry.npmjs.org/wTesting/-/wTesting-0.4.102.tgz",
               "integrity": "sha512-uwYt0RyxRIXVifSwb6KoHpB1edpUXhd6WOimGSw5QCVuBVL2P8OvIV1CyYsVEBePuREEoKkdl9h3o7j5fdtzmg==",
               "requires": {
-                "wConsequence": "^0.4.36",
-                "wCopyable": "^0.4.32",
-                "wEventHandler": "^0.4.22",
-                "wFiles": "^0.6.79",
-                "wLogger": "^0.5.51",
-                "wProto": "^0.4.48",
-                "wTools": "^0.8.63",
-                "wexectools": "^0.3.22",
-                "winstancing": "^0.4.9"
+                "wConsequence": "0.4.36",
+                "wCopyable": "0.4.32",
+                "wEventHandler": "0.4.22",
+                "wFiles": "0.6.79",
+                "wLogger": "0.5.51",
+                "wProto": "0.4.48",
+                "wTools": "0.8.63",
+                "wexectools": "0.3.22",
+                "winstancing": "0.4.9"
               },
               "dependencies": {
                 "wProto": {
@@ -789,7 +789,7 @@
                   "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.48.tgz",
                   "integrity": "sha512-/v1czgomqg03u46ouk9PqzbOqQRqac5r5hC1CMEp0DufHO9On4K0BeMpD4wmCOqYEWYTIMM5nurmCs2HgzYQrA==",
                   "requires": {
-                    "wTools": "^0.8.63"
+                    "wTools": "0.8.63"
                   }
                 }
               }
@@ -799,8 +799,8 @@
               "resolved": "https://registry.npmjs.org/wcloner/-/wcloner-0.3.29.tgz",
               "integrity": "sha512-NWpdGT2nh2fAoSXtC2MsSzLqLGn1iK8YfeQxZvbLGWc7gMYHqbBiQngd0/RsH/yEmzmt1iCewy9XxGxoV1N78A==",
               "requires": {
-                "wTools": "^0.8.63",
-                "wtraverser": "^0.3.14"
+                "wTools": "0.8.63",
+                "wtraverser": "0.3.14"
               }
             },
             "wexectools": {
@@ -808,8 +808,8 @@
               "resolved": "https://registry.npmjs.org/wexectools/-/wexectools-0.3.22.tgz",
               "integrity": "sha512-zM8L9jS/aP9KzU+zyvgrUHn5U86Oxoofpw4Od/gFa5HALanUaAKB1+Wp8RCyBp9o5rmEsAep0/W+VTxvY1KYgw==",
               "requires": {
-                "wPath": "^0.5.51",
-                "wTools": "^0.8.63"
+                "wPath": "0.5.51",
+                "wTools": "0.8.63"
               }
             },
             "wfieldsstack": {
@@ -817,8 +817,8 @@
               "resolved": "https://registry.npmjs.org/wfieldsstack/-/wfieldsstack-0.3.10.tgz",
               "integrity": "sha512-vhxp2QusYHep+ferJEsoi/sPs6I4XH42IXI3sHeNBkVl0lrIbch8/294HZowGaybZLBX+vqhD5k30XsaaVzLbA==",
               "requires": {
-                "wProto": "^0.4.48",
-                "wTools": "^0.8.63"
+                "wProto": "0.4.48",
+                "wTools": "0.8.63"
               },
               "dependencies": {
                 "wProto": {
@@ -826,7 +826,7 @@
                   "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.48.tgz",
                   "integrity": "sha512-/v1czgomqg03u46ouk9PqzbOqQRqac5r5hC1CMEp0DufHO9On4K0BeMpD4wmCOqYEWYTIMM5nurmCs2HgzYQrA==",
                   "requires": {
-                    "wTools": "^0.8.63"
+                    "wTools": "0.8.63"
                   }
                 }
               }
@@ -836,9 +836,9 @@
               "resolved": "https://registry.npmjs.org/winstancing/-/winstancing-0.4.9.tgz",
               "integrity": "sha512-bkaEVvGoEmHJA8i1W+/NuyBtaAllmnfRtpJrTyBQ5uSRl/7icUReIFol6hw0nTSCFyxMAkqFQWQdmOxZvA4Xwg==",
               "requires": {
-                "wProto": "^0.4.48",
-                "wTools": "^0.8.63",
-                "wcloner": "^0.3.29"
+                "wProto": "0.4.48",
+                "wTools": "0.8.63",
+                "wcloner": "0.3.29"
               },
               "dependencies": {
                 "wProto": {
@@ -846,7 +846,7 @@
                   "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.48.tgz",
                   "integrity": "sha512-/v1czgomqg03u46ouk9PqzbOqQRqac5r5hC1CMEp0DufHO9On4K0BeMpD4wmCOqYEWYTIMM5nurmCs2HgzYQrA==",
                   "requires": {
-                    "wTools": "^0.8.63"
+                    "wTools": "0.8.63"
                   }
                 }
               }
@@ -856,7 +856,7 @@
               "resolved": "https://registry.npmjs.org/wstringer/-/wstringer-0.3.14.tgz",
               "integrity": "sha512-KWB9K5eBpcgWmHW0VoNIrEObILwjHIEjKQ03CyUh05zyVbtEjYvBc3xeq9JMi363GOhb8vfANzfe5oazdPXrzQ==",
               "requires": {
-                "wTools": "^0.8.63"
+                "wTools": "0.8.63"
               }
             },
             "wstringsextra": {
@@ -864,8 +864,8 @@
               "resolved": "https://registry.npmjs.org/wstringsextra/-/wstringsextra-0.3.15.tgz",
               "integrity": "sha512-4tkMHip9VV+b54K5cOQBK3Q6zw1C4TdttNDL1Mc3GKdhxpAy+9YnqF5B+NJ/ym1QsIQS9KvWvdgsJNPN17uYFA==",
               "requires": {
-                "wTools": "^0.8.63",
-                "wstringer": "^0.3.14"
+                "wTools": "0.8.63",
+                "wstringer": "0.3.14"
               }
             },
             "wtraverser": {
@@ -873,7 +873,7 @@
               "resolved": "https://registry.npmjs.org/wtraverser/-/wtraverser-0.3.14.tgz",
               "integrity": "sha512-zkwZQjiY5tgEhFY30yrhf3RlGXX7GoC8taVyGYorIoekWvWvh2n0EOjy0oRJZKSxv5xe62I5Y1mzqcfNZB+9+g==",
               "requires": {
-                "wTools": "^0.8.63"
+                "wTools": "0.8.63"
               }
             }
           }
@@ -890,16 +890,16 @@
       "resolved": "https://registry.npmjs.org/wFiles/-/wFiles-0.6.79.tgz",
       "integrity": "sha512-YP7gaI+rF3I1OqkOtn/BnYl+VbykNKV1I/2OFG2/ew0x7VTKaX6Q1c45nBY/FcN+usyfS/1P21IF9yknYodBFA==",
       "requires": {
-        "fs-extra": "^6.0.1",
-        "wConsequence": "^0.4.36",
-        "wCopyable": "^0.4.32",
-        "wPath": "^0.5.51",
-        "wRegexpObject": "^0.4.40",
-        "wTools": "^0.8.63",
-        "wexectools": "^0.3.22",
-        "wfieldsstack": "^0.3.10",
-        "wstringer": "^0.3.14",
-        "wstringsextra": "^0.3.15"
+        "fs-extra": "6.0.1",
+        "wConsequence": "0.4.36",
+        "wCopyable": "0.4.32",
+        "wPath": "0.5.51",
+        "wRegexpObject": "0.4.40",
+        "wTools": "0.8.63",
+        "wexectools": "0.3.22",
+        "wfieldsstack": "0.3.10",
+        "wstringer": "0.3.14",
+        "wstringsextra": "0.3.15"
       }
     },
     "wLogger": {
@@ -907,11 +907,11 @@
       "resolved": "https://registry.npmjs.org/wLogger/-/wLogger-0.5.51.tgz",
       "integrity": "sha512-XwdVGorZzkDF424UqVVav8LMLTHyevcWkSHZ8Qz1PrLgsw8xLSPi7lWlNwIdj/xWj8AdIrh6qKsaoL4O47g8YQ==",
       "requires": {
-        "wColor": "^0.3.37",
-        "wCopyable": "^0.4.32",
-        "wTools": "^0.8.63",
-        "wstringer": "^0.3.14",
-        "wstringsextra": "^0.3.15"
+        "wColor": "0.3.37",
+        "wCopyable": "0.4.32",
+        "wTools": "0.8.63",
+        "wstringer": "0.3.14",
+        "wstringsextra": "0.3.15"
       }
     },
     "wPath": {
@@ -919,14 +919,14 @@
       "resolved": "https://registry.npmjs.org/wPath/-/wPath-0.5.51.tgz",
       "integrity": "sha512-77x2ijrQuVxstXbdS70TCNSQ9pIyo9pEE6WvZx/rf5B+19O2WoYFqEuopJ6hglOUMsCyIaTsMP8zeQuplhedVQ==",
       "requires": {
-        "wTools": "^0.8.63"
+        "wTools": "0.8.63"
       }
     },
     "wProto": {
       "version": "file:",
       "dev": true,
       "requires": {
-        "wTools": "^0.8.63"
+        "wTools": "0.8.63"
       }
     },
     "wRegexpObject": {
@@ -934,7 +934,7 @@
       "resolved": "https://registry.npmjs.org/wRegexpObject/-/wRegexpObject-0.4.40.tgz",
       "integrity": "sha512-I8BrH4cMSwwcGesPAstlkGqOD5OzGc1uanj3m/f+jOhK1t0AbrCTQDQUEWwTO6u6gnElsBMFxPTvIowYV58cgw==",
       "requires": {
-        "wTools": "^0.8.63"
+        "wTools": "0.8.63"
       }
     },
     "wTesting": {
@@ -942,15 +942,15 @@
       "resolved": "https://registry.npmjs.org/wTesting/-/wTesting-0.4.102.tgz",
       "integrity": "sha512-uwYt0RyxRIXVifSwb6KoHpB1edpUXhd6WOimGSw5QCVuBVL2P8OvIV1CyYsVEBePuREEoKkdl9h3o7j5fdtzmg==",
       "requires": {
-        "wConsequence": "^0.4.36",
-        "wCopyable": "^0.4.32",
-        "wEventHandler": "^0.4.22",
-        "wFiles": "^0.6.79",
-        "wLogger": "^0.5.51",
-        "wProto": "^0.4.51",
-        "wTools": "^0.8.63",
-        "wexectools": "^0.3.22",
-        "winstancing": "^0.4.9"
+        "wConsequence": "0.4.36",
+        "wCopyable": "0.4.32",
+        "wEventHandler": "0.4.22",
+        "wFiles": "0.6.79",
+        "wLogger": "0.5.51",
+        "wProto": "0.4.51",
+        "wTools": "0.8.63",
+        "wexectools": "0.3.22",
+        "winstancing": "0.4.9"
       },
       "dependencies": {
         "wProto": {
@@ -958,7 +958,7 @@
           "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.51.tgz",
           "integrity": "sha512-EfiA4qs/p0Y2zVkJJ4ctLEU5qHSKsD/+hl9rA2R42UIruRZbAeJzKagrIlBDkgvWXjzyNbo4q9udORP8gBWcXw==",
           "requires": {
-            "wTools": "^0.8.63"
+            "wTools": "0.8.63"
           },
           "dependencies": {
             "fs-extra": {
@@ -966,9 +966,9 @@
               "resolved": "https://registry.npmjs.org/fs-extra/-/fs-extra-6.0.1.tgz",
               "integrity": "sha512-GnyIkKhhzXZUWFCaJzvyDLEEgDkPfb4/TPvJCJVuS8MWZgoSsErf++QpiAlDnKFcqhRlm+tIOcencCjyJE6ZCA==",
               "requires": {
-                "graceful-fs": "^4.1.2",
-                "jsonfile": "^4.0.0",
-                "universalify": "^0.1.0"
+                "graceful-fs": "4.1.2",
+                "jsonfile": "4.0.0",
+                "universalify": "0.1.0"
               }
             },
             "graceful-fs": {
@@ -981,7 +981,7 @@
               "resolved": "https://registry.npmjs.org/jsonfile/-/jsonfile-4.0.0.tgz",
               "integrity": "sha1-h3Gq4HmbZAdrdmQPygWPnBDjPss=",
               "requires": {
-                "graceful-fs": "^4.1.6"
+                "graceful-fs": "4.1.6"
               }
             },
             "universalify": {
@@ -994,7 +994,7 @@
               "resolved": "https://registry.npmjs.org/wColor/-/wColor-0.3.37.tgz",
               "integrity": "sha512-vDH7Qsu4yNzjo2Rti77WZjrCJJ+fnkOxqI9gyZb7OgHTDf381h4E5KFbz+oaIQsM0Cw/bckuxo6pOxGokvRb9Q==",
               "requires": {
-                "wTools": "^0.8.63"
+                "wTools": "0.8.63"
               }
             },
             "wConsequence": {
@@ -1002,9 +1002,9 @@
               "resolved": "https://registry.npmjs.org/wConsequence/-/wConsequence-0.4.36.tgz",
               "integrity": "sha512-Z3FnIwh3kxXIm7fxXelOr7LBPZsjLOEpAvDzFMzVpkPaXirDFyGY32q3JFY93tvXUh00uFZi2yfD1HydGFieCg==",
               "requires": {
-                "wCopyable": "^0.4.32",
-                "wProto": "^0.4.48",
-                "wTools": "^0.8.63"
+                "wCopyable": "0.4.32",
+                "wProto": "0.4.48",
+                "wTools": "0.8.63"
               },
               "dependencies": {
                 "wProto": {
@@ -1012,7 +1012,7 @@
                   "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.48.tgz",
                   "integrity": "sha512-/v1czgomqg03u46ouk9PqzbOqQRqac5r5hC1CMEp0DufHO9On4K0BeMpD4wmCOqYEWYTIMM5nurmCs2HgzYQrA==",
                   "requires": {
-                    "wTools": "^0.8.63"
+                    "wTools": "0.8.63"
                   }
                 }
               }
@@ -1022,9 +1022,9 @@
               "resolved": "https://registry.npmjs.org/wCopyable/-/wCopyable-0.4.32.tgz",
               "integrity": "sha512-Qs4W3Nw9V+g/DpZEPlZABHcAsjAxjmwpximuYuV7xvtyQuTAP1l/pJJD72gH6G9jEDWqKw8BJOEJfzQFlmzhvA==",
               "requires": {
-                "wProto": "^0.4.48",
-                "wTools": "^0.8.63",
-                "wcloner": "^0.3.29"
+                "wProto": "0.4.48",
+                "wTools": "0.8.63",
+                "wcloner": "0.3.29"
               },
               "dependencies": {
                 "wProto": {
@@ -1032,7 +1032,7 @@
                   "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.48.tgz",
                   "integrity": "sha512-/v1czgomqg03u46ouk9PqzbOqQRqac5r5hC1CMEp0DufHO9On4K0BeMpD4wmCOqYEWYTIMM5nurmCs2HgzYQrA==",
                   "requires": {
-                    "wTools": "^0.8.63"
+                    "wTools": "0.8.63"
                   }
                 }
               }
@@ -1042,8 +1042,8 @@
               "resolved": "https://registry.npmjs.org/wEventHandler/-/wEventHandler-0.4.22.tgz",
               "integrity": "sha512-bAy+7m13xwsCUr46s8F5x4a/1MSLQ/DwUHnRp0B+erKRQJOUFssC9goLjlDe9eC5A7HGwwEN+C+I0taiJIqzNw==",
               "requires": {
-                "wProto": "^0.4.48",
-                "wTools": "^0.8.63"
+                "wProto": "0.4.48",
+                "wTools": "0.8.63"
               },
               "dependencies": {
                 "wProto": {
@@ -1051,7 +1051,7 @@
                   "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.48.tgz",
                   "integrity": "sha512-/v1czgomqg03u46ouk9PqzbOqQRqac5r5hC1CMEp0DufHO9On4K0BeMpD4wmCOqYEWYTIMM5nurmCs2HgzYQrA==",
                   "requires": {
-                    "wTools": "^0.8.63"
+                    "wTools": "0.8.63"
                   }
                 }
               }
@@ -1061,16 +1061,16 @@
               "resolved": "https://registry.npmjs.org/wFiles/-/wFiles-0.6.79.tgz",
               "integrity": "sha512-YP7gaI+rF3I1OqkOtn/BnYl+VbykNKV1I/2OFG2/ew0x7VTKaX6Q1c45nBY/FcN+usyfS/1P21IF9yknYodBFA==",
               "requires": {
-                "fs-extra": "^6.0.1",
-                "wConsequence": "^0.4.36",
-                "wCopyable": "^0.4.32",
-                "wPath": "^0.5.51",
-                "wRegexpObject": "^0.4.40",
-                "wTools": "^0.8.63",
-                "wexectools": "^0.3.22",
-                "wfieldsstack": "^0.3.10",
-                "wstringer": "^0.3.14",
-                "wstringsextra": "^0.3.15"
+                "fs-extra": "6.0.1",
+                "wConsequence": "0.4.36",
+                "wCopyable": "0.4.32",
+                "wPath": "0.5.51",
+                "wRegexpObject": "0.4.40",
+                "wTools": "0.8.63",
+                "wexectools": "0.3.22",
+                "wfieldsstack": "0.3.10",
+                "wstringer": "0.3.14",
+                "wstringsextra": "0.3.15"
               }
             },
             "wLogger": {
@@ -1078,11 +1078,11 @@
               "resolved": "https://registry.npmjs.org/wLogger/-/wLogger-0.5.51.tgz",
               "integrity": "sha512-XwdVGorZzkDF424UqVVav8LMLTHyevcWkSHZ8Qz1PrLgsw8xLSPi7lWlNwIdj/xWj8AdIrh6qKsaoL4O47g8YQ==",
               "requires": {
-                "wColor": "^0.3.37",
-                "wCopyable": "^0.4.32",
-                "wTools": "^0.8.63",
-                "wstringer": "^0.3.14",
-                "wstringsextra": "^0.3.15"
+                "wColor": "0.3.37",
+                "wCopyable": "0.4.32",
+                "wTools": "0.8.63",
+                "wstringer": "0.3.14",
+                "wstringsextra": "0.3.15"
               }
             },
             "wPath": {
@@ -1090,14 +1090,14 @@
               "resolved": "https://registry.npmjs.org/wPath/-/wPath-0.5.51.tgz",
               "integrity": "sha512-77x2ijrQuVxstXbdS70TCNSQ9pIyo9pEE6WvZx/rf5B+19O2WoYFqEuopJ6hglOUMsCyIaTsMP8zeQuplhedVQ==",
               "requires": {
-                "wTools": "^0.8.63"
+                "wTools": "0.8.63"
               }
             },
             "wProto": {
               "version": "file:node_modules/wTesting/node_modules/wProto",
               "integrity": "sha512-EfiA4qs/p0Y2zVkJJ4ctLEU5qHSKsD/+hl9rA2R42UIruRZbAeJzKagrIlBDkgvWXjzyNbo4q9udORP8gBWcXw==",
               "requires": {
-                "wTools": "^0.8.63"
+                "wTools": "0.8.63"
               }
             },
             "wRegexpObject": {
@@ -1105,7 +1105,7 @@
               "resolved": "https://registry.npmjs.org/wRegexpObject/-/wRegexpObject-0.4.40.tgz",
               "integrity": "sha512-I8BrH4cMSwwcGesPAstlkGqOD5OzGc1uanj3m/f+jOhK1t0AbrCTQDQUEWwTO6u6gnElsBMFxPTvIowYV58cgw==",
               "requires": {
-                "wTools": "^0.8.63"
+                "wTools": "0.8.63"
               }
             },
             "wTesting": {
@@ -1113,15 +1113,15 @@
               "resolved": "https://registry.npmjs.org/wTesting/-/wTesting-0.4.102.tgz",
               "integrity": "sha512-uwYt0RyxRIXVifSwb6KoHpB1edpUXhd6WOimGSw5QCVuBVL2P8OvIV1CyYsVEBePuREEoKkdl9h3o7j5fdtzmg==",
               "requires": {
-                "wConsequence": "^0.4.36",
-                "wCopyable": "^0.4.32",
-                "wEventHandler": "^0.4.22",
-                "wFiles": "^0.6.79",
-                "wLogger": "^0.5.51",
-                "wProto": "^0.4.48",
-                "wTools": "^0.8.63",
-                "wexectools": "^0.3.22",
-                "winstancing": "^0.4.9"
+                "wConsequence": "0.4.36",
+                "wCopyable": "0.4.32",
+                "wEventHandler": "0.4.22",
+                "wFiles": "0.6.79",
+                "wLogger": "0.5.51",
+                "wProto": "0.4.48",
+                "wTools": "0.8.63",
+                "wexectools": "0.3.22",
+                "winstancing": "0.4.9"
               },
               "dependencies": {
                 "wProto": {
@@ -1129,7 +1129,7 @@
                   "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.48.tgz",
                   "integrity": "sha512-/v1czgomqg03u46ouk9PqzbOqQRqac5r5hC1CMEp0DufHO9On4K0BeMpD4wmCOqYEWYTIMM5nurmCs2HgzYQrA==",
                   "requires": {
-                    "wTools": "^0.8.63"
+                    "wTools": "0.8.63"
                   }
                 }
               }
@@ -1139,8 +1139,8 @@
               "resolved": "https://registry.npmjs.org/wcloner/-/wcloner-0.3.29.tgz",
               "integrity": "sha512-NWpdGT2nh2fAoSXtC2MsSzLqLGn1iK8YfeQxZvbLGWc7gMYHqbBiQngd0/RsH/yEmzmt1iCewy9XxGxoV1N78A==",
               "requires": {
-                "wTools": "^0.8.63",
-                "wtraverser": "^0.3.14"
+                "wTools": "0.8.63",
+                "wtraverser": "0.3.14"
               }
             },
             "wexectools": {
@@ -1148,8 +1148,8 @@
               "resolved": "https://registry.npmjs.org/wexectools/-/wexectools-0.3.22.tgz",
               "integrity": "sha512-zM8L9jS/aP9KzU+zyvgrUHn5U86Oxoofpw4Od/gFa5HALanUaAKB1+Wp8RCyBp9o5rmEsAep0/W+VTxvY1KYgw==",
               "requires": {
-                "wPath": "^0.5.51",
-                "wTools": "^0.8.63"
+                "wPath": "0.5.51",
+                "wTools": "0.8.63"
               }
             },
             "wfieldsstack": {
@@ -1157,8 +1157,8 @@
               "resolved": "https://registry.npmjs.org/wfieldsstack/-/wfieldsstack-0.3.10.tgz",
               "integrity": "sha512-vhxp2QusYHep+ferJEsoi/sPs6I4XH42IXI3sHeNBkVl0lrIbch8/294HZowGaybZLBX+vqhD5k30XsaaVzLbA==",
               "requires": {
-                "wProto": "^0.4.48",
-                "wTools": "^0.8.63"
+                "wProto": "0.4.48",
+                "wTools": "0.8.63"
               },
               "dependencies": {
                 "wProto": {
@@ -1166,7 +1166,7 @@
                   "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.48.tgz",
                   "integrity": "sha512-/v1czgomqg03u46ouk9PqzbOqQRqac5r5hC1CMEp0DufHO9On4K0BeMpD4wmCOqYEWYTIMM5nurmCs2HgzYQrA==",
                   "requires": {
-                    "wTools": "^0.8.63"
+                    "wTools": "0.8.63"
                   }
                 }
               }
@@ -1176,9 +1176,9 @@
               "resolved": "https://registry.npmjs.org/winstancing/-/winstancing-0.4.9.tgz",
               "integrity": "sha512-bkaEVvGoEmHJA8i1W+/NuyBtaAllmnfRtpJrTyBQ5uSRl/7icUReIFol6hw0nTSCFyxMAkqFQWQdmOxZvA4Xwg==",
               "requires": {
-                "wProto": "^0.4.48",
-                "wTools": "^0.8.63",
-                "wcloner": "^0.3.29"
+                "wProto": "0.4.48",
+                "wTools": "0.8.63",
+                "wcloner": "0.3.29"
               },
               "dependencies": {
                 "wProto": {
@@ -1186,7 +1186,7 @@
                   "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.48.tgz",
                   "integrity": "sha512-/v1czgomqg03u46ouk9PqzbOqQRqac5r5hC1CMEp0DufHO9On4K0BeMpD4wmCOqYEWYTIMM5nurmCs2HgzYQrA==",
                   "requires": {
-                    "wTools": "^0.8.63"
+                    "wTools": "0.8.63"
                   }
                 }
               }
@@ -1196,7 +1196,7 @@
               "resolved": "https://registry.npmjs.org/wstringer/-/wstringer-0.3.14.tgz",
               "integrity": "sha512-KWB9K5eBpcgWmHW0VoNIrEObILwjHIEjKQ03CyUh05zyVbtEjYvBc3xeq9JMi363GOhb8vfANzfe5oazdPXrzQ==",
               "requires": {
-                "wTools": "^0.8.63"
+                "wTools": "0.8.63"
               }
             },
             "wstringsextra": {
@@ -1204,8 +1204,8 @@
               "resolved": "https://registry.npmjs.org/wstringsextra/-/wstringsextra-0.3.15.tgz",
               "integrity": "sha512-4tkMHip9VV+b54K5cOQBK3Q6zw1C4TdttNDL1Mc3GKdhxpAy+9YnqF5B+NJ/ym1QsIQS9KvWvdgsJNPN17uYFA==",
               "requires": {
-                "wTools": "^0.8.63",
-                "wstringer": "^0.3.14"
+                "wTools": "0.8.63",
+                "wstringer": "0.3.14"
               }
             },
             "wtraverser": {
@@ -1213,7 +1213,7 @@
               "resolved": "https://registry.npmjs.org/wtraverser/-/wtraverser-0.3.14.tgz",
               "integrity": "sha512-zkwZQjiY5tgEhFY30yrhf3RlGXX7GoC8taVyGYorIoekWvWvh2n0EOjy0oRJZKSxv5xe62I5Y1mzqcfNZB+9+g==",
               "requires": {
-                "wTools": "^0.8.63"
+                "wTools": "0.8.63"
               }
             }
           }
@@ -1235,8 +1235,8 @@
       "resolved": "https://registry.npmjs.org/wcloner/-/wcloner-0.3.29.tgz",
       "integrity": "sha512-NWpdGT2nh2fAoSXtC2MsSzLqLGn1iK8YfeQxZvbLGWc7gMYHqbBiQngd0/RsH/yEmzmt1iCewy9XxGxoV1N78A==",
       "requires": {
-        "wTools": "^0.8.63",
-        "wtraverser": "^0.3.14"
+        "wTools": "0.8.63",
+        "wtraverser": "0.3.14"
       }
     },
     "wexectools": {
@@ -1244,8 +1244,8 @@
       "resolved": "https://registry.npmjs.org/wexectools/-/wexectools-0.3.22.tgz",
       "integrity": "sha512-zM8L9jS/aP9KzU+zyvgrUHn5U86Oxoofpw4Od/gFa5HALanUaAKB1+Wp8RCyBp9o5rmEsAep0/W+VTxvY1KYgw==",
       "requires": {
-        "wPath": "^0.5.51",
-        "wTools": "^0.8.63"
+        "wPath": "0.5.51",
+        "wTools": "0.8.63"
       }
     },
     "wfieldsstack": {
@@ -1253,8 +1253,8 @@
       "resolved": "https://registry.npmjs.org/wfieldsstack/-/wfieldsstack-0.3.10.tgz",
       "integrity": "sha512-vhxp2QusYHep+ferJEsoi/sPs6I4XH42IXI3sHeNBkVl0lrIbch8/294HZowGaybZLBX+vqhD5k30XsaaVzLbA==",
       "requires": {
-        "wProto": "^0.4.51",
-        "wTools": "^0.8.63"
+        "wProto": "0.4.51",
+        "wTools": "0.8.63"
       },
       "dependencies": {
         "wProto": {
@@ -1262,7 +1262,7 @@
           "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.51.tgz",
           "integrity": "sha512-EfiA4qs/p0Y2zVkJJ4ctLEU5qHSKsD/+hl9rA2R42UIruRZbAeJzKagrIlBDkgvWXjzyNbo4q9udORP8gBWcXw==",
           "requires": {
-            "wTools": "^0.8.63"
+            "wTools": "0.8.63"
           },
           "dependencies": {
             "fs-extra": {
@@ -1270,9 +1270,9 @@
               "resolved": "https://registry.npmjs.org/fs-extra/-/fs-extra-6.0.1.tgz",
               "integrity": "sha512-GnyIkKhhzXZUWFCaJzvyDLEEgDkPfb4/TPvJCJVuS8MWZgoSsErf++QpiAlDnKFcqhRlm+tIOcencCjyJE6ZCA==",
               "requires": {
-                "graceful-fs": "^4.1.2",
-                "jsonfile": "^4.0.0",
-                "universalify": "^0.1.0"
+                "graceful-fs": "4.1.2",
+                "jsonfile": "4.0.0",
+                "universalify": "0.1.0"
               }
             },
             "graceful-fs": {
@@ -1285,7 +1285,7 @@
               "resolved": "https://registry.npmjs.org/jsonfile/-/jsonfile-4.0.0.tgz",
               "integrity": "sha1-h3Gq4HmbZAdrdmQPygWPnBDjPss=",
               "requires": {
-                "graceful-fs": "^4.1.6"
+                "graceful-fs": "4.1.6"
               }
             },
             "universalify": {
@@ -1298,7 +1298,7 @@
               "resolved": "https://registry.npmjs.org/wColor/-/wColor-0.3.37.tgz",
               "integrity": "sha512-vDH7Qsu4yNzjo2Rti77WZjrCJJ+fnkOxqI9gyZb7OgHTDf381h4E5KFbz+oaIQsM0Cw/bckuxo6pOxGokvRb9Q==",
               "requires": {
-                "wTools": "^0.8.63"
+                "wTools": "0.8.63"
               }
             },
             "wConsequence": {
@@ -1306,9 +1306,9 @@
               "resolved": "https://registry.npmjs.org/wConsequence/-/wConsequence-0.4.36.tgz",
               "integrity": "sha512-Z3FnIwh3kxXIm7fxXelOr7LBPZsjLOEpAvDzFMzVpkPaXirDFyGY32q3JFY93tvXUh00uFZi2yfD1HydGFieCg==",
               "requires": {
-                "wCopyable": "^0.4.32",
-                "wProto": "^0.4.48",
-                "wTools": "^0.8.63"
+                "wCopyable": "0.4.32",
+                "wProto": "0.4.48",
+                "wTools": "0.8.63"
               },
               "dependencies": {
                 "wProto": {
@@ -1316,7 +1316,7 @@
                   "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.48.tgz",
                   "integrity": "sha512-/v1czgomqg03u46ouk9PqzbOqQRqac5r5hC1CMEp0DufHO9On4K0BeMpD4wmCOqYEWYTIMM5nurmCs2HgzYQrA==",
                   "requires": {
-                    "wTools": "^0.8.63"
+                    "wTools": "0.8.63"
                   }
                 }
               }
@@ -1326,9 +1326,9 @@
               "resolved": "https://registry.npmjs.org/wCopyable/-/wCopyable-0.4.32.tgz",
               "integrity": "sha512-Qs4W3Nw9V+g/DpZEPlZABHcAsjAxjmwpximuYuV7xvtyQuTAP1l/pJJD72gH6G9jEDWqKw8BJOEJfzQFlmzhvA==",
               "requires": {
-                "wProto": "^0.4.48",
-                "wTools": "^0.8.63",
-                "wcloner": "^0.3.29"
+                "wProto": "0.4.48",
+                "wTools": "0.8.63",
+                "wcloner": "0.3.29"
               },
               "dependencies": {
                 "wProto": {
@@ -1336,7 +1336,7 @@
                   "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.48.tgz",
                   "integrity": "sha512-/v1czgomqg03u46ouk9PqzbOqQRqac5r5hC1CMEp0DufHO9On4K0BeMpD4wmCOqYEWYTIMM5nurmCs2HgzYQrA==",
                   "requires": {
-                    "wTools": "^0.8.63"
+                    "wTools": "0.8.63"
                   }
                 }
               }
@@ -1346,8 +1346,8 @@
               "resolved": "https://registry.npmjs.org/wEventHandler/-/wEventHandler-0.4.22.tgz",
               "integrity": "sha512-bAy+7m13xwsCUr46s8F5x4a/1MSLQ/DwUHnRp0B+erKRQJOUFssC9goLjlDe9eC5A7HGwwEN+C+I0taiJIqzNw==",
               "requires": {
-                "wProto": "^0.4.48",
-                "wTools": "^0.8.63"
+                "wProto": "0.4.48",
+                "wTools": "0.8.63"
               },
               "dependencies": {
                 "wProto": {
@@ -1355,7 +1355,7 @@
                   "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.48.tgz",
                   "integrity": "sha512-/v1czgomqg03u46ouk9PqzbOqQRqac5r5hC1CMEp0DufHO9On4K0BeMpD4wmCOqYEWYTIMM5nurmCs2HgzYQrA==",
                   "requires": {
-                    "wTools": "^0.8.63"
+                    "wTools": "0.8.63"
                   }
                 }
               }
@@ -1365,16 +1365,16 @@
               "resolved": "https://registry.npmjs.org/wFiles/-/wFiles-0.6.79.tgz",
               "integrity": "sha512-YP7gaI+rF3I1OqkOtn/BnYl+VbykNKV1I/2OFG2/ew0x7VTKaX6Q1c45nBY/FcN+usyfS/1P21IF9yknYodBFA==",
               "requires": {
-                "fs-extra": "^6.0.1",
-                "wConsequence": "^0.4.36",
-                "wCopyable": "^0.4.32",
-                "wPath": "^0.5.51",
-                "wRegexpObject": "^0.4.40",
-                "wTools": "^0.8.63",
-                "wexectools": "^0.3.22",
-                "wfieldsstack": "^0.3.10",
-                "wstringer": "^0.3.14",
-                "wstringsextra": "^0.3.15"
+                "fs-extra": "6.0.1",
+                "wConsequence": "0.4.36",
+                "wCopyable": "0.4.32",
+                "wPath": "0.5.51",
+                "wRegexpObject": "0.4.40",
+                "wTools": "0.8.63",
+                "wexectools": "0.3.22",
+                "wfieldsstack": "0.3.10",
+                "wstringer": "0.3.14",
+                "wstringsextra": "0.3.15"
               }
             },
             "wLogger": {
@@ -1382,11 +1382,11 @@
               "resolved": "https://registry.npmjs.org/wLogger/-/wLogger-0.5.51.tgz",
               "integrity": "sha512-XwdVGorZzkDF424UqVVav8LMLTHyevcWkSHZ8Qz1PrLgsw8xLSPi7lWlNwIdj/xWj8AdIrh6qKsaoL4O47g8YQ==",
               "requires": {
-                "wColor": "^0.3.37",
-                "wCopyable": "^0.4.32",
-                "wTools": "^0.8.63",
-                "wstringer": "^0.3.14",
-                "wstringsextra": "^0.3.15"
+                "wColor": "0.3.37",
+                "wCopyable": "0.4.32",
+                "wTools": "0.8.63",
+                "wstringer": "0.3.14",
+                "wstringsextra": "0.3.15"
               }
             },
             "wPath": {
@@ -1394,14 +1394,14 @@
               "resolved": "https://registry.npmjs.org/wPath/-/wPath-0.5.51.tgz",
               "integrity": "sha512-77x2ijrQuVxstXbdS70TCNSQ9pIyo9pEE6WvZx/rf5B+19O2WoYFqEuopJ6hglOUMsCyIaTsMP8zeQuplhedVQ==",
               "requires": {
-                "wTools": "^0.8.63"
+                "wTools": "0.8.63"
               }
             },
             "wProto": {
               "version": "file:node_modules/wfieldsstack/node_modules/wProto",
               "integrity": "sha512-EfiA4qs/p0Y2zVkJJ4ctLEU5qHSKsD/+hl9rA2R42UIruRZbAeJzKagrIlBDkgvWXjzyNbo4q9udORP8gBWcXw==",
               "requires": {
-                "wTools": "^0.8.63"
+                "wTools": "0.8.63"
               }
             },
             "wRegexpObject": {
@@ -1409,7 +1409,7 @@
               "resolved": "https://registry.npmjs.org/wRegexpObject/-/wRegexpObject-0.4.40.tgz",
               "integrity": "sha512-I8BrH4cMSwwcGesPAstlkGqOD5OzGc1uanj3m/f+jOhK1t0AbrCTQDQUEWwTO6u6gnElsBMFxPTvIowYV58cgw==",
               "requires": {
-                "wTools": "^0.8.63"
+                "wTools": "0.8.63"
               }
             },
             "wTesting": {
@@ -1417,15 +1417,15 @@
               "resolved": "https://registry.npmjs.org/wTesting/-/wTesting-0.4.102.tgz",
               "integrity": "sha512-uwYt0RyxRIXVifSwb6KoHpB1edpUXhd6WOimGSw5QCVuBVL2P8OvIV1CyYsVEBePuREEoKkdl9h3o7j5fdtzmg==",
               "requires": {
-                "wConsequence": "^0.4.36",
-                "wCopyable": "^0.4.32",
-                "wEventHandler": "^0.4.22",
-                "wFiles": "^0.6.79",
-                "wLogger": "^0.5.51",
-                "wProto": "^0.4.48",
-                "wTools": "^0.8.63",
-                "wexectools": "^0.3.22",
-                "winstancing": "^0.4.9"
+                "wConsequence": "0.4.36",
+                "wCopyable": "0.4.32",
+                "wEventHandler": "0.4.22",
+                "wFiles": "0.6.79",
+                "wLogger": "0.5.51",
+                "wProto": "0.4.48",
+                "wTools": "0.8.63",
+                "wexectools": "0.3.22",
+                "winstancing": "0.4.9"
               },
               "dependencies": {
                 "wProto": {
@@ -1433,7 +1433,7 @@
                   "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.48.tgz",
                   "integrity": "sha512-/v1czgomqg03u46ouk9PqzbOqQRqac5r5hC1CMEp0DufHO9On4K0BeMpD4wmCOqYEWYTIMM5nurmCs2HgzYQrA==",
                   "requires": {
-                    "wTools": "^0.8.63"
+                    "wTools": "0.8.63"
                   }
                 }
               }
@@ -1443,8 +1443,8 @@
               "resolved": "https://registry.npmjs.org/wcloner/-/wcloner-0.3.29.tgz",
               "integrity": "sha512-NWpdGT2nh2fAoSXtC2MsSzLqLGn1iK8YfeQxZvbLGWc7gMYHqbBiQngd0/RsH/yEmzmt1iCewy9XxGxoV1N78A==",
               "requires": {
-                "wTools": "^0.8.63",
-                "wtraverser": "^0.3.14"
+                "wTools": "0.8.63",
+                "wtraverser": "0.3.14"
               }
             },
             "wexectools": {
@@ -1452,8 +1452,8 @@
               "resolved": "https://registry.npmjs.org/wexectools/-/wexectools-0.3.22.tgz",
               "integrity": "sha512-zM8L9jS/aP9KzU+zyvgrUHn5U86Oxoofpw4Od/gFa5HALanUaAKB1+Wp8RCyBp9o5rmEsAep0/W+VTxvY1KYgw==",
               "requires": {
-                "wPath": "^0.5.51",
-                "wTools": "^0.8.63"
+                "wPath": "0.5.51",
+                "wTools": "0.8.63"
               }
             },
             "wfieldsstack": {
@@ -1461,8 +1461,8 @@
               "resolved": "https://registry.npmjs.org/wfieldsstack/-/wfieldsstack-0.3.10.tgz",
               "integrity": "sha512-vhxp2QusYHep+ferJEsoi/sPs6I4XH42IXI3sHeNBkVl0lrIbch8/294HZowGaybZLBX+vqhD5k30XsaaVzLbA==",
               "requires": {
-                "wProto": "^0.4.48",
-                "wTools": "^0.8.63"
+                "wProto": "0.4.48",
+                "wTools": "0.8.63"
               },
               "dependencies": {
                 "wProto": {
@@ -1470,7 +1470,7 @@
                   "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.48.tgz",
                   "integrity": "sha512-/v1czgomqg03u46ouk9PqzbOqQRqac5r5hC1CMEp0DufHO9On4K0BeMpD4wmCOqYEWYTIMM5nurmCs2HgzYQrA==",
                   "requires": {
-                    "wTools": "^0.8.63"
+                    "wTools": "0.8.63"
                   }
                 }
               }
@@ -1480,9 +1480,9 @@
               "resolved": "https://registry.npmjs.org/winstancing/-/winstancing-0.4.9.tgz",
               "integrity": "sha512-bkaEVvGoEmHJA8i1W+/NuyBtaAllmnfRtpJrTyBQ5uSRl/7icUReIFol6hw0nTSCFyxMAkqFQWQdmOxZvA4Xwg==",
               "requires": {
-                "wProto": "^0.4.48",
-                "wTools": "^0.8.63",
-                "wcloner": "^0.3.29"
+                "wProto": "0.4.48",
+                "wTools": "0.8.63",
+                "wcloner": "0.3.29"
               },
               "dependencies": {
                 "wProto": {
@@ -1490,7 +1490,7 @@
                   "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.48.tgz",
                   "integrity": "sha512-/v1czgomqg03u46ouk9PqzbOqQRqac5r5hC1CMEp0DufHO9On4K0BeMpD4wmCOqYEWYTIMM5nurmCs2HgzYQrA==",
                   "requires": {
-                    "wTools": "^0.8.63"
+                    "wTools": "0.8.63"
                   }
                 }
               }
@@ -1500,7 +1500,7 @@
               "resolved": "https://registry.npmjs.org/wstringer/-/wstringer-0.3.14.tgz",
               "integrity": "sha512-KWB9K5eBpcgWmHW0VoNIrEObILwjHIEjKQ03CyUh05zyVbtEjYvBc3xeq9JMi363GOhb8vfANzfe5oazdPXrzQ==",
               "requires": {
-                "wTools": "^0.8.63"
+                "wTools": "0.8.63"
               }
             },
             "wstringsextra": {
@@ -1508,8 +1508,8 @@
               "resolved": "https://registry.npmjs.org/wstringsextra/-/wstringsextra-0.3.15.tgz",
               "integrity": "sha512-4tkMHip9VV+b54K5cOQBK3Q6zw1C4TdttNDL1Mc3GKdhxpAy+9YnqF5B+NJ/ym1QsIQS9KvWvdgsJNPN17uYFA==",
               "requires": {
-                "wTools": "^0.8.63",
-                "wstringer": "^0.3.14"
+                "wTools": "0.8.63",
+                "wstringer": "0.3.14"
               }
             },
             "wtraverser": {
@@ -1517,7 +1517,7 @@
               "resolved": "https://registry.npmjs.org/wtraverser/-/wtraverser-0.3.14.tgz",
               "integrity": "sha512-zkwZQjiY5tgEhFY30yrhf3RlGXX7GoC8taVyGYorIoekWvWvh2n0EOjy0oRJZKSxv5xe62I5Y1mzqcfNZB+9+g==",
               "requires": {
-                "wTools": "^0.8.63"
+                "wTools": "0.8.63"
               }
             }
           }
@@ -1534,9 +1534,9 @@
       "resolved": "https://registry.npmjs.org/winstancing/-/winstancing-0.4.9.tgz",
       "integrity": "sha512-bkaEVvGoEmHJA8i1W+/NuyBtaAllmnfRtpJrTyBQ5uSRl/7icUReIFol6hw0nTSCFyxMAkqFQWQdmOxZvA4Xwg==",
       "requires": {
-        "wProto": "^0.4.51",
-        "wTools": "^0.8.63",
-        "wcloner": "^0.3.29"
+        "wProto": "0.4.51",
+        "wTools": "0.8.63",
+        "wcloner": "0.3.29"
       },
       "dependencies": {
         "wProto": {
@@ -1544,7 +1544,7 @@
           "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.51.tgz",
           "integrity": "sha512-EfiA4qs/p0Y2zVkJJ4ctLEU5qHSKsD/+hl9rA2R42UIruRZbAeJzKagrIlBDkgvWXjzyNbo4q9udORP8gBWcXw==",
           "requires": {
-            "wTools": "^0.8.63"
+            "wTools": "0.8.63"
           },
           "dependencies": {
             "fs-extra": {
@@ -1552,9 +1552,9 @@
               "resolved": "https://registry.npmjs.org/fs-extra/-/fs-extra-6.0.1.tgz",
               "integrity": "sha512-GnyIkKhhzXZUWFCaJzvyDLEEgDkPfb4/TPvJCJVuS8MWZgoSsErf++QpiAlDnKFcqhRlm+tIOcencCjyJE6ZCA==",
               "requires": {
-                "graceful-fs": "^4.1.2",
-                "jsonfile": "^4.0.0",
-                "universalify": "^0.1.0"
+                "graceful-fs": "4.1.2",
+                "jsonfile": "4.0.0",
+                "universalify": "0.1.0"
               }
             },
             "graceful-fs": {
@@ -1567,7 +1567,7 @@
               "resolved": "https://registry.npmjs.org/jsonfile/-/jsonfile-4.0.0.tgz",
               "integrity": "sha1-h3Gq4HmbZAdrdmQPygWPnBDjPss=",
               "requires": {
-                "graceful-fs": "^4.1.6"
+                "graceful-fs": "4.1.6"
               }
             },
             "universalify": {
@@ -1580,7 +1580,7 @@
               "resolved": "https://registry.npmjs.org/wColor/-/wColor-0.3.37.tgz",
               "integrity": "sha512-vDH7Qsu4yNzjo2Rti77WZjrCJJ+fnkOxqI9gyZb7OgHTDf381h4E5KFbz+oaIQsM0Cw/bckuxo6pOxGokvRb9Q==",
               "requires": {
-                "wTools": "^0.8.63"
+                "wTools": "0.8.63"
               }
             },
             "wConsequence": {
@@ -1588,9 +1588,9 @@
               "resolved": "https://registry.npmjs.org/wConsequence/-/wConsequence-0.4.36.tgz",
               "integrity": "sha512-Z3FnIwh3kxXIm7fxXelOr7LBPZsjLOEpAvDzFMzVpkPaXirDFyGY32q3JFY93tvXUh00uFZi2yfD1HydGFieCg==",
               "requires": {
-                "wCopyable": "^0.4.32",
-                "wProto": "^0.4.48",
-                "wTools": "^0.8.63"
+                "wCopyable": "0.4.32",
+                "wProto": "0.4.48",
+                "wTools": "0.8.63"
               },
               "dependencies": {
                 "wProto": {
@@ -1598,7 +1598,7 @@
                   "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.48.tgz",
                   "integrity": "sha512-/v1czgomqg03u46ouk9PqzbOqQRqac5r5hC1CMEp0DufHO9On4K0BeMpD4wmCOqYEWYTIMM5nurmCs2HgzYQrA==",
                   "requires": {
-                    "wTools": "^0.8.63"
+                    "wTools": "0.8.63"
                   }
                 }
               }
@@ -1608,9 +1608,9 @@
               "resolved": "https://registry.npmjs.org/wCopyable/-/wCopyable-0.4.32.tgz",
               "integrity": "sha512-Qs4W3Nw9V+g/DpZEPlZABHcAsjAxjmwpximuYuV7xvtyQuTAP1l/pJJD72gH6G9jEDWqKw8BJOEJfzQFlmzhvA==",
               "requires": {
-                "wProto": "^0.4.48",
-                "wTools": "^0.8.63",
-                "wcloner": "^0.3.29"
+                "wProto": "0.4.48",
+                "wTools": "0.8.63",
+                "wcloner": "0.3.29"
               },
               "dependencies": {
                 "wProto": {
@@ -1618,7 +1618,7 @@
                   "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.48.tgz",
                   "integrity": "sha512-/v1czgomqg03u46ouk9PqzbOqQRqac5r5hC1CMEp0DufHO9On4K0BeMpD4wmCOqYEWYTIMM5nurmCs2HgzYQrA==",
                   "requires": {
-                    "wTools": "^0.8.63"
+                    "wTools": "0.8.63"
                   }
                 }
               }
@@ -1628,8 +1628,8 @@
               "resolved": "https://registry.npmjs.org/wEventHandler/-/wEventHandler-0.4.22.tgz",
               "integrity": "sha512-bAy+7m13xwsCUr46s8F5x4a/1MSLQ/DwUHnRp0B+erKRQJOUFssC9goLjlDe9eC5A7HGwwEN+C+I0taiJIqzNw==",
               "requires": {
-                "wProto": "^0.4.48",
-                "wTools": "^0.8.63"
+                "wProto": "0.4.48",
+                "wTools": "0.8.63"
               },
               "dependencies": {
                 "wProto": {
@@ -1637,7 +1637,7 @@
                   "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.48.tgz",
                   "integrity": "sha512-/v1czgomqg03u46ouk9PqzbOqQRqac5r5hC1CMEp0DufHO9On4K0BeMpD4wmCOqYEWYTIMM5nurmCs2HgzYQrA==",
                   "requires": {
-                    "wTools": "^0.8.63"
+                    "wTools": "0.8.63"
                   }
                 }
               }
@@ -1647,16 +1647,16 @@
               "resolved": "https://registry.npmjs.org/wFiles/-/wFiles-0.6.79.tgz",
               "integrity": "sha512-YP7gaI+rF3I1OqkOtn/BnYl+VbykNKV1I/2OFG2/ew0x7VTKaX6Q1c45nBY/FcN+usyfS/1P21IF9yknYodBFA==",
               "requires": {
-                "fs-extra": "^6.0.1",
-                "wConsequence": "^0.4.36",
-                "wCopyable": "^0.4.32",
-                "wPath": "^0.5.51",
-                "wRegexpObject": "^0.4.40",
-                "wTools": "^0.8.63",
-                "wexectools": "^0.3.22",
-                "wfieldsstack": "^0.3.10",
-                "wstringer": "^0.3.14",
-                "wstringsextra": "^0.3.15"
+                "fs-extra": "6.0.1",
+                "wConsequence": "0.4.36",
+                "wCopyable": "0.4.32",
+                "wPath": "0.5.51",
+                "wRegexpObject": "0.4.40",
+                "wTools": "0.8.63",
+                "wexectools": "0.3.22",
+                "wfieldsstack": "0.3.10",
+                "wstringer": "0.3.14",
+                "wstringsextra": "0.3.15"
               }
             },
             "wLogger": {
@@ -1664,11 +1664,11 @@
               "resolved": "https://registry.npmjs.org/wLogger/-/wLogger-0.5.51.tgz",
               "integrity": "sha512-XwdVGorZzkDF424UqVVav8LMLTHyevcWkSHZ8Qz1PrLgsw8xLSPi7lWlNwIdj/xWj8AdIrh6qKsaoL4O47g8YQ==",
               "requires": {
-                "wColor": "^0.3.37",
-                "wCopyable": "^0.4.32",
-                "wTools": "^0.8.63",
-                "wstringer": "^0.3.14",
-                "wstringsextra": "^0.3.15"
+                "wColor": "0.3.37",
+                "wCopyable": "0.4.32",
+                "wTools": "0.8.63",
+                "wstringer": "0.3.14",
+                "wstringsextra": "0.3.15"
               }
             },
             "wPath": {
@@ -1676,14 +1676,14 @@
               "resolved": "https://registry.npmjs.org/wPath/-/wPath-0.5.51.tgz",
               "integrity": "sha512-77x2ijrQuVxstXbdS70TCNSQ9pIyo9pEE6WvZx/rf5B+19O2WoYFqEuopJ6hglOUMsCyIaTsMP8zeQuplhedVQ==",
               "requires": {
-                "wTools": "^0.8.63"
+                "wTools": "0.8.63"
               }
             },
             "wProto": {
               "version": "file:node_modules/winstancing/node_modules/wProto",
               "integrity": "sha512-EfiA4qs/p0Y2zVkJJ4ctLEU5qHSKsD/+hl9rA2R42UIruRZbAeJzKagrIlBDkgvWXjzyNbo4q9udORP8gBWcXw==",
               "requires": {
-                "wTools": "^0.8.63"
+                "wTools": "0.8.63"
               }
             },
             "wRegexpObject": {
@@ -1691,7 +1691,7 @@
               "resolved": "https://registry.npmjs.org/wRegexpObject/-/wRegexpObject-0.4.40.tgz",
               "integrity": "sha512-I8BrH4cMSwwcGesPAstlkGqOD5OzGc1uanj3m/f+jOhK1t0AbrCTQDQUEWwTO6u6gnElsBMFxPTvIowYV58cgw==",
               "requires": {
-                "wTools": "^0.8.63"
+                "wTools": "0.8.63"
               }
             },
             "wTesting": {
@@ -1699,15 +1699,15 @@
               "resolved": "https://registry.npmjs.org/wTesting/-/wTesting-0.4.102.tgz",
               "integrity": "sha512-uwYt0RyxRIXVifSwb6KoHpB1edpUXhd6WOimGSw5QCVuBVL2P8OvIV1CyYsVEBePuREEoKkdl9h3o7j5fdtzmg==",
               "requires": {
-                "wConsequence": "^0.4.36",
-                "wCopyable": "^0.4.32",
-                "wEventHandler": "^0.4.22",
-                "wFiles": "^0.6.79",
-                "wLogger": "^0.5.51",
-                "wProto": "^0.4.48",
-                "wTools": "^0.8.63",
-                "wexectools": "^0.3.22",
-                "winstancing": "^0.4.9"
+                "wConsequence": "0.4.36",
+                "wCopyable": "0.4.32",
+                "wEventHandler": "0.4.22",
+                "wFiles": "0.6.79",
+                "wLogger": "0.5.51",
+                "wProto": "0.4.48",
+                "wTools": "0.8.63",
+                "wexectools": "0.3.22",
+                "winstancing": "0.4.9"
               },
               "dependencies": {
                 "wProto": {
@@ -1715,7 +1715,7 @@
                   "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.48.tgz",
                   "integrity": "sha512-/v1czgomqg03u46ouk9PqzbOqQRqac5r5hC1CMEp0DufHO9On4K0BeMpD4wmCOqYEWYTIMM5nurmCs2HgzYQrA==",
                   "requires": {
-                    "wTools": "^0.8.63"
+                    "wTools": "0.8.63"
                   }
                 }
               }
@@ -1725,8 +1725,8 @@
               "resolved": "https://registry.npmjs.org/wcloner/-/wcloner-0.3.29.tgz",
               "integrity": "sha512-NWpdGT2nh2fAoSXtC2MsSzLqLGn1iK8YfeQxZvbLGWc7gMYHqbBiQngd0/RsH/yEmzmt1iCewy9XxGxoV1N78A==",
               "requires": {
-                "wTools": "^0.8.63",
-                "wtraverser": "^0.3.14"
+                "wTools": "0.8.63",
+                "wtraverser": "0.3.14"
               }
             },
             "wexectools": {
@@ -1734,8 +1734,8 @@
               "resolved": "https://registry.npmjs.org/wexectools/-/wexectools-0.3.22.tgz",
               "integrity": "sha512-zM8L9jS/aP9KzU+zyvgrUHn5U86Oxoofpw4Od/gFa5HALanUaAKB1+Wp8RCyBp9o5rmEsAep0/W+VTxvY1KYgw==",
               "requires": {
-                "wPath": "^0.5.51",
-                "wTools": "^0.8.63"
+                "wPath": "0.5.51",
+                "wTools": "0.8.63"
               }
             },
             "wfieldsstack": {
@@ -1743,8 +1743,8 @@
               "resolved": "https://registry.npmjs.org/wfieldsstack/-/wfieldsstack-0.3.10.tgz",
               "integrity": "sha512-vhxp2QusYHep+ferJEsoi/sPs6I4XH42IXI3sHeNBkVl0lrIbch8/294HZowGaybZLBX+vqhD5k30XsaaVzLbA==",
               "requires": {
-                "wProto": "^0.4.48",
-                "wTools": "^0.8.63"
+                "wProto": "0.4.48",
+                "wTools": "0.8.63"
               },
               "dependencies": {
                 "wProto": {
@@ -1752,7 +1752,7 @@
                   "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.48.tgz",
                   "integrity": "sha512-/v1czgomqg03u46ouk9PqzbOqQRqac5r5hC1CMEp0DufHO9On4K0BeMpD4wmCOqYEWYTIMM5nurmCs2HgzYQrA==",
                   "requires": {
-                    "wTools": "^0.8.63"
+                    "wTools": "0.8.63"
                   }
                 }
               }
@@ -1762,9 +1762,9 @@
               "resolved": "https://registry.npmjs.org/winstancing/-/winstancing-0.4.9.tgz",
               "integrity": "sha512-bkaEVvGoEmHJA8i1W+/NuyBtaAllmnfRtpJrTyBQ5uSRl/7icUReIFol6hw0nTSCFyxMAkqFQWQdmOxZvA4Xwg==",
               "requires": {
-                "wProto": "^0.4.48",
-                "wTools": "^0.8.63",
-                "wcloner": "^0.3.29"
+                "wProto": "0.4.48",
+                "wTools": "0.8.63",
+                "wcloner": "0.3.29"
               },
               "dependencies": {
                 "wProto": {
@@ -1772,7 +1772,7 @@
                   "resolved": "https://registry.npmjs.org/wProto/-/wProto-0.4.48.tgz",
                   "integrity": "sha512-/v1czgomqg03u46ouk9PqzbOqQRqac5r5hC1CMEp0DufHO9On4K0BeMpD4wmCOqYEWYTIMM5nurmCs2HgzYQrA==",
                   "requires": {
-                    "wTools": "^0.8.63"
+                    "wTools": "0.8.63"
                   }
                 }
               }
@@ -1782,7 +1782,7 @@
               "resolved": "https://registry.npmjs.org/wstringer/-/wstringer-0.3.14.tgz",
               "integrity": "sha512-KWB9K5eBpcgWmHW0VoNIrEObILwjHIEjKQ03CyUh05zyVbtEjYvBc3xeq9JMi363GOhb8vfANzfe5oazdPXrzQ==",
               "requires": {
-                "wTools": "^0.8.63"
+                "wTools": "0.8.63"
               }
             },
             "wstringsextra": {
@@ -1790,8 +1790,8 @@
               "resolved": "https://registry.npmjs.org/wstringsextra/-/wstringsextra-0.3.15.tgz",
               "integrity": "sha512-4tkMHip9VV+b54K5cOQBK3Q6zw1C4TdttNDL1Mc3GKdhxpAy+9YnqF5B+NJ/ym1QsIQS9KvWvdgsJNPN17uYFA==",
               "requires": {
-                "wTools": "^0.8.63",
-                "wstringer": "^0.3.14"
+                "wTools": "0.8.63",
+                "wstringer": "0.3.14"
               }
             },
             "wtraverser": {
@@ -1799,7 +1799,7 @@
               "resolved": "https://registry.npmjs.org/wtraverser/-/wtraverser-0.3.14.tgz",
               "integrity": "sha512-zkwZQjiY5tgEhFY30yrhf3RlGXX7GoC8taVyGYorIoekWvWvh2n0EOjy0oRJZKSxv5xe62I5Y1mzqcfNZB+9+g==",
               "requires": {
-                "wTools": "^0.8.63"
+                "wTools": "0.8.63"
               }
             }
           }
@@ -1816,7 +1816,7 @@
       "resolved": "https://registry.npmjs.org/wstringer/-/wstringer-0.3.14.tgz",
       "integrity": "sha512-KWB9K5eBpcgWmHW0VoNIrEObILwjHIEjKQ03CyUh05zyVbtEjYvBc3xeq9JMi363GOhb8vfANzfe5oazdPXrzQ==",
       "requires": {
-        "wTools": "^0.8.63"
+        "wTools": "0.8.63"
       }
     },
     "wstringsextra": {
@@ -1824,8 +1824,8 @@
       "resolved": "https://registry.npmjs.org/wstringsextra/-/wstringsextra-0.3.15.tgz",
       "integrity": "sha512-4tkMHip9VV+b54K5cOQBK3Q6zw1C4TdttNDL1Mc3GKdhxpAy+9YnqF5B+NJ/ym1QsIQS9KvWvdgsJNPN17uYFA==",
       "requires": {
-        "wTools": "^0.8.63",
-        "wstringer": "^0.3.14"
+        "wTools": "0.8.63",
+        "wstringer": "0.3.14"
       }
     },
     "wtraverser": {
@@ -1833,7 +1833,7 @@
       "resolved": "https://registry.npmjs.org/wtraverser/-/wtraverser-0.3.14.tgz",
       "integrity": "sha512-zkwZQjiY5tgEhFY30yrhf3RlGXX7GoC8taVyGYorIoekWvWvh2n0EOjy0oRJZKSxv5xe62I5Y1mzqcfNZB+9+g==",
       "requires": {
-        "wTools": "^0.8.63"
+        "wTools": "0.8.63"
       }
     }
   }
