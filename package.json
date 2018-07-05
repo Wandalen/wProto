@@ -5,6 +5,7 @@
   "description": "Little library of base level helping with defining classes and mixins in Java Script.",
   "author": "Kostiantyn Wandalen <wtory.net@domainsbyproxy.com>",
   "license": "MIT",
+  
   "contributors": [
     {
       "name": "Kostiantyn Wandalen",
