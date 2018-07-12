@@ -48,15 +48,15 @@ function isLike( test )
   var Base2 = _.like().end;
   var Mid = _.like( Base1,Base2 ).end;
 
-  test.description = 'Base1 class like itself';
+  test.case = 'Base1 class like itself';
   var is = _.construction.isLike( Base1,Base1 );
   test.is( is );
 
-  test.description = 'Mid class like itself';
+  test.case = 'Mid class like itself';
   var is = _.construction.isLike( Mid,Mid );
   test.is( is );
 
-  test.description = 'Mid class like one of parent';
+  test.case = 'Mid class like one of parent';
   var is = _.construction.isLike( Mid,Base1 );
   test.is( is );
   var is = _.construction.isLike( Mid,Base2 );
@@ -64,19 +64,19 @@ function isLike( test )
 
   /* */
 
-  test.description = 'base instance like base class';
+  test.case = 'base instance like base class';
   debugger;
   var base1 = Base1.constructor();
   debugger;
   var is = _.construction.isLike( base1,Base1 );
   test.is( is );
 
-  test.description = 'base instance like another base class';
+  test.case = 'base instance like another base class';
   var base1 = Base1.constructor();
   var is = _.construction.isLike( base1,Base2 );
   test.is( !is );
 
-  test.description = 'mid instance like one of class';
+  test.case = 'mid instance like one of class';
   var mid = Mid.constructor();
   var is = _.construction.isLike( mid,Mid );
   test.is( is );

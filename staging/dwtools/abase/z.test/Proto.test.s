@@ -221,7 +221,7 @@ function prototypeIsStandard( t )
 // function _accessorOptions( test )
 // {
 //
-//   test.description = 'one args call';
+//   test.case = 'one args call';
 //   var Alpha = { };
 //   var o =
 //   {
@@ -239,7 +239,7 @@ function prototypeIsStandard( t )
 //   };
 //   test.identical( got, expected );
 //
-//   test.description = 'two args call';
+//   test.case = 'two args call';
 //   var Alpha = function Alpha( ){ };
 //   var names = { a : '_a' };
 //   var got = _.toStr( _._accessorOptions( Alpha, names ), { levels : 2 } );
@@ -253,7 +253,7 @@ function prototypeIsStandard( t )
 //   ].join( '\n' );
 //   test.identical( got, expected );
 //
-//   test.description = 'three args call';
+//   test.case = 'three args call';
 //   var Alpha = function Alpha( ){ };
 //   var names = { a : '_a' };
 //   var message = [ 'set/get call' ];
@@ -275,7 +275,7 @@ function prototypeIsStandard( t )
 //
 //   if( Config.debug )
 //   {
-//     test.description = 'empty call';
+//     test.case = 'empty call';
 //     test.shouldThrowError( function()
 //       {
 //         _._accessorOptions( );
@@ -288,7 +288,7 @@ function prototypeIsStandard( t )
 function accessor( test )
 {
 
-  test.description = 'setter'; /**/
+  test.case = 'setter'; /**/
   var Alpha = function _Alpha(){}
   _.classMake
   ({
@@ -310,7 +310,7 @@ function accessor( test )
   var expected = 10;
   test.identical( got, expected );
 
-  test.description = 'getter'; /**/
+  test.case = 'getter'; /**/
   var Alpha = function _Alpha(){}
   _.classMake
   ({
@@ -332,7 +332,7 @@ function accessor( test )
   var expected = 10;
   test.identical( got, expected );
 
-  test.description = 'getter & setter'; /**/
+  test.case = 'getter & setter'; /**/
   var Alpha = function _Alpha(){}
   _.classMake
   ({
@@ -361,31 +361,31 @@ function accessor( test )
   if( !Config.debug )
   return;
 
-  test.description = 'empty call'; /**/
+  test.case = 'empty call'; /**/
   test.shouldThrowError( function()
   {
     _.accessor( );
   });
 
-  test.description = 'invalid first argument type'; /**/
+  test.case = 'invalid first argument type'; /**/
   test.shouldThrowError( function()
   {
     _.accessor( 1, { a : 'a' } );
   });
 
-  test.description = 'invalid second argument type'; /**/
+  test.case = 'invalid second argument type'; /**/
   test.shouldThrowError( function()
   {
     _.accessor( {}, [] );
   });
 
-  test.description = 'does not have Composes'; /**/
+  test.case = 'does not have Composes'; /**/
   test.shouldThrowError( function()
   {
     _.accessor( { constructor : function(){}, },{ a : 'a' } );
   });
 
-  test.description = 'does not have constructor'; /**/
+  test.case = 'does not have constructor'; /**/
   test.shouldThrowError( function()
   {
     _.accessor( { Composes : {}, },{ a : 'a' } );
@@ -398,7 +398,7 @@ function accessor( test )
 function accessorForbid( test )
 {
 
-  test.description = 'accessor forbid getter&setter';
+  test.case = 'accessor forbid getter&setter';
   var Alpha = { };
   _.accessorForbid( Alpha, { a : 'a' } );
   try
@@ -424,7 +424,7 @@ function accessorForbid( test )
   if( !Config.debug ) /* */
   return;
 
-  test.description = 'forbid get';
+  test.case = 'forbid get';
   test.shouldThrowError( function()
   {
     var Alpha = { };
@@ -432,7 +432,7 @@ function accessorForbid( test )
     Alpha.a;
   });
 
-  test.description = 'forbid set';
+  test.case = 'forbid set';
   test.shouldThrowError( function()
   {
     var Alpha = { };
@@ -440,19 +440,19 @@ function accessorForbid( test )
     Alpha.a = 5;
   });
 
-  test.description = 'empty call';
+  test.case = 'empty call';
   test.shouldThrowError( function()
   {
     _.accessorForbid( );
   });
 
-  test.description = 'invalid first argument type';
+  test.case = 'invalid first argument type';
   test.shouldThrowError( function()
   {
     _.accessorForbid( 1, { a : 'a' } );
   });
 
-  test.description = 'invalid second argument type';
+  test.case = 'invalid second argument type';
   test.shouldThrowError( function()
   {
     _.accessorForbid( {}, 1 );
@@ -464,7 +464,7 @@ function accessorForbid( test )
 
 function accessorReadOnly( test )
 {
-  test.description = 'readOnly';
+  test.case = 'readOnly';
 
   var Alpha = function _Alpha(){}
   _.classMake
@@ -481,7 +481,7 @@ function accessorReadOnly( test )
   var expected = false;
   test.identical( got, expected );
 
-  test.description = 'saves field value';
+  test.case = 'saves field value';
   var Alpha = function _Alpha( a )
   {
     this[ Symbol.for( 'a' ) ] = a;
@@ -503,7 +503,7 @@ function accessorReadOnly( test )
   if( !Config.debug )
   return;
 
-  test.description = 'readonly';
+  test.case = 'readonly';
   test.shouldThrowError( function()
   {
     var Alpha = { };
@@ -511,26 +511,26 @@ function accessorReadOnly( test )
     Alpha.a = 5;
   });
 
-  test.description = 'setter defined';
+  test.case = 'setter defined';
   test.shouldThrowError( function()
   {
     var Alpha = { _aSet : function() { } };
     _.accessorReadOnly( Alpha, { a : 'a' } );
   });
 
-  test.description = 'empty call';
+  test.case = 'empty call';
   test.shouldThrowError( function()
   {
     _.accessorReadOnly( );
   });
 
-  test.description = 'invalid first argument type';
+  test.case = 'invalid first argument type';
   test.shouldThrowError( function()
   {
     _.accessorReadOnly( 1, { a : 'a' } );
   });
 
-  test.description = 'invalid second argument type';
+  test.case = 'invalid second argument type';
   test.shouldThrowError( function()
   {
     _.accessorReadOnly( {}, [] );
@@ -542,7 +542,7 @@ function accessorReadOnly( test )
 
 function constant( test )
 {
-  test.description = 'creates new constant';
+  test.case = 'creates new constant';
   var Alpha = { };
   _.constant( Alpha, { a : 5 } );
   var descriptor = Object.getOwnPropertyDescriptor( Alpha, 'a' );
@@ -550,7 +550,7 @@ function constant( test )
   var expected = false;
   test.identical( got, expected );
 
-  test.description = 'rewrites existing field';
+  test.case = 'rewrites existing field';
   var Alpha = { a : 5 };
   _.constant( Alpha, { a : 1 } );
   var descriptor = Object.getOwnPropertyDescriptor( Alpha, 'a' );
@@ -561,19 +561,19 @@ function constant( test )
   if( !Config.debug )
   return;
 
-  test.description = 'empty call';
+  test.case = 'empty call';
   test.shouldThrowError( function()
   {
     _.constant( );
   });
 
-  test.description = 'invalid first argument type';
+  test.case = 'invalid first argument type';
   test.shouldThrowError( function()
   {
     _.constant( 1, { a : 'a' } );
   });
 
-  test.description = 'invalid second argument type';
+  test.case = 'invalid second argument type';
   test.shouldThrowError( function()
   {
     _.constant( {}, [] );
@@ -615,18 +615,18 @@ function classMake( test )
       C0proto = o.Class0.prototype;
     }
 
-    test.description = 'presence of valid prototype and constructor fields on class and prototype';
+    test.case = 'presence of valid prototype and constructor fields on class and prototype';
 
     test.identical( o.Class, o.Class.prototype.constructor );
     test.identical( Object.getPrototypeOf( o.Class ), o.Class0 );
     test.identical( Object.getPrototypeOf( o.Class.prototype ), C0proto );
 
 
-    test.description = 'presence of valid static field on class and prototype';
+    test.case = 'presence of valid static field on class and prototype';
 
     test.identical( o.Class.instances, o.Class.prototype.instances );
 
-    test.description = 'getting property descriptor of static field from constructor';
+    test.case = 'getting property descriptor of static field from constructor';
 
     var cd = Object.getOwnPropertyDescriptor( o.Class,'instances' );
     if( !o.ownStatics )
@@ -655,11 +655,11 @@ function classMake( test )
       test.is( !!pd.set );
     }
 
-    test.description = 'making the first instance';
+    test.case = 'making the first instance';
 
     var c1a = new o.Class();
 
-    // test.description = 'presence of valid static field on all';
+    // test.case = 'presence of valid static field on all';
     //
     // if( o.Class !== C1 && !o.ownStatics )
     // test.is( o.Class.instances === C1.instances );
@@ -669,12 +669,12 @@ function classMake( test )
     // test.identical( o.Class.instances.length, o.Statics.instances.length );
     // test.identical( o.Class.instances[ o.Statics.instances.length-1 ], c1a );
     //
-    // test.description = 'presence of valid prototype and constructor fields on instance';
+    // test.case = 'presence of valid prototype and constructor fields on instance';
     //
     // test.identical( Object.getPrototypeOf( c1a ), o.Class.prototype );
     // test.identical( c1a.constructor, o.Class );
     //
-    // test.description = 'presence of valid Statics descriptor';
+    // test.case = 'presence of valid Statics descriptor';
     //
     // test.is( o.Statics !== o.Class.prototype.Statics );
     // test.is( o.Statics !== c1a.Statics );
@@ -693,14 +693,14 @@ function classMake( test )
       test.identical( c1a.Statics, o.Statics );
     }
 
-    test.description = 'presence of conflicting fields';
+    test.case = 'presence of conflicting fields';
 
     test.is( o.Class.prototype.f1 === c1a.f1 );
     test.is( o.Class.prototype.f2 === c1a.f2 );
     test.is( o.Class.prototype.f3 === c1a.f3 );
     test.is( o.Class.prototype.f4 === c1a.f4 );
 
-    test.description = 'making the second instance';
+    test.case = 'making the second instance';
 
     var c1b = new o.Class();
     test.identical( o.Class.instances, o.Class.prototype.instances );
@@ -709,7 +709,7 @@ function classMake( test )
     test.identical( o.Class.instances[ o.Statics.instances.length-2 ], c1a );
     test.identical( o.Class.instances[ o.Statics.instances.length-1 ], c1b );
 
-    test.description = 'setting static field with constructor';
+    test.case = 'setting static field with constructor';
 
     o.Class.instances = o.Class.instances.slice();
     if( o.Class !== C1 && !o.ownStatics )
@@ -720,7 +720,7 @@ function classMake( test )
     test.is( o.Class.instances !== o.Statics.instances );
     o.Class.instances = Statics1.instances;
 
-    test.description = 'setting static field with prototype';
+    test.case = 'setting static field with prototype';
 
     o.Class.prototype.instances = o.Class.prototype.instances.slice();
     if( o.Class !== C1 && !o.ownStatics )
@@ -731,7 +731,7 @@ function classMake( test )
     test.is( o.Class.instances !== o.Statics.instances );
     o.Class.instances = Statics1.instances;
 
-    test.description = 'setting static field with instance';
+    test.case = 'setting static field with instance';
 
     c1a.instances = o.Class.instances.slice();
     if( o.Class !== C1 && !o.ownStatics )
@@ -749,7 +749,7 @@ function classMake( test )
   function testFields( f3 )
   {
 
-    test.description = 'presence of conflicting fields in the first class';
+    test.case = 'presence of conflicting fields in the first class';
 
     test.is( Statics1.f1 === C1.f1 );
     test.is( Extend1.f1 === C1.prototype.f1 );
@@ -816,7 +816,7 @@ function classMake( test )
   function testFields2()
   {
 
-    test.description = 'presence of conflicting fields in the second class';
+    test.case = 'presence of conflicting fields in the second class';
 
     test.is( Statics2.f1 === C3.f1 );
     test.is( Statics2.f1 === C3.prototype.f1 );
@@ -869,7 +869,7 @@ function classMake( test )
     test.is( !!d.get );
     test.is( !!d.set );
 
-    test.description = 'assigning static fields';
+    test.case = 'assigning static fields';
 
     C1.f1 = 1;
     C1.f2 = 2;
@@ -931,7 +931,7 @@ function classMake( test )
 
   /* */
 
-  test.description = 'first classMake';
+  test.case = 'first classMake';
 
   function C1()
   {
@@ -965,7 +965,7 @@ function classMake( test )
 
   // /* */
   //
-  // test.description = 'classMake with parent';
+  // test.case = 'classMake with parent';
   //
   // function C2()
   // {
@@ -984,7 +984,7 @@ function classMake( test )
   //
   // /* */
   //
-  // test.description = 'classMake with supplement';
+  // test.case = 'classMake with supplement';
   //
   // function Csupplement()
   // {
@@ -1008,7 +1008,7 @@ function classMake( test )
   //
   // /* */
   //
-  // test.description = 'classMake with extend';
+  // test.case = 'classMake with extend';
   //
   // function C3()
   // {
@@ -1057,7 +1057,7 @@ function classMake( test )
   // if( !Config.debug )
   // return;
   //
-  // test.description = 'attempt to extend statics without order';
+  // test.case = 'attempt to extend statics without order';
   //
   // test.shouldThrowError( function()
   // {
