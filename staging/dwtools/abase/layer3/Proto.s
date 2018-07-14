@@ -87,8 +87,6 @@ _.assert( _.routineIs( _nameFielded ),'wProto needs wTools/staging/dwtools/abase
 // property
 // --
 
-/* !!! no need to make examples for private routines */
-
 /**
  * Generates options object for _accessor, _accessorForbid functions.
  * Can be called in three ways:
@@ -1136,7 +1134,9 @@ function mixinMake( o )
   _.assert( _.objectIs( o.supplementOwn ) || o.supplementOwn === undefined || o.supplementOwn === null );
   _.assert( _.objectIs( o.supplement ) || o.supplement === undefined || o.supplement === null );
   _.assertOwnNoConstructor( o );
-  _.assertMapOwnOnly( o,mixinMake.defaults );
+
+  // _.assertMapOwnOnly( o, mixinMake.defaults );
+  _.routineOptions( mixinMake, o );
 
   if( !o._mixin )
   o.mixin = function mixin( cls )
@@ -1173,11 +1173,11 @@ function mixinMake( o )
 
     _.classExtend
     ({
-      cls : got.cls,
+      cls : got.cls || null,
       prototype : o.prototype,
-      extend : o.extend,
-      supplementOwn : o.supplementOwn,
-      supplement : o.supplement,
+      extend : o.extend || null,
+      supplementOwn : o.supplementOwn || null,
+      supplement : o.supplement || null,
     });
 
   }
@@ -2276,10 +2276,6 @@ function classMake( o )
     });
 
     /* statics */
-
-    /*
-      !!! implement accessor for static properties
-    */
 
     _.assert( prototype.constructor );
     _.assert( prototype.Statics );
