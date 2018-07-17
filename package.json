@@ -1,6 +1,6 @@
 {
   "name": "wProto",
-  "version": "0.4.61",
+  "version": "0.4.62",
   "engine": "node >= 6.0.0",
   "description": "Little library of base level helping with defining classes and mixins in Java Script.",
   "author": "Kostiantyn Wandalen <wanalen@willbe.so>",
