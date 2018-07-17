@@ -1,6 +1,6 @@
 ( function _Proto_s_() {
 
-'use strict';
+'use strict'; /**/
 
 /**
 * Definitions :
