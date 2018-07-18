@@ -1,6 +1,6 @@
 ( function _Proto_s_() {
 
-'use strict'; /**/
+'use strict';
 
 /**
 * Definitions :
@@ -1159,8 +1159,6 @@ function mixinMake( o )
 
   /* */
 
-  o._mixinDetails = _.mapExtend( null,o );
-
   if( !o.prototype )
   {
 
@@ -1193,7 +1191,8 @@ function mixinMake( o )
     }
   }
 
-  Object.freeze( o._mixinDetails );
+  o._mixinPrototype = _.mapExtend( null,o );
+  Object.freeze( o._mixinPrototype );
   Object.freeze( o );
 
   return o;
@@ -1226,13 +1225,13 @@ mixinMake.defaults =
 function mixinApply( o )
 {
   var dstProto = o.dstProto;
-  var d = o.descriptor._mixinDetails;
+  var d = o.descriptor._mixinPrototype;
 
-  _assert( arguments.length === 1 );
+  _.assert( arguments.length === 1 );
   _.assertOwnNoConstructor( o );
-  _assert( _.objectIs( dstProto ),'expects ( dstProto ) object, but got',_.strTypeOf( dstProto ) );
-  _assert( _.routineIs( d.mixin ),'looks like mixn descriptor is not made' );
-  _assert( Object.isFrozen( d ),'looks like mixn descriptor is not made' );
+  _.assert( _.objectIs( dstProto ),'expects ( dstProto ) object, but got',_.strTypeOf( dstProto ) );
+  _.assert( _.routineIs( d.mixin ),'looks like mixn descriptor is not made' );
+  _.assert( Object.isFrozen( d ),'looks like mixn descriptor is not made' );
   _.assertMapHasOnly( o,mixinApply.defaults );
 
   /* mixin into routine */
@@ -2059,7 +2058,7 @@ function proxyMap( dst,original )
 * @property {object} [o.extend=null] - extend prototype by this map.
 * @property {object} [o.supplement=null] - supplement prototype by this map.
 * @property {object} [o.static=null] - static fields of a class.
-* @property {boolean} [o.usingAtomicExtension=false] - extends class with atomic fields from relationship descriptors.
+* @property {boolean} [o.usingPrimitiveExtension=false] - extends class with primitive fields from relationship descriptors.
 * @property {boolean} [o.usingOriginalPrototype=false] - makes prototype using original constructor prototype.
 */
 
@@ -2138,7 +2137,7 @@ _.classMake
   parent : Parent,
   extend : Proto,
   supplement : Original.prototype,
-  usingAtomicExtension : true,
+  usingPrimitiveExtension : true,
 });
 */
 
@@ -2183,7 +2182,7 @@ function classMake( o )
     _.assert( !o.name || o.cls.name === o.name || o.cls._name === o.name,'class has name',o.cls.name + ', but options',o.name );
     _.assert( !o.nameShort || !o.cls.nameShort|| o.cls.nameShort === o.nameShort,'class has short name',o.cls.nameShort + ', but options',o.nameShort );
 
-    _.assertMapOwnAll( o.cls.prototype,has,'classMake : expects constructor' );
+    _.assertMapOwnAll( o.cls.prototype,has,'classMake expects constructor' );
     _.assertMapOwnNone( o.cls.prototype,hasNot );
     _.assertMapOwnNone( o.cls.prototype,ClassForbiddenNames );
 
@@ -2270,7 +2269,7 @@ function classMake( o )
       extend : o.extend,
       supplementOwn : o.supplementOwn,
       supplement : o.supplement,
-      usingAtomicExtension : o.usingAtomicExtension,
+      usingPrimitiveExtension : o.usingPrimitiveExtension,
       usingStatics : 1,
       allowingExtendStatics : o.allowingExtendStatics,
     });
@@ -2308,7 +2307,7 @@ function classMake( o )
 
     var mixinOptions = _.mapExtend( null,o );
 
-    _.assert( !o.usingAtomicExtension );
+    _.assert( !o.usingPrimitiveExtension );
     _.assert( !o.usingOriginalPrototype );
     _.assert( !o.parent );
     _.assert( !o.cls || o.withClass );
@@ -2320,17 +2319,19 @@ function classMake( o )
     delete mixinOptions.cls;
     delete mixinOptions.withMixin;
     delete mixinOptions.withClass;
-    delete mixinOptions.usingAtomicExtension;
+    delete mixinOptions.usingPrimitiveExtension;
     delete mixinOptions.usingOriginalPrototype;
     delete mixinOptions.allowingExtendStatics;
 
     mixinOptions.prototype = prototype;
 
-    result = _.mixinMake( mixinOptions );
+    _.mixinMake( mixinOptions );
 
-    if( o.withClass )
+    // if( o.withClass )
     {
-      result = _.mapSupplement( o.cls,result );
+      // mixinOptions = _.mapSupplement( o.cls,mixinOptions );
+      o.cls._mixinPrototype = mixinOptions._mixinPrototype;
+      o.cls.mixin = mixinOptions.mixin;
     }
 
   }
@@ -2365,7 +2366,7 @@ classMake.defaults =
   name : null,
   nameShort : null,
 
-  usingAtomicExtension : false,
+  usingPrimitiveExtension : false,
   usingOriginalPrototype : false,
   allowingExtendStatics : false,
 
@@ -2410,6 +2411,14 @@ classMake.defaults =
  * @memberof wTools
  */
 
+var knownConstructorFields =
+{
+  name : null,
+  _name : null,
+  nameShort : null,
+  prototype : null,
+}
+
 function classExtend( o )
 {
 
@@ -2423,11 +2432,24 @@ function classExtend( o )
   _.assert( _.objectIs( o.extend ) || o.extend === undefined || o.extend === null );
   _.assert( _.objectIs( o.supplementOwn ) || o.supplementOwn === undefined || o.supplementOwn === null );
   _.assert( _.objectIs( o.supplement ) || o.supplement === undefined || o.supplement === null );
+  _.assert( o.cls || o.prototype, 'expects class constructor or class prototype' );
 
-  if( o.cls || !o.prototype )
+  if( !o.prototype )
+  o.prototype = o.cls.prototype;
+
+  /*
+  mixin could could have none class constructor
+  */
+
+  if( o.cls /*|| !o.prototype*/ )
   {
-    _.assert( _.routineIs( o.cls ),'expects constructor of class ( o.cls )' );
-    _.assert( o.cls.name || o.cls._name,'class constructor should have name' );
+    _.assert( _.routineIs( o.cls ), 'expects constructor of class ( o.cls )' );
+    _.assert( o.cls.name || o.cls._name, 'class constructor should have name' );
+
+    _.assert( o.prototype );
+    if( !o.prototype.Statics )
+    _.assertMapHasOnly( o.cls, [ knownConstructorFields, o.prototype.Statics || {} ] );
+
   }
 
   if( o.extend )
@@ -2447,9 +2469,6 @@ function classExtend( o )
   }
 
   _.routineOptions( classExtend,o );
-
-  if( !o.prototype )
-  o.prototype = o.cls.prototype;
 
   _.assert( _.objectIs( o.prototype ) );
 
@@ -2550,23 +2569,17 @@ to prioritize ordinary facets adjustment order should be
   /* ordinary extend */
 
   if( o.extend )
-  {
-    ordinaryExtend( _.mapExtend, o.extend );
-  }
+  ordinaryExtend( _.mapExtend, o.extend );
 
   /* ordinary supplementOwn */
 
   if( o.supplementOwn )
-  {
-    ordinaryExtend( _.mapSupplementOwn, o.supplementOwn );
-  }
+  ordinaryExtend( _.mapSupplementOwn, o.supplementOwn );
 
   /* ordinary supplement */
 
   if( o.supplement )
-  {
-    ordinaryExtend( _.mapSupplement, o.supplement );
-  }
+  ordinaryExtend( _.mapSupplement, o.supplement );
 
   /* static supplementOwn */
 
@@ -2588,9 +2601,9 @@ to prioritize ordinary facets adjustment order should be
     _.mapSupplement( o.cls, o.supplement.Statics );
   }
 
-  /* atomic extend */
+  /* primitive extend */
 
-  if( o.usingAtomicExtension )
+  if( o.usingPrimitiveExtension )
   {
     for( var f in _.ClassFieldsGroups )
     if( f !== 'Statics' )
@@ -2626,26 +2639,11 @@ to prioritize ordinary facets adjustment order should be
     var prototype = o.prototype;
     var value = o.prototype.Statics[ s ];
 
-    // if( s === '_fieldsOfRelationshipsGroupsGet' )
-    // debugger;
-
     if( !_hasOwnProperty.call( o.prototype.Statics,s ) )
     return;
 
     var pd = _.propertyDescriptorGet( o.prototype,s );
     var cd = _.propertyDescriptorGet( o.prototype.constructor,s );
-
-    // if( pd.descriptor && pd.descriptor.value !== undefined )
-    // {
-    //   if( pd.descriptor.value === value )
-    //   pd.descriptor = null;
-    // }
-    //
-    // if( cd.descriptor && cd.descriptor.value !== undefined )
-    // {
-    //   if( cd.descriptor.value === value )
-    //   cd.descriptor = null;
-    // }
 
     if( pd.object !== prototype )
     pd.descriptor = null;
@@ -2656,11 +2654,7 @@ to prioritize ordinary facets adjustment order should be
     if( s === 'constructor' )
     return;
 
-    // _.assert( !pd ^ !!cd.descriptor );
     _.assert( s !== 'constructor' );
-
-    // if( pd.descriptor || cd.descriptor )
-    // return;
 
     var symbol = Symbol.for( s );
 
@@ -2716,11 +2710,19 @@ to prioritize ordinary facets adjustment order should be
 
   /* validation */
 
+  /*
+  mixin could could have none class constructor
+  */
+
   if( o.cls )
   {
     _.assert( o.prototype === o.cls.prototype );
     _.assert( _hasOwnProperty.call( o.prototype,'constructor' ),'prototype should has own constructor' );
     _.assert( _.routineIs( o.prototype.constructor ),'prototype should has own constructor' );
+    _.assert( o.cls === o.prototype.constructor );
+    _.assert( o.prototype.Statics );
+    //_.assertMapHasOnly( o.cls, [ knownConstructorFields, o.prototype.Statics ] );
+
   }
 
   return o.prototype;
@@ -2737,7 +2739,7 @@ classExtend.defaults =
   functor : null,
 
   usingStatics : true,
-  usingAtomicExtension : false,
+  usingPrimitiveExtension : false,
   allowingExtendStatics : false,
 }
 
