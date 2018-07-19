@@ -141,7 +141,7 @@ function _accessorOptions( routine, args )
 
   if( args.length > 2 )
   {
-    o.message = _.arraySlice( args,2 );
+    o.message = _.longSlice( args,2 );
   }
 
   return o;
@@ -3485,7 +3485,7 @@ apply default to each element of map, if present
 function defaultApply( src )
 {
 
-  _.assert( _.objectIs( src ) || _.arrayLike( src ) );
+  _.assert( _.objectIs( src ) || _.longIs( src ) );
   _.assert( def === _.def );
 
   var defVal = src[ def ];

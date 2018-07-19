@@ -94,7 +94,7 @@ function like()
     enumerable : false,
     configurable : false,
     writable : false,
-    value : _.arraySlice( arguments ),
+    value : _.longSlice( arguments ),
   });
 
   Object.defineProperty( proto, symbolForAllClasses,
