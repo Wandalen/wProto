@@ -346,7 +346,7 @@ function _accessor( o )
       _.assert( individual.object );
     }
 
-    _accessorProperty( individual,n );
+    _accessorMake( individual,n );
 
   }
 
@@ -372,7 +372,7 @@ _accessor.defaults =
 
 //
 
-function _accessorProperty( o,name )
+function _accessorMake( o,name )
 {
 
   _.assert( arguments.length === 2, 'expects exactly two arguments' );
@@ -387,7 +387,7 @@ function _accessorProperty( o,name )
 
   /* */
 
-  var propertyDescriptor = _.accessorDescriptorGet( o.object,encodedName );
+  var propertyDescriptor = _.prototypeDescriptorForAccessor( o.object,encodedName );
   if( propertyDescriptor.descriptor )
   {
 
@@ -727,7 +727,7 @@ function accessorForbid()
 
     /* */
 
-    var propertyDescriptor = _.accessorDescriptorGet( o.object,encodedName );
+    var propertyDescriptor = _.prototypeDescriptorForAccessor( o.object,encodedName );
     if( propertyDescriptor.descriptor )
     {
       _.assert( o.combining,'accessorForbid : if accessor overided expect ( o.combining ) is',Combining.join() );
@@ -1055,7 +1055,9 @@ function accessorToElement( o )
     _.assert( _.numberIs( index ) );
     _.assert( index >= 0 );
 
-    var setterGetter = _accessorSetterGetterGet( o.object,n );
+    var setterGetter = _accessorSetterGetterGet( o.object, n );
+
+    debugger;
 
     if( !setterGetter.set )
     o.object[ setterGetter.setName ] = function accessorToElementSet( src )
@@ -1088,7 +1090,7 @@ accessorToElement.defaults =
 
 //
 
-function accessorDescriptorGet( object,name )
+function prototypeDescriptorForAccessor( object,name )
 {
   var result = Object.create( null );
   result.object = null;
@@ -1099,7 +1101,6 @@ function accessorDescriptorGet( object,name )
   do
   {
     result.descriptor = Object.getOwnPropertyDescriptor( object,name );
-
     if( result.descriptor && !( 'value' in result.descriptor ) )
     {
       result.object = object;
@@ -1110,6 +1111,16 @@ function accessorDescriptorGet( object,name )
   while( object );
 
   return result;
+}
+
+//
+
+function accessorHas( proto, name )
+{
+  var accessors = proto._Accessors;
+  if( !accessors )
+  return false;
+  return !!accessors[ name ];
 }
 
 // --
@@ -1191,8 +1202,8 @@ function mixinMake( o )
     }
   }
 
-  o._mixinPrototype = _.mapExtend( null,o );
-  Object.freeze( o._mixinPrototype );
+  o.__mixin__ = _.mapExtend( null,o );
+  Object.freeze( o.__mixin__ );
   Object.freeze( o );
 
   return o;
@@ -1209,7 +1220,7 @@ mixinMake.defaults =
   extend : null,
   supplementOwn : null,
   supplement : null,
-  functor : null,
+  functors : null,
 
 }
 
@@ -1225,14 +1236,15 @@ mixinMake.defaults =
 function mixinApply( o )
 {
   var dstProto = o.dstProto;
-  var d = o.descriptor._mixinPrototype;
+  var d = o.descriptor.__mixin__;
 
   _.assert( arguments.length === 1 );
   _.assertOwnNoConstructor( o );
-  _.assert( _.objectIs( dstProto ),'expects ( dstProto ) object, but got',_.strTypeOf( dstProto ) );
-  _.assert( _.routineIs( d.mixin ),'looks like mixn descriptor is not made' );
-  _.assert( Object.isFrozen( d ),'looks like mixn descriptor is not made' );
-  _.assertMapHasOnly( o,mixinApply.defaults );
+  _.assert( _.objectIs( dstProto ), 'expects ( dstProto ) object, but got',_.strTypeOf( dstProto ) );
+  _.assert( _.routineIs( d.mixin ), 'looks like mixn descriptor is not made' );
+  _.assert( d );
+  _.assert( Object.isFrozen( d ), 'looks like mixn descriptor is not made' );
+  _.assertMapHasOnly( o, mixinApply.defaults );
 
   /* mixin into routine */
 
@@ -1253,7 +1265,7 @@ function mixinApply( o )
     extend : d.extend,
     supplementOwn : d.supplementOwn,
     supplement : d.supplement,
-    functor : d.functor,
+    functors : d.functors,
   });
 
   /* mixins map */
@@ -1535,7 +1547,7 @@ function descendantRestrictsAddTo( dstProto,srcMap )
 }
 
 // --
-// getter / setter functor
+// getter / setter functors
 // --
 
 function setterMapCollection_functor( o )
@@ -1943,12 +1955,30 @@ function propertyDescriptorGet( object,name )
 
 //
 
-function propertyGetterSetterGet( object,name )
+function propertyGetterSetterGet( object, propertyName )
 {
   var result = Object.create( null );
 
-  result.set = object[ '_' + name + 'Set' ] || object[ '' + name + 'Set' ];
-  result.get = object[ '_' + name + 'Get' ] || object[ '' + name + 'Get' ];
+  _.assert( arguments.length === 2 );
+  _.assert( _.strIs( propertyName ) );
+
+  result.set = object[ '_' + propertyName + 'Set' ] || object[ '' + propertyName + 'Set' ];
+  result.get = object[ '_' + propertyName + 'Get' ] || object[ '' + propertyName + 'Get' ];
+
+  return result;
+}
+
+//
+
+function propertyGetterSetterNames( propertyName )
+{
+  var result = Object.create( null );
+
+  _.assert( arguments.length === 1 );
+  _.assert( _.strIs( propertyName ) );
+
+  result.set = '_' + propertyName + 'Set';
+  result.get = '_' + propertyName + 'Get';
 
   return result;
 }
@@ -2258,7 +2288,7 @@ function classMake( o )
 
     if( o.parent )
     {
-      Object.setPrototypeOf( o.cls,o.parent );
+      Object.setPrototypeOf( o.cls, o.parent );
     }
 
     /* extend */
@@ -2322,6 +2352,7 @@ function classMake( o )
     delete mixinOptions.usingPrimitiveExtension;
     delete mixinOptions.usingOriginalPrototype;
     delete mixinOptions.allowingExtendStatics;
+    delete mixinOptions.onClassMakeEnd;
 
     mixinOptions.prototype = prototype;
 
@@ -2330,7 +2361,7 @@ function classMake( o )
     // if( o.withClass )
     {
       // mixinOptions = _.mapSupplement( o.cls,mixinOptions );
-      o.cls._mixinPrototype = mixinOptions._mixinPrototype;
+      o.cls.__mixin__ = mixinOptions.__mixin__;
       o.cls.mixin = mixinOptions.mixin;
     }
 
@@ -2338,8 +2369,11 @@ function classMake( o )
 
   /* handler */
 
-  if( prototype.onClassMakeEnd )
-  prototype.onClassMakeEnd( o );
+  if( prototype.OnClassMakeEnd )
+  prototype.OnClassMakeEnd.call( prototype, o );
+
+  if( o.onClassMakeEnd )
+  o.onClassMakeEnd.call( prototype, o );
 
   /* */
 
@@ -2359,9 +2393,12 @@ classMake.defaults =
   cls : null,
   parent : null,
 
+  onClassMakeEnd : null,
+
   extend : null,
   supplementOwn : null,
   supplement : null,
+  functors : null,
 
   name : null,
   nameShort : null,
@@ -2700,10 +2737,10 @@ to prioritize ordinary facets adjustment order should be
 
   /* functors */
 
-  if( o.functor )
-  for( var m in o.functor )
+  if( o.functors )
+  for( var m in o.functors )
   {
-    var func = o.functor[ m ].call( o,o.prototype[ m ] );
+    var func = o.functors[ m ].call( o,o.prototype[ m ] );
     _.assert( _.routineIs( func ),'not tested' );
     o.prototype[ m ] = func;
   }
@@ -2736,7 +2773,7 @@ classExtend.defaults =
   extend : null,
   supplementOwn : null,
   supplement : null,
-  functor : null,
+  functors : null,
 
   usingStatics : true,
   usingPrimitiveExtension : false,
@@ -2971,11 +3008,11 @@ function prototypeAppend( dstMap )
  * Does srcProto has insProto as prototype.
  * @param {object} srcProto - proto stack to investigate.
  * @param {object} insProto - proto to look for.
- * @method prototypeHas
+ * @method prototypeHasPrototype
  * @memberof wTools
  */
 
-function prototypeHas( srcProto,insProto )
+function prototypeHasPrototype( srcProto,insProto )
 {
 
   do
@@ -3040,6 +3077,24 @@ function prototypeArchyGet( srcPrototype )
   srcPrototype = Object.getPrototypeOf( srcPrototype );
 
   return srcPrototype;
+}
+
+//
+
+function prototypeHasField( src, fieldName )
+{
+  var prototype = _.prototypeGet( src );
+
+  _.assert( _.prototypeIs( prototype ) );
+  _.assert( _.prototypeIsStandard( prototype ),'expects standard prototype' );
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( _.strIs( fieldName ) );
+
+  for( var f in _.ClassFieldsGroupsRelationships )
+  if( prototype[ f ][ fieldName ] )
+  return true;
+
+  return false;
 }
 
 //
@@ -3273,24 +3328,6 @@ function fieldsOfInputGroups( src )
 //
 //   return result;
 // }
-
-//
-
-function prototypeHasField( src, fieldName )
-{
-  var prototype = _.prototypeGet( src );
-
-  _.assert( _.prototypeIs( prototype ) );
-  _.assert( _.prototypeIsStandard( prototype ),'expects standard prototype' );
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
-  _.assert( _.strIs( fieldName ) );
-
-  for( var f in _.ClassFieldsGroupsRelationships )
-  if( prototype[ f ][ fieldName ] )
-  return true;
-
-  return false;
-}
 
 // --
 // instance
@@ -3629,6 +3666,7 @@ ClassFieldsGroups.Associates = 'Associates';
 ClassFieldsGroups.Restricts = 'Restricts';
 ClassFieldsGroups.Medials = 'Medials';
 ClassFieldsGroups.Statics = 'Statics';
+ClassFieldsGroups.Copiers = 'Copiers';
 
 var ClassFieldsGroupsRelationships = Object.create( null );
 ClassFieldsGroupsRelationships.Composes = 'Composes';
@@ -3685,7 +3723,7 @@ var Proto =
   _accessorRegister : _accessorRegister,
 
   _accessor : _accessor,
-  _accessorProperty : _accessorProperty,
+  _accessorMake : _accessorMake,
 
   _accessorSetterGetterMake : _accessorSetterGetterMake,
   _accessorSetterGetterGet : _accessorSetterGetterGet,
@@ -3703,7 +3741,8 @@ var Proto =
   restrictReadOnly : restrictReadOnly,
 
   accessorToElement : accessorToElement,
-  accessorDescriptorGet : accessorDescriptorGet,
+  prototypeDescriptorForAccessor : prototypeDescriptorForAccessor,
+  accessorHas : accessorHas,
 
   // mixin
 
@@ -3721,7 +3760,7 @@ var Proto =
   descendantAssociatesAddTo : descendantAssociatesAddTo, /* experimental */
   descendantRestrictsAddTo : descendantRestrictsAddTo, /* experimental */
 
-  // getter / setter functor
+  // getter / setter functors
 
   setterMapCollection_functor : setterMapCollection_functor,
   setterArrayCollection_functor : setterArrayCollection_functor,
@@ -3738,6 +3777,7 @@ var Proto =
 
   propertyDescriptorGet : propertyDescriptorGet,
   propertyGetterSetterGet : propertyGetterSetterGet,
+  propertyGetterSetterNames : propertyGetterSetterNames,
 
   // proxy
 
@@ -3764,9 +3804,10 @@ var Proto =
   prototypeUnitedInterface : prototypeUnitedInterface, /* experimental */
 
   prototypeAppend : prototypeAppend, /* experimental */
-  prototypeHas : prototypeHas, /* experimental */
+  prototypeHasPrototype : prototypeHasPrototype, /* experimental */
   prototypeHasProperty : prototypeHasProperty, /* experimental */
   prototypeArchyGet : prototypeArchyGet, /* experimental */
+  prototypeHasField : prototypeHasField,
 
   prototypeCrossRefer : prototypeCrossRefer,
   prototypeEach : prototypeEach,
@@ -3775,8 +3816,6 @@ var Proto =
   fieldsOfCopyableGroups : fieldsOfCopyableGroups,
   fieldsOfTightGroups : fieldsOfTightGroups,
   fieldsOfInputGroups : fieldsOfInputGroups,
-
-  prototypeHasField : prototypeHasField,
 
   // instance
 
