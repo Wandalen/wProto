@@ -163,6 +163,12 @@ function _accessorRegister( o )
   _.assert( _.arrayIs( o.declaratorArgs ) );
   _.fieldsGroupFor( o.proto, '_Accessors' );
 
+  // if( o.declaratorKind )
+  // debugger;
+  //
+  // if( o.name === '_webglShaderId' )
+  // debugger;
+  //
   // if( Config.debug )
   // for( var a = 0 ; a < o.declaratorArgs.length ; a++ )
   // _.entityFreeze( o.declaratorArgs[ a ] );
@@ -365,7 +371,8 @@ function _accessorAct( o )
     ({
       proto : o.object,
       name : o.name,
-      declaratorName : 'Accessor',
+      declaratorName : 'accessor',
+      // declaratorName : null,
       declaratorArgs : [ o2 ],
       combining : o.combining,
     });
@@ -894,7 +901,7 @@ function accessorsSupplement( dst,src )
     if( _.objectIs( dst._Accessors[ a ] ) )
     return;
 
-    if( accessor.declaratorName )
+    if( accessor.declaratorName !== 'accessor' )
     {
       _.assert( _.routineIs( dst[ accessor.declaratorName ] ),'dst does not have accessor maker',accessor.declaratorName );
       dst[ accessor.declaratorName ].apply( dst,accessor.declaratorArgs );
@@ -1239,15 +1246,15 @@ fieldsGroupDeclare.defaults =
  * @example
  * var Self = function ClassName( o ) { };
  * var Composes = { tree : null };
- * _.fieldsGroupComposesDeclare( Self.prototype, Composes );
+ * _.fieldsGroupComposesExtend( Self.prototype, Composes );
  * console.log( Self.prototype ); // returns { Composes: { tree: null } }
  *
- * @method fieldsGroupComposesDeclare
+ * @method fieldsGroupComposesExtend
  * @throws {exception} If no arguments provided.
  * @memberof wTools
  */
 
-function fieldsGroupComposesDeclare( dstPrototype, srcMap )
+function fieldsGroupComposesExtend( dstPrototype, srcMap )
 {
 
   _.assert( arguments.length === 2, 'expects exactly two arguments' );
@@ -1259,7 +1266,6 @@ function fieldsGroupComposesDeclare( dstPrototype, srcMap )
     dstPrototype : dstPrototype,
     srcMap : srcMap,
     // filter : _.field.mapper.bypass,
-    // extending : false,
   });
 
 }
@@ -1273,15 +1279,15 @@ function fieldsGroupComposesDeclare( dstPrototype, srcMap )
  * @example
  * var Self = function ClassName( o ) { };
  * var Aggregates = { tree : null };
- * _.fieldsGroupAggregatesDeclare( Self.prototype, Aggregates );
+ * _.fieldsGroupAggregatesExtend( Self.prototype, Aggregates );
  * console.log( Self.prototype ); // returns { Aggregates: { tree: null } }
  *
- * @method fieldsGroupAggregatesDeclare
+ * @method fieldsGroupAggregatesExtend
  * @throws {exception} If no arguments provided.
  * @memberof wTools
  */
 
-function fieldsGroupAggregatesDeclare( dstPrototype,srcMap )
+function fieldsGroupAggregatesExtend( dstPrototype,srcMap )
 {
 
   _.assert( arguments.length === 2, 'expects exactly two arguments' );
@@ -1293,7 +1299,6 @@ function fieldsGroupAggregatesDeclare( dstPrototype,srcMap )
     dstPrototype : dstPrototype,
     srcMap : srcMap,
     // filter : _.field.mapper.bypass,
-    // extending : false,
   });
 
 }
@@ -1307,15 +1312,15 @@ function fieldsGroupAggregatesDeclare( dstPrototype,srcMap )
  * @example
  * var Self = function ClassName( o ) { };
  * var Associates = { tree : null };
- * _.fieldsGroupAssociatesDeclare( Self.prototype, Associates );
+ * _.fieldsGroupAssociatesExtend( Self.prototype, Associates );
  * console.log( Self.prototype ); // returns { Associates: { tree: null } }
  *
- * @method fieldsGroupAssociatesDeclare
+ * @method fieldsGroupAssociatesExtend
  * @throws {exception} If no arguments provided.
  * @memberof wTools
  */
 
-function fieldsGroupAssociatesDeclare( dstPrototype,srcMap )
+function fieldsGroupAssociatesExtend( dstPrototype,srcMap )
 {
 
   _.assert( arguments.length === 2, 'expects exactly two arguments' );
@@ -1327,7 +1332,6 @@ function fieldsGroupAssociatesDeclare( dstPrototype,srcMap )
     dstPrototype : dstPrototype,
     srcMap : srcMap,
     // filter : _.field.mapper.bypass,
-    // extending : false,
   });
 
 }
@@ -1341,15 +1345,15 @@ function fieldsGroupAssociatesDeclare( dstPrototype,srcMap )
  * @example
  * var Self = function ClassName( o ) { };
  * var Restricts = { tree : null };
- * _.fieldsGroupRestrictsDeclare( Self.prototype, Restricts );
+ * _.fieldsGroupRestrictsExtend( Self.prototype, Restricts );
  * console.log( Self.prototype ); // returns { Restricts: { tree: null } }
  *
- * @method fieldsGroupRestrictsDeclare
+ * @method fieldsGroupRestrictsExtend
  * @throws {exception} If no arguments provided.
  * @memberof wTools
  */
 
-function fieldsGroupRestrictsDeclare( dstPrototype,srcMap )
+function fieldsGroupRestrictsExtend( dstPrototype,srcMap )
 {
 
   _.assert( arguments.length === 2, 'expects exactly two arguments' );
@@ -1361,7 +1365,138 @@ function fieldsGroupRestrictsDeclare( dstPrototype,srcMap )
     dstPrototype : dstPrototype,
     srcMap : srcMap,
     // filter : _.field.mapper.bypass,
-    // extending : false,
+  });
+
+}
+
+//
+
+/**
+ * Adds own defaults( Composes ) to object. Creates new defaults container, if there is no such own.
+ * @param {array-like} arguments - for arguments details see {@link wTools~protoAddDefaults}.
+ *
+ * @example
+ * var Self = function ClassName( o ) { };
+ * var Composes = { tree : null };
+ * _.fieldsGroupComposesSupplement( Self.prototype, Composes );
+ * console.log( Self.prototype ); // returns { Composes: { tree: null } }
+ *
+ * @method fieldsGroupComposesSupplement
+ * @throws {exception} If no arguments provided.
+ * @memberof wTools
+ */
+
+function fieldsGroupComposesSupplement( dstPrototype, srcMap )
+{
+
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+
+  var fieldsGroupName = 'Composes';
+  return _.fieldsGroupDeclare
+  ({
+    fieldsGroupName : fieldsGroupName,
+    dstPrototype : dstPrototype,
+    srcMap : srcMap,
+    filter : _.field.mapper.dstNotHas,
+  });
+
+}
+
+//
+
+/**
+ * Adds own aggregates to object. Creates new aggregates container, if there is no such own.
+ * @param {array-like} arguments - for arguments details see {@link wTools~protoAddDefaults}.
+ *
+ * @example
+ * var Self = function ClassName( o ) { };
+ * var Aggregates = { tree : null };
+ * _.fieldsGroupAggregatesSupplement( Self.prototype, Aggregates );
+ * console.log( Self.prototype ); // returns { Aggregates: { tree: null } }
+ *
+ * @method fieldsGroupAggregatesSupplement
+ * @throws {exception} If no arguments provided.
+ * @memberof wTools
+ */
+
+function fieldsGroupAggregatesSupplement( dstPrototype,srcMap )
+{
+
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+
+  var fieldsGroupName = 'Aggregates';
+  return _.fieldsGroupDeclare
+  ({
+    fieldsGroupName : fieldsGroupName,
+    dstPrototype : dstPrototype,
+    srcMap : srcMap,
+    filter : _.field.mapper.dstNotHas,
+  });
+
+}
+
+//
+
+/**
+ * Adds own associates to object. Creates new associates container, if there is no such own.
+ * @param {array-like} arguments - for arguments details see {@link wTools~protoAddDefaults}.
+ *
+ * @example
+ * var Self = function ClassName( o ) { };
+ * var Associates = { tree : null };
+ * _.fieldsGroupAssociatesSupplement( Self.prototype, Associates );
+ * console.log( Self.prototype ); // returns { Associates: { tree: null } }
+ *
+ * @method fieldsGroupAssociatesSupplement
+ * @throws {exception} If no arguments provided.
+ * @memberof wTools
+ */
+
+function fieldsGroupAssociatesSupplement( dstPrototype,srcMap )
+{
+
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+
+  var fieldsGroupName = 'Associates';
+  return _.fieldsGroupDeclare
+  ({
+    fieldsGroupName : fieldsGroupName,
+    dstPrototype : dstPrototype,
+    srcMap : srcMap,
+    filter : _.field.mapper.dstNotHas,
+  });
+
+}
+
+//
+
+/**
+ * Adds own restricts to object. Creates new restricts container, if there is no such own.
+ * @param {array-like} arguments - for arguments details see {@link wTools~protoAddDefaults}.
+ *
+ * @example
+ * var Self = function ClassName( o ) { };
+ * var Restricts = { tree : null };
+ * _.fieldsGroupRestrictsSupplement( Self.prototype, Restricts );
+ * console.log( Self.prototype ); // returns { Restricts: { tree: null } }
+ *
+ * @method fieldsGroupRestrictsSupplement
+ * @throws {exception} If no arguments provided.
+ * @memberof wTools
+ */
+
+function fieldsGroupRestrictsSupplement( dstPrototype,srcMap )
+{
+
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+
+  var fieldsGroupName = 'Restricts';
+  return _.fieldsGroupDeclare
+  ({
+    fieldsGroupName : fieldsGroupName,
+    dstPrototype : dstPrototype,
+    srcMap : srcMap,
+    filter : _.field.mapper.dstNotHas,
   });
 
 }
@@ -2183,11 +2318,8 @@ function _mixinMake( o )
     _.assertMapHasOnly( this, [ _.KnownConstructorFields, { mixin : 'mixin', __mixin__ : '__mixin__' }, this.prototype.Statics || {} ] );
 
     _.mixinApply( md, dstClass.prototype );
-    // if( o.onMixinEnd )
-    // debugger;
     if( md.onMixinEnd )
-    md.onMixinEnd( dstClass, md );
-    // if( o )
+    md.onMixinEnd( md, dstClass );
     return dstClass;
   }
   else
@@ -2200,14 +2332,11 @@ function _mixinMake( o )
     _.assert( dstClass === dstClass.prototype.constructor );
     _.assertMapHasOnly( this, [ _.KnownConstructorFields, { mixin : 'mixin', __mixin__ : '__mixin__' }, this.prototype.Statics || {} ] );
 
-    // debugger;
     if( o.onMixinEnd )
     debugger;
-    // if( md.onMixin )
-    // debugger;
-    md.onMixin( dstClass, md );
+    md.onMixin( md, dstClass );
     if( md.onMixinEnd )
-    md.onMixinEnd( dstClass, md );
+    md.onMixinEnd( md, dstClass );
 
     return dstClass;
   }
@@ -2245,8 +2374,6 @@ function _mixinMake( o )
     }
   }
 
-  // o.__mixin__ = _.mapExtend( null,o );
-  // Object.freeze( o.__mixin__ );
   Object.freeze( o );
 
   return o;
@@ -2320,17 +2447,11 @@ var MixinDescriptorFields =
 function mixinApply( mixinDescriptor, dstPrototype )
 {
 
-  // var dstPrototype = o.dstPrototype;
-  // var md = o.descriptor.__mixin__;
-  // var md = o.descriptor;
-
   _.assert( arguments.length === 2, 'expects exactly two arguments' );
-  // _.assertOwnNoConstructor( o );
-  _.assert( _.objectIs( dstPrototype ), () => 'expects {-dstPrototype-} object, but got ' + _.strTypeOf( dstPrototype ) );
-  _.assert( _.routineIs( mixinDescriptor.mixin ), 'looks like mixn descriptor is not made' );
+  _.assert( _.objectIs( dstPrototype ), () => 'second argument {-dstPrototype-} does not look like prototype, got ' + _.strTypeOf( dstPrototype ) );
+  _.assert( _.routineIs( mixinDescriptor.mixin ), 'first argument does not look like mixin descriptor' );
   _.assert( mixinDescriptor );
-  _.assert( Object.isFrozen( mixinDescriptor ), 'looks like mixn descriptor is not made' );
-  // _.assertMapHasOnly( o, mixinApply.defaults );
+  _.assert( Object.isFrozen( mixinDescriptor ), 'first argument does not look like mixin descriptor' );
   _.assertMapHasOnly( mixinDescriptor, MixinDescriptorFields );
 
   /* mixin into routine */
@@ -2367,12 +2488,6 @@ function mixinApply( mixinDescriptor, dstPrototype )
   dstPrototype._mixinsMap[ mixinDescriptor.name ] = 1;
 
 }
-
-// mixinApply.defaults =
-// {
-//   dstPrototype : null,
-//   descriptor : null,
-// }
 
 //
 
@@ -4335,10 +4450,15 @@ var Routines =
   fieldsGroupFor : fieldsGroupFor, /* experimental */
   fieldsGroupDeclare : fieldsGroupDeclare,  /* experimental */
 
-  fieldsGroupComposesDeclare : fieldsGroupComposesDeclare, /* experimental */
-  fieldsGroupAggregatesDeclare : fieldsGroupAggregatesDeclare, /* experimental */
-  fieldsGroupAssociatesDeclare : fieldsGroupAssociatesDeclare, /* experimental */
-  fieldsGroupRestrictsDeclare : fieldsGroupRestrictsDeclare, /* experimental */
+  fieldsGroupComposesExtend : fieldsGroupComposesExtend, /* experimental */
+  fieldsGroupAggregatesExtend : fieldsGroupAggregatesExtend, /* experimental */
+  fieldsGroupAssociatesExtend : fieldsGroupAssociatesExtend, /* experimental */
+  fieldsGroupRestrictsExtend : fieldsGroupRestrictsExtend, /* experimental */
+
+  fieldsGroupComposesSupplement : fieldsGroupComposesSupplement, /* experimental */
+  fieldsGroupAggregatesSupplement : fieldsGroupAggregatesSupplement, /* experimental */
+  fieldsGroupAssociatesSupplement : fieldsGroupAssociatesSupplement, /* experimental */
+  fieldsGroupRestrictsSupplement : fieldsGroupRestrictsSupplement, /* experimental */
 
   fieldsGroupsDeclare : fieldsGroupsDeclare,
   fieldsGroupsDeclareForEachFilter : fieldsGroupsDeclareForEachFilter,
