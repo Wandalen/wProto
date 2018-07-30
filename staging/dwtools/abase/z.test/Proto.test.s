@@ -277,6 +277,80 @@ function prototypeIsStandard( t )
 
 //
 
+function accessorWithOptions( test )
+{
+
+  /* - */
+
+  test.open( 'with class, readOnly:1' );
+
+  test.case = 'setup';
+
+  function BasicConstructor()
+  {
+    _.instanceInit( this );
+  }
+
+  var Accessors =
+  {
+    f1 : { readOnly : 1 },
+  }
+
+  var Extend =
+  {
+    Accessors : Accessors,
+  }
+
+  Extend.constructor = BasicConstructor;
+
+  _.classMake
+  ({
+    cls : BasicConstructor,
+    extend : Extend,
+  });
+
+  debugger;
+  var methods = Object.create( null );
+  _.accessor
+  ({
+    object : BasicConstructor.prototype,
+    names : { f2 : { readOnly : 1 } },
+    methods : methods,
+  });
+  debugger;
+
+  var instance = new BasicConstructor();
+
+  test.case = 'methods';
+
+  debugger;
+  test.is( _.routineIs( methods._f2Get ) );
+  test.identical( _.mapKeys( methods ).length, 1 );
+
+  test.case = 'inline no method';
+
+  test.identical( instance._f1Get, undefined );
+  test.identical( instance._f1Set, undefined );
+  test.identical( BasicConstructor._f1Get, undefined );
+  test.identical( BasicConstructor._f1Set, undefined );
+  test.identical( BasicConstructor.prototype._f1Get, undefined );
+  test.identical( BasicConstructor.prototype._f1Set, undefined );
+
+  test.identical( instance._f2Get, undefined );
+  test.identical( instance._f2Set, undefined );
+  test.identical( BasicConstructor._f2Get, undefined );
+  test.identical( BasicConstructor._f2Set, undefined );
+  test.identical( BasicConstructor.prototype._f2Get, undefined );
+  test.identical( BasicConstructor.prototype._f2Set, undefined );
+
+  test.close( 'with class, readOnly:1' );
+
+}
+
+accessorWithOptions.timeOut = 300000;
+
+//
+
 function accessor( test )
 {
 
@@ -863,7 +937,6 @@ function classMake( test )
     test.identical( _.mapKeys( c1a.Statics ), o.keys );
     test.identical( _.mapVals( c1a.Statics ), o.vals );
     test.identical( o.Class.Statics, undefined );
-    // xxx
 
     if( !C0proto )
     {
@@ -1100,7 +1173,7 @@ function classMake( test )
 
 }
 
-classMake.timeOut = 300000;
+// classMake.timeOut = 300000;
 
 //
 
@@ -1217,6 +1290,93 @@ function staticsDeclaration( test )
 
 // staticsDeclaration.timeOut = 300000;
 
+//
+
+function forbids( test )
+{
+
+  test.open( 'pure map' );
+
+  test.case = 'setup';
+
+  var Forbids =
+  {
+    f1 : 'f1',
+  }
+
+  var instance = Object.create( null );
+
+  _.accessorForbid( instance, Forbids );
+
+  test.case = 'inline no method';
+
+  test.identical( instance._f1Get, undefined );
+  test.identical( instance._f1Set, undefined );
+  test.identical( _.mapProperties( instance ), Object.create( null ) );
+
+  test.case = 'throwing';
+
+  if( Config.debug )
+  {
+    test.shouldThrowError( () => instance.f1 );
+  }
+
+  test.close( 'pure map' );
+
+  /* - */
+
+  test.open( 'with class' );
+
+  test.case = 'setup';
+
+  function BasicConstructor()
+  {
+    _.instanceInit( this );
+  }
+
+  var Forbids =
+  {
+    f1 : 'f1',
+  }
+
+  var Extend =
+  {
+    Forbids : Forbids,
+  }
+
+  Extend.constructor = BasicConstructor;
+
+  _.classMake
+  ({
+    cls : BasicConstructor,
+    extend : Extend,
+  });
+
+  var instance = new BasicConstructor();
+
+  test.case = 'inline no method';
+
+  test.identical( instance._f1Get, undefined );
+  test.identical( instance._f1Set, undefined );
+  test.identical( BasicConstructor._f1Get, undefined );
+  test.identical( BasicConstructor._f1Set, undefined );
+  test.identical( BasicConstructor.prototype._f1Get, undefined );
+  test.identical( BasicConstructor.prototype._f1Set, undefined );
+
+  test.case = 'throwing';
+
+  if( Config.debug )
+  {
+    test.shouldThrowError( () => instance.f1 );
+    test.shouldThrowError( () => BasicConstructor.prototype.f1 );
+  }
+
+  test.close( 'with class' );
+
+}
+
+// forbids.timeOut = 300000;
+
 // --
 // define class
 // --
@@ -1236,6 +1396,7 @@ var Self =
     constructorIs : constructorIs,
     prototypeIsStandard : prototypeIsStandard,
 
+    accessorWithOptions : accessorWithOptions,
     accessor : accessor,
     accessorForbid : accessorForbid,
     accessorReadOnly : accessorReadOnly,
@@ -1243,6 +1404,7 @@ var Self =
 
     classMake : classMake,
     staticsDeclaration : staticsDeclaration,
+    forbids : forbids,
 
   },
 

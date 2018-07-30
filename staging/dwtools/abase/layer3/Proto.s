@@ -75,7 +75,7 @@ if( typeof module !== 'undefined' )
 var Self = _global_.wTools;
 var _global = _global_; var _ = _global_.wTools;
 
-var _hasOwnProperty = Object.hasOwnProperty;
+var _ObjectHasOwnProperty = Object.hasOwnProperty;
 var _propertyIsEumerable = Object.propertyIsEnumerable;
 var _nameFielded = _.nameFielded;
 
@@ -127,8 +127,8 @@ function _accessor_pre( routine, args )
     _.assert( args.length >= 2 );
   }
 
-  if( !o.methods )
-  o.methods = o.object;
+  // if( !o.methods )
+  // o.methods = o.object;
   // else
   // o.methods = _.mapExtend( null, o.methods );
 
@@ -332,6 +332,7 @@ function _accessorAct( o )
   ({
     name : o.name,
     methods : o.methods,
+    object : o.object,
     preserveValues : o.preserveValues,
     readOnly : o.readOnly,
     readOnlyProduct : o.readOnlyProduct,
@@ -355,7 +356,9 @@ function _accessorAct( o )
     // if( !o2.methods[ '_' + rawName + 'Set' ] && !o2.methods[ rawName + 'Set' ] )
     // o2.methods[ '_' + rawName + 'Set' ] = o.object[ '_' + name + 'Set' ] ? o.object[ '_' + name + 'Set' ] : o.object[ name + 'Set' ];
 
+    if( settrGetter.set )
     o2.methods[ '_' + o.name + 'Set' ] = settrGetter.set;
+    if( settrGetter.get )
     o2.methods[ '_' + o.name + 'Get' ] = settrGetter.get;
 
     _._accessorRegister
@@ -375,7 +378,7 @@ function _accessorAct( o )
   var fieldSymbol = Symbol.for( o.name );
 
   if( o.preserveValues )
-  if( _hasOwnProperty.call( o.object, o.name ) )
+  if( _ObjectHasOwnProperty.call( o.object, o.name ) )
   o.object[ fieldSymbol ] = o.object[ o.name ];
 
   /* define accessor */
@@ -490,6 +493,9 @@ function _accessor( o )
     return;
   }
 
+  if( !o.methods )
+  o.methods = o.object;
+
   /* verification */
 
   _.assert( !_.primitiveIs( o.object ) );
@@ -514,8 +520,9 @@ function _accessor( o )
 
   }
 
-  _.assert( _.objectLikeOrRoutine( o.object ),'expects object {-object-}, but got', _.toStrShort( o.object ) );
-  _.assert( _.objectIs( o.names ),'expects object {-names-}, but got', _.toStrShort( o.names ) );
+  // debugger;
+  _.assert( _.objectLikeOrRoutine( o.object ), () => 'expects object {-object-}, but got ' + _.toStrShort( o.object ) );
+  _.assert( _.objectIs( o.names ), () => 'expects object {-names-}, but got ' + _.toStrShort( o.names ) );
 
   /* */
 
@@ -608,11 +615,14 @@ accessor.defaults = Object.create( _accessor.defaults );
 function accessorForbid( o )
 {
 
-  o.methods = o.methods || Object.create( null );
+  // o.methods = o.methods || Object.create( null );
 
   var o = _accessor_pre( accessorForbid, arguments );
   // var object = o.object;
   // var names = o.names;
+
+  if( !o.methods )
+  o.methods = Object.create( null );
 
   if( _._arrayLike( o.object ) )
   {
@@ -638,8 +648,8 @@ function accessorForbid( o )
 
   /* verification */
 
-  _.assert( _.objectLikeOrRoutine( o.object ), 'expects object {-o.object-} but got', _.toStrShort( o.object ) );
-  _.assert( _.objectIs( o.names ) || _.arrayIs( o.names ), 'expects object {-o.names-} as argument but got', _.toStrShort( o.names ) );
+  _.assert( _.objectLikeOrRoutine( o.object ), () => 'expects object {-o.object-} but got ' + _.toStrShort( o.object ) );
+  _.assert( _.objectIs( o.names ) || _.arrayIs( o.names ), () => 'expects object {-o.names-} as argument but got ' + _.toStrShort( o.names ) );
 
   /* message */
 
@@ -667,14 +677,15 @@ function accessorForbid( o )
 
     for( var n in o.names )
     {
+      var name = o.names[ n ];
       // var encodedName = n;
       // var rawName = names[ n ];
       var o2 = _.mapExtend( null, o );
-      o2.fieldName = n;
+      o2.fieldName = name;
       // o2.fieldValue = o.names[ n ];
-      _.assert( n === o.names[ n ] );
+      _.assert( n === name, 'key and value should be the same' );
       if( !_accessorForbid( o2 ) )
-      delete o.names[ n ];
+      delete o.names[ name ];
     }
 
   }
@@ -683,18 +694,21 @@ function accessorForbid( o )
 
     var namesArray = o.names;
     o.names = Object.create( null );
+    // debugger;
     for( var n = 0 ; n < namesArray.length ; n++ )
     {
+      var name = namesArray[ n ];
       // var encodedName = namesArray[ n ];
       // var rawName = namesArray[ n ];
       var o2 = _.mapExtend( null, o );
-      o2.fieldName = n;
+      o2.fieldName = name;
       // o2.fieldValue = namesArray[ n ];
-      _.assert( n === namesArray[ n ] );
+      // _.assert( n === namesArray[ n ] );
       // names[ encodedName ] = rawName;
       if( _accessorForbid( o2 ) )
-      o.names[ n ] = o2.fieldValue;
+      o.names[ name ] = name;
     }
+    // debugger;
 
   }
 
@@ -747,7 +761,7 @@ function _accessorForbid()
   /* check fields */
 
   if( o.strict )
-  // if( _hasOwnProperty.call( o.object, o.fieldName ) )
+  // if( _ObjectHasOwnProperty.call( o.object, o.fieldName ) )
   if( propertyDescriptor.object === o.object )
   {
     if( _.accessorForbidOwns( o.object, o.fieldName ) )
@@ -830,7 +844,7 @@ defaults.protoName = null;
 
 function accessorForbidOwns( object,name )
 {
-  if( !_hasOwnProperty.call( object,name ) )
+  if( !_ObjectHasOwnProperty.call( object,name ) )
   return false;
 
   var descriptor = Object.getOwnPropertyDescriptor( object,name );
@@ -847,12 +861,10 @@ function accessorForbidOwns( object,name )
 
 //
 
-function accessorReadOnly( object,names )
+function accessorReadOnly( object, names )
 {
   var o = _accessor_pre( accessorReadOnly, arguments );
-
   _.assert( o.readOnly );
-
   return _accessor( o );
 }
 
@@ -868,8 +880,8 @@ function accessorsSupplement( dst,src )
   _.fieldsGroupFor( dst,'_Accessors' );
 
   _.assert( arguments.length === 2, 'expects exactly two arguments' );
-  _.assert( _hasOwnProperty.call( dst,'_Accessors' ),'accessorsSupplement : dst should has _Accessors map' );
-  _.assert( _hasOwnProperty.call( src,'_Accessors' ),'accessorsSupplement : src should has _Accessors map' );
+  _.assert( _ObjectHasOwnProperty.call( dst,'_Accessors' ),'accessorsSupplement : dst should has _Accessors map' );
+  _.assert( _ObjectHasOwnProperty.call( src,'_Accessors' ),'accessorsSupplement : src should has _Accessors map' );
 
   /* */
 
@@ -1138,7 +1150,7 @@ function fieldsGroupFor( dst, fieldName )
   _.assert( _.strIs( fieldName ) );
   _.assert( !_.primitiveIs( dst ) );
 
-  if( !_hasOwnProperty.call( dst, fieldName ) )
+  if( !_ObjectHasOwnProperty.call( dst, fieldName ) )
   {
     var field = dst[ fieldName ];
     dst[ fieldName ] = Object.create( null );
@@ -1916,17 +1928,26 @@ function _propertyGetterSetterMake( o )
   _.assert( arguments.length === 1 );
   _.assert( _.objectLikeOrRoutine( o.methods ) );
   _.assert( _.strIs( o.name ) );
+  _.assert( !o.readOnlyProduct || o.readOnly );
+  _.assert( o.object );
   _.assertRoutineOptions( _propertyGetterSetterMake, o );
 
-  result.set = o.methods[ o.name + 'Set' ] ? o.methods[ o.name + 'Set' ] : o.methods[ '_' + o.name + 'Set' ];
-  result.get = o.methods[ o.name + 'Get' ] ? o.methods[ o.name + 'Get' ] : o.methods[ '_' + o.name + 'Get' ];
+  if( o.methods[ '' + o.name + 'Set' ] )
+  result.set = o.methods[ o.name + 'Set' ];
+  else if( o.methods[ '_' + o.name + 'Set' ] )
+  result.set = o.methods[ '_' + o.name + 'Set' ];
+
+  if( o.methods[ '' + o.name + 'Get' ] )
+  result.get = o.methods[ o.name + 'Get' ];
+  else if( o.methods[ '_' + o.name + 'Get' ] )
+  result.get = o.methods[ '_' + o.name + 'Get' ];
 
   var fieldName = '_' + o.name;
   var fieldSymbol = Symbol.for( o.name );
 
   if( o.preserveValues )
-  if( _hasOwnProperty.call( o.methods,o.name ) )
-  o.methods[ fieldSymbol ] = o.methods[ o.name ];
+  if( _ObjectHasOwnProperty.call( o.methods,o.name ) )
+  o.object[ fieldSymbol ] = o.object[ o.name ];
 
   /* set */
 
@@ -1982,7 +2003,7 @@ function _propertyGetterSetterMake( o )
 
   /* validation */
 
-  _.assert( !result.set || !o.readOnly, 'read only, but setter found in', o.methods );
+  _.assert( !result.set || !o.readOnly, () => 'read only, but setter for ' + _.strQuote( o.name ) + ' found in' + _.toStrShort( o.methods ) );
 
   return result;
 }
@@ -1990,6 +2011,7 @@ function _propertyGetterSetterMake( o )
 _propertyGetterSetterMake.defaults =
 {
   name : null,
+  object : null,
   methods : null,
   preserveValues : 1,
   readOnly : 0,
@@ -2335,7 +2357,7 @@ function mixinApply( mixinDescriptor, dstPrototype )
 
   /* mixins map */
 
-  if( !_hasOwnProperty.call( dstPrototype,'_mixinsMap' ) )
+  if( !_ObjectHasOwnProperty.call( dstPrototype,'_mixinsMap' ) )
   {
     dstPrototype._mixinsMap = Object.create( dstPrototype._mixinsMap || null );
   }
@@ -2506,7 +2528,7 @@ function classMake( o )
     _.assert( o.cls,'expects {-o.cls-}' );
     _.assert( _.routineIs( o.cls ),'classMake expects constructor' );
     _.assert( o.cls.name || o.cls._name,'constructor should have name' );
-    _.assert( _hasOwnProperty.call( o.cls.prototype,'constructor' ) );
+    _.assert( _ObjectHasOwnProperty.call( o.cls.prototype,'constructor' ) );
     _.assert( !o.name || o.cls.name === o.name || o.cls._name === o.name,'class has name',o.cls.name + ', but options',o.name );
     _.assert( !o.shortName || !o.cls.shortName|| o.cls.shortName === o.shortName,'class has short name',o.cls.shortName + ', but options',o.shortName );
 
@@ -2514,7 +2536,7 @@ function classMake( o )
     _.assertMapOwnNone( o.cls.prototype,hasNot );
     _.assertMapOwnNone( o.cls.prototype,ClassForbiddenNames );
 
-    if( o.extend && _hasOwnProperty.call( o.extend,'constructor' ) )
+    if( o.extend && _ObjectHasOwnProperty.call( o.extend,'constructor' ) )
     _.assert( o.extend.constructor === o.cls );
 
   }
@@ -2603,12 +2625,12 @@ function classMake( o )
     // _.mapExtendConditional( _.field.mapper.dstNotOwnSrcOwn, prototype.constructor, prototype.Statics );
 
     _.assert( prototype === o.cls.prototype );
-    _.assert( _hasOwnProperty.call( prototype,'constructor' ),'prototype should has own constructor' );
+    _.assert( _ObjectHasOwnProperty.call( prototype,'constructor' ),'prototype should has own constructor' );
     _.assert( _.routineIs( prototype.constructor ),'prototype should has own constructor' );
 
     /* mixin tracking */
 
-    if( !_hasOwnProperty.call( prototype,'_mixinsMap' ) )
+    if( !_ObjectHasOwnProperty.call( prototype,'_mixinsMap' ) )
     {
       prototype._mixinsMap = Object.create( prototype._mixinsMap || null );
     }
@@ -2744,7 +2766,7 @@ function classExtend( o )
 
   _.assert( arguments.length === 1 || arguments.length === 2 );
   _.assert( _.objectIs( o ) );
-  _.assert( !_hasOwnProperty.call( o,'constructor' ) );
+  _.assert( !_ObjectHasOwnProperty.call( o,'constructor' ) );
   _.assertOwnNoConstructor( o );
   _.assert( _.objectIs( o.extend ) || o.extend === undefined || o.extend === null );
   _.assert( _.objectIs( o.supplementOwn ) || o.supplementOwn === undefined || o.supplementOwn === null );
@@ -2871,8 +2893,8 @@ to prioritize ordinary facets adjustment order should be
 
   var fieldsOfRelationshipsGroups = _._fieldsOfRelationshipsGroups( o.prototype );
 
-  if( o.prototype.constructor && o.prototype.constructor.name === 'BasicConstructor' )
-  debugger;
+  // if( o.prototype.constructor && o.prototype.constructor.name === 'BasicConstructor' )
+  // debugger;
 
   /* statics */
 
@@ -2907,7 +2929,7 @@ to prioritize ordinary facets adjustment order should be
   if( o.cls )
   {
     _.assert( o.prototype === o.cls.prototype );
-    _.assert( _hasOwnProperty.call( o.prototype,'constructor' ),'prototype should has own constructor' );
+    _.assert( _ObjectHasOwnProperty.call( o.prototype,'constructor' ),'prototype should has own constructor' );
     _.assert( _.routineIs( o.prototype.constructor ),'prototype should has own constructor' );
     _.assert( o.cls === o.prototype.constructor );
     //_.assertMapHasOnly( o.cls, [ _.KnownConstructorFields, o.prototype.Statics ] );
@@ -3003,7 +3025,7 @@ to prioritize ordinary facets adjustment order should be
     for( var s in statics )
     {
 
-      if( !_hasOwnProperty.call( o.prototype.Statics, s ) )
+      if( !_ObjectHasOwnProperty.call( o.prototype.Statics, s ) )
       return;
 
       _.declareStatic
@@ -3207,11 +3229,11 @@ function constructorGet( src )
 
   _.assert( arguments.length === 1, 'expects single argument' );
 
-  if( _hasOwnProperty.call( src,'constructor' ) )
+  if( _ObjectHasOwnProperty.call( src,'constructor' ) )
   {
     proto = src; /* proto */
   }
-  else if( _hasOwnProperty.call( src,'prototype' )  )
+  else if( _ObjectHasOwnProperty.call( src,'prototype' )  )
   {
     if( src.prototype )
     proto = src.prototype; /* constructor */
@@ -3463,7 +3485,7 @@ function prototypeHasProperty( srcPrototype,names )
   {
     var has = true;
     for( var n in names )
-    if( !_hasOwnProperty.call( srcPrototype,n ) )
+    if( !_ObjectHasOwnProperty.call( srcPrototype,n ) )
     {
       has = false;
       break;
