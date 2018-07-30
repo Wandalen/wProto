@@ -600,22 +600,6 @@ function classMake( test )
 {
   var context = this;
 
-/*
-  var Statics2 =
-  {
-    instances : [],
-    f1 : [],
-    f4 : [],
-  }
-  var Extend2 =
-  {
-    Statics : Statics2,
-    Associates : Associates,
-    f2 : [],
-    f3 : [],
-  }
-*/
-
   /* */
 
   test.case = 'first classMake';
@@ -648,10 +632,10 @@ function classMake( test )
   test.identical( C1, classMade );
   test.is( C1.instances === Statics1.instances );
 
-  // test1({ Class : C1 });
-  // testFields( Statics1.f3 );
+  test1({ Class : C1 });
+  testFields( Statics1.f3 );
 
-  /* xxx */
+  /* */
 
   test.case = 'classMake with parent';
 
@@ -667,121 +651,123 @@ function classMake( test )
 
   test.identical( C2, classMade );
 
-  // test1({ Class : C1, Statics : Statics1 });
-  //
-  // test.is( C1.instances === Statics1.instances );
-  // test.is( C2.instances === C1.instances );
+  test1({ Class : C1, Statics : Statics1 });
+
+  test.is( C1.instances === Statics1.instances );
+  test.is( C2.instances === C1.instances );
 
   test1({ Class : C2, Class0 : C1, Statics : Statics1, ownStatics : 0 });
 
   /* */
 
-  // test.case = 'classMake with supplement';
-  //
-  // function Csupplement()
-  // {
-  //   C1.call( this );
-  // }
-  // var Statics2 =
-  // {
-  //   instances : [],
-  // }
-  // var classMade = _.classMake
-  // ({
-  //   cls : Csupplement,
-  //   parent : C1,
-  //   supplement : { Statics : Statics2 },
-  // });
-  //
-  // test.identical( Csupplement,classMade );
-  //
-  // test1({ Class : C1, Statics : Statics1 });
-  // test1({ Class : Csupplement, Class0 : C1, Statics : Statics1, ownStatics : 0 });
-  //
-  // /* */
-  //
-  // test.case = 'classMake with extend';
-  //
-  // function C3()
-  // {
-  //   C1.call( this );
-  // }
-  // var Associates =
-  // {
-  // }
-  // var Statics2 =
-  // {
-  //   instances : [],
-  //   f1 : [],
-  //   f4 : [],
-  // }
-  // var Extend2 =
-  // {
-  //   Statics : Statics2,
-  //   Associates : Associates,
-  //   f2 : [],
-  //   f3 : [],
-  // }
-  // var classMade = _.classMake
-  // ({
-  //   cls : C3,
-  //   parent : C1,
-  //   extend : Extend2,
-  //   allowingExtendStatics : 1,
-  // });
-  //
-  // test.identical( C3, classMade );
-  //
-  // // test1({ Class : C1, Statics : Statics1 });
-  // // test1
-  // // ({
-  // //   Class : C3,
-  // //   Class0 : C1,
-  // //   Statics : Statics2,
-  // //   Extend : Extend2,
-  // //   keys : [ 'instances', 'f1', 'f4', 'f2', 'f3' ],
-  // //   vals : [ C3.instances, C3.f1, C3.f4, C1.f2, C1.f3 ],
-  // // });
-  //
-  // // testFields( Extend2.f3 );
-  // testFields2();
+  test.case = 'classMake with supplement';
 
-  // if( !Config.debug )
-  // return;
-  //
-  // test.case = 'attempt to extend statics without order';
-  //
-  // test.shouldThrowError( function()
-  // {
-  //
-  //   function C3()
-  //   {
-  //     C1.call( this );
-  //   }
-  //   var Associates =
-  //   {
-  //   }
-  //   var Statics2 =
-  //   {
-  //     instances : [],
-  //     f1 : [],
-  //     f4 : [],
-  //   }
-  //   var Extend2 =
-  //   {
-  //     Statics : Statics2,
-  //     Associates : Associates,
-  //     f2 : [],
-  //     f3 : [],
-  //   }
-  //   var classMade = _.classMake
-  //   ({
-  //     cls : C3,
-  //     parent : C1,
-  //     extend : Extend2,
-  //   });
-  //
-  // });
+  function Csupplement()
+  {
+    C1.call( this );
+  }
+  var Statics2 =
+  {
+    instances : [],
+  }
+  var classMade = _.classMake
+  ({
+    cls : Csupplement,
+    parent : C1,
+    supplement : { Statics : Statics2 },
+  });
+
+  test.identical( Csupplement,classMade );
+
+  test1({ Class : C1, Statics : Statics1 });
+  test1({ Class : Csupplement, Class0 : C1, Statics : Statics1, ownStatics : 0 });
+
+  /* */
+
+  test.case = 'classMake with extend';
+
+  function C3()
+  {
+    C1.call( this );
+  }
+  var Associates =
+  {
+  }
+  var Statics2 =
+  {
+    instances : [],
+    f1 : [],
+    f4 : [],
+  }
+  var Extend2 =
+  {
+    Statics : Statics2,
+    Associates : Associates,
+    f2 : [],
+    f3 : [],
+  }
+  var classMade = _.classMake
+  ({
+    cls : C3,
+    parent : C1,
+    extend : Extend2,
+    allowingExtendStatics : 1,
+  });
+
+  test.identical( C3, classMade );
+
+  test1({ Class : C1, Statics : Statics1 });
+  test1
+  ({
+    Class : C3,
+    Class0 : C1,
+    Statics : Statics2,
+    Extend : Extend2,
+    keys : [ 'instances', 'f1', 'f4', 'f2', 'f3' ],
+    vals : [ C3.instances, C3.f1, C3.f4, C1.f2, C1.f3 ],
+  });
+
+  testFields( Extend2.f3 );
+  testFields2();
+
+  if( !Config.debug )
+  return;
+
+  test.case = 'attempt to extend statics without order';
+
+  test.shouldThrowError( function()
+  {
+
+    function C3()
+    {
+      C1.call( this );
+    }
+    var Associates =
+    {
+    }
+    var Statics2 =
+    {
+      instances : [],
+      f1 : [],
+      f4 : [],
+    }
+    var Extend2 =
+    {
+      Statics : Statics2,
+      Associates : Associates,
+      f2 : [],
+      f3 : [],
+    }
+    var classMade = _.classMake
+    ({
+      cls : C3,
+      parent : C1,
+      extend : Extend2,
+    });
+
+  });
+
+  /* */
 
   function test1( o )
   {
@@ -854,7 +840,6 @@ function classMake( test )
 
     var c1a = new o.Class();
 
-    // xxx
     test.case = 'presence of valid static field on all';
 
     if( o.Class !== C1 && !o.ownStatics )
@@ -907,7 +892,9 @@ function classMake( test )
 
     o.Class.instances = o.Class.instances.slice();
     // test.is( o.Class === C1 || o.Class.instances !== C1.instances );
-    test.is( o.Class.instances === C1.instances );
+    debugger;
+    test.is( o.Class.instances === C1.instances || _.mapOwnKey( o.Class.prototype.Statics, 'instances' ) );
+    debugger;
     test.is( o.Class.instances === o.Class.prototype.instances );
     test.is( o.Class.instances === c1a.instances );
     test.is( o.Class.instances === c1b.instances );
@@ -919,7 +906,7 @@ function classMake( test )
     o.Class.prototype.instances = o.Class.prototype.instances.slice();
     // if( o.Class !== C1 && !o.ownStatics )
     // test.is( o.Class === C1 || o.Class.instances !== C1.instances );
-    test.is( o.Class.instances === C1.instances );
+    test.is( o.Class.instances === C1.instances || _.mapOwnKey( o.Class.prototype.Statics, 'instances' ) );
     test.is( o.Class.instances === o.Class.prototype.instances );
     test.is( o.Class.instances === c1a.instances );
     test.is( o.Class.instances === c1b.instances );
@@ -931,7 +918,7 @@ function classMake( test )
     c1a.instances = o.Class.instances.slice();
     // if( o.Class !== C1 && !o.ownStatics )
     // test.is( o.Class === C1 || o.Class.instances !== C1.instances );
-    test.is( o.Class.instances === C1.instances );
+    test.is( o.Class.instances === C1.instances || _.mapOwnKey( o.Class.prototype.Statics, 'instances' ) );
     test.is( o.Class.instances === o.Class.prototype.instances );
     test.is( o.Class.instances === c1a.instances );
     test.is( o.Class.instances === c1b.instances );

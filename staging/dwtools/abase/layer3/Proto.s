@@ -380,16 +380,6 @@ function _accessorAct( o )
 
   /* define accessor */
 
-  // if( o.name === 'Static' && o.object.constructor && o.object.constructor.name === 'wPrinterTop' )
-  // debugger;
-
-  if( propertyDescriptor.descriptor )
-  {
-    debugger;
-    // if( !pd.descriptor.writable )
-    // debugger;
-  }
-
   Object.defineProperty( o.object, o.name,
   {
     set : settrGetter.set,
