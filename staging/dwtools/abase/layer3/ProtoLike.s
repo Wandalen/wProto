@@ -25,7 +25,7 @@ var Self = function wLike( o )
 {
 }
 
-Self.nameShort = 'Like';
+Self.shortName = 'Like';
 
 // --
 // helper

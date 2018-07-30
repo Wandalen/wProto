@@ -27,11 +27,12 @@ if( typeof module !== 'undefined' )
   _.include( 'wTesting' );
 
   if( !_.isIncluded( 'wProto' ) )
-  require( '../../abase/layer3/Proto.s' );
+  require( '../../abase/layer3/Prototype.s' );
 
 }
 
-var _global = _global_; var _ = _global_.wTools;
+var _global = _global_;
+var _ = _global_.wTools;
 
 // --
 // test
@@ -40,7 +41,6 @@ var _global = _global_; var _ = _global_.wTools;
 function instanceIs( t )
 {
   var self = this;
-  // debugger;
 
   t.will = 'pure map';
   t.is( !_.instanceIs( Object.create( null ) ) );
@@ -77,7 +77,6 @@ function instanceIs( t )
   t.is( !_.instanceIs( Object.getPrototypeOf( new (function(){})() ) ) );
   t.is( !_.instanceIs( Object.getPrototypeOf( Self ) ) );
 
-  // debugger;
 }
 
 //
@@ -85,7 +84,6 @@ function instanceIs( t )
 function prototypeIs( t )
 {
   var self = this;
-  debugger;
 
   t.will = 'pure map';
   t.is( !_.prototypeIs( Object.create( null ) ) );
@@ -122,7 +120,6 @@ function prototypeIs( t )
   t.is( _.prototypeIs( Object.getPrototypeOf( new (function(){})() ) ) );
   t.is( _.prototypeIs( Object.getPrototypeOf( Self ) ) );
 
-  debugger;
 }
 
 //
@@ -130,7 +127,6 @@ function prototypeIs( t )
 function constructorIs( t )
 {
   var self = this;
-  debugger;
 
   t.will = 'pure map';
   t.is( !_.constructorIs( Object.create( null ) ) );
@@ -167,7 +163,6 @@ function constructorIs( t )
   t.is( !_.constructorIs( Object.getPrototypeOf( new (function(){})() ) ) );
   t.is( !_.constructorIs( Object.getPrototypeOf( Self ) ) );
 
-  debugger;
 }
 
 //
@@ -175,7 +170,6 @@ function constructorIs( t )
 function prototypeIsStandard( t )
 {
   var self = this;
-  debugger;
 
   t.will = 'pure map';
   t.is( !_.prototypeIsStandard( Object.create( null ) ) );
@@ -212,8 +206,6 @@ function prototypeIsStandard( t )
   t.is( !_.prototypeIsStandard( Object.getPrototypeOf( new (function(){})() ) ) );
   t.is( _.prototypeIsStandard( Object.getPrototypeOf( Self ) ) );
 
-  // console.log( 'Self',Self );
-  // debugger;
 }
 
 //
@@ -542,21 +534,42 @@ function accessorReadOnly( test )
 
 function constant( test )
 {
-  test.case = 'creates new constant';
-  var Alpha = { };
-  _.constant( Alpha, { a : 5 } );
-  var descriptor = Object.getOwnPropertyDescriptor( Alpha, 'a' );
-  var got = descriptor.writable;
-  var expected = false;
-  test.identical( got, expected );
+
+  test.case = 'second argument is map';
+  var dstMap = {};
+  _.constant( dstMap, { a : 5 } );
+  var descriptor = Object.getOwnPropertyDescriptor( dstMap, 'a' );
+  test.identical( descriptor.writable, false );
+  test.identical( dstMap.a, 5 );
 
   test.case = 'rewrites existing field';
-  var Alpha = { a : 5 };
-  _.constant( Alpha, { a : 1 } );
-  var descriptor = Object.getOwnPropertyDescriptor( Alpha, 'a' );
-  var got = !descriptor.writable  && Alpha.a === 1;
-  var expected = true;
-  test.identical( got, expected );
+  var dstMap = { a : 5 };
+  _.constant( dstMap, { a : 1 } );
+  var descriptor = Object.getOwnPropertyDescriptor( dstMap, 'a' );
+  test.identical( descriptor.writable, false );
+  test.identical( dstMap.a, 1 );
+
+  test.case = '3 arguments';
+  var dstMap = {};
+  _.constant( dstMap, 'a', 5 );
+  var descriptor = Object.getOwnPropertyDescriptor( dstMap, 'a' );
+  test.identical( descriptor.writable, false );
+  test.identical( dstMap.a, 5 );
+
+  test.case = '2 arguments, no value';
+  var dstMap = {};
+  _.constant( dstMap, 'a' );
+  var descriptor = Object.getOwnPropertyDescriptor( dstMap, 'a' );
+  test.identical( descriptor.writable, false );
+  test.identical( dstMap.a, undefined );
+  test.is( 'a' in dstMap );
+
+  test.case = 'second argument is array';
+  var dstMap = {};
+  _.constant( dstMap, [ 'a' ], 5 );
+  var descriptor = Object.getOwnPropertyDescriptor( dstMap, 'a' );
+  test.identical( descriptor.writable, false );
+  test.identical( dstMap.a, 5 );
 
   if( !Config.debug )
   return;
@@ -576,7 +589,7 @@ function constant( test )
   test.case = 'invalid second argument type';
   test.shouldThrowError( function()
   {
-    _.constant( {}, [] );
+    _.constant( {}, 13 );
   });
 
 }
@@ -586,6 +599,189 @@ function constant( test )
 function classMake( test )
 {
   var context = this;
+
+/*
+  var Statics2 =
+  {
+    instances : [],
+    f1 : [],
+    f4 : [],
+  }
+  var Extend2 =
+  {
+    Statics : Statics2,
+    Associates : Associates,
+    f2 : [],
+    f3 : [],
+  }
+*/
+
+  /* */
+
+  test.case = 'first classMake';
+
+  function C1()
+  {
+    this.instances.push( this );
+  }
+  var Statics1 =
+  {
+    instances : [],
+    f1 : [],
+    f2 : [],
+    f3 : [],
+  }
+  var Extend1 =
+  {
+    Statics : Statics1,
+    f1 : [],
+    f2 : [],
+    f4 : [],
+  }
+  var classMade = _.classMake
+  ({
+    cls : C1,
+    parent : null,
+    extend : Extend1,
+  });
+
+  test.identical( C1, classMade );
+  test.is( C1.instances === Statics1.instances );
+
+  // test1({ Class : C1 });
+  // testFields( Statics1.f3 );
+
+  /* xxx */
+
+  test.case = 'classMake with parent';
+
+  function C2()
+  {
+    C1.call( this );
+  }
+  var classMade = _.classMake
+  ({
+    cls : C2,
+    parent : C1,
+  });
+
+  test.identical( C2, classMade );
+
+  // test1({ Class : C1, Statics : Statics1 });
+  //
+  // test.is( C1.instances === Statics1.instances );
+  // test.is( C2.instances === C1.instances );
+
+  test1({ Class : C2, Class0 : C1, Statics : Statics1, ownStatics : 0 });
+
+  /* */
+
+  // test.case = 'classMake with supplement';
+  //
+  // function Csupplement()
+  // {
+  //   C1.call( this );
+  // }
+  // var Statics2 =
+  // {
+  //   instances : [],
+  // }
+  // var classMade = _.classMake
+  // ({
+  //   cls : Csupplement,
+  //   parent : C1,
+  //   supplement : { Statics : Statics2 },
+  // });
+  //
+  // test.identical( Csupplement,classMade );
+  //
+  // test1({ Class : C1, Statics : Statics1 });
+  // test1({ Class : Csupplement, Class0 : C1, Statics : Statics1, ownStatics : 0 });
+  //
+  // /* */
+  //
+  // test.case = 'classMake with extend';
+  //
+  // function C3()
+  // {
+  //   C1.call( this );
+  // }
+  // var Associates =
+  // {
+  // }
+  // var Statics2 =
+  // {
+  //   instances : [],
+  //   f1 : [],
+  //   f4 : [],
+  // }
+  // var Extend2 =
+  // {
+  //   Statics : Statics2,
+  //   Associates : Associates,
+  //   f2 : [],
+  //   f3 : [],
+  // }
+  // var classMade = _.classMake
+  // ({
+  //   cls : C3,
+  //   parent : C1,
+  //   extend : Extend2,
+  //   allowingExtendStatics : 1,
+  // });
+  //
+  // test.identical( C3, classMade );
+  //
+  // // test1({ Class : C1, Statics : Statics1 });
+  // // test1
+  // // ({
+  // //   Class : C3,
+  // //   Class0 : C1,
+  // //   Statics : Statics2,
+  // //   Extend : Extend2,
+  // //   keys : [ 'instances', 'f1', 'f4', 'f2', 'f3' ],
+  // //   vals : [ C3.instances, C3.f1, C3.f4, C1.f2, C1.f3 ],
+  // // });
+  //
+  // // testFields( Extend2.f3 );
+  // testFields2();
+
+  // if( !Config.debug )
+  // return;
+  //
+  // test.case = 'attempt to extend statics without order';
+  //
+  // test.shouldThrowError( function()
+  // {
+  //
+  //   function C3()
+  //   {
+  //     C1.call( this );
+  //   }
+  //   var Associates =
+  //   {
+  //   }
+  //   var Statics2 =
+  //   {
+  //     instances : [],
+  //     f1 : [],
+  //     f4 : [],
+  //   }
+  //   var Extend2 =
+  //   {
+  //     Statics : Statics2,
+  //     Associates : Associates,
+  //     f2 : [],
+  //     f3 : [],
+  //   }
+  //   var classMade = _.classMake
+  //   ({
+  //     cls : C3,
+  //     parent : C1,
+  //     extend : Extend2,
+  //   });
+  //
+  // });
 
   function test1( o )
   {
@@ -621,14 +817,13 @@ function classMake( test )
     test.identical( Object.getPrototypeOf( o.Class ), o.Class0 );
     test.identical( Object.getPrototypeOf( o.Class.prototype ), C0proto );
 
-
     test.case = 'presence of valid static field on class and prototype';
 
     test.identical( o.Class.instances, o.Class.prototype.instances );
 
     test.case = 'getting property descriptor of static field from constructor';
 
-    var cd = Object.getOwnPropertyDescriptor( o.Class,'instances' );
+    var cd = Object.getOwnPropertyDescriptor( o.Class, 'instances' );
     if( !o.ownStatics )
     {
       test.identical( cd, undefined );
@@ -641,7 +836,7 @@ function classMake( test )
       test.is( !!cd.set );
     }
 
-    var pd = Object.getOwnPropertyDescriptor( o.Class.prototype,'instances' );
+    var pd = Object.getOwnPropertyDescriptor( o.Class.prototype, 'instances' );
 
     if( !o.ownStatics )
     {
@@ -659,37 +854,36 @@ function classMake( test )
 
     var c1a = new o.Class();
 
-    // test.case = 'presence of valid static field on all';
-    //
-    // if( o.Class !== C1 && !o.ownStatics )
-    // test.is( o.Class.instances === C1.instances );
-    // test.is( o.Class.instances === o.Class.prototype.instances );
-    // test.is( o.Class.instances === c1a.instances );
-    // test.is( o.Class.instances === o.Statics.instances );
-    // test.identical( o.Class.instances.length, o.Statics.instances.length );
-    // test.identical( o.Class.instances[ o.Statics.instances.length-1 ], c1a );
-    //
-    // test.case = 'presence of valid prototype and constructor fields on instance';
-    //
-    // test.identical( Object.getPrototypeOf( c1a ), o.Class.prototype );
-    // test.identical( c1a.constructor, o.Class );
-    //
-    // test.case = 'presence of valid Statics descriptor';
-    //
-    // test.is( o.Statics !== o.Class.prototype.Statics );
-    // test.is( o.Statics !== c1a.Statics );
-    //
-    // test.identical( _.mapKeys( c1a.Statics ), o.keys );
-    // test.identical( _.mapVals( c1a.Statics ), o.vals );
-    // test.identical( o.Class.Statics, undefined );
+    // xxx
+    test.case = 'presence of valid static field on all';
+
+    if( o.Class !== C1 && !o.ownStatics )
+    test.is( o.Class.instances === C1.instances );
+    test.is( o.Class.instances === o.Class.prototype.instances );
+    test.is( o.Class.instances === c1a.instances );
+    test.is( o.Class.instances === o.Statics.instances );
+    test.identical( o.Class.instances.length, o.Statics.instances.length );
+    test.identical( o.Class.instances[ o.Statics.instances.length-1 ], c1a );
+
+    test.case = 'presence of valid prototype and constructor fields on instance';
+
+    test.identical( Object.getPrototypeOf( c1a ), o.Class.prototype );
+    test.identical( c1a.constructor, o.Class );
+
+    test.case = 'presence of valid Statics descriptor';
+
+    test.is( o.Statics !== o.Class.prototype.Statics );
+    test.is( o.Statics !== c1a.Statics );
+
+    test.identical( _.mapKeys( c1a.Statics ), o.keys );
+    test.identical( _.mapVals( c1a.Statics ), o.vals );
+    test.identical( o.Class.Statics, undefined );
+    // xxx
 
     if( !C0proto )
     {
-      debugger;
       var r = _.entityIdentical( o.Class.prototype.Statics, o.Statics );
-      debugger;
       test.identical( o.Class.prototype.Statics, o.Statics );
-      debugger;
       test.identical( c1a.Statics, o.Statics );
     }
 
@@ -712,7 +906,7 @@ function classMake( test )
     test.case = 'setting static field with constructor';
 
     o.Class.instances = o.Class.instances.slice();
-    if( o.Class !== C1 && !o.ownStatics )
+    // test.is( o.Class === C1 || o.Class.instances !== C1.instances );
     test.is( o.Class.instances === C1.instances );
     test.is( o.Class.instances === o.Class.prototype.instances );
     test.is( o.Class.instances === c1a.instances );
@@ -723,7 +917,8 @@ function classMake( test )
     test.case = 'setting static field with prototype';
 
     o.Class.prototype.instances = o.Class.prototype.instances.slice();
-    if( o.Class !== C1 && !o.ownStatics )
+    // if( o.Class !== C1 && !o.ownStatics )
+    // test.is( o.Class === C1 || o.Class.instances !== C1.instances );
     test.is( o.Class.instances === C1.instances );
     test.is( o.Class.instances === o.Class.prototype.instances );
     test.is( o.Class.instances === c1a.instances );
@@ -734,7 +929,8 @@ function classMake( test )
     test.case = 'setting static field with instance';
 
     c1a.instances = o.Class.instances.slice();
-    if( o.Class !== C1 && !o.ownStatics )
+    // if( o.Class !== C1 && !o.ownStatics )
+    // test.is( o.Class === C1 || o.Class.instances !== C1.instances );
     test.is( o.Class.instances === C1.instances );
     test.is( o.Class.instances === o.Class.prototype.instances );
     test.is( o.Class.instances === c1a.instances );
@@ -893,7 +1089,9 @@ function classMake( test )
 
     test.identical( C1.f1,1 );
     test.identical( C1.f2,2 );
+    debugger;
     test.identical( C1.f3,33 );
+    debugger;
     test.identical( C1.f4,4 );
 
     test.identical( C1.prototype.f1,11 );
@@ -913,185 +1111,124 @@ function classMake( test )
 
   }
 
-/*
-  var Statics2 =
+}
+
+classMake.timeOut = 300000;
+
+//
+
+function staticsDeclaration( test )
+{
+
+  /* - */
+
+  test.open( 'basic' );
+  test.case = 'setup';
+
+  function BasicConstructor()
   {
-    instances : [],
-    f1 : [],
-    f4 : [],
+    _.instanceInit( this );
   }
-  var Extend2 =
+
+  var Associates =
   {
-    Statics : Statics2,
+    f2 : [ 'Associates' ],
+  }
+
+  var Statics =
+  {
+    f1 : [ 'Statics' ],
+    f2 : [ 'Statics' ],
+    f3 : [ 'Statics' ],
+  }
+
+  var Extend =
+  {
+    f3 : [ 'Extend' ],
     Associates : Associates,
-    f2 : [],
-    f3 : [],
+    Statics : Statics,
   }
-*/
 
-  /* */
+  Extend.constructor = BasicConstructor;
 
-  test.case = 'first classMake';
-
-  function C1()
-  {
-    this.instances.push( this );
-  }
-  var Statics1 =
-  {
-    instances : [],
-    f1 : [],
-    f2 : [],
-    f3 : [],
-  }
-  var Extend1 =
-  {
-    Statics : Statics1,
-    f1 : [],
-    f2 : [],
-    f4 : [],
-  }
-  var classMade = _.classMake
+  _.classMake
   ({
-    cls : C1,
-    parent : null,
-    extend : Extend1,
+    cls : BasicConstructor,
+    extend : Extend,
   });
 
-  test.identical( C1,classMade );
-  test.is( C1.instances === Statics1.instances );
-  test1({ Class : C1 });
-  testFields( Statics1.f3 );
+  var instance = new BasicConstructor();
 
-  // /* */
-  //
-  // test.case = 'classMake with parent';
-  //
-  // function C2()
-  // {
-  //   C1.call( this );
-  // }
-  // var classMade = _.classMake
-  // ({
-  //   cls : C2,
-  //   parent : C1,
-  // });
-  //
-  // test.identical( C2,classMade );
-  //
-  // test1({ Class : C1, Statics : Statics1 });
-  // test1({ Class : C2, Class0 : C1, Statics : Statics1, ownStatics : 0 });
-  //
-  // /* */
-  //
-  // test.case = 'classMake with supplement';
-  //
-  // function Csupplement()
-  // {
-  //   C1.call( this );
-  // }
-  // var Statics2 =
-  // {
-  //   instances : [],
-  // }
-  // var classMade = _.classMake
-  // ({
-  //   cls : Csupplement,
-  //   parent : C1,
-  //   supplement : { Statics : Statics2 },
-  // });
-  //
-  // test.identical( Csupplement,classMade );
-  //
-  // test1({ Class : C1, Statics : Statics1 });
-  // test1({ Class : Csupplement, Class0 : C1, Statics : Statics1, ownStatics : 0 });
-  //
-  // /* */
-  //
-  // test.case = 'classMake with extend';
-  //
-  // function C3()
-  // {
-  //   C1.call( this );
-  // }
-  // var Associates =
-  // {
-  // }
-  // var Statics2 =
-  // {
-  //   instances : [],
-  //   f1 : [],
-  //   f4 : [],
-  // }
-  // var Extend2 =
-  // {
-  //   Statics : Statics2,
-  //   Associates : Associates,
-  //   f2 : [],
-  //   f3 : [],
-  // }
-  // var classMade = _.classMake
-  // ({
-  //   cls : C3,
-  //   parent : C1,
-  //   extend : Extend2,
-  //   allowingExtendStatics : 1,
-  // });
-  //
-  // test.identical( C3,classMade );
-  //
-  // test1({ Class : C1, Statics : Statics1 });
-  // test1
-  // ({
-  //   Class : C3,
-  //   Class0 : C1,
-  //   Statics : Statics2,
-  //   Extend : Extend2,
-  //   keys : [ 'instances', 'f1', 'f4', 'f2', 'f3' ],
-  //   vals : [ C3.instances, C3.f1, C3.f4, C1.f2, C1.f3 ],
-  // });
-  //
-  // testFields( Extend2.f3 );
-  // testFields2();
-  //
-  // if( !Config.debug )
-  // return;
-  //
-  // test.case = 'attempt to extend statics without order';
-  //
-  // test.shouldThrowError( function()
-  // {
-  //
-  //   function C3()
-  //   {
-  //     C1.call( this );
-  //   }
-  //   var Associates =
-  //   {
-  //   }
-  //   var Statics2 =
-  //   {
-  //     instances : [],
-  //     f1 : [],
-  //     f4 : [],
-  //   }
-  //   var Extend2 =
-  //   {
-  //     Statics : Statics2,
-  //     Associates : Associates,
-  //     f2 : [],
-  //     f3 : [],
-  //   }
-  //   var classMade = _.classMake
-  //   ({
-  //     cls : C3,
-  //     parent : C1,
-  //     extend : Extend2,
-  //   });
-  //
-  // });
+  test.case = 'f1';
+
+  test.is( BasicConstructor.f1 === BasicConstructor.prototype.f1 );
+  test.is( BasicConstructor.prototype.f1 === Statics.f1 );
+  test.is( BasicConstructor.f1 === Statics.f1 );
+  test.is( BasicConstructor.prototype.Statics.f1 === Statics.f1 );
+  test.is( instance.f1 === Statics.f1 );
+
+  test.case = 'set prototype.f1';
+
+  var newF1 = [ 'newF1' ];
+  BasicConstructor.prototype.f1 = newF1;
+  var instance2 = new BasicConstructor();
+
+  test.is( BasicConstructor.f1 === BasicConstructor.prototype.f1 );
+  test.is( BasicConstructor.prototype.f1 === newF1 );
+  test.is( BasicConstructor.f1 === newF1 );
+  test.is( instance.f1 === newF1 );
+  test.is( instance2.f1 === newF1 );
+
+  test.case = 'set class.f1';
+
+  var newF1 = [ 'newF1' ];
+  BasicConstructor.f1 = newF1;
+  var instance2 = new BasicConstructor();
+
+  test.is( BasicConstructor.f1 === BasicConstructor.prototype.f1 );
+  test.is( BasicConstructor.prototype.f1 === newF1 );
+  test.is( BasicConstructor.f1 === newF1 );
+  test.is( instance.f1 === newF1 );
+  test.is( instance2.f1 === newF1 );
+
+  test.case = 'f2';
+
+  test.is( BasicConstructor.prototype.f2 === undefined );
+  test.is( BasicConstructor.f2 === Statics.f2 );
+  test.is( BasicConstructor.prototype.Statics.f2 === Statics.f2 );
+  test.is( BasicConstructor.prototype.Associates.f2 === Associates.f2 );
+  test.is( instance.f2 === Associates.f2 );
+
+  test.case = 'set prototype.f2';
+
+  var newF2 = [ 'newF2' ];
+  BasicConstructor.prototype.f2 = newF2;
+  var instance2 = new BasicConstructor();
+
+  test.is( BasicConstructor.f2 !== BasicConstructor.prototype.f2 );
+  test.is( BasicConstructor.prototype.f2 === newF2 );
+  test.is( BasicConstructor.f2 === Statics.f2 );
+  test.is( instance.f2 === Associates.f2 );
+  test.is( instance2.f2 === Associates.f2 );
+
+  test.case = 'set constructor.f2';
+
+  var newF2 = [ 'newF2' ];
+  BasicConstructor.f2 = newF2;
+  var instance2 = new BasicConstructor();
+
+  test.is( BasicConstructor.f2 !== BasicConstructor.prototype.f2 );
+  test.is( BasicConstructor.f2 === newF2 );
+  test.is( instance.f2 === Associates.f2 );
+  test.is( instance2.f2 === Associates.f2 );
+
+  test.close( 'basic' );
+
+  /* - */
 
 }
+
+// staticsDeclaration.timeOut = 300000;
 
 // --
 // define class
@@ -1100,24 +1237,25 @@ function classMake( test )
 var Self =
 {
 
-  name : 'Tools/base/layer3/Proto',
+  name : 'Tools/base/layer3/Prototype',
   silencing : 1,
   // verbosity : 7,
 
   tests :
   {
 
-    // instanceIs : instanceIs,
-    // prototypeIs : prototypeIs,
-    // constructorIs : constructorIs,
-    // prototypeIsStandard : prototypeIsStandard,
+    instanceIs : instanceIs,
+    prototypeIs : prototypeIs,
+    constructorIs : constructorIs,
+    prototypeIsStandard : prototypeIsStandard,
 
-    // accessor : accessor,
-    // accessorForbid : accessorForbid,
-    // accessorReadOnly : accessorReadOnly,
-    // constant : constant,
+    accessor : accessor,
+    accessorForbid : accessorForbid,
+    accessorReadOnly : accessorReadOnly,
+    constant : constant,
 
     classMake : classMake,
+    staticsDeclaration : staticsDeclaration,
 
   },
 
