@@ -1689,7 +1689,7 @@ var Self =
   name : 'Tools/base/layer3/Prototype',
   silencing : 1,
   // verbosity : 7,
-  routineTimeOut : 300000,
+  // routineTimeOut : 300000,
 
   tests :
   {
