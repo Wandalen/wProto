@@ -11,7 +11,7 @@ if( typeof module !== 'undefined' )
 
 var _global = _global_; var _ = _global_.wTools;
 var _ObjectHasOwnProperty = Object.hasOwnProperty;
-var _assert = _.assert;
+// var __assert = _.assert;
 var _nameFielded = _.nameFielded;
 
 _.assert( !_.construction )
@@ -82,7 +82,7 @@ function like()
   for( var a = 0 ; a < arguments.length ; a++ )
   {
     var arg = arguments[ a ];
-    _.assert( arg[ symbolForAllClasses ] );
+    _.assert( !!arg[ symbolForAllClasses ] );
     if( arg[ symbolForAllClasses ] )
     _.arrayAppendArrayOnce( allClasses,arg[ symbolForAllClasses ] );
   }

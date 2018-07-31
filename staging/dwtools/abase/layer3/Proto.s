@@ -83,7 +83,7 @@ _.assert( _.objectIs( _.field ),'wProto needs wTools/staging/dwtools/abase/layer
 _.assert( _.routineIs( _nameFielded ),'wProto needs wTools/staging/dwtools/abase/layer3/NameTools.s' );
 
 // --
-// property
+// accessor
 // --
 
 /**
@@ -162,16 +162,6 @@ function _accessorRegister( o )
   _.assert( _.strIsNotEmpty( o.declaratorName ) );
   _.assert( _.arrayIs( o.declaratorArgs ) );
   _.fieldsGroupFor( o.proto, '_Accessors' );
-
-  // if( o.declaratorKind )
-  // debugger;
-  //
-  // if( o.name === '_webglShaderId' )
-  // debugger;
-  //
-  // if( Config.debug )
-  // for( var a = 0 ; a < o.declaratorArgs.length ; a++ )
-  // _.entityFreeze( o.declaratorArgs[ a ] );
 
   var accessors = o.proto._Accessors;
 
@@ -256,16 +246,12 @@ function _accessorAct( o )
   _.assert( _.strIs( o.name ) );
   _.assertRoutineOptions( _accessorAct, arguments );
 
-  // if( o.name === 'f4' )
-  // debugger;
-
-  // var encodedName = name;
-  // var rawName = name;
-  var appending = 0;
+  // var appending = 0;
 
   if( o.combining === 'append' )
   debugger;
-  // if( name === 'fieldsOfRelationshipsGroups' )
+
+  // if( o.name === 'array' )
   // debugger;
 
   /* */
@@ -276,7 +262,7 @@ function _accessorAct( o )
 
     _.assert
     (
-      o.combining, () =>
+      _.strIs( o.combining ), () =>
       'overriding of property ' + o.name + '\n' +
       '{-o.combining-} suppose to be ' + _.strQuote( Combining ) + ' if accessor overided, ' +
       'but is' + _.strQuote( o.combining )
@@ -288,7 +274,7 @@ function _accessorAct( o )
     return;
 
     _.assert( o.combining === 'rewrite', 'not implemented' );
-    _.assert( propertyDescriptor.object !== o.object, () => 'attempty to redefine own accessor ' + _.strQuote( o.name ) + ' of ' + _.toStrShort( o.object ) );
+    _.assert( propertyDescriptor.object !== o.object, () => 'Attempt to redefine own accessor ' + _.strQuote( o.name ) + ' of ' + _.toStrShort( o.object ) );
 
     // if( o.combining === 'append' )
     // {
@@ -332,8 +318,6 @@ function _accessorAct( o )
 
   /* */
 
-  // var settrGetter = _propertyGetterSetterMake( o,o.methods,rawName );
-  // debugger;
   var settrGetter = _._propertyGetterSetterMake
   ({
     name : o.name,
@@ -349,18 +333,11 @@ function _accessorAct( o )
   if( o.prime )
   {
 
-    // console.warn( 'REMINDER : repair it' );
-
     var o2 = _.mapExtend( null,o );
     o2.names = o.name;
     if( o2.methods === o2.object )
     o2.methods = Object.create( null );
     o2.object = null;
-
-    // if( !o2.methods[ '_' + rawName + 'Get' ] && !o2.methods[ rawName + 'Get' ] )
-    // o2.methods[ '_' + rawName + 'Get' ] = o.object[ '_' + name + 'Get' ] ? o.object[ '_' + name + 'Get' ] : o.object[ name + 'Get' ];
-    // if( !o2.methods[ '_' + rawName + 'Set' ] && !o2.methods[ rawName + 'Set' ] )
-    // o2.methods[ '_' + rawName + 'Set' ] = o.object[ '_' + name + 'Set' ] ? o.object[ '_' + name + 'Set' ] : o.object[ name + 'Set' ];
 
     if( settrGetter.set )
     o2.methods[ '_' + o.name + 'Set' ] = settrGetter.set;
@@ -487,7 +464,7 @@ function _accessor( o )
 
   _.assertRoutineOptions( _accessor, arguments );
 
-  if( _._arrayLike( o.object ) )
+  if( _.arrayLike( o.object ) )
   {
     // debugger;
     _.each( o.object, ( object ) =>
@@ -549,7 +526,7 @@ function _accessor( o )
     {
       _.assertMapHasOnly( o2, _.AccessorDefaults );
       o2 = _.mapExtend( null, o, o2 );
-      _.assert( o2.object );
+      _.assert( !!o2.object );
     }
 
     o2.name = n;
@@ -631,7 +608,7 @@ function accessorForbid( o )
   if( !o.methods )
   o.methods = Object.create( null );
 
-  if( _._arrayLike( o.object ) )
+  if( _.arrayLike( o.object ) )
   {
     debugger;
     _.each( o.object, ( object ) =>
@@ -662,7 +639,7 @@ function accessorForbid( o )
 
   var _constructor = o.object.constructor || Object.getPrototypeOf( o.object );
   _.assert( _.routineIs( _constructor ) || _constructor === null );
-  _.assert( _constructor === null || _constructor.name || _constructor._name,'object should have name' );
+  _.assert( _constructor === null || _.strIs( _constructor.name ) || _.strIs( _constructor._name ), 'object should have name' );
   if( !o.protoName )
   o.protoName = ( _constructor ? ( _constructor.name || _constructor._name || '' ) : '' ) + '.';
   if( !o.message )
@@ -755,7 +732,7 @@ function _accessorForbid()
   var propertyDescriptor = _.propertyDescriptorForAccessor( o.object, o.fieldName );
   if( propertyDescriptor.descriptor )
   {
-    _.assert( o.combining,'accessorForbid : if accessor overided expect ( o.combining ) is',Combining.join() );
+    _.assert( _.strIs( o.combining ), 'accessorForbid : if accessor overided expect ( o.combining ) is',Combining.join() );
 
     if( _.routineIs( propertyDescriptor.descriptor.get ) && propertyDescriptor.descriptor.get.name === 'forbidden' )
     {
@@ -1217,7 +1194,7 @@ function fieldsGroupDeclare( o )
   _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( o.srcMap === null || !_.primitiveIs( o.srcMap ),'expects object {-o.srcMap-}, got', _.strTypeOf( o.srcMap ) );
   _.assert( _.strIs( o.fieldsGroupName ) );
-  _.assert( o.filter && o.filter.functionFamily );
+  _.assert( _.routineIs( o.filter ) && _.strIs( o.filter.functionFamily ) );
 
   _.fieldsGroupFor( o.dstPrototype, o.fieldsGroupName );
 
@@ -1837,7 +1814,7 @@ function setterCopyable_functor( o )
 
       if( self[ symbol ] !== data )
       {
-        _.assert( self[ symbol ].copy );
+        _.assert( _.routineIs( self[ symbol ].copy ) );
         self[ symbol ].copy( data );
       }
 
@@ -2064,7 +2041,7 @@ function _propertyGetterSetterMake( o )
   _.assert( _.objectLikeOrRoutine( o.methods ) );
   _.assert( _.strIs( o.name ) );
   _.assert( !o.readOnlyProduct || o.readOnly );
-  _.assert( o.object );
+  _.assert( !!o.object );
   _.assertRoutineOptions( _propertyGetterSetterMake, o );
 
   if( o.methods[ '' + o.name + 'Set' ] )
@@ -2253,8 +2230,8 @@ function proxyMap( dst,original )
 {
 
   _.assert( arguments.length === 2, 'expects exactly two arguments' );
-  _.assert( dst );
-  _.assert( original );
+  _.assert( !!dst );
+  _.assert( !!original );
 
   var handler =
   {
@@ -2311,7 +2288,7 @@ function _mixinMake( o )
   {
     var md = this.__mixin__;
 
-    _.assert( md );
+    _.assert( _.objectIs( md ) );
     _.assert( arguments.length === 1, 'expects single argument' );
     _.assert( _.routineIs( dstClass ) );
     _.assert( dstClass === dstClass.prototype.constructor );
@@ -2450,7 +2427,7 @@ function mixinApply( mixinDescriptor, dstPrototype )
   _.assert( arguments.length === 2, 'expects exactly two arguments' );
   _.assert( _.objectIs( dstPrototype ), () => 'second argument {-dstPrototype-} does not look like prototype, got ' + _.strTypeOf( dstPrototype ) );
   _.assert( _.routineIs( mixinDescriptor.mixin ), 'first argument does not look like mixin descriptor' );
-  _.assert( mixinDescriptor );
+  _.assert( _.objectIs( mixinDescriptor ) );
   _.assert( Object.isFrozen( mixinDescriptor ), 'first argument does not look like mixin descriptor' );
   _.assertMapHasOnly( mixinDescriptor, MixinDescriptorFields );
 
@@ -2562,7 +2539,6 @@ function mixinHas( proto,mixin )
  *  var Proto =
  *  {
  *   init : init,
- *   constructor : Self,
  *   Composes : Composes
  *  }
  *
@@ -2601,8 +2577,6 @@ _.classMake
   cls : Self,
   parent : Parent,
   extend : Proto,
-  supplement : Original.prototype,
-  usingPrimitiveExtension : true,
 });
 */
 
@@ -2621,10 +2595,8 @@ function classMake( o )
 
   /* */
 
-  var has =
-  {
-    constructor : 'constructor',
-  }
+  var has = {}
+  has.constructor = 'constructor';
 
   var hasNot =
   {
@@ -2640,16 +2612,16 @@ function classMake( o )
   if( o.withClass )
   {
 
-    _.assert( o.cls,'expects {-o.cls-}' );
+    _.assert( _.routineIs( o.cls ),'expects {-o.cls-}' );
     _.assert( _.routineIs( o.cls ),'classMake expects constructor' );
-    _.assert( o.cls.name || o.cls._name,'constructor should have name' );
+    _.assert( _.strIs( o.cls.name ) || _.strIs( o.cls._name ),'constructor should have name' );
     _.assert( _ObjectHasOwnProperty.call( o.cls.prototype,'constructor' ) );
     _.assert( !o.name || o.cls.name === o.name || o.cls._name === o.name,'class has name',o.cls.name + ', but options',o.name );
     _.assert( !o.shortName || !o.cls.shortName|| o.cls.shortName === o.shortName,'class has short name',o.cls.shortName + ', but options',o.shortName );
 
-    _.assertMapOwnAll( o.cls.prototype,has,'classMake expects constructor' );
-    _.assertMapOwnNone( o.cls.prototype,hasNot );
-    _.assertMapOwnNone( o.cls.prototype,ClassForbiddenNames );
+    _.assertMapOwnAll( o.cls.prototype, has,'classMake expects constructor' );
+    _.assertMapOwnNone( o.cls.prototype, hasNot );
+    _.assertMapOwnNone( o.cls.prototype, ClassForbiddenNames );
 
     if( o.extend && _ObjectHasOwnProperty.call( o.extend,'constructor' ) )
     _.assert( o.extend.constructor === o.cls );
@@ -2660,17 +2632,32 @@ function classMake( o )
     _.assert( !o.cls );
   }
 
-  _.assert( _.routineIs( o.parent ) || o.parent === undefined || o.parent === null,'wrong type of parent :',_.strTypeOf( 'o.parent' ) );
+  _.assert( _.routineIs( o.parent ) || o.parent === undefined || o.parent === null, () => 'Wrong type of parent : ' + _.strTypeOf( 'o.parent' ) );
   _.assert( _.objectIs( o.extend ) || o.extend === undefined );
   _.assert( _.objectIs( o.supplement ) || o.supplement === undefined );
-  _.assert( o.parent !== o.extend );
+  _.assert( o.parent !== o.extend || o.extend === undefined );
+
+  if( o.extend )
+  {
+    _.assert( o.extend.cls === undefined );
+    _.assertOwnNoConstructor( o.extend );
+  }
+  if( o.supplementOwn )
+  {
+    _.assert( o.supplementOwn.cls === undefined );
+    _.assertOwnNoConstructor( o.supplementOwn );
+  }
+  if( o.supplement )
+  {
+    _.assert( o.supplement.cls === undefined );
+    _.assertOwnNoConstructor( o.supplement );
+  }
 
   _.routineOptions( classMake,o );
 
   /* */
 
   var prototype;
-
   if( !o.parent )
   o.parent = null;
 
@@ -2730,8 +2717,8 @@ function classMake( o )
 
     /* statics */
 
-    _.assert( prototype.constructor );
-    _.assert( prototype.Statics );
+    _.assert( _.routineIs( prototype.constructor ) );
+    _.assert( _.objectIs( prototype.Statics ) );
 
     // _.assertMapHasAll( prototype, prototype.Statics );
     _.assertMapHasAll( prototype.constructor, prototype.Statics );
@@ -2787,10 +2774,22 @@ function classMake( o )
     delete mixinOptions.allowingExtendStatics;
     delete mixinOptions.onClassMakeEnd;
 
-    mixinOptions.prototype = prototype;
+    if( mixinOptions.extend )
+    mixinOptions.extend = _.mapExtend( null, mixinOptions.extend );
+    if( mixinOptions.supplement )
+    mixinOptions.supplement = _.mapExtend( null, mixinOptions.supplement );
+    if( mixinOptions.supplementOwn )
+    mixinOptions.supplementOwn = _.mapExtend( null, mixinOptions.supplementOwn );
 
-    o.cls.__mixin__ = _._mixinMake( mixinOptions );
+    mixinOptions.prototype = prototype; /* xxx : remove? */
+
+    _._mixinMake( mixinOptions );
+    o.cls.__mixin__ = mixinOptions;
     o.cls.mixin = mixinOptions.mixin;
+
+    _.assert( mixinOptions.extend === null || mixinOptions.extend.constructor === undefined );
+    _.assert( mixinOptions.supplement === null || mixinOptions.supplement.constructor === undefined );
+    _.assert( mixinOptions.supplementOwn === null || mixinOptions.supplementOwn.constructor === undefined );
 
   }
 
@@ -2845,7 +2844,7 @@ classMake.defaults =
  * var Self = function Betta( o ) { };
  * var Statics = { staticFunction : function staticFunction(){ } };
  * var Composes = { a : 1, b : 2 };
- * var Proto = { constructor : Self, Composes : Composes, Statics : Statics };
+ * var Proto = { Composes : Composes, Statics : Statics };
  *
  * var proto =  _.classExtend
  * ({
@@ -2886,7 +2885,7 @@ function classExtend( o )
   _.assert( _.objectIs( o.extend ) || o.extend === undefined || o.extend === null );
   _.assert( _.objectIs( o.supplementOwn ) || o.supplementOwn === undefined || o.supplementOwn === null );
   _.assert( _.objectIs( o.supplement ) || o.supplement === undefined || o.supplement === null );
-  _.assert( o.cls || o.prototype, 'expects class constructor or class prototype' );
+  _.assert( _.routineIs( o.cls ) || _.objectIs( o.prototype ), 'expects class constructor or class prototype' );
 
   /*
   mixin could could have none class constructor
@@ -2896,8 +2895,8 @@ function classExtend( o )
   {
 
     _.assert( _.routineIs( o.cls ), 'expects constructor of class ( o.cls )' );
-    _.assert( o.cls.name || o.cls._name, 'class constructor should have name' );
-    _.assert( o.prototype );
+    _.assert( _.strIs( o.cls.name ) || _.strIs( o.cls._name ), 'class constructor should have name' );
+    _.assert( !!o.prototype );
     // if( !o.prototype.Statics )
     // _.assertMapHasOnly( o.cls, [ _.KnownConstructorFields, o.prototype.Statics || {} ] ); /* xxx */
 
@@ -2924,9 +2923,6 @@ function classExtend( o )
   _.assert( _.objectIs( o.prototype ) );
 
   /* fields groups */
-
-  // if( o.prototype.constructor && o.prototype.constructor.name === 'C3' )
-  // debugger;
 
   _.fieldsGroupsDeclareForEachFilter
   ({
@@ -3008,9 +3004,6 @@ to prioritize ordinary facets adjustment order should be
 
   var fieldsOfRelationshipsGroups = _._fieldsOfRelationshipsGroups( o.prototype );
 
-  // if( o.prototype.constructor && o.prototype.constructor.name === 'BasicConstructor' )
-  // debugger;
-
   /* statics */
 
   if( o.supplement && o.supplement.Statics )
@@ -3051,7 +3044,7 @@ to prioritize ordinary facets adjustment order should be
 
   }
 
-  _.assert( o.prototype.Statics );
+  _.assert( _.objectIs( o.prototype.Statics ) );
 
   return o.prototype;
 
@@ -3187,22 +3180,22 @@ classExtend.defaults =
 
 //
 
-// function declareStatic( name, extending, dstNotOwn )
 function declareStatic( o )
 {
 
   if( !( 'value' in o ) )
   o.value = o.prototype.Statics[ o.name ];
 
+  // if( _.definitionIs( o.value ) )
+  // debugger;
+  if( _.definitionIs( o.value ) && o.name === 'wrap' )
+  debugger;
   if( _.definitionIs( o.value ) )
   _.mapExtend( o, o.value.valueGet() );
 
   _.routineOptions( declareStatic, arguments );
   _.assert( _.strIs( o.name ) );
   _.assert( arguments.length === 1 );
-
-  // if( o.name === 'f4' )
-  // debugger;
 
   if( !o.fieldsOfRelationshipsGroups )
   o.fieldsOfRelationshipsGroups = _._fieldsOfRelationshipsGroups( o.prototype );
@@ -4211,40 +4204,13 @@ function Definition( o )
 }
 
 //
-//
-// function define( o )
-// {
-//   var self = this;
-//   _.assert( arguments.length === 1 );
-//
-//   _.mapExtend( self, o );
-//
-//   return self;
-// }
-//
-// Definition.prototype = _.mapExtendHiding( null, { define : define } );
-//
-// //
-//
-// Definition.prototype.make = function()
-// {
-//   debugger;
-//   if( _.mapIs( self.element ) )
-//   return _.mapExtend( null, self.element );
-//   else if( _.longIs( self.element ) )
-//   return _.arraySlice( self.element );
-//   else _.assert( 0 );
-//   // return _.cloneObject(  );
-// }
-//
-//
 
 function multiple( src )
 {
 
   _.assert( _.mapIs( src ) || _.arrayIs( src ) );
 
-  var definition = new Definition({ element : src });
+  var definition = new Definition({ value : src });
 
   // if( _.mapIs( src ) )
   // definition.valueGet = function get() { return _.mapExtend( null, src ); }
@@ -4252,7 +4218,7 @@ function multiple( src )
   // definition.valueGet = function get() { return _.arraySlice( src ); }
   // else _.assert( 0 );
 
-  definition.valueGet = function get() { return _.entityShallowClone( this.element ) }
+  definition.valueGet = function get() { return _.entityShallowClone( this.value ) }
 
   _.hide( definition, 'valueGet' );
 
@@ -4263,23 +4229,32 @@ function multiple( src )
 
 //
 
-function withOptions( src )
+function contained( src )
 {
+
   _.assert( _.mapIs( src ) );
+  _.assert( arguments.length === 1 );
 
-  // debugger;
-  // var r = _.mapAllFields( src )
-  // debugger;
-
-  var element = _.mapBut( src, withOptions.defaults );
-  var o = _.mapOnly( src, withOptions.defaults );
-  o.element = element;
+  var container = _.mapBut( src, contained.defaults );
+  var o = _.mapOnly( src, contained.defaults );
+  o.container = container;
+  o.value = container.value;
   var definition = new Definition( o );
 
   if( o.shallowCloning )
-  definition.valueGet = function get() { return _.entityShallowClone( this.element ) }
+  definition.valueGet = function get()
+  {
+    var result = this.container;
+    result.value = _.entityShallowClone( definition.value );
+    return result;
+  }
   else
-  definition.valueGet = function get() { return this.element }
+  definition.valueGet = function get()
+  {
+    var result = this.container;
+    result.value = definition.value;
+    return result;
+  }
 
   _.hide( definition, 'valueGet' );
 
@@ -4288,7 +4263,7 @@ function withOptions( src )
   return definition;
 }
 
-withOptions.defaults =
+contained.defaults =
 {
   shallowCloning : 0,
 }
@@ -4392,7 +4367,7 @@ var Define =
 {
   Definition : Definition,
   multiple : multiple,
-  withOptions : withOptions,
+  contained : contained,
 }
 
 //
@@ -4422,7 +4397,7 @@ var Fields =
 var Routines =
 {
 
-  // property
+  // accessor
 
   _accessor_pre : _accessor_pre,
   _accessorRegister : _accessorRegister,
@@ -4523,8 +4498,8 @@ var Routines =
   prototypeArchyGet : prototypeArchyGet, /* experimental */
   prototypeHasField : prototypeHasField,
 
-  prototypeCrossRefer : prototypeCrossRefer,
-  prototypeEach : prototypeEach,
+  prototypeCrossRefer : prototypeCrossRefer, /* experimental */
+  prototypeEach : prototypeEach, /* experimental */
 
   _fieldsOfRelationshipsGroups : _fieldsOfRelationshipsGroups,
   fieldsOfRelationshipsGroups : fieldsOfRelationshipsGroups,

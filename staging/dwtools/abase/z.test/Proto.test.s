@@ -210,147 +210,6 @@ function prototypeIsStandard( t )
 
 //
 
-// function _accessorOptions( test )
-// {
-//
-//   test.case = 'one args call';
-//   var Alpha = { };
-//   var o =
-//   {
-//     object : Alpha,
-//     names : { a : '_a' },
-//     message : [ 'set/get call' ],
-//   }
-//   var got = _._accessorOptions( o );
-//   var expected =
-//   {
-//     object : o.object,
-//     names : _.nameFielded( o.names ),
-//     message : o.message,
-//     methods : o.object,
-//   };
-//   test.identical( got, expected );
-//
-//   test.case = 'two args call';
-//   var Alpha = function Alpha( ){ };
-//   var names = { a : '_a' };
-//   var got = _.toStr( _._accessorOptions( Alpha, names ), { levels : 2 } );
-//   var expected =
-//   [
-//     '{',
-//     '  object : [ routine Alpha ], ',
-//     '  methods : [ routine Alpha ], ',
-//     '  names : { a : "_a" }',
-//     '}',
-//   ].join( '\n' );
-//   test.identical( got, expected );
-//
-//   test.case = 'three args call';
-//   var Alpha = function Alpha( ){ };
-//   var names = { a : '_a' };
-//   var message = [ 'set/get call' ];
-//   var got = _.toStr( _._accessorOptions( Alpha, names, message ), { levels : 3 } );
-//   var expected =
-//   [
-//     '{',
-//     '  object : [ routine Alpha ], ',
-//     '  methods : [ routine Alpha ], ',
-//     '  names : { a : "_a" }, ',
-//     '  message : ',
-//     '  [',
-//     '    [ "set/get call" ]',
-//     '  ]',
-//     '}',
-//
-//   ].join( '\n' );
-//   test.identical( got, expected );
-//
-//   if( Config.debug )
-//   {
-//     test.case = 'empty call';
-//     test.shouldThrowError( function()
-//       {
-//         _._accessorOptions( );
-//       });
-//   }
-// }
-
-//
-
-function accessorWithOptions( test )
-{
-
-  /* - */
-
-  test.open( 'with class, readOnly:1' );
-
-  test.case = 'setup';
-
-  function BasicConstructor()
-  {
-    _.instanceInit( this );
-  }
-
-  var Accessors =
-  {
-    f1 : { readOnly : 1 },
-  }
-
-  var Extend =
-  {
-    Accessors : Accessors,
-  }
-
-  Extend.constructor = BasicConstructor;
-
-  _.classMake
-  ({
-    cls : BasicConstructor,
-    extend : Extend,
-  });
-
-  debugger;
-  var methods = Object.create( null );
-  _.accessor
-  ({
-    object : BasicConstructor.prototype,
-    names : { f2 : { readOnly : 1 } },
-    methods : methods,
-  });
-  debugger;
-
-  var instance = new BasicConstructor();
-
-  test.case = 'methods';
-
-  debugger;
-  test.is( _.routineIs( methods._f2Get ) );
-  test.identical( _.mapKeys( methods ).length, 1 );
-
-  test.case = 'inline no method';
-
-  test.identical( instance._f1Get, undefined );
-  test.identical( instance._f1Set, undefined );
-  test.identical( BasicConstructor._f1Get, undefined );
-  test.identical( BasicConstructor._f1Set, undefined );
-  test.identical( BasicConstructor.prototype._f1Get, undefined );
-  test.identical( BasicConstructor.prototype._f1Set, undefined );
-
-  test.identical( instance._f2Get, undefined );
-  test.identical( instance._f2Set, undefined );
-  test.identical( BasicConstructor._f2Get, undefined );
-  test.identical( BasicConstructor._f2Set, undefined );
-  test.identical( BasicConstructor.prototype._f2Get, undefined );
-  test.identical( BasicConstructor.prototype._f2Set, undefined );
-
-  test.close( 'with class, readOnly:1' );
-
-}
-
-accessorWithOptions.timeOut = 300000;
-
-//
-
 function accessor( test )
 {
 
@@ -458,6 +317,80 @@ function accessor( test )
   });
 
 }
+
+//
+
+function accessorIsClean( test )
+{
+
+  /* - */
+
+  test.open( 'with class, readOnly:1' );
+
+  test.case = 'setup';
+
+  function BasicConstructor()
+  {
+    _.instanceInit( this );
+  }
+
+  var Accessors =
+  {
+    f1 : { readOnly : 1 },
+  }
+
+  var Extend =
+  {
+    Accessors : Accessors,
+  }
+
+  Extend.constructor = BasicConstructor;
+
+  _.classMake
+  ({
+    cls : BasicConstructor,
+    extend : Extend,
+  });
+
+  debugger;
+  var methods = Object.create( null );
+  _.accessor
+  ({
+    object : BasicConstructor.prototype,
+    names : { f2 : { readOnly : 1 } },
+    methods : methods,
+  });
+  debugger;
+
+  var instance = new BasicConstructor();
+
+  test.case = 'methods';
+
+  debugger;
+  test.is( _.routineIs( methods._f2Get ) );
+  test.identical( _.mapKeys( methods ).length, 1 );
+
+  test.case = 'inline no method';
+
+  test.identical( instance._f1Get, undefined );
+  test.identical( instance._f1Set, undefined );
+  test.identical( BasicConstructor._f1Get, undefined );
+  test.identical( BasicConstructor._f1Set, undefined );
+  test.identical( BasicConstructor.prototype._f1Get, undefined );
+  test.identical( BasicConstructor.prototype._f1Set, undefined );
+
+  test.identical( instance._f2Get, undefined );
+  test.identical( instance._f2Set, undefined );
+  test.identical( BasicConstructor._f2Get, undefined );
+  test.identical( BasicConstructor._f2Set, undefined );
+  test.identical( BasicConstructor.prototype._f2Get, undefined );
+  test.identical( BasicConstructor.prototype._f2Set, undefined );
+
+  test.close( 'with class, readOnly:1' );
+
+}
+
+// accessorIsClean.timeOut = 300000;
 
 //
 
@@ -603,6 +536,93 @@ function accessorReadOnly( test )
   });
 
 }
+
+//
+
+function forbids( test )
+{
+
+  test.open( 'pure map' );
+
+  test.case = 'setup';
+
+  var Forbids =
+  {
+    f1 : 'f1',
+  }
+
+  var instance = Object.create( null );
+
+  _.accessorForbid( instance, Forbids );
+
+  test.case = 'inline no method';
+
+  test.identical( instance._f1Get, undefined );
+  test.identical( instance._f1Set, undefined );
+  test.identical( _.mapProperties( instance ), Object.create( null ) );
+
+  test.case = 'throwing';
+
+  if( Config.debug )
+  {
+    test.shouldThrowError( () => instance.f1 );
+  }
+
+  test.close( 'pure map' );
+
+  /* - */
+
+  test.open( 'with class' );
+
+  test.case = 'setup';
+
+  function BasicConstructor()
+  {
+    _.instanceInit( this );
+  }
+
+  var Forbids =
+  {
+    f1 : 'f1',
+  }
+
+  var Extend =
+  {
+    Forbids : Forbids,
+  }
+
+  Extend.constructor = BasicConstructor;
+
+  _.classMake
+  ({
+    cls : BasicConstructor,
+    extend : Extend,
+  });
+
+  var instance = new BasicConstructor();
+
+  test.case = 'inline no method';
+
+  test.identical( instance._f1Get, undefined );
+  test.identical( instance._f1Set, undefined );
+  test.identical( BasicConstructor._f1Get, undefined );
+  test.identical( BasicConstructor._f1Set, undefined );
+  test.identical( BasicConstructor.prototype._f1Get, undefined );
+  test.identical( BasicConstructor.prototype._f1Set, undefined );
+
+  test.case = 'throwing';
+
+  if( Config.debug )
+  {
+    test.shouldThrowError( () => instance.f1 );
+    test.shouldThrowError( () => BasicConstructor.prototype.f1 );
+  }
+
+  test.close( 'with class' );
+
+}
+
+// forbids.timeOut = 300000;
 
 //
 
@@ -1292,56 +1312,28 @@ function staticsDeclaration( test )
 
 //
 
-function forbids( test )
+function staticsOverwriting( test )
 {
-
-  test.open( 'pure map' );
-
-  test.case = 'setup';
-
-  var Forbids =
-  {
-    f1 : 'f1',
-  }
-
-  var instance = Object.create( null );
-
-  _.accessorForbid( instance, Forbids );
-
-  test.case = 'inline no method';
-
-  test.identical( instance._f1Get, undefined );
-  test.identical( instance._f1Set, undefined );
-  test.identical( _.mapProperties( instance ), Object.create( null ) );
-
-  test.case = 'throwing';
-
-  if( Config.debug )
-  {
-    test.shouldThrowError( () => instance.f1 );
-  }
-
-  test.close( 'pure map' );
 
   /* - */
 
-  test.open( 'with class' );
-
+  test.open( 'basic' );
   test.case = 'setup';
 
   function BasicConstructor()
   {
     _.instanceInit( this );
+    this.instances.push( this );
   }
 
-  var Forbids =
+  var Statics =
   {
-    f1 : 'f1',
+    instances : [],
   }
 
   var Extend =
   {
-    Forbids : Forbids,
+    Statics : Statics,
   }
 
   Extend.constructor = BasicConstructor;
@@ -1352,30 +1344,340 @@ function forbids( test )
     extend : Extend,
   });
 
-  var instance = new BasicConstructor();
+  var instance0 = new BasicConstructor();
 
-  test.case = 'inline no method';
+  /* */
 
-  test.identical( instance._f1Get, undefined );
-  test.identical( instance._f1Set, undefined );
-  test.identical( BasicConstructor._f1Get, undefined );
-  test.identical( BasicConstructor._f1Set, undefined );
-  test.identical( BasicConstructor.prototype._f1Get, undefined );
-  test.identical( BasicConstructor.prototype._f1Set, undefined );
-
-  test.case = 'throwing';
-
-  if( Config.debug )
+  function DerivedConstructor1()
   {
-    test.shouldThrowError( () => instance.f1 );
-    test.shouldThrowError( () => BasicConstructor.prototype.f1 );
+    _.instanceInit( this );
+    this.instances.push( this );
   }
 
-  test.close( 'with class' );
+  var Statics =
+  {
+    instances : [],
+  }
+
+  var Extend =
+  {
+    Statics : Statics,
+  }
+
+  Extend.constructor = DerivedConstructor1;
+
+  _.classMake
+  ({
+    parent : BasicConstructor,
+    cls : DerivedConstructor1,
+    extend : Extend,
+  });
+
+  var instance1 = new DerivedConstructor1();
+
+  /* */
+
+  function DerivedConstructor2()
+  {
+    _.instanceInit( this );
+    this.instances.push( this );
+  }
+
+  var Statics =
+  {
+  }
+
+  var Extend =
+  {
+    Statics : Statics,
+  }
+
+  Extend.constructor = DerivedConstructor2;
+
+  _.classMake
+  ({
+    parent : BasicConstructor,
+    cls : DerivedConstructor2,
+    extend : Extend,
+  });
+
+  var instance2 = new DerivedConstructor2();
+
+  /* */
+
+  test.case = 'f1';
+
+  test.is( BasicConstructor.instances === BasicConstructor.prototype.instances );
+  test.is( BasicConstructor.instances === DerivedConstructor2.instances );
+  test.is( BasicConstructor.instances === DerivedConstructor2.prototype.instances );
+  test.is( BasicConstructor.instances === instance0.instances );
+  test.is( BasicConstructor.instances === instance2.instances );
+
+  test.is( BasicConstructor.instances !== DerivedConstructor1.instances );
+  test.is( BasicConstructor.instances !== instance1.instances );
+
+  test.is( DerivedConstructor1.instances === DerivedConstructor1.prototype.instances );
+  test.is( DerivedConstructor1.instances === instance1.instances );
+
+  test.identical( instance0.instances.length, 2 );
+  test.identical( instance1.instances.length, 1 );
+  test.identical( instance2.instances.length, 2 );
+
+  test.close( 'basic' );
+
+  /* - */
 
 }
 
-// forbids.timeOut = 300000;
+//
+
+function mixinStaticsWithDefinition( test )
+{
+
+  /* - */
+
+  test.will = 'setup Mixin';
+
+  function Mixin()
+  {
+  }
+
+  Mixin.shortName = 'Mix';
+
+  var wrap = [ 0 ];
+  var array = [ wrap ];
+  var map = { 0 : wrap };
+  var Statics =
+  {
+    array : _.define.contained({ value : array, readOnly : 1, shallowCloning : 1 }),
+    map : _.define.contained({ value : map, readOnly : 1, shallowCloning : 1 }),
+    bool : _.define.contained({ value : 0 }),
+    wrap : _.define.contained({ value : wrap }),
+  }
+
+  var Extend =
+  {
+    Statics : Statics,
+  }
+
+  _.classMake
+  ({
+    cls : Mixin,
+    extend : Extend,
+    withMixin : 1,
+  });
+
+  test.is( _.routineIs( Mixin.mixin ) );
+  test.identical( Mixin.__mixin__.mixin, Mixin.mixin );
+  test.identical( Mixin.__mixin__.name, 'Mixin' );
+  test.identical( Mixin.__mixin__.shortName, 'Mix' );
+  // test.identical( Mixin.__mixin__.prototype, undefined ); /* xxx */
+  test.identical( Mixin.__mixin__.extend.constructor, undefined );
+
+  /* */
+
+  test.will = 'setup Class1';
+
+  function Class1()
+  {
+    _.instanceInit( this );
+  }
+
+  _.classMake
+  ({
+    cls : Class1,
+  });
+
+  test.is( Class1.prototype.constructor === Class1 );
+
+  Mixin.mixin( Class1 );
+
+  var instance1 = new Class1();
+
+  /* */
+
+  test.will = 'setup Class2';
+
+  function Class2()
+  {
+    _.instanceInit( this );
+  }
+
+  _.classMake
+  ({
+    cls : Class2,
+  });
+
+  Mixin.mixin( Class2 );
+
+  var instance2 = new Class2();
+
+  /* */
+
+  test.case = 'clean';
+
+  test.is( Mixin.wrapGet === undefined );
+  test.is( Mixin._wrapGet === undefined );
+  test.is( Mixin.prototype.wrapGet === undefined );
+  test.is( Mixin.prototype._wrapGet === undefined );
+
+  test.is( Class1.wrapGet === undefined );
+  test.is( Class1._wrapGet === undefined );
+  test.is( Class1.prototype.wrapGet === undefined );
+  test.is( Class1.prototype._wrapGet === undefined );
+
+  test.is( Class2.wrapGet === undefined );
+  test.is( Class2._wrapGet === undefined );
+  test.is( Class2.prototype.wrapGet === undefined );
+  test.is( Class2.prototype._wrapGet === undefined );
+
+  /* */
+
+  test.case = 'wrap';
+
+  test.is( wrap === Mixin.wrap );
+  test.is( wrap === Mixin.prototype.Statics.wrap.value );
+  test.is( wrap === Mixin.prototype.wrap );
+  test.is( wrap === Class1.prototype.Statics.wrap.value );
+  test.is( wrap === Class1.prototype.wrap );
+  test.is( wrap === Class1.wrap );
+  test.is( wrap === instance1.wrap );
+
+  test.is( wrap === Class2.prototype.Statics.wrap.value );
+  test.is( wrap === Class2.prototype.wrap );
+  test.is( wrap === Class2.wrap );
+  test.is( wrap === instance2.wrap );
+
+  test.case = 'set Mixin.wrap';
+
+  var wrap2 = Mixin.wrap = [ 'wrap2' ];
+
+  test.is( wrap2 === Mixin.wrap );
+  test.is( wrap == Mixin.prototype.Statics.wrap.value );
+  test.is( wrap2 === Mixin.prototype.wrap );
+  test.is( wrap === Class1.prototype.Statics.wrap.value );
+  test.is( wrap === Class1.prototype.wrap );
+  test.is( wrap === Class1.wrap );
+  test.is( wrap === instance1.wrap );
+  test.is( wrap == Class2.prototype.Statics.wrap.value );
+  test.is( wrap == Class2.prototype.wrap );
+  test.is( wrap == Class2.wrap );
+  test.is( wrap == instance2.wrap );
+
+  test.case = 'set Class1.wrap';
+
+  var wrap3 = Class1.wrap = [ 'wrap3' ];
+
+  test.is( wrap2 === Mixin.wrap );
+  test.is( wrap === Mixin.prototype.Statics.wrap.value );
+  test.is( wrap2 === Mixin.prototype.wrap );
+  test.is( wrap === Class1.prototype.Statics.wrap.value );
+  test.is( wrap3 === Class1.prototype.wrap );
+  test.is( wrap3 === Class1.wrap );
+  test.is( wrap3 === instance1.wrap );
+  test.is( wrap === Class2.prototype.Statics.wrap.value );
+  test.is( wrap === Class2.prototype.wrap );
+  test.is( wrap === Class2.wrap );
+  test.is( wrap === instance2.wrap );
+
+  /* */
+
+  test.case = 'array';
+
+  test.is( array !== Mixin.array );
+  test.is( array === Mixin.prototype.Statics.array.value );
+  test.is( Mixin.array === Mixin.prototype.array );
+
+  test.is( array === Class1.prototype.Statics.array.value );
+  test.is( Class1.array === Class1.prototype.array );
+  test.is( array !== Class1.array );
+  test.is( Mixin.array !== Class1.array );
+  test.is( Class1.array === instance1.array );
+
+  test.is( array === Class2.prototype.Statics.array.value );
+  test.is( Class2.array === Class2.prototype.array );
+  test.is( array !== Class2.array );
+  test.is( Mixin.array !== Class2.array );
+  test.is( Class2.array === instance2.array );
+
+  test.case = 'wrap in array';
+
+  test.is( array[ 0 ] === Mixin.array[ 0 ] );
+  test.is( array[ 0 ] === Mixin.prototype.Statics.array.value[ 0 ] );
+  test.is( array[ 0 ] === Mixin.prototype.array[ 0 ] );
+  test.is( array[ 0 ] === Class1.prototype.Statics.array.value[ 0 ] );
+  test.is( array[ 0 ] === Class1.prototype.array[ 0 ] );
+  test.is( array[ 0 ] === Class1.array[ 0 ] );
+  test.is( array[ 0 ] === instance1.array[ 0 ] );
+  test.is( array[ 0 ] === Class2.prototype.Statics.array.value[ 0 ] );
+  test.is( array[ 0 ] === Class2.prototype.array[ 0 ] );
+  test.is( array[ 0 ] === Class2.array[ 0 ] );
+  test.is( array[ 0 ] === instance2.array[ 0 ] );
+
+  /* */
+
+  test.case = 'map';
+
+  test.is( map !== Mixin.map );
+  test.is( map === Mixin.prototype.Statics.map.value );
+  test.is( Mixin.map === Mixin.prototype.map );
+
+  test.is( map === Class1.prototype.Statics.map.value );
+  test.is( Class1.map === Class1.prototype.map );
+  test.is( map !== Class1.map );
+  test.is( Mixin.map !== Class1.map );
+  test.is( Class1.map === instance1.map );
+
+  test.is( map === Class2.prototype.Statics.map.value );
+  test.is( Class2.map === Class2.prototype.map );
+  test.is( map !== Class2.map );
+  test.is( Mixin.map !== Class2.map );
+  test.is( Class2.map === instance2.map );
+
+  test.case = 'wrap in map';
+
+  test.is( map[ 0 ] === Mixin.map[ 0 ] );
+  test.is( map[ 0 ] === Mixin.prototype.Statics.map.value[ 0 ] );
+  test.is( map[ 0 ] === Mixin.prototype.map[ 0 ] );
+  test.is( map[ 0 ] === Class1.prototype.Statics.map.value[ 0 ] );
+  test.is( map[ 0 ] === Class1.prototype.map[ 0 ] );
+  test.is( map[ 0 ] === Class1.map[ 0 ] );
+  test.is( map[ 0 ] === instance1.map[ 0 ] );
+  test.is( map[ 0 ] === Class2.prototype.Statics.map.value[ 0 ] );
+  test.is( map[ 0 ] === Class2.prototype.map[ 0 ] );
+  test.is( map[ 0 ] === Class2.map[ 0 ] );
+  test.is( map[ 0 ] === instance2.map[ 0 ] );
+
+  /* - */
+
+  if( !Config.debug )
+  return;
+
+  test.will = 'constructor in extend';
+
+  test.shouldThrowError( function()
+  {
+
+    function Mixin()
+    {
+    }
+
+    var Extend =
+    {
+    }
+
+    Extend.constructor = Mixin;
+
+    _.classMake
+    ({
+      cls : Mixin,
+      extend : Extend,
+      withMixin : 1,
+    });
+
+  });
+
+}
 
 // --
 // define class
@@ -1387,6 +1689,7 @@ var Self =
   name : 'Tools/base/layer3/Prototype',
   silencing : 1,
   // verbosity : 7,
+  routineTimeOut : 300000,
 
   tests :
   {
@@ -1396,15 +1699,19 @@ var Self =
     constructorIs : constructorIs,
     prototypeIsStandard : prototypeIsStandard,
 
-    accessorWithOptions : accessorWithOptions,
     accessor : accessor,
+    accessorIsClean : accessorIsClean,
+
     accessorForbid : accessorForbid,
     accessorReadOnly : accessorReadOnly,
+    forbids : forbids,
+
     constant : constant,
 
     classMake : classMake,
     staticsDeclaration : staticsDeclaration,
-    forbids : forbids,
+    staticsOverwriting : staticsOverwriting,
+    mixinStaticsWithDefinition : mixinStaticsWithDefinition,
 
   },
 
