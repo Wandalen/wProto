@@ -344,7 +344,7 @@ function accessorIsClean( test )
     Accessors : Accessors,
   }
 
-  Extend.constructor = BasicConstructor;
+  // Extend.constructor = BasicConstructor;
 
   _.classMake
   ({
@@ -591,7 +591,7 @@ function forbids( test )
     Forbids : Forbids,
   }
 
-  Extend.constructor = BasicConstructor;
+  // Extend.constructor = BasicConstructor;
 
   _.classMake
   ({
@@ -1229,7 +1229,7 @@ function staticsDeclaration( test )
     Statics : Statics,
   }
 
-  Extend.constructor = BasicConstructor;
+  // Extend.constructor = BasicConstructor;
 
   _.classMake
   ({
@@ -1336,7 +1336,7 @@ function staticsOverwriting( test )
     Statics : Statics,
   }
 
-  Extend.constructor = BasicConstructor;
+  // Extend.constructor = BasicConstructor;
 
   _.classMake
   ({
@@ -1364,7 +1364,7 @@ function staticsOverwriting( test )
     Statics : Statics,
   }
 
-  Extend.constructor = DerivedConstructor1;
+  // Extend.constructor = DerivedConstructor1;
 
   _.classMake
   ({
@@ -1392,7 +1392,7 @@ function staticsOverwriting( test )
     Statics : Statics,
   }
 
-  Extend.constructor = DerivedConstructor2;
+  // Extend.constructor = DerivedConstructor2;
 
   _.classMake
   ({
