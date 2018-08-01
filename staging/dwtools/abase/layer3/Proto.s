@@ -3361,7 +3361,7 @@ function constructorGet( src )
 
 //
 
-function subclassIs( cls,subCls )
+function subclassOf( subCls, cls )
 {
 
   _.assert( _.routineIs( cls ) );
@@ -3372,6 +3372,22 @@ function subclassIs( cls,subCls )
   return true;
 
   return Object.isPrototypeOf.call( cls.prototype, subCls.prototype );
+}
+
+//
+
+function subOf( sub, parent )
+{
+
+  _.assert( !!parent );
+  _.assert( !!sub );
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+
+  if( parent === sub )
+  return true;
+
+  return Object.isPrototypeOf.call( parent, sub );
+
 }
 
 //
@@ -3869,31 +3885,36 @@ function fieldsOfInputGroups( src )
   return result;
 }
 
-//
-//
-// function fieldsOfTightGroups( src )
-// {
-//   var prototype = _.prototypeGet( src );
-//   var result = Object.create( null );
-//
-//   _.assert( _.prototypeIs( prototype ) || _.constructorIs( prototype ) );
-//   _.assert( _.prototypeIsStandard( prototype ),'expects standard prototype' );
-//   _.assert( arguments.length === 1, 'expects single argument' );
-//
-//   for( var g in _.ClassFieldsGroupsTight )
-//   {
-//
-//     if( prototype[ g ] )
-//     _.mapExtend( result,prototype[ g ] );
-//
-//   }
-//
-//   return result;
-// }
-
 // --
 // instance
 // --
+
+function instanceConstructor( cls, context, args )
+{
+  _.assert( args.length === 0 || args.length === 1 );
+  _.assert( arguments.length === 3 );
+  _.routineIs( cls );
+  _.arrayLike( args );
+
+  let o = args[ 0 ];
+
+  if( !( context instanceof cls ) )
+  if( o instanceof cls )
+  {
+    debugger;
+    _.assert( args.length === 1 );
+    return o;
+  }
+  else
+  {
+    debugger;
+    return new( _.routineJoin( cls, cls, args ) );
+  }
+
+  return cls.prototype.init.apply( context, args );
+}
+
+//
 
 /**
  * Is this instance finited.
@@ -4205,20 +4226,31 @@ function Definition( o )
 
 //
 
-function multiple( src )
+function own( src )
 {
-
-  _.assert( _.mapIs( src ) || _.arrayIs( src ) );
-
   var definition = new Definition({ value : src });
 
-  // if( _.mapIs( src ) )
-  // definition.valueGet = function get() { return _.mapExtend( null, src ); }
-  // else if( _.longIs( src ) )
-  // definition.valueGet = function get() { return _.arraySlice( src ); }
-  // else _.assert( 0 );
+  _.assert( _.objectIs( src ) || _.longIs( src ), 'Expects object-like or long' );
 
-  definition.valueGet = function get() { return _.entityShallowClone( this.value ) }
+  // definition.valueGet = function get() { return _.entityShallowClone( this.value ) }
+  definition.valueGet = function get() { return _.cloneJust( this.value ) }
+
+  _.hide( definition, 'valueGet' );
+
+  Object.freeze( definition );
+
+  return definition;
+}
+
+//
+
+function ownInstanceOf( src )
+{
+  var definition = new Definition({ value : src });
+
+  _.assert( _.routineIs( src ), 'Expects constructor' );
+
+  definition.valueGet = function get() { return new this.value() }
 
   _.hide( definition, 'valueGet' );
 
@@ -4366,7 +4398,8 @@ var Forbids =
 var Define =
 {
   Definition : Definition,
-  multiple : multiple,
+  own : own,
+  ownInstanceOf : ownInstanceOf,
   contained : contained,
 }
 
@@ -4482,7 +4515,9 @@ var Routines =
 
   constructorGet : constructorGet,
 
-  subclassIs : subclassIs,
+  subclassOf : subclassOf,
+  subOf : subOf,
+
   parentGet : parentGet,
   _classConstructorAndPrototypeGet : _classConstructorAndPrototypeGet,
 
@@ -4508,6 +4543,8 @@ var Routines =
   fieldsOfInputGroups : fieldsOfInputGroups,
 
   // instance
+
+  instanceConstructor : instanceConstructor,
 
   instanceIsFinited : instanceIsFinited,
   instanceFinit : instanceFinit,
