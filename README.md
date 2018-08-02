@@ -7,3 +7,4 @@ Relations module. Collection of routines to define classes and relations between
 npm install
 node sample/Sample.s
 ```
+
