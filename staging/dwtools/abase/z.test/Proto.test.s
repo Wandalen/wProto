@@ -1197,7 +1197,7 @@ function classMake( test )
 
 //
 
-function staticsDeclaration( test )
+function staticsDeclare( test )
 {
 
   /* - */
@@ -1308,11 +1308,11 @@ function staticsDeclaration( test )
 
 }
 
-// staticsDeclaration.timeOut = 300000;
+// staticsDeclare.timeOut = 300000;
 
 //
 
-function staticsOverwriting( test )
+function staticsOverwrite( test )
 {
 
   /* - */
@@ -1335,8 +1335,6 @@ function staticsOverwriting( test )
   {
     Statics : Statics,
   }
-
-  // Extend.constructor = BasicConstructor;
 
   _.classMake
   ({
@@ -1363,8 +1361,6 @@ function staticsOverwriting( test )
   {
     Statics : Statics,
   }
-
-  // Extend.constructor = DerivedConstructor1;
 
   _.classMake
   ({
@@ -1679,6 +1675,152 @@ function mixinStaticsWithDefinition( test )
 
 }
 
+//
+
+function customFieldsGroups( test )
+{
+
+  /* - */
+
+  test.case = 'setup';
+
+  function BasicConstructor(){}
+
+  var Extend =
+  {
+  }
+
+  _.classMake
+  ({
+    cls : BasicConstructor,
+    extend : Extend,
+  });
+
+  /* */
+
+  function DerivedConstructor1(){}
+
+  var Groups =
+  {
+    Names : 'Names',
+  }
+
+  var Names1 =
+  {
+    a : [ 1 ],
+    b : [ 1 ],
+  }
+
+  var Extend =
+  {
+    Names : Names1,
+    Groups : Groups,
+  }
+
+  _.classMake
+  ({
+    parent : BasicConstructor,
+    cls : DerivedConstructor1,
+    extend : Extend,
+  });
+
+  /* */
+
+  function DerivedConstructor2(){}
+
+  var Names2 =
+  {
+    b : [ 2 ],
+    c : [ 2 ],
+  }
+
+  var Extend =
+  {
+    Names : Names2,
+  }
+
+  _.classMake
+  ({
+    parent : DerivedConstructor1,
+    cls : DerivedConstructor2,
+    extend : Extend,
+  });
+
+  /* */
+
+  function DerivedConstructor3(){}
+
+  _.classMake
+  ({
+    parent : DerivedConstructor2,
+    cls : DerivedConstructor3,
+  });
+
+  /* */
+
+  var instance0 = new BasicConstructor();
+  var instance1 = new DerivedConstructor1();
+  var instance2 = new DerivedConstructor2();
+  var instance3 = new DerivedConstructor3();
+
+  test.will = 'check base class';
+
+  test.is( !!instance0.Groups );
+  // test.is( !!BasicConstructor.Groups ); /* xxx */
+  test.is( !!BasicConstructor.prototype.Groups );
+  // test.is( instance0.Groups === BasicConstructor.Groups );
+  test.is( instance0.Groups === BasicConstructor.prototype.Groups );
+
+  test.will = 'check dervied class1';
+
+  test.is( !!instance1.Groups );
+  // test.is( !!DerivedConstructor1.Groups );
+  test.is( !!DerivedConstructor1.prototype.Groups );
+  // test.is( instance1.Groups === DerivedConstructor1.Groups );
+  test.is( instance1.Groups === DerivedConstructor1.prototype.Groups );
+  test.is( instance1.Groups !== instance0.Groups );
+  // test.is( DerivedConstructor1.Groups !== instance0.Groups );
+  test.is( DerivedConstructor1.prototype.Groups !== instance0.Groups );
+  test.is( instance1.Names.a === Names1.a );
+  test.is( instance1.Names.b === Names1.b );
+  test.is( instance1.Names.c === Names1.c );
+
+  test.will = 'check dervied class2';
+
+  test.is( !!instance2.Groups );
+  // test.is( !!DerivedConstructor2.Groups );
+  test.is( !!DerivedConstructor2.prototype.Groups );
+  // test.is( instance2.Groups === DerivedConstructor2.Groups );
+  test.is( instance2.Groups === DerivedConstructor2.prototype.Groups );
+  test.is( instance2.Groups !== instance0.Groups );
+  // test.is( DerivedConstructor2.Groups !== instance0.Groups );
+  test.is( DerivedConstructor2.prototype.Groups !== instance0.Groups );
+  test.is( instance2.Groups !== instance1.Groups );
+  // test.is( DerivedConstructor2.Groups !== instance1.Groups );
+  test.is( DerivedConstructor2.prototype.Groups !== instance1.Groups );
+  test.is( instance2.Names.a === Names1.a );
+  test.is( instance2.Names.b === Names2.b );
+  test.is( instance2.Names.c === Names2.c );
+
+  test.will = 'check dervied class3';
+
+  test.is( !!instance3.Groups );
+  // test.is( !!DerivedConstructor3.Groups );
+  test.is( !!DerivedConstructor3.prototype.Groups );
+  // test.is( instance3.Groups === DerivedConstructor3.Groups );
+  test.is( instance3.Groups === DerivedConstructor3.prototype.Groups );
+  test.is( instance3.Groups !== instance0.Groups );
+  // test.is( DerivedConstructor3.Groups !== instance0.Groups );
+  test.is( DerivedConstructor3.prototype.Groups !== instance0.Groups );
+  test.is( instance3.Groups !== instance1.Groups );
+  // test.is( DerivedConstructor3.Groups !== instance1.Groups );
+  test.is( DerivedConstructor3.prototype.Groups !== instance1.Groups );
+  test.is( instance3.Names.a === Names1.a );
+  test.is( instance3.Names.b === Names2.b );
+  test.is( instance3.Names.c === Names2.c );
+
+}
+
 // --
 // define class
 // --
@@ -1709,9 +1851,11 @@ var Self =
     constant : constant,
 
     classMake : classMake,
-    staticsDeclaration : staticsDeclaration,
-    staticsOverwriting : staticsOverwriting,
+    staticsDeclare : staticsDeclare,
+    staticsOverwrite : staticsOverwrite,
     mixinStaticsWithDefinition : mixinStaticsWithDefinition,
+
+    customFieldsGroups : customFieldsGroups,
 
   },
 
