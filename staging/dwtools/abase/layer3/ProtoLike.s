@@ -227,7 +227,7 @@ var Proto =
   _endGet : _endGet,
 }
 
-_.classMake
+_.classDeclare
 ({
   cls : Self,
   parent : Parent,

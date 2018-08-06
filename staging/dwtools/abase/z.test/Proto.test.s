@@ -215,7 +215,7 @@ function accessor( test )
 
   test.case = 'setter'; /**/
   var Alpha = function _Alpha(){}
-  _.classMake
+  _.classDeclare
   ({
     cls : Alpha,
     parent : null,
@@ -237,7 +237,7 @@ function accessor( test )
 
   test.case = 'getter'; /**/
   var Alpha = function _Alpha(){}
-  _.classMake
+  _.classDeclare
   ({
     cls : Alpha,
     parent : null,
@@ -259,7 +259,7 @@ function accessor( test )
 
   test.case = 'getter & setter'; /**/
   var Alpha = function _Alpha(){}
-  _.classMake
+  _.classDeclare
   ({
     cls : Alpha,
     parent : null,
@@ -346,7 +346,7 @@ function accessorIsClean( test )
 
   // Extend.constructor = BasicConstructor;
 
-  _.classMake
+  _.classDeclare
   ({
     cls : BasicConstructor,
     extend : Extend,
@@ -466,7 +466,7 @@ function accessorReadOnly( test )
   test.case = 'readOnly';
 
   var Alpha = function _Alpha(){}
-  _.classMake
+  _.classDeclare
   ({
     cls : Alpha,
     parent : null,
@@ -485,7 +485,7 @@ function accessorReadOnly( test )
   {
     this[ Symbol.for( 'a' ) ] = a;
   }
-  _.classMake
+  _.classDeclare
   ({
     cls : Alpha,
     parent : null,
@@ -593,7 +593,7 @@ function forbids( test )
 
   // Extend.constructor = BasicConstructor;
 
-  _.classMake
+  _.classDeclare
   ({
     cls : BasicConstructor,
     extend : Extend,
@@ -690,13 +690,13 @@ function constant( test )
 
 //
 
-function classMake( test )
+function classDeclare( test )
 {
   var context = this;
 
   /* */
 
-  test.case = 'first classMake';
+  test.case = 'first classDeclare';
 
   function C1()
   {
@@ -716,7 +716,7 @@ function classMake( test )
     f2 : [],
     f4 : [],
   }
-  var classMade = _.classMake
+  var classMade = _.classDeclare
   ({
     cls : C1,
     parent : null,
@@ -731,13 +731,13 @@ function classMake( test )
 
   /* */
 
-  test.case = 'classMake with parent';
+  test.case = 'classDeclare with parent';
 
   function C2()
   {
     C1.call( this );
   }
-  var classMade = _.classMake
+  var classMade = _.classDeclare
   ({
     cls : C2,
     parent : C1,
@@ -754,7 +754,7 @@ function classMake( test )
 
   /* */
 
-  test.case = 'classMake with supplement';
+  test.case = 'classDeclare with supplement';
 
   function Csupplement()
   {
@@ -764,7 +764,7 @@ function classMake( test )
   {
     instances : [],
   }
-  var classMade = _.classMake
+  var classMade = _.classDeclare
   ({
     cls : Csupplement,
     parent : C1,
@@ -778,7 +778,7 @@ function classMake( test )
 
   /* */
 
-  test.case = 'classMake with extend';
+  test.case = 'classDeclare with extend';
 
   function C3()
   {
@@ -800,7 +800,7 @@ function classMake( test )
     f2 : [],
     f3 : [],
   }
-  var classMade = _.classMake
+  var classMade = _.classDeclare
   ({
     cls : C3,
     parent : C1,
@@ -852,7 +852,7 @@ function classMake( test )
       f2 : [],
       f3 : [],
     }
-    var classMade = _.classMake
+    var classMade = _.classDeclare
     ({
       cls : C3,
       parent : C1,
@@ -1193,7 +1193,7 @@ function classMake( test )
 
 }
 
-// classMake.timeOut = 300000;
+// classDeclare.timeOut = 300000;
 
 //
 
@@ -1231,7 +1231,7 @@ function staticsDeclare( test )
 
   // Extend.constructor = BasicConstructor;
 
-  _.classMake
+  _.classDeclare
   ({
     cls : BasicConstructor,
     extend : Extend,
@@ -1336,7 +1336,7 @@ function staticsOverwrite( test )
     Statics : Statics,
   }
 
-  _.classMake
+  _.classDeclare
   ({
     cls : BasicConstructor,
     extend : Extend,
@@ -1362,7 +1362,7 @@ function staticsOverwrite( test )
     Statics : Statics,
   }
 
-  _.classMake
+  _.classDeclare
   ({
     parent : BasicConstructor,
     cls : DerivedConstructor1,
@@ -1390,7 +1390,7 @@ function staticsOverwrite( test )
 
   // Extend.constructor = DerivedConstructor2;
 
-  _.classMake
+  _.classDeclare
   ({
     parent : BasicConstructor,
     cls : DerivedConstructor2,
@@ -1456,7 +1456,7 @@ function mixinStaticsWithDefinition( test )
     Statics : Statics,
   }
 
-  _.classMake
+  _.classDeclare
   ({
     cls : Mixin,
     extend : Extend,
@@ -1479,7 +1479,7 @@ function mixinStaticsWithDefinition( test )
     _.instanceInit( this );
   }
 
-  _.classMake
+  _.classDeclare
   ({
     cls : Class1,
   });
@@ -1499,7 +1499,7 @@ function mixinStaticsWithDefinition( test )
     _.instanceInit( this );
   }
 
-  _.classMake
+  _.classDeclare
   ({
     cls : Class2,
   });
@@ -1664,7 +1664,7 @@ function mixinStaticsWithDefinition( test )
 
     Extend.constructor = Mixin;
 
-    _.classMake
+    _.classDeclare
     ({
       cls : Mixin,
       extend : Extend,
@@ -1690,7 +1690,7 @@ function customFieldsGroups( test )
   {
   }
 
-  _.classMake
+  _.classDeclare
   ({
     cls : BasicConstructor,
     extend : Extend,
@@ -1717,7 +1717,7 @@ function customFieldsGroups( test )
     Groups : Groups,
   }
 
-  _.classMake
+  _.classDeclare
   ({
     parent : BasicConstructor,
     cls : DerivedConstructor1,
@@ -1739,7 +1739,7 @@ function customFieldsGroups( test )
     Names : Names2,
   }
 
-  _.classMake
+  _.classDeclare
   ({
     parent : DerivedConstructor1,
     cls : DerivedConstructor2,
@@ -1750,7 +1750,7 @@ function customFieldsGroups( test )
 
   function DerivedConstructor3(){}
 
-  _.classMake
+  _.classDeclare
   ({
     parent : DerivedConstructor2,
     cls : DerivedConstructor3,
@@ -1850,7 +1850,7 @@ var Self =
 
     constant : constant,
 
-    classMake : classMake,
+    classDeclare : classDeclare,
     staticsDeclare : staticsDeclare,
     staticsOverwrite : staticsOverwrite,
     mixinStaticsWithDefinition : mixinStaticsWithDefinition,

@@ -2316,11 +2316,11 @@ function proxyMap( dst,original )
 /**
  * Make mixin which could be mixed into prototype of another object.
  * @param {object} o - options.
- * @method _mixinMake
+ * @method _mixinDelcare
  * @memberof wTools#
  */
 
-function _mixinMake( o )
+function _mixinDelcare( o )
 {
 
   _.assert( arguments.length === 1, 'expects single argument' );
@@ -2332,7 +2332,7 @@ function _mixinMake( o )
   _.assert( _.objectIs( o.supplement ) || o.supplement === undefined || o.supplement === null );
   _.assertOwnNoConstructor( o );
 
-  _.routineOptions( _mixinMake, o );
+  _.routineOptions( _mixinDelcare, o );
 
   if( !o.onMixin )
   o.mixin = function mixin( dstClass )
@@ -2407,7 +2407,7 @@ function _mixinMake( o )
   return o;
 }
 
-_mixinMake.defaults =
+_mixinDelcare.defaults =
 {
 
   name : null,
@@ -2426,13 +2426,13 @@ _mixinMake.defaults =
 
 //
 
-function mixinMake( o )
+function mixinDelcare( o )
 {
   var result = Object.create( null );
 
   _.assert( o.mixin === undefined );
 
-  var md = result.__mixin__ = _._mixinMake.apply( this, arguments );
+  var md = result.__mixin__ = _._mixinDelcare.apply( this, arguments );
   result.name = md.name;
   result.shortName = md.shortName;
   result.prototype = md.prototype;
@@ -2443,7 +2443,7 @@ function mixinMake( o )
   return result;
 }
 
-mixinMake.defaults = Object.create( _mixinMake.defaults );
+mixinDelcare.defaults = Object.create( _mixinDelcare.defaults );
 
 //
 
@@ -2593,7 +2593,7 @@ function mixinHas( proto,mixin )
  *   Composes : Composes
  *  }
  *
- *  _.classMake
+ *  _.classDeclare
  *  ({
  *    cls : Self,
  *    parent : Parent,
@@ -2605,7 +2605,7 @@ function mixinHas( proto,mixin )
  *  console.log( Parent.prototype.isPrototypeOf( betta ) ); //returns true
  *  console.log( betta.a, betta.b, betta.c ); //returns 1 2 5
  *
- * @method classMake
+ * @method classDeclare
  * @throws {exception} If no argument provided.
  * @throws {exception} If( o ) is not a Object.
  * @throws {exception} If( o.cls ) is not a Routine.
@@ -2623,7 +2623,7 @@ function mixinHas( proto,mixin )
  */
 
 /*
-_.classMake
+_.classDeclare
 ({
   cls : Self,
   parent : Parent,
@@ -2631,7 +2631,7 @@ _.classMake
 });
 */
 
-function classMake( o )
+function classDeclare( o )
 {
   var result;
 
@@ -2657,20 +2657,20 @@ function classMake( o )
 
   _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.objectIs( o ) );
-  _.assertOwnNoConstructor( o,'options for classMake should have no constructor' );
+  _.assertOwnNoConstructor( o,'options for classDeclare should have no constructor' );
   _.assert( !( 'parent' in o ) || o.parent !== undefined,'parent is "undefined", something is wrong' );
 
   if( o.withClass )
   {
 
     _.assert( _.routineIs( o.cls ),'expects {-o.cls-}' );
-    _.assert( _.routineIs( o.cls ),'classMake expects constructor' );
+    _.assert( _.routineIs( o.cls ),'classDeclare expects constructor' );
     _.assert( _.strIs( o.cls.name ) || _.strIs( o.cls._name ),'constructor should have name' );
     _.assert( _ObjectHasOwnProperty.call( o.cls.prototype,'constructor' ) );
     _.assert( !o.name || o.cls.name === o.name || o.cls._name === o.name,'class has name',o.cls.name + ', but options',o.name );
     _.assert( !o.shortName || !o.cls.shortName|| o.cls.shortName === o.shortName,'class has short name',o.cls.shortName + ', but options',o.shortName );
 
-    _.assertMapOwnAll( o.cls.prototype, has,'classMake expects constructor' );
+    _.assertMapOwnAll( o.cls.prototype, has,'classDeclare expects constructor' );
     _.assertMapOwnNone( o.cls.prototype, hasNot );
     _.assertMapOwnNone( o.cls.prototype, DefaultForbiddenNames );
 
@@ -2704,7 +2704,7 @@ function classMake( o )
     _.assertOwnNoConstructor( o.supplement );
   }
 
-  _.routineOptions( classMake,o );
+  _.routineOptions( classDeclare,o );
 
   /* */
 
@@ -2728,7 +2728,7 @@ function classMake( o )
     {
       if( o.cls.prototype )
       {
-        _.assert( Object.keys( o.cls.prototype ).length === 0, 'misuse of classMake, prototype of constructor has properties which where put there manually',Object.keys( o.cls.prototype ) );
+        _.assert( Object.keys( o.cls.prototype ).length === 0, 'misuse of classDeclare, prototype of constructor has properties which where put there manually',Object.keys( o.cls.prototype ) );
         _.assert( o.cls.prototype.constructor === o.cls );
       }
       if( o.parent )
@@ -2834,7 +2834,7 @@ function classMake( o )
 
     mixinOptions.prototype = prototype; /* xxx : remove? */
 
-    _._mixinMake( mixinOptions );
+    _._mixinDelcare( mixinOptions );
     o.cls.__mixin__ = mixinOptions;
     o.cls.mixin = mixinOptions.mixin;
 
@@ -2857,7 +2857,7 @@ function classMake( o )
   return result;
 }
 
-classMake.defaults =
+classDeclare.defaults =
 {
   cls : null,
   parent : null,
@@ -4014,7 +4014,7 @@ function instanceFinit( src )
  *
  * var Proto = { constructor: Self, Composes : { a : 1, b : 2 } };
  *
- * _.classMake
+ * _.classDeclare
  * ({
  *     constructor: Self,
  *     extend: Proto,
@@ -4035,11 +4035,14 @@ function instanceInit( instance,prototype )
   if( prototype === undefined )
   prototype = instance;
 
-  _.mapComplement( instance, prototype.Restricts );
-  _.mapComplement( instance, prototype.Composes );
-  _.mapComplement( instance, prototype.Aggregates );
+  // _.mapComplement( instance, prototype.Restricts );
+  // _.mapComplement( instance, prototype.Composes );
+  // _.mapComplement( instance, prototype.Aggregates );
 
-  _.mapSupplementOwnFromDefinition( instance, prototype.Associates );
+  _.mapSupplementOwnFromDefinitionStrictlyPrimitives( instance, prototype.Restricts );
+  _.mapSupplementOwnFromDefinitionStrictlyPrimitives( instance, prototype.Composes );
+  _.mapSupplementOwnFromDefinitionStrictlyPrimitives( instance, prototype.Aggregates );
+  _.mapSupplementOwnFromDefinitionStrictlyPrimitives( instance, prototype.Associates );
 
   // _.mapSupplementOwn( instance, prototype.Associates );
   // _.mapSupplementOwnAssigning( instance, prototype.Associates );
@@ -4273,7 +4276,7 @@ function own( src )
 {
   var definition = new Definition({ value : src });
 
-  _.assert( _.objectIs( src ) || _.longIs( src ), 'Expects object-like or long' );
+  _.assert( src !== undefined, () => 'Expects object-like or long, but got ' + _.strTypeOf( src ) );
 
   // definition.valueGet = function get() { return _.entityShallowClone( this.value ) }
   definition.valueGet = function get() { return _.cloneJust( this.value ) }
@@ -4441,7 +4444,7 @@ var Forbids =
 }
 
 // --
-// define extend
+// define
 // --
 
 var Define =
@@ -4551,14 +4554,14 @@ var Routines =
 
   // mixin
 
-  _mixinMake : _mixinMake,
-  mixinMake : mixinMake,
+  _mixinDelcare : _mixinDelcare,
+  mixinDelcare : mixinDelcare,
   mixinApply : mixinApply,
   mixinHas : mixinHas,
 
   // class
 
-  classMake : classMake,
+  classDeclare : classDeclare,
   classExtend : classExtend,
 
   declareStatic : declareStatic,

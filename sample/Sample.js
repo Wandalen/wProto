@@ -107,7 +107,7 @@ var Proto =
 
 /* make class */
 
-_.classMake
+_.classDeclare
 ({
   cls : Self,
   parent : Parent,
