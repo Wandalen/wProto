@@ -3930,6 +3930,10 @@ function fieldsOfInputGroups( src )
 // instance
 // --
 
+/*
+ usage : return _.instanceConstructor( Self, this, arguments );
+*/
+
 function instanceConstructor( cls, context, args )
 {
   _.assert( args.length === 0 || args.length === 1 );
@@ -3942,7 +3946,6 @@ function instanceConstructor( cls, context, args )
   if( !( context instanceof cls ) )
   if( o instanceof cls )
   {
-    debugger;
     _.assert( args.length === 1 );
     return o;
   }
