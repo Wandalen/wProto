@@ -4272,6 +4272,22 @@ function Definition( o )
 
 //
 
+function common( src )
+{
+  var definition = new Definition({ value : src });
+
+  _.assert( src !== undefined, () => 'Expects object-like or long, but got ' + _.strTypeOf( src ) );
+
+  definition.valueGet = function get() { return this.value }
+
+  _.hide( definition, 'valueGet' );
+
+  Object.freeze( definition );
+  return definition;
+}
+
+//
+
 function own( src )
 {
   var definition = new Definition({ value : src });
@@ -4284,7 +4300,6 @@ function own( src )
   _.hide( definition, 'valueGet' );
 
   Object.freeze( definition );
-
   return definition;
 }
 
@@ -4301,7 +4316,6 @@ function ownInstanceOf( src )
   _.hide( definition, 'valueGet' );
 
   Object.freeze( definition );
-
   return definition;
 }
 
@@ -4337,7 +4351,6 @@ function contained( src )
   _.hide( definition, 'valueGet' );
 
   Object.freeze( definition );
-
   return definition;
 }
 
@@ -4450,6 +4463,7 @@ var Forbids =
 var Define =
 {
   Definition : Definition,
+  common : common,
   own : own,
   ownInstanceOf : ownInstanceOf,
   contained : contained,

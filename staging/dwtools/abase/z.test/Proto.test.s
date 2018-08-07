@@ -27,7 +27,7 @@ if( typeof module !== 'undefined' )
   _.include( 'wTesting' );
 
   if( !_.isIncluded( 'wProto' ) )
-  require( '../../abase/layer3/Prototype.s' );
+  require( '../../abase/layer3/Proto.s' );
 
 }
 
@@ -1212,7 +1212,7 @@ function staticsDeclare( test )
 
   var Associates =
   {
-    f2 : [ 'Associates' ],
+    f2 : _.define.common([ 'Associates' ]),
   }
 
   var Statics =
@@ -1277,7 +1277,7 @@ function staticsDeclare( test )
   test.is( BasicConstructor.f2 === Statics.f2 );
   test.is( BasicConstructor.prototype.Statics.f2 === Statics.f2 );
   test.is( BasicConstructor.prototype.Associates.f2 === Associates.f2 );
-  test.is( instance.f2 === Associates.f2 );
+  test.is( instance.f2 === Associates.f2.value );
 
   test.case = 'set prototype.f2';
 
@@ -1288,8 +1288,8 @@ function staticsDeclare( test )
   test.is( BasicConstructor.f2 !== BasicConstructor.prototype.f2 );
   test.is( BasicConstructor.prototype.f2 === newF2 );
   test.is( BasicConstructor.f2 === Statics.f2 );
-  test.is( instance.f2 === Associates.f2 );
-  test.is( instance2.f2 === Associates.f2 );
+  test.is( instance.f2 === Associates.f2.value );
+  test.is( instance2.f2 === Associates.f2.value );
 
   test.case = 'set constructor.f2';
 
@@ -1299,8 +1299,8 @@ function staticsDeclare( test )
 
   test.is( BasicConstructor.f2 !== BasicConstructor.prototype.f2 );
   test.is( BasicConstructor.f2 === newF2 );
-  test.is( instance.f2 === Associates.f2 );
-  test.is( instance2.f2 === Associates.f2 );
+  test.is( instance.f2 === Associates.f2.value );
+  test.is( instance2.f2 === Associates.f2.value );
 
   test.close( 'basic' );
 
@@ -1828,7 +1828,7 @@ function customFieldsGroups( test )
 var Self =
 {
 
-  name : 'Tools/base/layer3/Prototype',
+  name : 'Tools/base/layer3/proto',
   silencing : 1,
   // verbosity : 7,
   // routineTimeOut : 300000,
