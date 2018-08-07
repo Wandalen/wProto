@@ -3931,7 +3931,17 @@ function fieldsOfInputGroups( src )
 // --
 
 /*
- usage : return _.instanceConstructor( Self, this, arguments );
+  usage : return _.instanceConstructor( Self, this, arguments );
+  replacement for :
+
+  _.assert( arguments.length === 0 || arguments.length === 1 );
+  if( !( this instanceof Self ) )
+  if( o instanceof Self )
+  return o;
+  else
+  return new( _.routineJoin( Self, Self, arguments ) );
+  return Self.prototype.init.apply( this,arguments );
+
 */
 
 function instanceConstructor( cls, context, args )
@@ -4277,6 +4287,7 @@ function common( src )
   var definition = new Definition({ value : src });
 
   _.assert( src !== undefined, () => 'Expects object-like or long, but got ' + _.strTypeOf( src ) );
+  _.assert( arguments.length === 1 );
 
   definition.valueGet = function get() { return this.value }
 
@@ -4293,6 +4304,7 @@ function own( src )
   var definition = new Definition({ value : src });
 
   _.assert( src !== undefined, () => 'Expects object-like or long, but got ' + _.strTypeOf( src ) );
+  _.assert( arguments.length === 1 );
 
   // definition.valueGet = function get() { return _.entityShallowClone( this.value ) }
   definition.valueGet = function get() { return _.cloneJust( this.value ) }
@@ -4310,8 +4322,26 @@ function ownInstanceOf( src )
   var definition = new Definition({ value : src });
 
   _.assert( _.routineIs( src ), 'Expects constructor' );
+  _.assert( arguments.length === 1 );
 
   definition.valueGet = function get() { return new this.value() }
+
+  _.hide( definition, 'valueGet' );
+
+  Object.freeze( definition );
+  return definition;
+}
+
+//
+
+function ownMadeBy( src )
+{
+  var definition = new Definition({ value : src });
+
+  _.assert( _.routineIs( src ), 'Expects constructor' );
+  _.assert( arguments.length === 1 );
+
+  definition.valueGet = function get() { return this.value() }
 
   _.hide( definition, 'valueGet' );
 
@@ -4466,6 +4496,7 @@ var Define =
   common : common,
   own : own,
   ownInstanceOf : ownInstanceOf,
+  ownMadeBy : ownMadeBy,
   contained : contained,
 }
 
