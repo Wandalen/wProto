@@ -8,8 +8,8 @@ if( typeof module !== 'undefined' )
   require( './Proto.s' );
 
 }
-
-var _global = _global_; var _ = _global_.wTools;
+var _global = _global_;
+var _ = _global_.wTools;
 var _ObjectHasOwnProperty = Object.hasOwnProperty;
 // var __assert = _.assert;
 var _nameFielded = _.nameFielded;
