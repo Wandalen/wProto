@@ -88,7 +88,7 @@ function isLike( test )
 }
 
 // --
-// define class
+// declare
 // --
 
 var Self =

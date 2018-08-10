@@ -1822,7 +1822,7 @@ function customFieldsGroups( test )
 }
 
 // --
-// define class
+// declare
 // --
 
 var Self =

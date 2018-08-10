@@ -191,7 +191,7 @@ var symbolForClass = Symbol.for( 'class' );
 var symbolForAllClasses = Symbol.for( 'allClasses' );
 
 // --
-// define class
+// declare
 // --
 
 var Proto =
@@ -205,7 +205,7 @@ _.construction = Object.create( null );
 _.mapExtend( _.construction, Proto );
 
 // --
-// define class
+// declare
 // --
 
 var Proto =
@@ -216,7 +216,7 @@ var Proto =
 _.mapExtend( _, Proto );
 
 // --
-// define class
+// declare
 // --
 
 var Proto =
