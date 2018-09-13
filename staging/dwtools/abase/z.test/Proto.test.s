@@ -1212,7 +1212,7 @@ function staticsDeclare( test )
 
   var Associates =
   {
-    f2 : _.define.common([ 'Associates' ]),
+    f2 : _.define.common( 'Associates' ),
   }
 
   var Statics =
