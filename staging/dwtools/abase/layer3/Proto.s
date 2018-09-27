@@ -2342,7 +2342,7 @@ function _mixinDelcare( o )
 
     _.assert( _.objectIs( md ) );
     _.assert( arguments.length === 1, 'expects single argument' );
-    _.assert( _.routineIs( dstClass ) );
+    _.assert( _.routineIs( dstClass ), 'expects constructor' );
     _.assert( dstClass === dstClass.prototype.constructor );
     _.assertMapHasOnly( this, [ _.KnownConstructorFields, { mixin : 'mixin', __mixin__ : '__mixin__' }, this.prototype.Statics || {} ] );
 
@@ -2357,7 +2357,7 @@ function _mixinDelcare( o )
     var md = this.__mixin__;
 
     _.assert( arguments.length === 1, 'expects single argument' );
-    _.assert( _.routineIs( dstClass ) );
+    _.assert( _.routineIs( dstClass ), 'expects constructor' );
     _.assert( dstClass === dstClass.prototype.constructor );
     _.assertMapHasOnly( this, [ _.KnownConstructorFields, { mixin : 'mixin', __mixin__ : '__mixin__' }, this.prototype.Statics || {} ] );
 
