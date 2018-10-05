@@ -3698,7 +3698,7 @@ function prototypeHasField( src, fieldName )
   _.assert( _.strIs( fieldName ) );
 
   for( var f in _.DefaultFieldsGroupsRelations )
-  if( prototype[ f ][ fieldName ] )
+  if( prototype[ f ][ fieldName ] !== undefined )
   return true;
 
   return false;
