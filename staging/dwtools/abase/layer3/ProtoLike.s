@@ -234,7 +234,7 @@ _.classDeclare
   extend : Proto,
 });
 
-_.accessorReadOnly
+_.accessor.readOnly
 ({
   object : Self.prototype,
   names : { end : { readOnlyProduct : 0 } },

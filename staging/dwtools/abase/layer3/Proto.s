@@ -7,7 +7,7 @@
 */
 
 /*
-  xxx : replace var -> let
+  xxx : replace let -> let
 */
 
 /**
@@ -80,13 +80,13 @@ if( typeof module !== 'undefined' )
 
 }
 
-var Self = _global_.wTools;
-var _global = _global_;
-var _ = _global_.wTools;
+let Self = _global_.wTools;
+let _global = _global_;
+let _ = _global_.wTools;
 
-var _ObjectHasOwnProperty = Object.hasOwnProperty;
-var _propertyIsEumerable = Object.propertyIsEnumerable;
-var _nameFielded = _.nameFielded;
+let _ObjectHasOwnProperty = Object.hasOwnProperty;
+let _propertyIsEumerable = Object.propertyIsEnumerable;
+let _nameFielded = _.nameFielded;
 
 _.assert( _.objectIs( _.field ),'wProto needs wTools/staging/dwtools/abase/layer1/FieldMapper.s' );
 _.assert( _.routineIs( _nameFielded ),'wProto needs wTools/staging/dwtools/abase/layer3/NameTools.s' );
@@ -94,1043 +94,1045 @@ _.assert( _.routineIs( _nameFielded ),'wProto needs wTools/staging/dwtools/abase
 // --
 // accessor
 // --
-
-/**
- * Generates options object for _accessor, _accessorForbid functions.
- * Can be called in three ways:
- * - First by passing all options in one object;
- * - Second by passing object and name options;
- * - Third by passing object,names and message option as third parameter.
- * @param {wTools~accessorOptions} o - options {@link wTools~accessorOptions}.
- *
- * @example
- * //returns
- * // { object: [Function],
- * // methods: [Function],
- * // names: { a: 'a', b: 'b' },
- * // message: [ 'set/get call' ] }
- *
- * var Self = function ClassName( o ) { };
- * _._accessor_pre( Self,{ a : 'a', b : 'b' }, 'set/get call' );
- *
- * @private
- * @method _accessor_pre
- * @memberof wTools
- */
-
-function _accessor_pre( routine, args )
-{
-  var o;
-
-  _.assert( arguments.length === 2 );
-
-  if( args.length === 1 )
-  {
-    o = args[ 0 ];
-  }
-  else
-  {
-    o = Object.create( null );
-    o.object = args[ 0 ];
-    o.names = args[ 1 ];
-    _.assert( args.length >= 2 );
-  }
-
-  // if( !o.methods )
-  // o.methods = o.object;
-  // else
-  // o.methods = _.mapExtend( null, o.methods );
-
-  // if( !_.arrayIs( o.names ) )
-  // o.names = _nameFielded( o.names );
-  // else
-  // o.names = o.names;
-
-  if( args.length > 2 )
-  {
-    o.message = _.longSlice( args, 2 );
-  }
-
-  if( _.strIs( o.names ) )
-  o.names = { [ o.names ] : o.names }
-
-  _.routineOptions( routine, o );
-  _.assert( !_.primitiveIs( o.object ),'expects object as argument but got', o.object );
-  _.assert( _.objectIs( o.names ) || _.arrayIs( o.names ),'expects object names as argument but got', o.names );
-
-  return o;
-}
-
 //
-
-function _accessorRegister( o )
-{
-
-  _.routineOptions( _accessorRegister, arguments );
-  _.assert( _.prototypeIsStandard( o.proto ), 'expects formal prototype' );
-  _.assert( _.strIsNotEmpty( o.declaratorName ) );
-  _.assert( _.arrayIs( o.declaratorArgs ) );
-  _.fieldsGroupFor( o.proto, '_Accessors' );
-
-  var accessors = o.proto._Accessors;
-
-  if( o.combining && o.combining !== 'rewrite' && o.combining !== 'supplement' )
-  debugger;
-
-  if( Config.debug )
-  if( !o.combining )
-  {
-    var stack = accessors[ o.name ] ? accessors[ o.name ].stack : '';
-    _.assert
-    (
-      !accessors[ o.name ],
-      'defined at' + '\n',
-      stack,
-      '\naccessor',o.name,'of',o.proto.constructor.name
-    );
-    if( accessors[ o.name ] )
-    debugger;
-  }
-
-  _.assert( !o.combining || o.combining === 'rewrite' || o.combining === 'append' || o.combining === 'supplement', 'not supported ( o.combining )',o.combining );
-  _.assert( _.strIs( o.name ) );
-
-  if( accessors[ o.name ] && o.combining === 'supplement' )
-  return;
-
-  var descriptor =
-  {
-    name : o.name,
-    declaratorName : o.declaratorName,
-    declaratorArgs : o.declaratorArgs,
-    declaratorKind : o.declaratorKind,
-    combining : o.combining,
-  }
-
-  if( Config.debug )
-  descriptor.stack = _.diagnosticStack();
-
-  if( o.combining === 'append' )
-  {
-    if( _.arrayIs( accessors[ o.name ] ) )
-    accessors[ o.name ].push( descriptor );
-    else
-    accessors[ o.name ] = [ descriptor ];
-  }
-
-  accessors[ o.name ] = descriptor;
-
-  return descriptor;
-}
-
-_accessorRegister.defaults =
-{
-  name : null,
-  proto : null,
-  declaratorName : null,
-  declaratorArgs : null,
-  declaratorKind : null,
-  combining : 0,
-}
-
+// /**
+//  * Generates options object for _accessor, _accessorForbid functions.
+//  * Can be called in three ways:
+//  * - First by passing all options in one object;
+//  * - Second by passing object and name options;
+//  * - Third by passing object,names and message option as third parameter.
+//  * @param {wTools~accessorOptions} o - options {@link wTools~accessorOptions}.
+//  *
+//  * @example
+//  * //returns
+//  * // { object: [Function],
+//  * // methods: [Function],
+//  * // names: { a: 'a', b: 'b' },
+//  * // message: [ 'set/get call' ] }
+//  *
+//  * let Self = function ClassName( o ) { };
+//  * _._accessor_pre( Self,{ a : 'a', b : 'b' }, 'set/get call' );
+//  *
+//  * @private
+//  * @method _accessor_pre
+//  * @memberof wTools
+//  */
 //
-
-var AccessorDefaults =
-{
-  strict : 1,
-  preserveValues : 1,
-  prime : 1,
-  combining : null,
-
-  readOnly : 0,
-  readOnlyProduct : 0,
-  enumerable : 1,
-  configurable : 0,
-}
-
-function _accessorAct( o )
-{
-
-  _.assert( arguments.length === 1 );
-  _.assert( _.strIs( o.name ) );
-  _.assertRoutineOptions( _accessorAct, arguments );
-
-  // var appending = 0;
-
-  if( o.combining === 'append' )
-  debugger;
-
-  // if( o.name === 'array' )
-  // debugger;
-
-  /* */
-
-  var propertyDescriptor = _.propertyDescriptorForAccessor( o.object, o.name );
-  if( propertyDescriptor.descriptor )
-  {
-
-    _.assert
-    (
-      _.strIs( o.combining ), () =>
-      'overriding of property ' + o.name + '\n' +
-      '{-o.combining-} suppose to be ' + _.strQuote( Combining ) + ' if accessor overided, ' +
-      'but is' + _.strQuote( o.combining )
-    );
-
-    _.assert( o.combining === 'rewrite' || o.combining === 'append' || o.combining === 'supplement','not implemented' );
-
-    if( o.combining === 'supplement' )
-    return;
-
-    _.assert( o.combining === 'rewrite', 'not implemented' );
-    _.assert( propertyDescriptor.object !== o.object, () => 'Attempt to redefine own accessor ' + _.strQuote( o.name ) + ' of ' + _.toStrShort( o.object ) );
-
-    // if( o.combining === 'append' )
-    // {
-    //
-    //   debugger;
-    //
-    //   if( o.methods[ '_' + rawName + 'Set' ] === propertyDescriptor.descriptor.set )
-    //   o.methods[ '_' + rawName + 'Set' ] = null;
-    //   if( o.methods[ rawName + 'Set' ] === propertyDescriptor.descriptor.set )
-    //   o.methods[ rawName + 'Set' ] = null;
-    //   if( o.methods[ '_' + rawName + 'Get' ] === propertyDescriptor.descriptor.get )
-    //   o.methods[ '_' + rawName + 'Get' ] = null;
-    //   if( o.methods[ rawName + 'Get' ] === propertyDescriptor.descriptor.get )
-    //   o.methods[ rawName + 'Get' ] = null;
-    //
-    //   var settrGetterSecond = _propertyGetterSetterMake( o,o.methods,rawName );
-    //
-    //   if( o.methods[ '_' + rawName + 'Set' ] )
-    //   o.methods[ '_' + rawName + 'Set' ] = null;
-    //   if( o.methods[ rawName + 'Set' ] )
-    //   o.methods[ rawName + 'Set' ] = null;
-    //   if( o.methods[ '_' + rawName + 'Get' ] )
-    //   o.methods[ '_' + rawName + 'Get' ] = null;
-    //   if( o.methods[ rawName + 'Get' ] )
-    //   o.methods[ rawName + 'Get' ] = null;
-    //
-    //   o.methods[ '_' + rawName + 'Set' ] = function appendingSet( src )
-    //   {
-    //     debugger;
-    //     src = propertyDescriptor.descriptor.set.call( this,src );
-    //     _.assert( src !== undefined );
-    //     return settrGetterSecond.set.call( this,src );
-    //   }
-    //
-    //   o.methods[ '_' + rawName + 'Get' ] = settrGetterSecond.get;
-    //
-    //   appending = 1;
-    // }
-
-  }
-
-  /* */
-
-  var settrGetter = _._propertyGetterSetterMake
-  ({
-    name : o.name,
-    methods : o.methods,
-    object : o.object,
-    preserveValues : o.preserveValues,
-    readOnly : o.readOnly,
-    readOnlyProduct : o.readOnlyProduct,
-  });
-
-  /* */
-
-  if( o.prime )
-  {
-
-    var o2 = _.mapExtend( null,o );
-    o2.names = o.name;
-    if( o2.methods === o2.object )
-    o2.methods = Object.create( null );
-    o2.object = null;
-
-    if( settrGetter.set )
-    o2.methods[ '_' + o.name + 'Set' ] = settrGetter.set;
-    if( settrGetter.get )
-    o2.methods[ '_' + o.name + 'Get' ] = settrGetter.get;
-
-    _._accessorRegister
-    ({
-      proto : o.object,
-      name : o.name,
-      declaratorName : 'accessor',
-      // declaratorName : null,
-      declaratorArgs : [ o2 ],
-      combining : o.combining,
-    });
-
-  }
-
-  /* */
-
-  var forbiddenName = '_' + o.name;
-  var fieldSymbol = Symbol.for( o.name );
-
-  if( o.preserveValues )
-  if( _ObjectHasOwnProperty.call( o.object, o.name ) )
-  o.object[ fieldSymbol ] = o.object[ o.name ];
-
-  /* define accessor */
-
-  Object.defineProperty( o.object, o.name,
-  {
-    set : settrGetter.set,
-    get : settrGetter.get,
-    enumerable : !!o.enumerable,
-    configurable : !!o.configurable,
-    // configurable : o.combining === 'append',
-  });
-
-  /* forbid underscore field */
-
-  if( o.strict && !propertyDescriptor.descriptor  )
-  {
-
-    var m =
-    [
-      'use Symbol.for( \'' + o.name + '\' ) ',
-      'to get direct access to property\'s field, ',
-      'not ' + forbiddenName,
-    ].join( '' );
-
-    if( !_.prototypeIsStandard( o.object ) || ( _.prototypeIsStandard( o.object ) && !_.prototypeHasField( o.object,forbiddenName ) ) )
-    _.accessorForbid
-    ({
-      object : o.object,
-      names : forbiddenName,
-      message : [ m ],
-      prime : 0,
-      strict : 1,
-    });
-
-  }
-
-}
-
-var defaults = _accessorAct.defaults = Object.create( AccessorDefaults );
-
-defaults.name = null;
-defaults.object = null;
-defaults.methods = null;
-
+// function _accessor_pre( routine, args )
+// {
+//   let o;
 //
-
-/**
- * Accessor options
- * @typedef{object} wTools~accessorOptions
- * @property{object} [ object=null ] - source object wich properties will get getter/setter defined.
- * @property{object} [ names=null ] - properties of that object represent names of fields for wich function defines setter/getter.
- * Function uses values( rawName ) of object( o.names ) properties to check if fields of( o.object ) have setter/getter.
- * Example : if( rawName ) is 'a', function searchs for '_aSet' or 'aSet' and same for getter.
- * @property{object} [ methods=null ] - object where function searchs for existing setter/getter of property.
- * @property{array} [ message=null ] - setter/getter prints this message when called.
- * @property{boolean} [ strict=true ] - makes object field private if no getter defined but object must have own constructor.
- * @property{boolean} [ enumerable=true ] - sets property descriptor enumerable option.
- * @property{boolean} [ preserveValues=true ] - saves values of existing object properties.
- * @property{boolean} [ readOnly=false ] - if true function doesn't define setter to property.
- **/
-
-/**
- * Defines set/get functions on source object( o.object ) properties if they dont have them.
- * If property specified by( o.names ) doesn't exist on source( o.object ) function creates it.
- * If ( o.object.constructor.prototype ) has property with getter defined function forbids set/get access
- * to object( o.object ) property. Field can be accessed by use of Symbol.for( rawName ) function,
- * where( rawName ) is value of property from( o.names ) object.
- *
- * @param {wTools~accessorOptions} o - options {@link wTools~accessorOptions}.
- *
- * @example
- * var Self = function ClassName( o ) { };
- * var o = _._accessor_pre( Self, { a : 'a', b : 'b' }, [ 'set/get call' ] );
- * _._accessor( o );
- * Self.a = 1; // returns [ 'set/get call' ]
- * Self.b = 2; // returns [ 'set/get call' ]
- * console.log( Self.a );
- * // returns [ 'set/get call' ]
- * // 1
- * console.log( Self.b );
- * // returns [ 'set/get call' ]
- * // 2
- *
- * @private
- * @method _accessor
- * @throws {exception} If( o.object ) is not a Object.
- * @throws {exception} If( o.names ) is not a Object.
- * @throws {exception} If( o.methods ) is not a Object.
- * @throws {exception} If( o.message ) is not a Array.
- * @throws {exception} If( o ) is extented by unknown property.
- * @throws {exception} If( o.strict ) is true and object doesn't have own constructor.
- * @throws {exception} If( o.readOnly ) is true and property has own setter.
- * @memberof wTools
- */
-
-function _accessor( o )
-{
-
-  _.assertRoutineOptions( _accessor, arguments );
-
-  if( _.arrayLike( o.object ) )
-  {
-    // debugger;
-    _.each( o.object, ( object ) =>
-    {
-      var o2 = _.mapExtend( null, o );
-      o2.object = object;
-      _accessor( o2 );
-    });
-    // debugger;
-    return;
-  }
-
-  if( !o.methods )
-  o.methods = o.object;
-
-  /* verification */
-
-  _.assert( !_.primitiveIs( o.object ) );
-  _.assert( !_.primitiveIs( o.methods ) );
-
-  if( o.strict )
-  {
-
-    var has =
-    {
-      constructor : 'constructor',
-    }
-
-    _.assertMapOwnAll( o.object,has );
-    _.accessorForbid
-    ({
-      object : o.object,
-      names : DefaultForbiddenNames,
-      prime : 0,
-      strict : 0,
-    });
-
-  }
-
-  // debugger;
-  _.assert( _.objectLikeOrRoutine( o.object ), () => 'expects object {-object-}, but got ' + _.toStrShort( o.object ) );
-  _.assert( _.objectIs( o.names ), () => 'expects object {-names-}, but got ' + _.toStrShort( o.names ) );
-
-  /* */
-
-  for( var n in o.names )
-  {
-
-    var o2 = o.names[ n ];
-
-    _.assert( _.strIs( o2 ) || _.objectIs( o2 ) );
-
-    if( _.strIs( o2 ) )
-    {
-      _.assert( o2 === n,'map for forbid should have same key and value' );
-      o2 = _.mapExtend( null, o );
-    }
-    else
-    {
-      _.assertMapHasOnly( o2, _.AccessorDefaults );
-      o2 = _.mapExtend( null, o, o2 );
-      _.assert( !!o2.object );
-    }
-
-    o2.name = n;
-    delete o2.names;
-
-    _._accessorAct( o2 );
-
-  }
-
-}
-
-var defaults = _accessor.defaults = Object.create( _accessorAct.defaults );
-
-defaults.names = null;
-
+//   _.assert( arguments.length === 2 );
+//
+//   if( args.length === 1 )
+//   {
+//     o = args[ 0 ];
+//   }
+//   else
+//   {
+//     o = Object.create( null );
+//     o.object = args[ 0 ];
+//     o.names = args[ 1 ];
+//     _.assert( args.length >= 2 );
+//   }
+//
+//   // if( !o.methods )
+//   // o.methods = o.object;
+//   // else
+//   // o.methods = _.mapExtend( null, o.methods );
+//
+//   // if( !_.arrayIs( o.names ) )
+//   // o.names = _nameFielded( o.names );
+//   // else
+//   // o.names = o.names;
+//
+//   if( args.length > 2 )
+//   {
+//     o.message = _.longSlice( args, 2 );
+//   }
+//
+//   if( _.strIs( o.names ) )
+//   o.names = { [ o.names ] : o.names }
+//
+//   _.routineOptions( routine, o );
+//   _.assert( !_.primitiveIs( o.object ),'expects object as argument but got', o.object );
+//   _.assert( _.objectIs( o.names ) || _.arrayIs( o.names ),'expects object names as argument but got', o.names );
+//
+//   return o;
+// }
+//
+// //
+//
+// function _accessorRegister( o )
 // {
 //
-//   object : null,
-//   names : null,
-//   methods : null,
+//   _.routineOptions( _accessorRegister, arguments );
+//   _.assert( _.prototypeIsStandard( o.proto ), 'expects formal prototype' );
+//   _.assert( _.strDefined( o.declaratorName ) );
+//   _.assert( _.arrayIs( o.declaratorArgs ) );
+//   _.fieldsGroupFor( o.proto, '_Accessors' );
 //
-//   // message : null,
+//   let accessors = o.proto._Accessors;
 //
+//   if( o.combining && o.combining !== 'rewrite' && o.combining !== 'supplement' )
+//   debugger;
+//
+//   if( Config.debug )
+//   if( !o.combining )
+//   {
+//     let stack = accessors[ o.name ] ? accessors[ o.name ].stack : '';
+//     _.assert
+//     (
+//       !accessors[ o.name ],
+//       'defined at' + '\n',
+//       stack,
+//       '\naccessor',o.name,'of',o.proto.constructor.name
+//     );
+//     if( accessors[ o.name ] )
+//     debugger;
+//   }
+//
+//   _.assert( !o.combining || o.combining === 'rewrite' || o.combining === 'append' || o.combining === 'supplement', 'not supported ( o.combining )',o.combining );
+//   _.assert( _.strIs( o.name ) );
+//
+//   if( accessors[ o.name ] && o.combining === 'supplement' )
+//   return;
+//
+//   let descriptor =
+//   {
+//     name : o.name,
+//     declaratorName : o.declaratorName,
+//     declaratorArgs : o.declaratorArgs,
+//     declaratorKind : o.declaratorKind,
+//     combining : o.combining,
+//   }
+//
+//   if( Config.debug )
+//   descriptor.stack = _.diagnosticStack();
+//
+//   if( o.combining === 'append' )
+//   {
+//     if( _.arrayIs( accessors[ o.name ] ) )
+//     accessors[ o.name ].push( descriptor );
+//     else
+//     accessors[ o.name ] = [ descriptor ];
+//   }
+//
+//   accessors[ o.name ] = descriptor;
+//
+//   return descriptor;
+// }
+//
+// _accessorRegister.defaults =
+// {
+//   name : null,
+//   proto : null,
+//   declaratorName : null,
+//   declaratorArgs : null,
+//   declaratorKind : null,
+//   combining : 0,
+// }
+//
+// //
+//
+// let AccessorDefaults =
+// {
 //   strict : 1,
-//   enumerable : 1,
 //   preserveValues : 1,
+//   prime : 1,
+//   combining : null,
+//
 //   readOnly : 0,
 //   readOnlyProduct : 0,
-//   prime : 1,
-//   combining : 0,
+//   enumerable : 1,
+//   configurable : 0,
+// }
+//
+// function _accessorAct( o )
+// {
+//
+//   _.assert( arguments.length === 1 );
+//   _.assert( _.strIs( o.name ) );
+//   _.assertRoutineOptions( _accessorAct, arguments );
+//
+//   // let appending = 0;
+//
+//   if( o.combining === 'append' )
+//   debugger;
+//
+//   // if( o.name === 'array' )
+//   // debugger;
+//
+//   /* */
+//
+//   let propertyDescriptor = _.propertyDescriptorForAccessor( o.object, o.name );
+//   if( propertyDescriptor.descriptor )
+//   {
+//
+//     _.assert
+//     (
+//       _.strIs( o.combining ), () =>
+//       'overriding of property ' + o.name + '\n' +
+//       '{-o.combining-} suppose to be ' + _.strQuote( Combining ) + ' if accessor overided, ' +
+//       'but is' + _.strQuote( o.combining )
+//     );
+//
+//     _.assert( o.combining === 'rewrite' || o.combining === 'append' || o.combining === 'supplement','not implemented' );
+//
+//     if( o.combining === 'supplement' )
+//     return;
+//
+//     _.assert( o.combining === 'rewrite', 'not implemented' );
+//     _.assert( propertyDescriptor.object !== o.object, () => 'Attempt to redefine own accessor ' + _.strQuote( o.name ) + ' of ' + _.toStrShort( o.object ) );
+//
+//     // if( o.combining === 'append' )
+//     // {
+//     //
+//     //   debugger;
+//     //
+//     //   if( o.methods[ '_' + rawName + 'Set' ] === propertyDescriptor.descriptor.set )
+//     //   o.methods[ '_' + rawName + 'Set' ] = null;
+//     //   if( o.methods[ rawName + 'Set' ] === propertyDescriptor.descriptor.set )
+//     //   o.methods[ rawName + 'Set' ] = null;
+//     //   if( o.methods[ '_' + rawName + 'Get' ] === propertyDescriptor.descriptor.get )
+//     //   o.methods[ '_' + rawName + 'Get' ] = null;
+//     //   if( o.methods[ rawName + 'Get' ] === propertyDescriptor.descriptor.get )
+//     //   o.methods[ rawName + 'Get' ] = null;
+//     //
+//     //   let settrGetterSecond = _propertyGetterSetterMake( o,o.methods,rawName );
+//     //
+//     //   if( o.methods[ '_' + rawName + 'Set' ] )
+//     //   o.methods[ '_' + rawName + 'Set' ] = null;
+//     //   if( o.methods[ rawName + 'Set' ] )
+//     //   o.methods[ rawName + 'Set' ] = null;
+//     //   if( o.methods[ '_' + rawName + 'Get' ] )
+//     //   o.methods[ '_' + rawName + 'Get' ] = null;
+//     //   if( o.methods[ rawName + 'Get' ] )
+//     //   o.methods[ rawName + 'Get' ] = null;
+//     //
+//     //   o.methods[ '_' + rawName + 'Set' ] = function appendingSet( src )
+//     //   {
+//     //     debugger;
+//     //     src = propertyDescriptor.descriptor.set.call( this,src );
+//     //     _.assert( src !== undefined );
+//     //     return settrGetterSecond.set.call( this,src );
+//     //   }
+//     //
+//     //   o.methods[ '_' + rawName + 'Get' ] = settrGetterSecond.get;
+//     //
+//     //   appending = 1;
+//     // }
+//
+//   }
+//
+//   /* */
+//
+//   let settrGetter = _._propertyGetterSetterMake
+//   ({
+//     name : o.name,
+//     methods : o.methods,
+//     object : o.object,
+//     preserveValues : o.preserveValues,
+//     readOnly : o.readOnly,
+//     readOnlyProduct : o.readOnlyProduct,
+//   });
+//
+//   /* */
+//
+//   if( o.prime )
+//   {
+//
+//     let o2 = _.mapExtend( null,o );
+//     o2.names = o.name;
+//     if( o2.methods === o2.object )
+//     o2.methods = Object.create( null );
+//     o2.object = null;
+//
+//     if( settrGetter.set )
+//     o2.methods[ '_' + o.name + 'Set' ] = settrGetter.set;
+//     if( settrGetter.get )
+//     o2.methods[ '_' + o.name + 'Get' ] = settrGetter.get;
+//
+//     _._accessorRegister
+//     ({
+//       proto : o.object,
+//       name : o.name,
+//       declaratorName : 'accessor',
+//       // declaratorName : null,
+//       declaratorArgs : [ o2 ],
+//       combining : o.combining,
+//     });
+//
+//   }
+//
+//   /* */
+//
+//   let forbiddenName = '_' + o.name;
+//   let fieldSymbol = Symbol.for( o.name );
+//
+//   if( o.preserveValues )
+//   if( _ObjectHasOwnProperty.call( o.object, o.name ) )
+//   o.object[ fieldSymbol ] = o.object[ o.name ];
+//
+//   /* define accessor */
+//
+//   Object.defineProperty( o.object, o.name,
+//   {
+//     set : settrGetter.set,
+//     get : settrGetter.get,
+//     enumerable : !!o.enumerable,
+//     configurable : !!o.configurable,
+//     // configurable : o.combining === 'append',
+//   });
+//
+//   /* forbid underscore field */
+//
+//   if( o.strict && !propertyDescriptor.descriptor  )
+//   {
+//
+//     let m =
+//     [
+//       'use Symbol.for( \'' + o.name + '\' ) ',
+//       'to get direct access to property\'s field, ',
+//       'not ' + forbiddenName,
+//     ].join( '' );
+//
+//     if( !_.prototypeIsStandard( o.object ) || ( _.prototypeIsStandard( o.object ) && !_.prototypeHasField( o.object,forbiddenName ) ) )
+//     _.accessor.forbid
+//     ({
+//       object : o.object,
+//       names : forbiddenName,
+//       message : [ m ],
+//       prime : 0,
+//       strict : 1,
+//     });
+//
+//   }
 //
 // }
-
 //
-
-/**
- * Short-cut for _accessor function.
- * Defines set/get functions on source object( o.object ) properties if they dont have them.
- * For more details @see {@link wTools._accessor }.
- * Can be called in three ways:
- * - First by passing all options in one object( o );
- * - Second by passing ( object ) and ( names ) options;
- * - Third by passing ( object ), ( names ) and ( message ) option as third parameter.
- *
- * @param {wTools~accessorOptions} o - options {@link wTools~accessorOptions}.
- *
- * @example
- * var Self = function ClassName( o ) { };
- * _.accessor( Self,{ a : 'a' }, 'set/get call' )
- * Self.a = 1; // set/get call
- * Self.a;
- * // returns
- * // set/get call
- * // 1
- *
- * @method accessor
- * @memberof wTools
- */
-
-function accessor( o )
-{
-  var o = _accessor_pre( accessor, arguments );
-  return _accessor( o );
-}
-
-accessor.defaults = Object.create( _accessor.defaults );
-
+// var defaults = _accessorAct.defaults = Object.create( AccessorDefaults );
 //
-
-function accessorForbid( o )
-{
-
-  // o.methods = o.methods || Object.create( null );
-
-  var o = _accessor_pre( accessorForbid, arguments );
-  // var object = o.object;
-  // var names = o.names;
-
-  if( !o.methods )
-  o.methods = Object.create( null );
-
-  if( _.arrayLike( o.object ) )
-  {
-    debugger;
-    _.each( o.object, ( object ) =>
-    {
-      var o2 = _.mapExtend( null, o );
-      o2.object = object;
-      accessorForbid( o2 );
-    });
-    debugger;
-    return;
-  }
-
-  if( _.objectIs( o.names ) )
-  o.names = _.mapExtend( null, o.names );
-
-  if( o.combining === 'rewrite' && o.strict === undefined )
-  o.strict = 0;
-
-  if( o.prime === null )
-  o.prime = _.prototypeIsStandard( o.object );
-
-  /* verification */
-
-  _.assert( _.objectLikeOrRoutine( o.object ), () => 'expects object {-o.object-} but got ' + _.toStrShort( o.object ) );
-  _.assert( _.objectIs( o.names ) || _.arrayIs( o.names ), () => 'expects object {-o.names-} as argument but got ' + _.toStrShort( o.names ) );
-
-  /* message */
-
-  var _constructor = o.object.constructor || Object.getPrototypeOf( o.object );
-  _.assert( _.routineIs( _constructor ) || _constructor === null );
-  _.assert( _constructor === null || _.strIs( _constructor.name ) || _.strIs( _constructor._name ), 'object should have name' );
-  if( !o.protoName )
-  o.protoName = ( _constructor ? ( _constructor.name || _constructor._name || '' ) : '' ) + '.';
-  if( !o.message )
-  o.message = 'is deprecated';
-  else
-  o.message = _.arrayIs( o.message ) ? o.message.join( ' : ' ) : o.message;
-
-  // if( o.protoName === 'wPrinterTop.' && o.names.Static )
-  // debugger;
-
-  // /* _accessorForbid */
-  //
-  // var encodedName,rawName;
-
-  /* property */
-
-  if( _.objectIs( o.names ) )
-  {
-
-    for( var n in o.names )
-    {
-      var name = o.names[ n ];
-      // var encodedName = n;
-      // var rawName = names[ n ];
-      var o2 = _.mapExtend( null, o );
-      o2.fieldName = name;
-      // o2.fieldValue = o.names[ n ];
-      _.assert( n === name, 'key and value should be the same' );
-      if( !_accessorForbid( o2 ) )
-      delete o.names[ name ];
-    }
-
-  }
-  else
-  {
-
-    var namesArray = o.names;
-    o.names = Object.create( null );
-    // debugger;
-    for( var n = 0 ; n < namesArray.length ; n++ )
-    {
-      var name = namesArray[ n ];
-      // var encodedName = namesArray[ n ];
-      // var rawName = namesArray[ n ];
-      var o2 = _.mapExtend( null, o );
-      o2.fieldName = name;
-      // o2.fieldValue = namesArray[ n ];
-      // _.assert( n === namesArray[ n ] );
-      // names[ encodedName ] = rawName;
-      if( _accessorForbid( o2 ) )
-      o.names[ name ] = name;
-    }
-    // debugger;
-
-  }
-
-  // o.names = names;
-  // o.object = object;
-  // o.methods = methods;
-  o.strict = 0;
-  o.prime = 0;
-
-  return _accessor( _.mapOnly( o, _accessor.defaults ) );
-}
-
-var defaults = accessorForbid.defaults = Object.create( _accessor.defaults );
-
-defaults.preserveValues = 0;
-defaults.enumerable = 0;
-defaults.prime = null;
-defaults.strict = 1;
-defaults.combining = 'rewrite';
-defaults.message = null;
-
+// defaults.name = null;
+// defaults.object = null;
+// defaults.methods = null;
 //
-
-function _accessorForbid()
-{
-  var o = _.routineOptions( _accessorForbid, arguments );
-  var setterName = '_' + o.fieldName + 'Set';
-  var getterName = '_' + o.fieldName + 'Get';
-  var messageLine = o.protoName + o.fieldName + ' : ' + o.message;
-
-  // _.assert( o.fieldName === o.fieldValue );
-  _.assert( _.strIs( o.protoName ) );
-  _.assert( _.objectIs( o.methods ) );
-
-  /* */
-
-  var propertyDescriptor = _.propertyDescriptorForAccessor( o.object, o.fieldName );
-  if( propertyDescriptor.descriptor )
-  {
-    _.assert( _.strIs( o.combining ), 'accessorForbid : if accessor overided expect ( o.combining ) is',Combining.join() );
-
-    if( _.routineIs( propertyDescriptor.descriptor.get ) && propertyDescriptor.descriptor.get.name === 'forbidden' )
-    {
-      // delete names[ encodedName ];
-      return false;
-    }
-
-  }
-
-  /* check fields */
-
-  if( o.strict )
-  // if( _ObjectHasOwnProperty.call( o.object, o.fieldName ) )
-  if( propertyDescriptor.object === o.object )
-  {
-    if( _.accessorForbidOwns( o.object, o.fieldName ) )
-    {
-      // delete names[ encodedName ];
-      return false;
-    }
-    else
-    {
-      // debugger;
-      // let pd = _.propertyDescriptorForAccessor( o.object, '_pathGet' );
-      forbidden();
-    }
-  }
-
-  /* check fields group */
-
-  if( o.strict && _.prototypeIsStandard( o.object ) )
-  if( _.prototypeHasField( o.object, o.fieldName ) )
-  {
-    forbidden();
-  }
-
-  /* */
-
-  if( !Object.isExtensible( o.object ) )
-  {
-    // delete names[ encodedName ];
-    return false;
-  }
-
-  o.methods[ setterName ] = forbidden;
-  o.methods[ getterName ] = forbidden;
-  forbidden.isForbid = true;
-
-  /* */
-
-  if( o.prime )
-  {
-
-    /* !!! not tested */
-    var o2 = _.mapExtend( null,o );
-    o2.names = o.fieldName;
-    o2.object = null;
-    delete o2.protoName;
-    delete o2.fieldName;
-
-    _._accessorRegister
-    ({
-      proto : o.object,
-      name : o.fieldName,
-      declaratorName : 'accessorForbid',
-      declaratorArgs : [ o2 ],
-      combining : o.combining,
-    });
-
-  }
-
-  /* */
-
-  return true;
-
-  /* */
-
-  function forbidden()
-  {
-    debugger;
-    throw _.err( messageLine );
-  }
-
-}
-
-var defaults = _accessorForbid.defaults = Object.create( accessorForbid.defaults );
-
-defaults.fieldName = null;
-// defaults.fieldValue = null;
-defaults.protoName = null;
-
+// //
 //
-
-function accessorForbidOwns( object,name )
-{
-  if( !_ObjectHasOwnProperty.call( object,name ) )
-  return false;
-
-  var descriptor = Object.getOwnPropertyDescriptor( object,name );
-  if( _.routineIs( descriptor.get ) && descriptor.get.isForbid )
-  {
-    return true;
-  }
-  else
-  {
-    return false;
-  }
-
-}
-
+// /**
+//  * Accessor options
+//  * @typedef{object} wTools~accessorOptions
+//  * @property{object} [ object=null ] - source object wich properties will get getter/setter defined.
+//  * @property{object} [ names=null ] - properties of that object represent names of fields for wich function defines setter/getter.
+//  * Function uses values( rawName ) of object( o.names ) properties to check if fields of( o.object ) have setter/getter.
+//  * Example : if( rawName ) is 'a', function searchs for '_aSet' or 'aSet' and same for getter.
+//  * @property{object} [ methods=null ] - object where function searchs for existing setter/getter of property.
+//  * @property{array} [ message=null ] - setter/getter prints this message when called.
+//  * @property{boolean} [ strict=true ] - makes object field private if no getter defined but object must have own constructor.
+//  * @property{boolean} [ enumerable=true ] - sets property descriptor enumerable option.
+//  * @property{boolean} [ preserveValues=true ] - saves values of existing object properties.
+//  * @property{boolean} [ readOnly=false ] - if true function doesn't define setter to property.
+//  **/
 //
-
-function accessorReadOnly( object, names )
-{
-  var o = _accessor_pre( accessorReadOnly, arguments );
-  _.assert( o.readOnly );
-  return _accessor( o );
-}
-
-var defaults = accessorReadOnly.defaults = Object.create( _accessor.defaults );
-
-defaults.readOnly = true;
-
+// /**
+//  * Defines set/get functions on source object( o.object ) properties if they dont have them.
+//  * If property specified by( o.names ) doesn't exist on source( o.object ) function creates it.
+//  * If ( o.object.constructor.prototype ) has property with getter defined function forbids set/get access
+//  * to object( o.object ) property. Field can be accessed by use of Symbol.for( rawName ) function,
+//  * where( rawName ) is value of property from( o.names ) object.
+//  *
+//  * @param {wTools~accessorOptions} o - options {@link wTools~accessorOptions}.
+//  *
+//  * @example
+//  * let Self = function ClassName( o ) { };
+//  * let o = _._accessor_pre( Self, { a : 'a', b : 'b' }, [ 'set/get call' ] );
+//  * _._accessor( o );
+//  * Self.a = 1; // returns [ 'set/get call' ]
+//  * Self.b = 2; // returns [ 'set/get call' ]
+//  * console.log( Self.a );
+//  * // returns [ 'set/get call' ]
+//  * // 1
+//  * console.log( Self.b );
+//  * // returns [ 'set/get call' ]
+//  * // 2
+//  *
+//  * @private
+//  * @method _accessor
+//  * @throws {exception} If( o.object ) is not a Object.
+//  * @throws {exception} If( o.names ) is not a Object.
+//  * @throws {exception} If( o.methods ) is not a Object.
+//  * @throws {exception} If( o.message ) is not a Array.
+//  * @throws {exception} If( o ) is extented by unknown property.
+//  * @throws {exception} If( o.strict ) is true and object doesn't have own constructor.
+//  * @throws {exception} If( o.readOnly ) is true and property has own setter.
+//  * @memberof wTools
+//  */
 //
-
-function accessorsSupplement( dst,src )
-{
-
-  _.fieldsGroupFor( dst,'_Accessors' );
-
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
-  _.assert( _ObjectHasOwnProperty.call( dst,'_Accessors' ),'accessorsSupplement : dst should has _Accessors map' );
-  _.assert( _ObjectHasOwnProperty.call( src,'_Accessors' ),'accessorsSupplement : src should has _Accessors map' );
-
-  /* */
-
-  function supplement( accessor )
-  {
-
-    _.assert( _.arrayIs( accessor.declaratorArgs ) );
-    _.assert( !accessor.combining || accessor.combining === 'rewrite' || accessor.combining === 'supplement' || accessor.combining === 'append','not implemented' );
-
-    if( _.objectIs( dst._Accessors[ a ] ) )
-    return;
-
-    if( accessor.declaratorName !== 'accessor' )
-    {
-      _.assert( _.routineIs( dst[ accessor.declaratorName ] ),'dst does not have accessor maker',accessor.declaratorName );
-      dst[ accessor.declaratorName ].apply( dst,accessor.declaratorArgs );
-    }
-    else
-    {
-      _.assert( accessor.declaratorArgs.length === 1 );
-      var optionsForAccessor = _.mapExtend( null,accessor.declaratorArgs[ 0 ] );
-      optionsForAccessor.object = dst;
-      if( !optionsForAccessor.methods )
-      optionsForAccessor.methods = dst;
-      _.accessor( optionsForAccessor );
-    }
-
-  }
-
-  /* */
-
-  for( var a in src._Accessors )
-  {
-
-    var accessor = src._Accessors[ a ];
-
-    if( _.objectIs( accessor ) )
-    supplement( accessor );
-    else for( var i = 0 ; i < accessor.length ; i++ )
-    supplement( accessor[ i ] );
-
-  }
-
-}
-
+// function _accessor( o )
+// {
 //
-
-/**
- * Makes constants properties on object by creating new or replacing existing properties.
- * @param {object} dstPrototype - prototype of class which will get new constant property.
- * @param {object} namesObject - name/value map of constants.
- *
- * @example
- * var Self = function ClassName( o ) { };
- * var Constants = { num : 100  };
- * _.constant ( Self.prototype,Constants );
- * console.log( Self.prototype ); // returns { num: 100 }
- * Self.prototype.num = 1;// error assign to read only property
- *
- * @method constant
- * @throws {exception} If no argument provided.
- * @throws {exception} If( dstPrototype ) is not a Object.
- * @throws {exception} If( name ) is not a Map.
- * @memberof wTools
- */
-
-function constant( dstPrototype, name, value )
-{
-
-  _.assert( arguments.length === 2 || arguments.length === 3 );
-  _.assert( !_.primitiveIs( dstPrototype ), () => 'dstPrototype is needed, but got ' + _.toStrShort( dstPrototype ) );
-
-  if( _.containerIs( name ) )
-  {
-    _.eachName( name, ( n, v ) =>
-    {
-      if( value !== undefined )
-      _.constant( dstPrototype, n, value );
-      else
-      _.constant( dstPrototype, n, v );
-    });
-    return;
-  }
-
-  if( value === undefined )
-  value = dstPrototype[ name ];
-
-  _.assert( _.strIs( name ), 'name is needed, but got', name );
-
-  // for( var n in name )
-  // {
-  //   var encodedName = n;
-  //   var value = name[ n ];
-
-  Object.defineProperty( dstPrototype, name,
-  {
-    value : value,
-    enumerable : true,
-    writable : false,
-    configurable : true,
-  });
-
-}
-
+//   _.assertRoutineOptions( _accessor, arguments );
 //
-
-function hide( dstPrototype, name, value )
-{
-
-  _.assert( arguments.length === 2 || arguments.length === 3 );
-  _.assert( !_.primitiveIs( dstPrototype ), () => 'dstPrototype is needed, but got ' + _.toStrShort( dstPrototype ) );
-
-  if( _.containerIs( name ) )
-  {
-    _.eachName( name, ( n, v ) =>
-    {
-      if( value !== undefined )
-      _.hide( dstPrototype, n, value );
-      else
-      _.hide( dstPrototype, n, v );
-    });
-    return;
-  }
-
-  if( value === undefined )
-  value = dstPrototype[ name ];
-
-  _.assert( _.strIs( name ), 'name is needed, but got', name );
-
-  // for( var n in name )
-  // {
-  //   var encodedName = n;
-  //   var value = name[ n ];
-
-  Object.defineProperty( dstPrototype, name,
-  {
-    value : value,
-    enumerable : false,
-    writable : true,
-    configurable : true,
-  });
-
-}
-
+//   if( _.arrayLike( o.object ) )
+//   {
+//     // debugger;
+//     _.each( o.object, ( object ) =>
+//     {
+//       let o2 = _.mapExtend( null, o );
+//       o2.object = object;
+//       _accessor( o2 );
+//     });
+//     // debugger;
+//     return;
+//   }
 //
-
-/**
- * Makes properties of object( dstPrototype ) read only without changing their values. Uses properties names from argument( namesObject ).
- * Sets undefined for property that not exists on source( dstPrototype ).
- * @param {object} dstPrototype - prototype of class which properties will get read only state.
- * @param {object|string} namesObject - property name as string/map with properties.
- *
- * @example
- * var Self = function ClassName( o ) { };
- * Self.prototype.num = 100;
- * var ReadOnly = { num : null, num2 : null  };
- * _.restrictReadOnly ( Self.prototype,ReadOnly );
- * console.log( Self.prototype ); // returns { num: 100, num2: undefined }
- * Self.prototype.num2 = 1; // error assign to read only property
- *
- * @method restrictReadOnly
- * @throws {exception} If no argument provided.
- * @throws {exception} If( dstPrototype ) is not a Object.
- * @throws {exception} If( namesObject ) is not a Map.
- * @memberof wTools
- */
-
-function restrictReadOnly( dstPrototype, namesObject )
-{
-
-  if( _.strIs( namesObject ) )
-  {
-    namesObject = Object.create( null );
-    namesObject[ namesObject ] = namesObject;
-  }
-
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
-  _.assert( _.objectLikeOrRoutine( dstPrototype ),'_.constant :','dstPrototype is needed :', dstPrototype );
-  _.assert( _.mapIs( namesObject ),'_.constant :','namesObject is needed :', namesObject );
-
-  for( var n in namesObject )
-  {
-
-    var encodedName = n;
-    var value = namesObject[ n ];
-
-    Object.defineProperty( dstPrototype, encodedName,
-    {
-      value : dstPrototype[ n ],
-      enumerable : true,
-      writable : false,
-    });
-
-  }
-
-}
-
+//   if( !o.methods )
+//   o.methods = o.object;
 //
-
-function accessorToElement( o )
-{
-
-  _.assert( arguments.length === 1, 'expects single argument' );
-  _.assert( _.objectIs( o.names ) );
-  _.routineOptions( accessorToElement,o );
-
-  var names = Object.create( null );
-  for( var n in o.names ) (function()
-  {
-    names[ n ] = n;
-
-    var arrayName = o.arrayName;
-    var index = o.names[ n ];
-    _.assert( _.numberIs( index ) );
-    _.assert( index >= 0 );
-
-    var setterGetter = _propertyGetterSetterGet( o.object, n );
-
-    if( !setterGetter.set )
-    o.object[ setterGetter.setName ] = function accessorToElementSet( src )
-    {
-      this[ arrayName ][ index ] = src;
-    }
-
-    if( !setterGetter.get )
-    o.object[ setterGetter.getName ] = function accessorToElementGet()
-    {
-      return this[ arrayName ][ index ];
-    }
-
-  })();
-
-  _.accessor
-  ({
-    object : o.object,
-    names : names,
-  });
-
-}
-
-accessorToElement.defaults =
-{
-  object : null,
-  names : null,
-  arrayName : null,
-}
-
+//   /* verification */
 //
-
-function accessorHas( proto, name )
-{
-  var accessors = proto._Accessors;
-  if( !accessors )
-  return false;
-  return !!accessors[ name ];
-}
+//   _.assert( !_.primitiveIs( o.object ) );
+//   _.assert( !_.primitiveIs( o.methods ) );
+//
+//   if( o.strict )
+//   {
+//
+//     let has =
+//     {
+//       constructor : 'constructor',
+//     }
+//
+//     _.assertMapOwnAll( o.object,has );
+//     _.accessor.forbid
+//     ({
+//       object : o.object,
+//       names : DefaultForbiddenNames,
+//       prime : 0,
+//       strict : 0,
+//     });
+//
+//   }
+//
+//   // debugger;
+//   _.assert( _.objectLikeOrRoutine( o.object ), () => 'expects object {-object-}, but got ' + _.toStrShort( o.object ) );
+//   _.assert( _.objectIs( o.names ), () => 'expects object {-names-}, but got ' + _.toStrShort( o.names ) );
+//
+//   /* */
+//
+//   for( let n in o.names )
+//   {
+//
+//     let o2 = o.names[ n ];
+//
+//     _.assert( _.strIs( o2 ) || _.objectIs( o2 ) );
+//
+//     if( _.strIs( o2 ) )
+//     {
+//       _.assert( o2 === n,'map for forbid should have same key and value' );
+//       o2 = _.mapExtend( null, o );
+//     }
+//     else
+//     {
+//       _.assertMapHasOnly( o2, _.AccessorDefaults );
+//       o2 = _.mapExtend( null, o, o2 );
+//       _.assert( !!o2.object );
+//     }
+//
+//     o2.name = n;
+//     delete o2.names;
+//
+//     _._accessorAct( o2 );
+//
+//   }
+//
+// }
+//
+// var defaults = _accessor.defaults = Object.create( _accessorAct.defaults );
+//
+// defaults.names = null;
+//
+// // {
+// //
+// //   object : null,
+// //   names : null,
+// //   methods : null,
+// //
+// //   // message : null,
+// //
+// //   strict : 1,
+// //   enumerable : 1,
+// //   preserveValues : 1,
+// //   readOnly : 0,
+// //   readOnlyProduct : 0,
+// //   prime : 1,
+// //   combining : 0,
+// //
+// // }
+//
+// //
+//
+// /**
+//  * Short-cut for _accessor function.
+//  * Defines set/get functions on source object( o.object ) properties if they dont have them.
+//  * For more details @see {@link wTools._accessor }.
+//  * Can be called in three ways:
+//  * - First by passing all options in one object( o );
+//  * - Second by passing ( object ) and ( names ) options;
+//  * - Third by passing ( object ), ( names ) and ( message ) option as third parameter.
+//  *
+//  * @param {wTools~accessorOptions} o - options {@link wTools~accessorOptions}.
+//  *
+//  * @example
+//  * let Self = function ClassName( o ) { };
+//  * _.accessor.declare( Self,{ a : 'a' }, 'set/get call' )
+//  * Self.a = 1; // set/get call
+//  * Self.a;
+//  * // returns
+//  * // set/get call
+//  * // 1
+//  *
+//  * @method accessor
+//  * @memberof wTools
+//  */
+//
+// function accessor( o )
+// {
+//   o = _accessor_pre( accessor, arguments );
+//   return _accessor( o );
+// }
+//
+// accessor.defaults = Object.create( _accessor.defaults );
+//
+// //
+//
+// function accessorForbid( o )
+// {
+//
+//   // o.methods = o.methods || Object.create( null );
+//
+//   o = _accessor_pre( accessorForbid, arguments );
+//   // let object = o.object;
+//   // let names = o.names;
+//
+//   if( !o.methods )
+//   o.methods = Object.create( null );
+//
+//   if( _.arrayLike( o.object ) )
+//   {
+//     debugger;
+//     _.each( o.object, ( object ) =>
+//     {
+//       let o2 = _.mapExtend( null, o );
+//       o2.object = object;
+//       accessorForbid( o2 );
+//     });
+//     debugger;
+//     return;
+//   }
+//
+//   if( _.objectIs( o.names ) )
+//   o.names = _.mapExtend( null, o.names );
+//
+//   if( o.combining === 'rewrite' && o.strict === undefined )
+//   o.strict = 0;
+//
+//   if( o.prime === null )
+//   o.prime = _.prototypeIsStandard( o.object );
+//
+//   /* verification */
+//
+//   _.assert( _.objectLikeOrRoutine( o.object ), () => 'expects object {-o.object-} but got ' + _.toStrShort( o.object ) );
+//   _.assert( _.objectIs( o.names ) || _.arrayIs( o.names ), () => 'expects object {-o.names-} as argument but got ' + _.toStrShort( o.names ) );
+//
+//   /* message */
+//
+//   let _constructor = o.object.constructor || Object.getPrototypeOf( o.object );
+//   _.assert( _.routineIs( _constructor ) || _constructor === null );
+//   _.assert( _constructor === null || _.strIs( _constructor.name ) || _.strIs( _constructor._name ), 'object should have name' );
+//   if( !o.protoName )
+//   o.protoName = ( _constructor ? ( _constructor.name || _constructor._name || '' ) : '' ) + '.';
+//   if( !o.message )
+//   o.message = 'is deprecated';
+//   else
+//   o.message = _.arrayIs( o.message ) ? o.message.join( ' : ' ) : o.message;
+//
+//   // if( o.protoName === 'wPrinterTop.' && o.names.Static )
+//   // debugger;
+//
+//   // /* _accessorForbid */
+//   //
+//   // let encodedName,rawName;
+//
+//   /* property */
+//
+//   if( _.objectIs( o.names ) )
+//   {
+//
+//     for( let n in o.names )
+//     {
+//       let name = o.names[ n ];
+//       // let encodedName = n;
+//       // let rawName = names[ n ];
+//       let o2 = _.mapExtend( null, o );
+//       o2.fieldName = name;
+//       // o2.fieldValue = o.names[ n ];
+//       _.assert( n === name, 'key and value should be the same' );
+//       if( !_accessorForbid( o2 ) )
+//       delete o.names[ name ];
+//     }
+//
+//   }
+//   else
+//   {
+//
+//     let namesArray = o.names;
+//     o.names = Object.create( null );
+//     // debugger;
+//     for( let n = 0 ; n < namesArray.length ; n++ )
+//     {
+//       let name = namesArray[ n ];
+//       // let encodedName = namesArray[ n ];
+//       // let rawName = namesArray[ n ];
+//       let o2 = _.mapExtend( null, o );
+//       o2.fieldName = name;
+//       // o2.fieldValue = namesArray[ n ];
+//       // _.assert( n === namesArray[ n ] );
+//       // names[ encodedName ] = rawName;
+//       if( _accessorForbid( o2 ) )
+//       o.names[ name ] = name;
+//     }
+//     // debugger;
+//
+//   }
+//
+//   // o.names = names;
+//   // o.object = object;
+//   // o.methods = methods;
+//   o.strict = 0;
+//   o.prime = 0;
+//
+//   return _accessor( _.mapOnly( o, _accessor.defaults ) );
+// }
+//
+// var defaults = accessorForbid.defaults = Object.create( _accessor.defaults );
+//
+// defaults.preserveValues = 0;
+// defaults.enumerable = 0;
+// defaults.prime = null;
+// defaults.strict = 1;
+// defaults.combining = 'rewrite';
+// defaults.message = null;
+//
+// //
+//
+// function _accessorForbid()
+// {
+//   let o = _.routineOptions( _accessorForbid, arguments );
+//   let setterName = '_' + o.fieldName + 'Set';
+//   let getterName = '_' + o.fieldName + 'Get';
+//   let messageLine = o.protoName + o.fieldName + ' : ' + o.message;
+//
+//   // _.assert( o.fieldName === o.fieldValue );
+//   _.assert( _.strIs( o.protoName ) );
+//   _.assert( _.objectIs( o.methods ) );
+//
+//   /* */
+//
+//   let propertyDescriptor = _.propertyDescriptorForAccessor( o.object, o.fieldName );
+//   if( propertyDescriptor.descriptor )
+//   {
+//     _.assert( _.strIs( o.combining ), 'accessorForbid : if accessor overided expect ( o.combining ) is',Combining.join() );
+//
+//     if( _.routineIs( propertyDescriptor.descriptor.get ) && propertyDescriptor.descriptor.get.name === 'forbidden' )
+//     {
+//       // delete names[ encodedName ];
+//       return false;
+//     }
+//
+//   }
+//
+//   /* check fields */
+//
+//   if( o.strict )
+//   // if( _ObjectHasOwnProperty.call( o.object, o.fieldName ) )
+//   if( propertyDescriptor.object === o.object )
+//   {
+//     if( _.accessor.forbidOwns( o.object, o.fieldName ) )
+//     {
+//       // delete names[ encodedName ];
+//       return false;
+//     }
+//     else
+//     {
+//       // debugger;
+//       // let pd = _.propertyDescriptorForAccessor( o.object, '_pathGet' );
+//       forbidden();
+//     }
+//   }
+//
+//   /* check fields group */
+//
+//   if( o.strict && _.prototypeIsStandard( o.object ) )
+//   if( _.prototypeHasField( o.object, o.fieldName ) )
+//   {
+//     forbidden();
+//   }
+//
+//   /* */
+//
+//   if( !Object.isExtensible( o.object ) )
+//   {
+//     // delete names[ encodedName ];
+//     return false;
+//   }
+//
+//   o.methods[ setterName ] = forbidden;
+//   o.methods[ getterName ] = forbidden;
+//   forbidden.isForbid = true;
+//
+//   /* */
+//
+//   if( o.prime )
+//   {
+//
+//     /* !!! not tested */
+//     let o2 = _.mapExtend( null,o );
+//     o2.names = o.fieldName;
+//     o2.object = null;
+//     delete o2.protoName;
+//     delete o2.fieldName;
+//
+//     _._accessorRegister
+//     ({
+//       proto : o.object,
+//       name : o.fieldName,
+//       declaratorName : 'accessorForbid',
+//       declaratorArgs : [ o2 ],
+//       combining : o.combining,
+//     });
+//
+//   }
+//
+//   /* */
+//
+//   return true;
+//
+//   /* */
+//
+//   function forbidden()
+//   {
+//     debugger;
+//     throw _.err( messageLine );
+//   }
+//
+// }
+//
+// var defaults = _accessorForbid.defaults = Object.create( accessorForbid.defaults );
+//
+// defaults.fieldName = null;
+// // defaults.fieldValue = null;
+// defaults.protoName = null;
+//
+// //
+//
+// function accessorForbidOwns( object,name )
+// {
+//   if( !_ObjectHasOwnProperty.call( object,name ) )
+//   return false;
+//
+//   let descriptor = Object.getOwnPropertyDescriptor( object,name );
+//   if( _.routineIs( descriptor.get ) && descriptor.get.isForbid )
+//   {
+//     return true;
+//   }
+//   else
+//   {
+//     return false;
+//   }
+//
+// }
+//
+// //
+//
+// function accessorReadOnly( object, names )
+// {
+//   let o = _accessor_pre( accessorReadOnly, arguments );
+//   _.assert( o.readOnly );
+//   return _accessor( o );
+// }
+//
+// var defaults = accessorReadOnly.defaults = Object.create( _accessor.defaults );
+//
+// defaults.readOnly = true;
+//
+// //
+//
+// function accessorsSupplement( dst,src )
+// {
+//
+//   _.fieldsGroupFor( dst,'_Accessors' );
+//
+//   _.assert( arguments.length === 2, 'expects exactly two arguments' );
+//   _.assert( _ObjectHasOwnProperty.call( dst,'_Accessors' ),'accessorsSupplement : dst should has _Accessors map' );
+//   _.assert( _ObjectHasOwnProperty.call( src,'_Accessors' ),'accessorsSupplement : src should has _Accessors map' );
+//
+//   /* */
+//
+//   function supplement( accessor )
+//   {
+//
+//     _.assert( _.arrayIs( accessor.declaratorArgs ) );
+//     _.assert( !accessor.combining || accessor.combining === 'rewrite' || accessor.combining === 'supplement' || accessor.combining === 'append','not implemented' );
+//
+//     if( _.objectIs( dst._Accessors[ a ] ) )
+//     return;
+//
+//     if( accessor.declaratorName !== 'accessor' )
+//     {
+//       _.assert( _.routineIs( dst[ accessor.declaratorName ] ),'dst does not have accessor maker',accessor.declaratorName );
+//       dst[ accessor.declaratorName ].apply( dst,accessor.declaratorArgs );
+//     }
+//     else
+//     {
+//       _.assert( accessor.declaratorArgs.length === 1 );
+//       let optionsForAccessor = _.mapExtend( null,accessor.declaratorArgs[ 0 ] );
+//       optionsForAccessor.object = dst;
+//       if( !optionsForAccessor.methods )
+//       optionsForAccessor.methods = dst;
+//       _.accessor.declare( optionsForAccessor );
+//     }
+//
+//   }
+//
+//   /* */
+//
+//   for( let a in src._Accessors )
+//   {
+//
+//     let accessor = src._Accessors[ a ];
+//
+//     if( _.objectIs( accessor ) )
+//     supplement( accessor );
+//     else for( let i = 0 ; i < accessor.length ; i++ )
+//     supplement( accessor[ i ] );
+//
+//   }
+//
+// }
+//
+// //
+//
+// /**
+//  * Makes constants properties on object by creating new or replacing existing properties.
+//  * @param {object} dstPrototype - prototype of class which will get new constant property.
+//  * @param {object} namesObject - name/value map of constants.
+//  *
+//  * @example
+//  * let Self = function ClassName( o ) { };
+//  * let Constants = { num : 100  };
+//  * _.constant ( Self.prototype,Constants );
+//  * console.log( Self.prototype ); // returns { num: 100 }
+//  * Self.prototype.num = 1;// error assign to read only property
+//  *
+//  * @method constant
+//  * @throws {exception} If no argument provided.
+//  * @throws {exception} If( dstPrototype ) is not a Object.
+//  * @throws {exception} If( name ) is not a Map.
+//  * @memberof wTools
+//  */
+//
+// function constant( dstPrototype, name, value )
+// {
+//
+//   _.assert( arguments.length === 2 || arguments.length === 3 );
+//   _.assert( !_.primitiveIs( dstPrototype ), () => 'dstPrototype is needed, but got ' + _.toStrShort( dstPrototype ) );
+//
+//   if( _.containerIs( name ) )
+//   {
+//     _.eachName( name, ( n, v ) =>
+//     {
+//       if( value !== undefined )
+//       _.accessor.constant( dstPrototype, n, value );
+//       else
+//       _.accessor.constant( dstPrototype, n, v );
+//     });
+//     return;
+//   }
+//
+//   if( value === undefined )
+//   value = dstPrototype[ name ];
+//
+//   _.assert( _.strIs( name ), 'name is needed, but got', name );
+//
+//   // for( let n in name )
+//   // {
+//   //   let encodedName = n;
+//   //   let value = name[ n ];
+//
+//   Object.defineProperty( dstPrototype, name,
+//   {
+//     value : value,
+//     enumerable : true,
+//     writable : false,
+//     configurable : true,
+//   });
+//
+// }
+//
+// //
+//
+// function hide( dstPrototype, name, value )
+// {
+//
+//   _.assert( arguments.length === 2 || arguments.length === 3 );
+//   _.assert( !_.primitiveIs( dstPrototype ), () => 'dstPrototype is needed, but got ' + _.toStrShort( dstPrototype ) );
+//
+//   if( _.containerIs( name ) )
+//   {
+//     _.eachName( name, ( n, v ) =>
+//     {
+//       if( value !== undefined )
+//       _.accessor.hide( dstPrototype, n, value );
+//       else
+//       _.accessor.hide( dstPrototype, n, v );
+//     });
+//     return;
+//   }
+//
+//   if( value === undefined )
+//   value = dstPrototype[ name ];
+//
+//   _.assert( _.strIs( name ), 'name is needed, but got', name );
+//
+//   // for( let n in name )
+//   // {
+//   //   let encodedName = n;
+//   //   let value = name[ n ];
+//
+//   Object.defineProperty( dstPrototype, name,
+//   {
+//     value : value,
+//     enumerable : false,
+//     writable : true,
+//     configurable : true,
+//   });
+//
+// }
+//
+// //
+//
+// /**
+//  * Makes properties of object( dstPrototype ) read only without changing their values. Uses properties names from argument( namesObject ).
+//  * Sets undefined for property that not exists on source( dstPrototype ).
+//  * @param {object} dstPrototype - prototype of class which properties will get read only state.
+//  * @param {object|string} namesObject - property name as string/map with properties.
+//  *
+//  * @example
+//  * let Self = function ClassName( o ) { };
+//  * Self.prototype.num = 100;
+//  * let ReadOnly = { num : null, num2 : null  };
+//  * _.restrictReadOnly ( Self.prototype,ReadOnly );
+//  * console.log( Self.prototype ); // returns { num: 100, num2: undefined }
+//  * Self.prototype.num2 = 1; // error assign to read only property
+//  *
+//  * @method restrictReadOnly
+//  * @throws {exception} If no argument provided.
+//  * @throws {exception} If( dstPrototype ) is not a Object.
+//  * @throws {exception} If( namesObject ) is not a Map.
+//  * @memberof wTools
+//  */
+//
+// function restrictReadOnly( dstPrototype, namesObject )
+// {
+//
+//   if( _.strIs( namesObject ) )
+//   {
+//     namesObject = Object.create( null );
+//     namesObject[ namesObject ] = namesObject;
+//   }
+//
+//   _.assert( arguments.length === 2, 'expects exactly two arguments' );
+//   _.assert( _.objectLikeOrRoutine( dstPrototype ),'_.constant :','dstPrototype is needed :', dstPrototype );
+//   _.assert( _.mapIs( namesObject ),'_.constant :','namesObject is needed :', namesObject );
+//
+//   for( let n in namesObject )
+//   {
+//
+//     let encodedName = n;
+//     let value = namesObject[ n ];
+//
+//     Object.defineProperty( dstPrototype, encodedName,
+//     {
+//       value : dstPrototype[ n ],
+//       enumerable : true,
+//       writable : false,
+//     });
+//
+//   }
+//
+// }
+//
+// debugger;
+//
+// //
+// //
+// // function accessorToElement( o )
+// // {
+// //
+// //   _.assert( arguments.length === 1, 'expects single argument' );
+// //   _.assert( _.objectIs( o.names ) );
+// //   _.routineOptions( accessorToElement,o );
+// //
+// //   let names = Object.create( null );
+// //   for( let n in o.names ) (function()
+// //   {
+// //     names[ n ] = n;
+// //
+// //     let arrayName = o.arrayName;
+// //     let index = o.names[ n ];
+// //     _.assert( _.numberIs( index ) );
+// //     _.assert( index >= 0 );
+// //
+// //     let setterGetter = _propertyGetterSetterGet( o.object, n );
+// //
+// //     if( !setterGetter.set )
+// //     o.object[ setterGetter.setName ] = function accessorToElementSet( src )
+// //     {
+// //       this[ arrayName ][ index ] = src;
+// //     }
+// //
+// //     if( !setterGetter.get )
+// //     o.object[ setterGetter.getName ] = function accessorToElementGet()
+// //     {
+// //       return this[ arrayName ][ index ];
+// //     }
+// //
+// //   })();
+// //
+// //   _.accessor.declare
+// //   ({
+// //     object : o.object,
+// //     names : names,
+// //   });
+// //
+// // }
+// //
+// // accessorToElement.defaults =
+// // {
+// //   object : null,
+// //   names : null,
+// //   arrayName : null,
+// // }
+//
+// //
+//
+// function accessorHas( proto, name )
+// {
+//   let accessors = proto._Accessors;
+//   if( !accessors )
+//   return false;
+//   return !!accessors[ name ];
+// }
 
 // --
 // fields group
@@ -1158,7 +1160,7 @@ function fieldsGroupFor( dst, fieldsGroupName )
 
   if( !_ObjectHasOwnProperty.call( dst, fieldsGroupName ) )
   {
-    var field = dst[ fieldsGroupName ];
+    let field = dst[ fieldsGroupName ];
     dst[ fieldsGroupName ] = Object.create( null );
     if( field )
     Object.setPrototypeOf( dst[ fieldsGroupName ], field );
@@ -1166,7 +1168,7 @@ function fieldsGroupFor( dst, fieldsGroupName )
 
   if( Config.debug )
   {
-    var parent = Object.getPrototypeOf( dst );
+    let parent = Object.getPrototypeOf( dst );
     if( parent && parent[ fieldsGroupName ] )
     _.assert( Object.getPrototypeOf( dst[ fieldsGroupName ] ) === parent[ fieldsGroupName ] );
   }
@@ -1192,7 +1194,7 @@ function fieldsGroupFor( dst, fieldsGroupName )
  * @private
  *
  * @example
- * var Self = function ClassName( o ) { };
+ * let Self = function ClassName( o ) { };
  * _.fieldsGroupDeclare
  * ({
  *   fieldsGroupName : { Composes : 'Composes' },
@@ -1210,7 +1212,7 @@ function fieldsGroupFor( dst, fieldsGroupName )
 
 function fieldsGroupDeclare( o )
 {
-  var o = o || Object.create( null );
+  o = o || Object.create( null );
 
   _.routineOptions( fieldsGroupDeclare,o );
   _.assert( arguments.length === 1, 'expects single argument' );
@@ -1220,7 +1222,7 @@ function fieldsGroupDeclare( o )
 
   _.fieldsGroupFor( o.dstPrototype, o.fieldsGroupName );
 
-  var fieldGroup = o.dstPrototype[ o.fieldsGroupName ];
+  let fieldGroup = o.dstPrototype[ o.fieldsGroupName ];
 
   if( o.srcMap )
   _.mapExtendConditional( o.filter, fieldGroup, o.srcMap );
@@ -1242,8 +1244,8 @@ fieldsGroupDeclare.defaults =
  * @param {array-like} arguments - for arguments details see {@link wTools~protoAddDefaults}.
  *
  * @example
- * var Self = function ClassName( o ) { };
- * var Composes = { tree : null };
+ * let Self = function ClassName( o ) { };
+ * let Composes = { tree : null };
  * _.fieldsGroupComposesExtend( Self.prototype, Composes );
  * console.log( Self.prototype ); // returns { Composes: { tree: null } }
  *
@@ -1257,7 +1259,7 @@ function fieldsGroupComposesExtend( dstPrototype, srcMap )
 
   _.assert( arguments.length === 2, 'expects exactly two arguments' );
 
-  var fieldsGroupName = 'Composes';
+  let fieldsGroupName = 'Composes';
   return _.fieldsGroupDeclare
   ({
     fieldsGroupName : fieldsGroupName,
@@ -1275,8 +1277,8 @@ function fieldsGroupComposesExtend( dstPrototype, srcMap )
  * @param {array-like} arguments - for arguments details see {@link wTools~protoAddDefaults}.
  *
  * @example
- * var Self = function ClassName( o ) { };
- * var Aggregates = { tree : null };
+ * let Self = function ClassName( o ) { };
+ * let Aggregates = { tree : null };
  * _.fieldsGroupAggregatesExtend( Self.prototype, Aggregates );
  * console.log( Self.prototype ); // returns { Aggregates: { tree: null } }
  *
@@ -1290,7 +1292,7 @@ function fieldsGroupAggregatesExtend( dstPrototype,srcMap )
 
   _.assert( arguments.length === 2, 'expects exactly two arguments' );
 
-  var fieldsGroupName = 'Aggregates';
+  let fieldsGroupName = 'Aggregates';
   return _.fieldsGroupDeclare
   ({
     fieldsGroupName : fieldsGroupName,
@@ -1308,8 +1310,8 @@ function fieldsGroupAggregatesExtend( dstPrototype,srcMap )
  * @param {array-like} arguments - for arguments details see {@link wTools~protoAddDefaults}.
  *
  * @example
- * var Self = function ClassName( o ) { };
- * var Associates = { tree : null };
+ * let Self = function ClassName( o ) { };
+ * let Associates = { tree : null };
  * _.fieldsGroupAssociatesExtend( Self.prototype, Associates );
  * console.log( Self.prototype ); // returns { Associates: { tree: null } }
  *
@@ -1323,7 +1325,7 @@ function fieldsGroupAssociatesExtend( dstPrototype,srcMap )
 
   _.assert( arguments.length === 2, 'expects exactly two arguments' );
 
-  var fieldsGroupName = 'Associates';
+  let fieldsGroupName = 'Associates';
   return _.fieldsGroupDeclare
   ({
     fieldsGroupName : fieldsGroupName,
@@ -1341,8 +1343,8 @@ function fieldsGroupAssociatesExtend( dstPrototype,srcMap )
  * @param {array-like} arguments - for arguments details see {@link wTools~protoAddDefaults}.
  *
  * @example
- * var Self = function ClassName( o ) { };
- * var Restricts = { tree : null };
+ * let Self = function ClassName( o ) { };
+ * let Restricts = { tree : null };
  * _.fieldsGroupRestrictsExtend( Self.prototype, Restricts );
  * console.log( Self.prototype ); // returns { Restricts: { tree: null } }
  *
@@ -1356,7 +1358,7 @@ function fieldsGroupRestrictsExtend( dstPrototype,srcMap )
 
   _.assert( arguments.length === 2, 'expects exactly two arguments' );
 
-  var fieldsGroupName = 'Restricts';
+  let fieldsGroupName = 'Restricts';
   return _.fieldsGroupDeclare
   ({
     fieldsGroupName : fieldsGroupName,
@@ -1374,8 +1376,8 @@ function fieldsGroupRestrictsExtend( dstPrototype,srcMap )
  * @param {array-like} arguments - for arguments details see {@link wTools~protoAddDefaults}.
  *
  * @example
- * var Self = function ClassName( o ) { };
- * var Composes = { tree : null };
+ * let Self = function ClassName( o ) { };
+ * let Composes = { tree : null };
  * _.fieldsGroupComposesSupplement( Self.prototype, Composes );
  * console.log( Self.prototype ); // returns { Composes: { tree: null } }
  *
@@ -1389,7 +1391,7 @@ function fieldsGroupComposesSupplement( dstPrototype, srcMap )
 
   _.assert( arguments.length === 2, 'expects exactly two arguments' );
 
-  var fieldsGroupName = 'Composes';
+  let fieldsGroupName = 'Composes';
   return _.fieldsGroupDeclare
   ({
     fieldsGroupName : fieldsGroupName,
@@ -1407,8 +1409,8 @@ function fieldsGroupComposesSupplement( dstPrototype, srcMap )
  * @param {array-like} arguments - for arguments details see {@link wTools~protoAddDefaults}.
  *
  * @example
- * var Self = function ClassName( o ) { };
- * var Aggregates = { tree : null };
+ * let Self = function ClassName( o ) { };
+ * let Aggregates = { tree : null };
  * _.fieldsGroupAggregatesSupplement( Self.prototype, Aggregates );
  * console.log( Self.prototype ); // returns { Aggregates: { tree: null } }
  *
@@ -1422,7 +1424,7 @@ function fieldsGroupAggregatesSupplement( dstPrototype,srcMap )
 
   _.assert( arguments.length === 2, 'expects exactly two arguments' );
 
-  var fieldsGroupName = 'Aggregates';
+  let fieldsGroupName = 'Aggregates';
   return _.fieldsGroupDeclare
   ({
     fieldsGroupName : fieldsGroupName,
@@ -1440,8 +1442,8 @@ function fieldsGroupAggregatesSupplement( dstPrototype,srcMap )
  * @param {array-like} arguments - for arguments details see {@link wTools~protoAddDefaults}.
  *
  * @example
- * var Self = function ClassName( o ) { };
- * var Associates = { tree : null };
+ * let Self = function ClassName( o ) { };
+ * let Associates = { tree : null };
  * _.fieldsGroupAssociatesSupplement( Self.prototype, Associates );
  * console.log( Self.prototype ); // returns { Associates: { tree: null } }
  *
@@ -1455,7 +1457,7 @@ function fieldsGroupAssociatesSupplement( dstPrototype,srcMap )
 
   _.assert( arguments.length === 2, 'expects exactly two arguments' );
 
-  var fieldsGroupName = 'Associates';
+  let fieldsGroupName = 'Associates';
   return _.fieldsGroupDeclare
   ({
     fieldsGroupName : fieldsGroupName,
@@ -1473,8 +1475,8 @@ function fieldsGroupAssociatesSupplement( dstPrototype,srcMap )
  * @param {array-like} arguments - for arguments details see {@link wTools~protoAddDefaults}.
  *
  * @example
- * var Self = function ClassName( o ) { };
- * var Restricts = { tree : null };
+ * let Self = function ClassName( o ) { };
+ * let Restricts = { tree : null };
  * _.fieldsGroupRestrictsSupplement( Self.prototype, Restricts );
  * console.log( Self.prototype ); // returns { Restricts: { tree: null } }
  *
@@ -1488,7 +1490,7 @@ function fieldsGroupRestrictsSupplement( dstPrototype,srcMap )
 
   _.assert( arguments.length === 2, 'expects exactly two arguments' );
 
-  var fieldsGroupName = 'Restricts';
+  let fieldsGroupName = 'Restricts';
   return _.fieldsGroupDeclare
   ({
     fieldsGroupName : fieldsGroupName,
@@ -1516,7 +1518,7 @@ function fieldsGroupsDeclare( o )
 
   _.assert( _.subOf( o.fieldsGroups, _.DefaultFieldsGroups ) );
 
-  for( var f in o.fieldsGroups )
+  for( let f in o.fieldsGroups )
   {
 
     if( !o.srcMap[ f ] )
@@ -1535,12 +1537,12 @@ function fieldsGroupsDeclare( o )
 
     if( Config.debug )
     {
-      for( var f2 in _.DefaultFieldsGroupsRelations )
+      for( let f2 in _.DefaultFieldsGroupsRelations )
       if( f2 === f )
       {
         continue;
       }
-      else for( var k in o.srcMap[ f ] )
+      else for( let k in o.srcMap[ f ] )
       {
         _.assert( o.dstPrototype[ f2 ][ k ] === undefined,'Fields group','"'+f2+'"','already has fields','"'+k+'"','fields group','"'+f+'"','should not have the same' );
       }
@@ -1567,8 +1569,8 @@ function fieldsGroupsDeclareForEachFilter( o )
   _.assertRoutineOptions( fieldsGroupsDeclareForEachFilter, arguments );
   _.assertMapHasNoUndefine( o );
 
-  var oldFieldsGroups = _.fieldsGroupsGet( o.dstPrototype );
-  var newFieldsGroups = Object.create( oldFieldsGroups )
+  let oldFieldsGroups = _.fieldsGroupsGet( o.dstPrototype );
+  let newFieldsGroups = Object.create( oldFieldsGroups )
   if( ( o.extendMap && o.extendMap.Groups ) || ( o.supplementOwnMap && o.supplementOwnMap.Groups ) || ( o.supplementMap && o.supplementMap.Groups ) )
   {
     if( o.supplementMap && o.supplementMap.Groups )
@@ -1584,7 +1586,7 @@ function fieldsGroupsDeclareForEachFilter( o )
   if( !o.dstPrototype.Groups )
   o.dstPrototype.Groups = Object.create( _.DefaultFieldsGroups );
 
-  for( var f in newFieldsGroups )
+  for( let f in newFieldsGroups )
   _.fieldsGroupFor( o.dstPrototype, f );
 
   // _.fieldsGroupDeclare
@@ -1635,381 +1637,381 @@ fieldsGroupsDeclareForEachFilter.defaults =
 // getter / setter functors
 // --
 
-function setterMapCollection_functor( o )
-{
-
-  _.assertMapHasOnly( o,setterMapCollection_functor.defaults );
-  _.assert( _.strIs( o.name ) );
-  _.assert( _.routineIs( o.elementMaker ) );
-  var symbol = Symbol.for( o.name );
-  var elementMakerOriginal = o.elementMaker;
-  var elementMaker = o.elementMaker;
-  var friendField = o.friendField;
-
-  if( friendField )
-  elementMaker = function elementMaker( src )
-  {
-    src[ friendField ] = this;
-    return elementMakerOriginal.call( this,src );
-  }
-
-  return function _setterMapCollection( src )
-  {
-    var self = this;
-
-    _.assert( _.objectIs( src ) );
-
-    if( self[ symbol ] )
-    {
-
-      if( src !== self[ symbol ] )
-      for( var d in self[ symbol ] )
-      delete self[ symbol ][ d ];
-
-    }
-    else
-    {
-
-      self[ symbol ] = Object.create( null );
-
-    }
-
-    for( var d in src )
-    {
-      if( src[ d ] !== null )
-      self[ symbol ][ d ] = elementMaker.call( self,src[ d ] );
-    }
-
-    return self[ symbol ];
-  }
-
-}
-
-setterMapCollection_functor.defaults =
-{
-  name : null,
-  elementMaker : null,
-  friendField : null,
-}
-
+// function setterMapCollection_functor( o )
+// {
 //
-
-function setterArrayCollection_functor( o )
-{
-
-  _.assertMapHasOnly( o,setterMapCollection_functor.defaults );
-  _.assert( _.strIs( o.name ) );
-  _.assert( _.routineIs( o.elementMaker ) );
-  var symbol = Symbol.for( o.name );
-  var elementMakerOriginal = o.elementMaker;
-  var elementMaker = o.elementMaker;
-  var friendField = o.friendField;
-
-  if( friendField )
-  elementMaker = function elementMaker( src )
-  {
-    src[ friendField ] = this;
-    return elementMakerOriginal.call( this,src );
-  }
-
-  return function _setterMapCollection( src )
-  {
-    var self = this;
-
-    _.assert( _.arrayIs( src ) );
-
-    if( self[ symbol ] )
-    {
-
-      if( src !== self[ symbol ] )
-      self[ symbol ].splice( 0,self[ symbol ].length );
-
-    }
-    else
-    {
-
-      self[ symbol ] = [];
-
-    }
-
-    if( src !== self[ symbol ] )
-    for( var d = 0 ; d < src.length ; d++ )
-    {
-      if( src[ d ] !== null )
-      self[ symbol ].push( elementMaker.call( self,src[ d ] ) );
-    }
-    else for( var d = 0 ; d < src.length ; d++ )
-    {
-      if( src[ d ] !== null )
-      src[ d ] = elementMaker.call( self,src[ d ] );
-    }
-
-    return self[ symbol ];
-  }
-
-}
-
-setterArrayCollection_functor.defaults =
-{
-  name : null,
-  elementMaker : null,
-  friendField : null,
-}
-
+//   _.assertMapHasOnly( o,setterMapCollection_functor.defaults );
+//   _.assert( _.strIs( o.name ) );
+//   _.assert( _.routineIs( o.elementMaker ) );
+//   let symbol = Symbol.for( o.name );
+//   let elementMakerOriginal = o.elementMaker;
+//   let elementMaker = o.elementMaker;
+//   let friendField = o.friendField;
 //
-
-function setterFriend_functor( o )
-{
-
-  var name = _.nameUnfielded( o.name ).coded;
-  var nameOfLink = o.nameOfLink;
-  var maker = o.maker;
-  var symbol = Symbol.for( name );
-
-  _.assert( arguments.length === 1, 'expects single argument' );
-  _.assert( _.strIs( name ) );
-  _.assert( _.strIs( nameOfLink ) );
-  _.assert( _.routineIs( maker ) );
-  _.assertMapHasOnly( o,setterFriend_functor.defaults );
-
-  return function setterFriend( src )
-  {
-
-    var self = this;
-    _.assert( src === null || _.objectIs( src ),'setterFriend : expects null or object, but got ' + _.strTypeOf( src ) );
-
-    if( !src )
-    {
-
-      self[ symbol ] = src;
-      return;
-
-    }
-    else if( !self[ symbol ] )
-    {
-
-      if( _.mapIs( src ) )
-      {
-        var o = Object.create( null );
-        o[ nameOfLink ] = self;
-        o.name = name;
-        self[ symbol ] = maker( o );
-        self[ symbol ].copy( src );
-      }
-      else
-      {
-        self[ symbol ] = src;
-      }
-
-    }
-    else
-    {
-
-      if( self[ symbol ] !== src )
-      self[ symbol ].copy( src );
-
-    }
-
-    if( self[ symbol ][ nameOfLink ] !== self )
-    self[ symbol ][ nameOfLink ] = self;
-
-    return self[ symbol ];
-  }
-
-}
-
-setterFriend_functor.defaults =
-{
-  name : null,
-  nameOfLink : null,
-  maker : null,
-}
-
+//   if( friendField )
+//   elementMaker = function elementMaker( src )
+//   {
+//     src[ friendField ] = this;
+//     return elementMakerOriginal.call( this,src );
+//   }
 //
-
-function setterCopyable_functor( o )
-{
-
-  var name = _.nameUnfielded( o.name ).coded;
-  var maker = o.maker;
-  var symbol = Symbol.for( name );
-  var debug = o.debug;
-
-  _.assert( arguments.length === 1, 'expects single argument' );
-  _.assert( _.strIs( name ) );
-  _.assert( _.routineIs( maker ) );
-  _.assertMapHasOnly( o,setterCopyable_functor.defaults );
-
-  return function setterCopyable( data )
-  {
-    var self = this;
-
-    if( debug )
-    debugger;
-
-    if( data === null )
-    {
-      if( self[ symbol ] && self[ symbol ].finit )
-      self[ symbol ].finit();
-      self[ symbol ] = null;
-      return self[ symbol ];
-    }
-
-    if( !_.objectIs( self[ symbol ] ) )
-    {
-
-      self[ symbol ] = maker( data );
-
-    }
-    else
-    {
-
-      if( self[ symbol ] !== data )
-      {
-        _.assert( _.routineIs( self[ symbol ].copy ) );
-        self[ symbol ].copy( data );
-      }
-
-    }
-
-    return self[ symbol ];
-  }
-
-}
-
-setterCopyable_functor.defaults =
-{
-  name : null,
-  maker : null,
-  debug : 0,
-}
-
+//   return function _setterMapCollection( src )
+//   {
+//     let self = this;
 //
-
-function setterBufferFrom_functor( o )
-{
-
-  var name = _.nameUnfielded( o.name ).coded;
-  var bufferConstructor = o.bufferConstructor;
-  var symbol = Symbol.for( name );
-
-  _.assert( arguments.length === 1, 'expects single argument' );
-  _.assert( _.strIs( name ) );
-  _.assert( _.routineIs( bufferConstructor ) );
-  _.routineOptions( setterBufferFrom_functor,o );
-
-  return function setterBufferFrom( data )
-  {
-    var self = this;
-
-    if( data === null || data === false )
-    {
-      data = null;
-    }
-    else
-    {
-      data = _.bufferFrom({ src : data, bufferConstructor : bufferConstructor });
-    }
-
-    self[ symbol ] = data;
-    return data;
-  }
-
-}
-
-setterBufferFrom_functor.defaults =
-{
-  name : null,
-  bufferConstructor : null,
-}
-
+//     _.assert( _.objectIs( src ) );
 //
-
-function setterChangesTracking_functor( o )
-{
-
-  var name = Symbol.for( _.nameUnfielded( o.name ).coded );
-  var nameOfChangeFlag = Symbol.for( _.nameUnfielded( o.nameOfChangeFlag ).coded );
-
-  _.assert( arguments.length === 1, 'expects single argument' );
-  _.routineOptions( setterChangesTracking_functor,o );
-
-  throw _.err( 'not tested' );
-
-  return function setterChangesTracking( data )
-  {
-    var self = this;
-
-    if( data === self[ name ] )
-    return;
-
-    self[ name ] = data;
-    self[ nameOfChangeFlag ] = true;
-
-    return data;
-  }
-
-}
-
-setterChangesTracking_functor.defaults =
-{
-  name : null,
-  nameOfChangeFlag : 'needsUpdate',
-  bufferConstructor : null,
-}
-
+//     if( self[ symbol ] )
+//     {
 //
-
-function setterAlias_functor( o )
-{
-
-  var original = o.original;
-  var alias = o.alias;
-
-  _.assert( arguments.length === 1, 'expects single argument' );
-  _.routineOptions( setterAlias_functor,o );
-
-  return function setterAlias( src )
-  {
-    var self = this;
-
-    self[ original ] = src;
-
-    return self[ original ];
-  }
-
-}
-
-setterAlias_functor.defaults =
-{
-  original : null,
-  alias : null,
-}
-
+//       if( src !== self[ symbol ] )
+//       for( let d in self[ symbol ] )
+//       delete self[ symbol ][ d ];
 //
-
-function getterAlias_functor( o )
-{
-
-  var original = o.original;
-  var alias = o.alias;
-
-  _.assert( arguments.length === 1, 'expects single argument' );
-  _.routineOptions( getterAlias_functor,o );
-
-  return function getterAlias( src )
-  {
-    var self = this;
-    return self[ original ];
-  }
-
-}
-
-getterAlias_functor.defaults =
-{
-  original : null,
-  alias : null,
-}
+//     }
+//     else
+//     {
+//
+//       self[ symbol ] = Object.create( null );
+//
+//     }
+//
+//     for( let d in src )
+//     {
+//       if( src[ d ] !== null )
+//       self[ symbol ][ d ] = elementMaker.call( self,src[ d ] );
+//     }
+//
+//     return self[ symbol ];
+//   }
+//
+// }
+//
+// setterMapCollection_functor.defaults =
+// {
+//   name : null,
+//   elementMaker : null,
+//   friendField : null,
+// }
+//
+// //
+//
+// function setterArrayCollection_functor( o )
+// {
+//
+//   _.assertMapHasOnly( o,setterMapCollection_functor.defaults );
+//   _.assert( _.strIs( o.name ) );
+//   _.assert( _.routineIs( o.elementMaker ) );
+//   let symbol = Symbol.for( o.name );
+//   let elementMakerOriginal = o.elementMaker;
+//   let elementMaker = o.elementMaker;
+//   let friendField = o.friendField;
+//
+//   if( friendField )
+//   elementMaker = function elementMaker( src )
+//   {
+//     src[ friendField ] = this;
+//     return elementMakerOriginal.call( this,src );
+//   }
+//
+//   return function _setterMapCollection( src )
+//   {
+//     let self = this;
+//
+//     _.assert( _.arrayIs( src ) );
+//
+//     if( self[ symbol ] )
+//     {
+//
+//       if( src !== self[ symbol ] )
+//       self[ symbol ].splice( 0,self[ symbol ].length );
+//
+//     }
+//     else
+//     {
+//
+//       self[ symbol ] = [];
+//
+//     }
+//
+//     if( src !== self[ symbol ] )
+//     for( let d = 0 ; d < src.length ; d++ )
+//     {
+//       if( src[ d ] !== null )
+//       self[ symbol ].push( elementMaker.call( self,src[ d ] ) );
+//     }
+//     else for( let d = 0 ; d < src.length ; d++ )
+//     {
+//       if( src[ d ] !== null )
+//       src[ d ] = elementMaker.call( self,src[ d ] );
+//     }
+//
+//     return self[ symbol ];
+//   }
+//
+// }
+//
+// setterArrayCollection_functor.defaults =
+// {
+//   name : null,
+//   elementMaker : null,
+//   friendField : null,
+// }
+//
+// //
+//
+// function setterFriend_functor( o )
+// {
+//
+//   let name = _.nameUnfielded( o.name ).coded;
+//   let nameOfLink = o.nameOfLink;
+//   let maker = o.maker;
+//   let symbol = Symbol.for( name );
+//
+//   _.assert( arguments.length === 1, 'expects single argument' );
+//   _.assert( _.strIs( name ) );
+//   _.assert( _.strIs( nameOfLink ) );
+//   _.assert( _.routineIs( maker ) );
+//   _.assertMapHasOnly( o,setterFriend_functor.defaults );
+//
+//   return function setterFriend( src )
+//   {
+//
+//     let self = this;
+//     _.assert( src === null || _.objectIs( src ),'setterFriend : expects null or object, but got ' + _.strTypeOf( src ) );
+//
+//     if( !src )
+//     {
+//
+//       self[ symbol ] = src;
+//       return;
+//
+//     }
+//     else if( !self[ symbol ] )
+//     {
+//
+//       if( _.mapIs( src ) )
+//       {
+//         let o = Object.create( null );
+//         o[ nameOfLink ] = self;
+//         o.name = name;
+//         self[ symbol ] = maker( o );
+//         self[ symbol ].copy( src );
+//       }
+//       else
+//       {
+//         self[ symbol ] = src;
+//       }
+//
+//     }
+//     else
+//     {
+//
+//       if( self[ symbol ] !== src )
+//       self[ symbol ].copy( src );
+//
+//     }
+//
+//     if( self[ symbol ][ nameOfLink ] !== self )
+//     self[ symbol ][ nameOfLink ] = self;
+//
+//     return self[ symbol ];
+//   }
+//
+// }
+//
+// setterFriend_functor.defaults =
+// {
+//   name : null,
+//   nameOfLink : null,
+//   maker : null,
+// }
+//
+// //
+//
+// function setterCopyable_functor( o )
+// {
+//
+//   let name = _.nameUnfielded( o.name ).coded;
+//   let maker = o.maker;
+//   let symbol = Symbol.for( name );
+//   let debug = o.debug;
+//
+//   _.assert( arguments.length === 1, 'expects single argument' );
+//   _.assert( _.strIs( name ) );
+//   _.assert( _.routineIs( maker ) );
+//   _.assertMapHasOnly( o,setterCopyable_functor.defaults );
+//
+//   return function setterCopyable( data )
+//   {
+//     let self = this;
+//
+//     if( debug )
+//     debugger;
+//
+//     if( data === null )
+//     {
+//       if( self[ symbol ] && self[ symbol ].finit )
+//       self[ symbol ].finit();
+//       self[ symbol ] = null;
+//       return self[ symbol ];
+//     }
+//
+//     if( !_.objectIs( self[ symbol ] ) )
+//     {
+//
+//       self[ symbol ] = maker( data );
+//
+//     }
+//     else
+//     {
+//
+//       if( self[ symbol ] !== data )
+//       {
+//         _.assert( _.routineIs( self[ symbol ].copy ) );
+//         self[ symbol ].copy( data );
+//       }
+//
+//     }
+//
+//     return self[ symbol ];
+//   }
+//
+// }
+//
+// setterCopyable_functor.defaults =
+// {
+//   name : null,
+//   maker : null,
+//   debug : 0,
+// }
+//
+// //
+//
+// function setterBufferFrom_functor( o )
+// {
+//
+//   let name = _.nameUnfielded( o.name ).coded;
+//   let bufferConstructor = o.bufferConstructor;
+//   let symbol = Symbol.for( name );
+//
+//   _.assert( arguments.length === 1, 'expects single argument' );
+//   _.assert( _.strIs( name ) );
+//   _.assert( _.routineIs( bufferConstructor ) );
+//   _.routineOptions( setterBufferFrom_functor,o );
+//
+//   return function setterBufferFrom( data )
+//   {
+//     let self = this;
+//
+//     if( data === null || data === false )
+//     {
+//       data = null;
+//     }
+//     else
+//     {
+//       data = _.bufferFrom({ src : data, bufferConstructor : bufferConstructor });
+//     }
+//
+//     self[ symbol ] = data;
+//     return data;
+//   }
+//
+// }
+//
+// setterBufferFrom_functor.defaults =
+// {
+//   name : null,
+//   bufferConstructor : null,
+// }
+//
+// //
+//
+// function setterChangesTracking_functor( o )
+// {
+//
+//   let name = Symbol.for( _.nameUnfielded( o.name ).coded );
+//   let nameOfChangeFlag = Symbol.for( _.nameUnfielded( o.nameOfChangeFlag ).coded );
+//
+//   _.assert( arguments.length === 1, 'expects single argument' );
+//   _.routineOptions( setterChangesTracking_functor,o );
+//
+//   throw _.err( 'not tested' );
+//
+//   return function setterChangesTracking( data )
+//   {
+//     let self = this;
+//
+//     if( data === self[ name ] )
+//     return;
+//
+//     self[ name ] = data;
+//     self[ nameOfChangeFlag ] = true;
+//
+//     return data;
+//   }
+//
+// }
+//
+// setterChangesTracking_functor.defaults =
+// {
+//   name : null,
+//   nameOfChangeFlag : 'needsUpdate',
+//   bufferConstructor : null,
+// }
+//
+// //
+//
+// function setterAlias_functor( o )
+// {
+//
+//   let original = o.original;
+//   let alias = o.alias;
+//
+//   _.assert( arguments.length === 1, 'expects single argument' );
+//   _.routineOptions( setterAlias_functor,o );
+//
+//   return function setterAlias( src )
+//   {
+//     let self = this;
+//
+//     self[ original ] = src;
+//
+//     return self[ original ];
+//   }
+//
+// }
+//
+// setterAlias_functor.defaults =
+// {
+//   original : null,
+//   alias : null,
+// }
+//
+// //
+//
+// function getterAlias_functor( o )
+// {
+//
+//   let original = o.original;
+//   let alias = o.alias;
+//
+//   _.assert( arguments.length === 1, 'expects single argument' );
+//   _.routineOptions( getterAlias_functor,o );
+//
+//   return function getterAlias( src )
+//   {
+//     let self = this;
+//     return self[ original ];
+//   }
+//
+// }
+//
+// getterAlias_functor.defaults =
+// {
+//   original : null,
+//   alias : null,
+// }
 
 // --
 // property
@@ -2017,7 +2019,7 @@ getterAlias_functor.defaults =
 
 function propertyDescriptorForAccessor( object, name )
 {
-  var result = Object.create( null );
+  let result = Object.create( null );
   result.object = null;
   result.descriptor = null;
 
@@ -2043,7 +2045,7 @@ function propertyDescriptorForAccessor( object, name )
 
 function propertyDescriptorGet( object, name )
 {
-  var result = Object.create( null );
+  let result = Object.create( null );
   result.object = null;
   result.descriptor = null;
 
@@ -2069,7 +2071,7 @@ function propertyDescriptorGet( object, name )
 
 function _propertyGetterSetterNames( propertyName )
 {
-  var result = Object.create( null );
+  let result = Object.create( null );
 
   _.assert( arguments.length === 1 );
   _.assert( _.strIs( propertyName ) );
@@ -2084,10 +2086,9 @@ function _propertyGetterSetterNames( propertyName )
 
 //
 
-// function _propertyGetterSetterMake( o, object, name )
 function _propertyGetterSetterMake( o )
 {
-  var result = Object.create( null );
+  let result = Object.create( null );
 
   _.assert( arguments.length === 1 );
   _.assert( _.objectLikeOrRoutine( o.methods ) );
@@ -2096,18 +2097,26 @@ function _propertyGetterSetterMake( o )
   _.assert( !!o.object );
   _.assertRoutineOptions( _propertyGetterSetterMake, o );
 
-  if( o.methods[ '' + o.name + 'Set' ] )
-  result.set = o.methods[ o.name + 'Set' ];
-  else if( o.methods[ '_' + o.name + 'Set' ] )
-  result.set = o.methods[ '_' + o.name + 'Set' ];
-
-  if( o.methods[ '' + o.name + 'Get' ] )
+  if( o.getter )
+  result.get = o.getter;
+  else if( o.getterSetter && o.getterSetter.get )
+  result.get = o.getterSetter.get;
+  else if( o.methods[ '' + o.name + 'Get' ] )
   result.get = o.methods[ o.name + 'Get' ];
   else if( o.methods[ '_' + o.name + 'Get' ] )
   result.get = o.methods[ '_' + o.name + 'Get' ];
 
-  var fieldName = '_' + o.name;
-  var fieldSymbol = Symbol.for( o.name );
+  if( o.setter )
+  result.set = o.setter;
+  else if( o.getterSetter && o.getterSetter.set )
+  result.set = o.setterSetter.set;
+  else if( o.methods[ '' + o.name + 'Set' ] )
+  result.set = o.methods[ o.name + 'Set' ];
+  else if( o.methods[ '_' + o.name + 'Set' ] )
+  result.set = o.methods[ '_' + o.name + 'Set' ];
+
+  let fieldName = '_' + o.name;
+  let fieldSymbol = Symbol.for( o.name );
 
   if( o.preserveValues )
   if( _ObjectHasOwnProperty.call( o.methods,o.name ) )
@@ -2116,14 +2125,6 @@ function _propertyGetterSetterMake( o )
   /* set */
 
   if( !result.set && !o.readOnly )
-  // if( o.message )
-  // result.set = function set( src )
-  // {
-  //   // console.info.apply( console,o.message );
-  //   this[ fieldSymbol ] = src;
-  //   return src;
-  // }
-  // else
   result.set = function set( src )
   {
     this[ fieldSymbol ] = src;
@@ -2131,8 +2132,6 @@ function _propertyGetterSetterMake( o )
   }
 
   /* get */
-
-  // _.assert( !o.readOnlyProduct || !result.get,'not tested' );
 
   if( !result.get )
   {
@@ -2145,29 +2144,20 @@ function _propertyGetterSetterMake( o )
     else if( o.readOnlyProduct )
     result.get = function get()
     {
-      var result = this[ fieldSymbol ];
+      let result = this[ fieldSymbol ];
       debugger;
       if( !_.primitiveIs( result ) )
       result = _.proxyReadOnly( result );
       return result;
     }
 
-    // if( o.message )
-    // {
-    //   var message = o.message;
-    //   var _getWithoutMessage = o.get;
-    //   o.get = function()
-    //   {
-    //     // console.info.apply( console,message );
-    //     return _getWithoutMessage.apply( this,arguments );
-    //   }
-    // }
-
   }
 
   /* validation */
 
   _.assert( !result.set || !o.readOnly, () => 'read only, but setter for ' + _.strQuote( o.name ) + ' found in' + _.toStrShort( o.methods ) );
+  _.assert( !!result.set || !!o.readOnly );
+  _.assert( !!result.get );
 
   return result;
 }
@@ -2180,13 +2170,16 @@ _propertyGetterSetterMake.defaults =
   preserveValues : 1,
   readOnly : 0,
   readOnlyProduct : 0,
+  getter : null,
+  setter : null,
+  getterSetter : null,
 }
 
 //
 
 function _propertyGetterSetterGet( object, propertyName )
 {
-  var result = Object.create( null );
+  let result = Object.create( null );
 
   _.assert( arguments.length === 2, 'expects exactly two arguments' );
   _.assert( _.objectIs( object ) );
@@ -2205,7 +2198,7 @@ function _propertyGetterSetterGet( object, propertyName )
 //
 // function propertyGetterSetterGet( object, propertyName )
 // {
-//   var result = Object.create( null );
+//   let result = Object.create( null );
 //
 //   _.assert( arguments.length === 2, 'expects exactly two arguments' );
 //   _.assert( _.strIs( propertyName ) );
@@ -2223,7 +2216,7 @@ function _propertyGetterSetterGet( object, propertyName )
 function proxyNoUndefined( ins )
 {
 
-  var validator =
+  let validator =
   {
     set : function( obj, k, e )
     {
@@ -2242,7 +2235,7 @@ function proxyNoUndefined( ins )
 
   }
 
-  var result = new Proxy( ins, validator );
+  let result = new Proxy( ins, validator );
 
   return result;
 }
@@ -2252,7 +2245,7 @@ function proxyNoUndefined( ins )
 function proxyReadOnly( ins )
 {
 
-  var validator =
+  let validator =
   {
     set : function( obj, k, e )
     {
@@ -2260,7 +2253,7 @@ function proxyReadOnly( ins )
     }
   }
 
-  var result = new Proxy( ins, validator );
+  let result = new Proxy( ins, validator );
 
   return result;
 }
@@ -2285,7 +2278,7 @@ function proxyMap( dst,original )
   _.assert( !!dst );
   _.assert( !!original );
 
-  var handler =
+  let handler =
   {
     get : function( obj, k )
     {
@@ -2305,7 +2298,7 @@ function proxyMap( dst,original )
     },
   }
 
-  var result = new Proxy( dst, handler );
+  let result = new Proxy( dst, handler );
 
   return result;
 }
@@ -2327,7 +2320,7 @@ function _mixinDelcare( o )
   _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.mapIs( o ) || _.routineIs( o ) );
   _.assert( _.routineIs( o.onMixin ) || o.onMixin === undefined || o.onMixin === null, 'expects routine {-o.onMixin-}, but got', _.strTypeOf( o ) );
-  _.assert( _.strIsNotEmpty( o.name ), 'mixin should have name' );
+  _.assert( _.strDefined( o.name ), 'mixin should have name' );
   _.assert( _.objectIs( o.extend ) || o.extend === undefined || o.extend === null );
   _.assert( _.objectIs( o.supplementOwn ) || o.supplementOwn === undefined || o.supplementOwn === null );
   _.assert( _.objectIs( o.supplement ) || o.supplement === undefined || o.supplement === null );
@@ -2338,7 +2331,7 @@ function _mixinDelcare( o )
   if( !o.onMixin )
   o.mixin = function mixin( dstClass )
   {
-    var md = this.__mixin__;
+    let md = this.__mixin__;
 
     _.assert( _.objectIs( md ) );
     _.assert( arguments.length === 1, 'expects single argument' );
@@ -2354,7 +2347,7 @@ function _mixinDelcare( o )
   else
   o.mixin = function mixin( dstClass )
   {
-    var md = this.__mixin__;
+    let md = this.__mixin__;
 
     _.assert( arguments.length === 1, 'expects single argument' );
     _.assert( _.routineIs( dstClass ), 'expects constructor' );
@@ -2374,7 +2367,7 @@ function _mixinDelcare( o )
 
   if( !o.prototype )
   {
-    var got = _._classConstructorAndPrototypeGet( o );
+    let got = _._classConstructorAndPrototypeGet( o );
 
     if( got.prototype )
     o.prototype = got.prototype;
@@ -2429,11 +2422,11 @@ _mixinDelcare.defaults =
 
 function mixinDelcare( o )
 {
-  var result = Object.create( null );
+  let result = Object.create( null );
 
   _.assert( o.mixin === undefined );
 
-  var md = result.__mixin__ = _._mixinDelcare.apply( this, arguments );
+  let md = result.__mixin__ = _._mixinDelcare.apply( this, arguments );
   result.name = md.name;
   result.shortName = md.shortName;
   result.prototype = md.prototype;
@@ -2455,7 +2448,7 @@ mixinDelcare.defaults = Object.create( _mixinDelcare.defaults );
  * @memberof wTools#
  */
 
-var MixinDescriptorFields =
+let MixinDescriptorFields =
 {
 
   name : null,
@@ -2535,7 +2528,7 @@ function mixinHas( proto,mixin )
   else
   {
     _.assert( _.routineIs( mixin.mixin ),'expects mixin, but got not mixin',_.strTypeOf( mixin ) );
-    _.assert( _.strIsNotEmpty( mixin.name ),'expects mixin, but got not mixin',_.strTypeOf( mixin ) );
+    _.assert( _.strDefined( mixin.name ),'expects mixin, but got not mixin',_.strTypeOf( mixin ) );
     return proto._mixinsMap && proto._mixinsMap[ mixin.name ];
   }
 
@@ -2563,32 +2556,32 @@ function mixinHas( proto,mixin )
  * @returns {object} Returns constructor's prototype based on( o.parent ) prototype and complemented by fields, static and non-static methods.
  *
  * @example
- *  var Parent = function Alpha(){ };
+ *  let Parent = function Alpha(){ };
  *  Parent.prototype.init = function(  )
  *  {
- *    var self = this;
+ *    let self = this;
  *    self.c = 5;
  *  };
  *
- *  var Self = function Betta( o )
+ *  let Self = function Betta( o )
  *  {
  *    return Self.prototype.init.apply( this,arguments );
  *  }
  *
  *  function init()
  *  {
- *    var self = this;
+ *    let self = this;
  *    Parent.prototype.init.call( this );
  *    _.mapExtendConditional( _.field.mapper.srcOwn,self,Composes );
  *  }
  *
- *  var Composes =
+ *  let Composes =
  *  {
  *   a : 1,
  *   b : 2,
  *  }
  *
- *  var Proto =
+ *  let Proto =
  *  {
  *   init : init,
  *   Composes : Composes
@@ -2601,7 +2594,7 @@ function mixinHas( proto,mixin )
  *    extend : Proto,
  *  });
  *
- *  var betta = new Betta();
+ *  let betta = new Betta();
  *  console.log( proto === Self.prototype ); //returns true
  *  console.log( Parent.prototype.isPrototypeOf( betta ) ); //returns true
  *  console.log( betta.a, betta.b, betta.c ); //returns 1 2 5
@@ -2634,7 +2627,7 @@ _.classDeclare
 
 function classDeclare( o )
 {
-  var result;
+  let result;
 
   if( o.withClass === undefined )
   o.withClass = true;
@@ -2647,10 +2640,10 @@ function classDeclare( o )
 
   /* */
 
-  var has = {}
+  let has = {}
   has.constructor = 'constructor';
 
-  var hasNot =
+  let hasNot =
   {
     Parent : 'Parent',
     Self : 'Self',
@@ -2673,7 +2666,7 @@ function classDeclare( o )
 
     _.assertMapOwnAll( o.cls.prototype, has,'classDeclare expects constructor' );
     _.assertMapOwnNone( o.cls.prototype, hasNot );
-    _.assertMapOwnNone( o.cls.prototype, DefaultForbiddenNames );
+    _.assertMapOwnNone( o.cls.prototype, _.DefaultForbiddenNames );
 
     if( o.extend && _ObjectHasOwnProperty.call( o.extend,'constructor' ) )
     _.assert( o.extend.constructor === o.cls );
@@ -2709,7 +2702,7 @@ function classDeclare( o )
 
   /* */
 
-  var prototype;
+  let prototype;
   if( !o.parent )
   o.parent = null;
 
@@ -2810,7 +2803,7 @@ function classDeclare( o )
   if( o.withMixin )
   {
 
-    var mixinOptions = _.mapExtend( null,o );
+    let mixinOptions = _.mapExtend( null,o );
 
     _.assert( !o.usingPrimitiveExtension );
     _.assert( !o.usingOriginalPrototype );
@@ -2850,7 +2843,7 @@ function classDeclare( o )
   if( Config.debug )
   if( prototype )
   {
-    var descriptor = Object.getOwnPropertyDescriptor( prototype,'constructor' );
+    let descriptor = Object.getOwnPropertyDescriptor( prototype,'constructor' );
     _.assert( descriptor.writable || descriptor.set );
     _.assert( descriptor.configurable );
   }
@@ -2893,12 +2886,12 @@ classDeclare.defaults =
  * @returns {object} Returns constructor's prototype complemented by fields, static and non-static methods.
  *
  * @example
- * var Self = function Betta( o ) { };
- * var Statics = { staticFunction : function staticFunction(){ } };
- * var Composes = { a : 1, b : 2 };
- * var Proto = { Composes : Composes, Statics : Statics };
+ * let Self = function Betta( o ) { };
+ * let Statics = { staticFunction : function staticFunction(){ } };
+ * let Composes = { a : 1, b : 2 };
+ * let Proto = { Composes : Composes, Statics : Statics };
  *
- * var proto =  _.classExtend
+ * let proto =  _.classExtend
  * ({
  *     cls : Self,
  *     extend : Proto,
@@ -2991,9 +2984,9 @@ function classExtend( o )
 
   /* */
 
-  var staticsOwn = _.mapOwnProperties( o.prototype.Statics );
-  var staticsAll = staticsAllGet();
-  var fieldsGroups = _.fieldsGroupsGet( o.prototype );
+  let staticsOwn = _.mapOwnProperties( o.prototype.Statics );
+  let staticsAll = staticsAllGet();
+  let fieldsGroups = _.fieldsGroupsGet( o.prototype );
 
   /* xxx : investigate */
   // if( _.mapKeys( staticsOwn ).length )
@@ -3045,7 +3038,7 @@ to prioritize ordinary facets adjustment order should be
   if( o.usingPrimitiveExtension )
   {
     debugger;
-    for( var f in _.DefaultFieldsGroupsRelations )
+    for( let f in _.DefaultFieldsGroupsRelations )
     if( f !== 'Statics' )
     if( _.mapOwnKey( o.prototype,f ) )
     _.mapExtendConditional( _.field.mapper.srcOwnPrimitive, o.prototype, o.prototype[ f ] );
@@ -3062,7 +3055,7 @@ to prioritize ordinary facets adjustment order should be
 
   /* statics */
 
-  var fieldsOfRelationsGroups = _._fieldsOfRelationsGroups( o.prototype );
+  let fieldsOfRelationsGroups = _._fieldsOfRelationsGroups( o.prototype );
 
   if( o.supplement && o.supplement.Statics )
   declareStaticsForClass( o.supplement.Statics, 0, 0 );
@@ -3074,9 +3067,9 @@ to prioritize ordinary facets adjustment order should be
   /* functors */
 
   if( o.functors )
-  for( var m in o.functors )
+  for( let m in o.functors )
   {
-    var func = o.functors[ m ].call( o,o.prototype[ m ] );
+    let func = o.functors[ m ].call( o,o.prototype[ m ] );
     _.assert( _.routineIs( func ),'not tested' );
     o.prototype[ m ] = func;
   }
@@ -3105,9 +3098,9 @@ to prioritize ordinary facets adjustment order should be
 
   function fieldsDeclare( extend, src )
   {
-    var map = _.mapBut( src, fieldsGroups );
+    let map = _.mapBut( src, fieldsGroups );
 
-    for( var s in staticsAll )
+    for( let s in staticsAll )
     if( map[ s ] === staticsAll[ s ] )
     delete map[ s ];
 
@@ -3119,7 +3112,7 @@ to prioritize ordinary facets adjustment order should be
     {
       map = _.mapBut( map, staticsOwn );
 
-      var keys = _.mapKeys( _.mapOnly( map, Object.getPrototypeOf( o.prototype.Statics ) ) );
+      let keys = _.mapKeys( _.mapOnly( map, Object.getPrototypeOf( o.prototype.Statics ) ) );
       if( keys.length )
       {
         _.assert( 0,'attempt to extend static field', keys );
@@ -3154,7 +3147,7 @@ to prioritize ordinary facets adjustment order should be
 
   function staticsAllGet()
   {
-    var staticsAll = _.mapExtend( null, o.prototype.Statics );
+    let staticsAll = _.mapExtend( null, o.prototype.Statics );
     if( o.supplement && o.supplement.Statics )
     _.mapSupplement( staticsAll, o.supplement.Statics );
     if( o.supplementOwn && o.supplementOwn.Statics )
@@ -3175,7 +3168,7 @@ to prioritize ordinary facets adjustment order should be
     if( !o.usingStatics )
     return;
 
-    for( var s in statics )
+    for( let s in statics )
     {
 
       if( !_ObjectHasOwnProperty.call( o.prototype.Statics, s ) )
@@ -3199,10 +3192,10 @@ to prioritize ordinary facets adjustment order should be
 
   function declareAccessors( src )
   {
-    for( var d in DefaultAccessorsMap )
+    for( let d in _.accessor.DefaultAccessorsMap )
     if( src[ d ] )
     {
-      DefaultAccessorsMap[ d ]( o.prototype,src[ d ] );
+      _.accessor.DefaultAccessorsMap[ d ]( o.prototype,src[ d ] );
     }
   }
 
@@ -3238,11 +3231,13 @@ function declareStatic( o )
   _.assert( _.strIs( o.name ) );
   _.assert( arguments.length === 1 );
 
+  // debugger;
+
   if( !o.fieldsOfRelationsGroups )
   o.fieldsOfRelationsGroups = _._fieldsOfRelationsGroups( o.prototype );
 
-  var pd = _.propertyDescriptorGet( o.prototype, o.name );
-  var cd = _.propertyDescriptorGet( o.prototype.constructor, o.name );
+  let pd = _.propertyDescriptorGet( o.prototype, o.name );
+  let cd = _.propertyDescriptorGet( o.prototype.constructor, o.name );
 
   if( pd.object !== o.prototype )
   pd.descriptor = null;
@@ -3253,13 +3248,13 @@ function declareStatic( o )
   if( o.name === 'constructor' )
   return;
 
-  var symbol = Symbol.for( o.name );
-  var aname = _._propertyGetterSetterNames( o.name );
-  var methods = Object.create( null );
+  let symbol = Symbol.for( o.name );
+  let aname = _._propertyGetterSetterNames( o.name );
+  let methods = Object.create( null );
 
   /* */
 
-  var prototype = o.prototype;
+  let prototype = o.prototype;
   if( !o.readOnly )
   methods[ aname.set ] = function set( src )
   {
@@ -3289,7 +3284,7 @@ function declareStatic( o )
     {
       o.prototype[ symbol ] = o.value;
 
-      _.accessor
+      _.accessor.declare
       ({
         object : o.prototype,
         methods : methods,
@@ -3339,7 +3334,7 @@ function declareStatic( o )
       //   configurable : true,
       // });
 
-      _.accessor
+      _.accessor.declare
       ({
         object : o.prototype.constructor,
         methods : methods,
@@ -3375,7 +3370,7 @@ defaults.readOnly = 0;
 
 function constructorGet( src )
 {
-  var proto;
+  let proto;
 
   _.assert( arguments.length === 1, 'expects single argument' );
 
@@ -3442,12 +3437,12 @@ function subOf( sub, parent )
 
 function parentGet( src )
 {
-  var c = constructorGet( src );
+  let c = constructorGet( src );
 
   _.assert( arguments.length === 1, 'expects single argument' );
 
-  var proto = Object.getPrototypeOf( c.prototype );
-  var result = proto ? proto.constructor : null;
+  let proto = Object.getPrototypeOf( c.prototype );
+  let result = proto ? proto.constructor : null;
 
   return result;
 }
@@ -3456,7 +3451,7 @@ function parentGet( src )
 
 function _classConstructorAndPrototypeGet( o )
 {
-  var result = Object.create( null );
+  let result = Object.create( null );
 
   if( !result.cls )
   if( o.prototype )
@@ -3503,7 +3498,7 @@ function prototypeGet( src )
   if( !( 'constructor' in src ) )
   return null;
 
-  var c = constructorGet( src );
+  let c = constructorGet( src );
 
   _.assert( arguments.length === 1, 'expects single argument' );
 
@@ -3522,10 +3517,10 @@ function prototypeGet( src )
 
 function prototypeUnitedInterface( protos )
 {
-  var result = Object.create( null );
-  var unitedArraySymbol = Symbol.for( '_unitedArray_' );
-  var unitedMapSymbol = Symbol.for( '_unitedMap_' );
-  var protoMap = Object.create( null );
+  let result = Object.create( null );
+  let unitedArraySymbol = Symbol.for( '_unitedArray_' );
+  let unitedMapSymbol = Symbol.for( '_unitedMap_' );
+  let protoMap = Object.create( null );
 
   _.assert( arguments.length === 1 );
   _.assert( _.arrayIs( protos ) );
@@ -3549,21 +3544,21 @@ function prototypeUnitedInterface( protos )
 
   //
 
-  for( var p = 0 ; p < protos.length ; p++ )
+  for( let p = 0 ; p < protos.length ; p++ )
   {
-    var proto = protos[ p ];
-    for( var f in proto )
+    let proto = protos[ p ];
+    for( let f in proto )
     {
       if( f in protoMap )
       throw _.err( 'prototypeUnitedInterface :','several objects try to unite have same field :',f );
       protoMap[ f ] = proto;
 
-      var methods = Object.create( null )
+      let methods = Object.create( null )
       methods[ f + 'Get' ] = get( f );
       methods[ f + 'Set' ] = set( f );
-      var names = Object.create( null );
+      let names = Object.create( null );
       names[ f ] = f;
-      _.accessor
+      _.accessor.declare
       ({
         object : result,
         names : names,
@@ -3595,13 +3590,13 @@ function prototypeAppend( dstMap )
 
   _.assert( _.objectIs( dstMap ) );
 
-  for( var a = 1 ; a < arguments.length ; a++ )
+  for( let a = 1 ; a < arguments.length ; a++ )
   {
-    var proto = arguments[ a ];
+    let proto = arguments[ a ];
 
     _.assert( _.objectIs( proto ) );
 
-    var parent = _.prototypeArchyGet( dstMap );
+    let parent = _.prototypeArchyGet( dstMap );
     Object.setPrototypeOf( parent, proto );
 
   }
@@ -3644,13 +3639,13 @@ function prototypeHasPrototype( srcProto,insProto )
 
 function prototypeHasProperty( srcPrototype,names )
 {
-  var names = _nameFielded( names );
+  let names = _nameFielded( names );
   _.assert( _.objectIs( srcPrototype ) );
 
   do
   {
-    var has = true;
-    for( var n in names )
+    let has = true;
+    for( let n in names )
     if( !_ObjectHasOwnProperty.call( srcPrototype,n ) )
     {
       has = false;
@@ -3690,14 +3685,14 @@ function prototypeArchyGet( srcPrototype )
 
 function prototypeHasField( src, fieldName )
 {
-  var prototype = _.prototypeGet( src );
+  let prototype = _.prototypeGet( src );
 
   _.assert( _.prototypeIs( prototype ) );
   _.assert( _.prototypeIsStandard( prototype ),'expects standard prototype' );
   _.assert( arguments.length === 2, 'expects exactly two arguments' );
   _.assert( _.strIs( fieldName ) );
 
-  for( var f in _.DefaultFieldsGroupsRelations )
+  for( let f in _.DefaultFieldsGroupsRelations )
   if( prototype[ f ][ fieldName ] !== undefined )
   return true;
 
@@ -3706,13 +3701,13 @@ function prototypeHasField( src, fieldName )
 
 //
 
-var _protoCrossReferAssociations = Object.create( null );
+let _protoCrossReferAssociations = Object.create( null );
 function prototypeCrossRefer( o )
 {
-  var names = _.mapKeys( o.entities );
-  var length = names.length;
+  let names = _.mapKeys( o.entities );
+  let length = names.length;
 
-  var association = _protoCrossReferAssociations[ o.name ];
+  let association = _protoCrossReferAssociations[ o.name ];
   if( !association )
   {
     _.assert( _protoCrossReferAssociations[ o.name ] === undefined );
@@ -3730,7 +3725,7 @@ function prototypeCrossRefer( o )
   _.assert( association.name === o.name );
   _.assert( association.length === length );
 
-  for( var e in o.entities )
+  for( let e in o.entities )
   {
     if( !association.entities[ e ] )
     association.entities[ e ] = o.entities[ e ];
@@ -3739,20 +3734,20 @@ function prototypeCrossRefer( o )
   }
 
   association.have = 0;
-  for( var e in association.entities )
+  for( let e in association.entities )
   if( association.entities[ e ] )
   association.have += 1;
 
   if( association.have === association.length )
   {
 
-    for( var src in association.entities )
-    for( var dst in association.entities )
+    for( let src in association.entities )
+    for( let dst in association.entities )
     {
       if( src === dst )
       continue;
-      var dstEntity = association.entities[ dst ];
-      var srcEntity = association.entities[ src ];
+      let dstEntity = association.entities[ dst ];
+      let srcEntity = association.entities[ src ];
       _.assert( !dstEntity[ src ] || dstEntity[ src ] === srcEntity, 'override of entity',src );
       _.assert( !dstEntity.prototype[ src ] || dstEntity.prototype[ src ] === srcEntity );
       _.classExtend( dstEntity,{ Statics : { [ src ] : srcEntity } } );
@@ -3799,7 +3794,7 @@ prototypeCrossRefer.defaults =
 
 function prototypeEach( proto,onEach )
 {
-  var result = [];
+  let result = [];
 
   _.assert( _.routineIs( onEach ) || !onEach );
   _.assert( _.prototypeIs( proto ) );
@@ -3813,7 +3808,7 @@ function prototypeEach( proto,onEach )
 
     result.push( proto );
 
-    var parent = _.parentGet( proto );
+    let parent = _.parentGet( proto );
 
     proto = parent ? parent.prototype : null;
 
@@ -3830,12 +3825,12 @@ function prototypeEach( proto,onEach )
 
 function _fieldsOfRelationsGroups( src )
 {
-  var result = Object.create( null );
+  let result = Object.create( null );
 
   _.assert( _.objectIs( src ) );
   _.assert( arguments.length === 1, 'expects single argument' );
 
-  for( var g in _.DefaultFieldsGroupsRelations )
+  for( let g in _.DefaultFieldsGroupsRelations )
   {
 
     if( src[ g ] )
@@ -3850,13 +3845,13 @@ function _fieldsOfRelationsGroups( src )
 
 function fieldsOfRelationsGroups( src )
 {
-  var prototype = _.prototypeGet( src );
+  let prototype = _.prototypeGet( src );
 
   _.assert( _.prototypeIs( prototype ) );
   _.assert( _.prototypeIsStandard( prototype ),'expects standard prototype' );
   _.assert( arguments.length === 1, 'expects single argument' );
 
-  var result = _._fieldsOfRelationsGroups( prototype );
+  let result = _._fieldsOfRelationsGroups( prototype );
 
   return result;
 }
@@ -3865,14 +3860,14 @@ function fieldsOfRelationsGroups( src )
 
 function fieldsOfCopyableGroups( src )
 {
-  var prototype = _.prototypeGet( src );
-  var result = Object.create( null );
+  let prototype = _.prototypeGet( src );
+  let result = Object.create( null );
 
   _.assert( _.prototypeIs( prototype ) );
   _.assert( _.prototypeIsStandard( prototype ),'expects standard prototype' );
   _.assert( arguments.length === 1, 'expects single argument' );
 
-  for( var g in _.DefaultFieldsGroupsCopyable )
+  for( let g in _.DefaultFieldsGroupsCopyable )
   {
 
     if( prototype[ g ] )
@@ -3887,14 +3882,14 @@ function fieldsOfCopyableGroups( src )
 
 function fieldsOfTightGroups( src )
 {
-  var prototype = _.prototypeGet( src );
-  var result = Object.create( null );
+  let prototype = _.prototypeGet( src );
+  let result = Object.create( null );
 
   _.assert( _.prototypeIs( prototype ) );
   _.assert( _.prototypeIsStandard( prototype ),'expects standard prototype' );
   _.assert( arguments.length === 1, 'expects single argument' );
 
-  for( var g in _.DefaultFieldsGroupsTight )
+  for( let g in _.DefaultFieldsGroupsTight )
   {
 
     if( prototype[ g ] )
@@ -3909,14 +3904,14 @@ function fieldsOfTightGroups( src )
 
 function fieldsOfInputGroups( src )
 {
-  var prototype = _.prototypeGet( src );
-  var result = Object.create( null );
+  let prototype = _.prototypeGet( src );
+  let result = Object.create( null );
 
   _.assert( _.prototypeIs( prototype ) );
   _.assert( _.prototypeIsStandard( prototype ),'expects standard prototype' );
   _.assert( arguments.length === 1, 'expects single argument' );
 
-  for( var g in _.DefaultFieldsGroupsInput )
+  for( let g in _.DefaultFieldsGroupsInput )
   {
 
     if( prototype[ g ] )
@@ -3993,7 +3988,7 @@ function instanceFinit( src )
   _.assert( _.objectLikeOrRoutine( src ) );
   _.assert( arguments.length === 1, 'expects single argument' );
 
-  // var validator =
+  // let validator =
   // {
   //   set : function( obj, k, e )
   //   {
@@ -4008,7 +4003,7 @@ function instanceFinit( src )
   //     return false;
   //   },
   // }
-  // var result = new Proxy( src, validator );
+  // let result = new Proxy( src, validator );
 
   Object.freeze( src );
 
@@ -4021,16 +4016,16 @@ function instanceFinit( src )
  * @param {object} instance - instance to complement.
  *
  * @example
- * var Self = function Alpha( o ) { };
+ * let Self = function Alpha( o ) { };
  *
- * var Proto = { constructor: Self, Composes : { a : 1, b : 2 } };
+ * let Proto = { constructor: Self, Composes : { a : 1, b : 2 } };
  *
  * _.classDeclare
  * ({
  *     constructor: Self,
  *     extend: Proto,
  * });
- * var obj = new Self();
+ * let obj = new Self();
  * console.log( _.instanceInit( obj ) ); //returns Alpha { a: 1, b: 2 }
  *
  * @return {object} Returns complemented instance.
@@ -4086,7 +4081,7 @@ function instanceFilterInit( o )
 
   _.routineOptions( instanceFilterInit,o );
 
-  // var self = _.instanceFilterInit
+  // let self = _.instanceFilterInit
   // ({
   //   cls : Self,
   //   parent : Parent,
@@ -4097,7 +4092,7 @@ function instanceFilterInit( o )
   _.assert( _.routineIs( o.cls ) );
   _.assert( !o.args || o.args.length === 0 || o.args.length === 1 );
 
-  var result = Object.create( null );
+  let result = Object.create( null );
 
   _.instanceInit( result,o.cls.prototype );
 
@@ -4144,10 +4139,10 @@ instanceFilterInit.defaults =
 function assertInstanceDoesNotHaveReduntantFields( src )
 {
 
-  var Composes = src.Composes || Object.create( null );
-  var Aggregates = src.Aggregates || Object.create( null );
-  var Associates = src.Associates || Object.create( null );
-  var Restricts = src.Restricts || Object.create( null );
+  let Composes = src.Composes || Object.create( null );
+  let Aggregates = src.Aggregates || Object.create( null );
+  let Associates = src.Associates || Object.create( null );
+  let Restricts = src.Restricts || Object.create( null );
 
   _.assert( _.ojbectIs( src ) )
   _.assertMapOwnOnly( src, [ Composes, Aggregates, Associates, Restricts ] );
@@ -4169,7 +4164,7 @@ function defaultApply( src )
   _.assert( _.objectIs( src ) || _.longIs( src ) );
   _.assert( def === _.def );
 
-  var defVal = src[ def ];
+  let defVal = src[ def ];
 
   if( !defVal )
   return src;
@@ -4179,7 +4174,7 @@ function defaultApply( src )
   if( _.objectIs( src ) )
   {
 
-    for( var s in src )
+    for( let s in src )
     {
       if( !_.objectIs( src[ s ] ) )
       continue;
@@ -4190,7 +4185,7 @@ function defaultApply( src )
   else
   {
 
-    for( var s = 0 ; s < src.length ; s++ )
+    for( let s = 0 ; s < src.length ; s++ )
     {
       if( !_.objectIs( src[ s ] ) )
       continue;
@@ -4214,7 +4209,7 @@ function defaultProxy( map )
   _.assert( _.objectIs( map ) );
   _.assert( arguments.length === 1, 'expects single argument' );
 
-  var validator =
+  let validator =
   {
     set : function( obj, k, e )
     {
@@ -4223,9 +4218,9 @@ function defaultProxy( map )
     }
   }
 
-  var result = new Proxy( map, validator );
+  let result = new Proxy( map, validator );
 
-  for( var k in map )
+  for( let k in map )
   {
     _.defaultApply( map[ k ] );
   }
@@ -4237,7 +4232,7 @@ function defaultProxy( map )
 
 function defaultProxyFlatteningToArray( src )
 {
-  var result = [];
+  let result = [];
 
   _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.objectIs( src ) || _.arrayIs( src ) );
@@ -4247,7 +4242,7 @@ function defaultProxyFlatteningToArray( src )
 
     if( _.arrayIs( src ) )
     {
-      for( var s = 0 ; s < src.length ; s++ )
+      for( let s = 0 ; s < src.length ; s++ )
       flatten( src[ s ] );
     }
     else
@@ -4285,14 +4280,14 @@ function Definition( o )
 
 function common( src )
 {
-  var definition = new Definition({ value : src });
+  let definition = new Definition({ value : src });
 
   _.assert( src !== undefined, () => 'Expects object-like or long, but got ' + _.strTypeOf( src ) );
   _.assert( arguments.length === 1 );
 
   definition.valueGet = function get() { return this.value }
 
-  _.hide( definition, 'valueGet' );
+  _.accessor.hide( definition, 'valueGet' );
 
   Object.freeze( definition );
   return definition;
@@ -4302,7 +4297,7 @@ function common( src )
 
 function own( src )
 {
-  var definition = new Definition({ value : src });
+  let definition = new Definition({ value : src });
 
   _.assert( src !== undefined, () => 'Expects object-like or long, but got ' + _.strTypeOf( src ) );
   _.assert( arguments.length === 1 );
@@ -4310,7 +4305,7 @@ function own( src )
   // definition.valueGet = function get() { return _.entityShallowClone( this.value ) }
   definition.valueGet = function get() { return _.cloneJust( this.value ) }
 
-  _.hide( definition, 'valueGet' );
+  _.accessor.hide( definition, 'valueGet' );
 
   Object.freeze( definition );
   return definition;
@@ -4320,14 +4315,14 @@ function own( src )
 
 function ownInstanceOf( src )
 {
-  var definition = new Definition({ value : src });
+  let definition = new Definition({ value : src });
 
   _.assert( _.routineIs( src ), 'Expects constructor' );
   _.assert( arguments.length === 1 );
 
   definition.valueGet = function get() { return new this.value() }
 
-  _.hide( definition, 'valueGet' );
+  _.accessor.hide( definition, 'valueGet' );
 
   Object.freeze( definition );
   return definition;
@@ -4337,14 +4332,14 @@ function ownInstanceOf( src )
 
 function ownMadeBy( src )
 {
-  var definition = new Definition({ value : src });
+  let definition = new Definition({ value : src });
 
   _.assert( _.routineIs( src ), 'Expects constructor' );
   _.assert( arguments.length === 1 );
 
   definition.valueGet = function get() { return this.value() }
 
-  _.hide( definition, 'valueGet' );
+  _.accessor.hide( definition, 'valueGet' );
 
   Object.freeze( definition );
   return definition;
@@ -4358,28 +4353,28 @@ function contained( src )
   _.assert( _.mapIs( src ) );
   _.assert( arguments.length === 1 );
 
-  var container = _.mapBut( src, contained.defaults );
-  var o = _.mapOnly( src, contained.defaults );
+  let container = _.mapBut( src, contained.defaults );
+  let o = _.mapOnly( src, contained.defaults );
   o.container = container;
   o.value = container.value;
-  var definition = new Definition( o );
+  let definition = new Definition( o );
 
   if( o.shallowCloning )
   definition.valueGet = function get()
   {
-    var result = this.container;
+    let result = this.container;
     result.value = _.entityShallowClone( definition.value );
     return result;
   }
   else
   definition.valueGet = function get()
   {
-    var result = this.container;
+    let result = this.container;
     result.value = definition.value;
     return result;
   }
 
-  _.hide( definition, 'valueGet' );
+  _.accessor.hide( definition, 'valueGet' );
 
   Object.freeze( definition );
   return definition;
@@ -4400,8 +4395,8 @@ class wCallableObject extends Function
   {
     super( 'return this.self.__call__.apply( this.self,arguments );' );
 
-    var context = Object.create( null );
-    var self = this.bind( context );
+    let context = Object.create( null );
+    let self = this.bind( context );
     context.self = self;
     Object.freeze( context );
 
@@ -4415,9 +4410,9 @@ wCallableObject.shortName = 'CallableObject';
 // fields
 // --
 
-var Combining = [ 'rewrite','supplement','apppend','prepend' ];
+// let Combining = [ 'rewrite','supplement','apppend','prepend' ];
 
-var KnownConstructorFields =
+let KnownConstructorFields =
 {
   name : null,
   _name : null,
@@ -4430,7 +4425,7 @@ var KnownConstructorFields =
  * @memberof wTools
  */
 
-var DefaultFieldsGroups = Object.create( null );
+let DefaultFieldsGroups = Object.create( null );
 DefaultFieldsGroups.Groups = 'Groups';
 DefaultFieldsGroups.Composes = 'Composes';
 DefaultFieldsGroups.Aggregates = 'Aggregates';
@@ -4441,57 +4436,57 @@ DefaultFieldsGroups.Statics = 'Statics';
 DefaultFieldsGroups.Copiers = 'Copiers';
 Object.freeze( DefaultFieldsGroups );
 
-var DefaultFieldsGroupsRelations = Object.create( null );
+let DefaultFieldsGroupsRelations = Object.create( null );
 DefaultFieldsGroupsRelations.Composes = 'Composes';
 DefaultFieldsGroupsRelations.Aggregates = 'Aggregates';
 DefaultFieldsGroupsRelations.Associates = 'Associates';
 DefaultFieldsGroupsRelations.Restricts = 'Restricts';
 Object.freeze( DefaultFieldsGroupsRelations );
 
-var DefaultFieldsGroupsCopyable = Object.create( null );
+let DefaultFieldsGroupsCopyable = Object.create( null );
 DefaultFieldsGroupsCopyable.Composes = 'Composes';
 DefaultFieldsGroupsCopyable.Aggregates = 'Aggregates';
 DefaultFieldsGroupsCopyable.Associates = 'Associates';
 Object.freeze( DefaultFieldsGroupsCopyable );
 
-var DefaultFieldsGroupsTight = Object.create( null );
+let DefaultFieldsGroupsTight = Object.create( null );
 DefaultFieldsGroupsTight.Composes = 'Composes';
 DefaultFieldsGroupsTight.Aggregates = 'Aggregates';
 Object.freeze( DefaultFieldsGroupsTight );
 
-var DefaultFieldsGroupsInput = Object.create( null );
+let DefaultFieldsGroupsInput = Object.create( null );
 DefaultFieldsGroupsInput.Composes = 'Composes';
 DefaultFieldsGroupsInput.Aggregates = 'Aggregates';
 DefaultFieldsGroupsInput.Associates = 'Associates';
 DefaultFieldsGroupsInput.Medials = 'Medials';
 Object.freeze( DefaultFieldsGroupsInput );
 
-var DefaultForbiddenNames = Object.create( null );
+let DefaultForbiddenNames = Object.create( null );
 DefaultForbiddenNames.Static = 'Static';
 DefaultForbiddenNames.Type = 'Type';
 Object.freeze( DefaultForbiddenNames );
 
-var DefaultAccessorsMap = Object.create( null );
-DefaultAccessorsMap.Accessors = accessor;
-DefaultAccessorsMap.Forbids = accessorForbid;
-DefaultAccessorsMap.AccessorsForbid = accessorForbid;
-DefaultAccessorsMap.AccessorsReadOnly = accessorReadOnly;
-
-var Forbids =
-{
-  _ArrayDescriptor : '_ArrayDescriptor',
-  ArrayDescriptor : 'ArrayDescriptor',
-  _ArrayDescriptors : '_ArrayDescriptors',
-  ArrayDescriptors : 'ArrayDescriptors',
-  arrays : 'arrays',
-  arrayOf : 'arrayOf',
-}
+// let DefaultAccessorsMap = Object.create( null );
+// DefaultAccessorsMap.Accessors = accessor;
+// DefaultAccessorsMap.Forbids = accessorForbid;
+// DefaultAccessorsMap.AccessorsForbid = accessorForbid;
+// DefaultAccessorsMap.AccessorsReadOnly = accessorReadOnly;
+//
+// let Forbids =
+// {
+//   _ArrayDescriptor : '_ArrayDescriptor',
+//   ArrayDescriptor : 'ArrayDescriptor',
+//   _ArrayDescriptors : '_ArrayDescriptors',
+//   ArrayDescriptors : 'ArrayDescriptors',
+//   arrays : 'arrays',
+//   arrayOf : 'arrayOf',
+// }
 
 // --
 // define
 // --
 
-var Define =
+let Define =
 {
   Definition : Definition,
   common : common,
@@ -4503,11 +4498,11 @@ var Define =
 
 //
 
-var Fields =
+let Fields =
 {
 
-  AccessorDefaults : AccessorDefaults,
-  Combining : Combining,
+  // AccessorDefaults : AccessorDefaults,
+  // Combining : Combining,
   KnownConstructorFields : KnownConstructorFields,
 
   DefaultFieldsGroups : DefaultFieldsGroups,
@@ -4517,7 +4512,7 @@ var Fields =
   DefaultFieldsGroupsInput : DefaultFieldsGroupsInput,
 
   DefaultForbiddenNames : DefaultForbiddenNames,
-  DefaultAccessorsMap : DefaultAccessorsMap,
+  // DefaultAccessorsMap : DefaultAccessorsMap,
 
   CallableObject : wCallableObject,
 
@@ -4525,31 +4520,31 @@ var Fields =
 
 //
 
-var Routines =
+let Routines =
 {
 
   // accessor
 
-  _accessor_pre : _accessor_pre,
-  _accessorRegister : _accessorRegister,
-  _accessorAct : _accessorAct,
-  _accessor : _accessor,
-
-  accessor : accessor,
-  accessorForbid : accessorForbid,
-  _accessorForbid : _accessorForbid,
-
-  accessorForbidOwns : accessorForbidOwns,
-  accessorReadOnly : accessorReadOnly,
-
-  accessorsSupplement : accessorsSupplement,
-
-  constant : constant,
-  hide : hide,
-  restrictReadOnly : restrictReadOnly,
-
-  accessorToElement : accessorToElement,
-  accessorHas : accessorHas,
+  // _accessor_pre : _accessor_pre,
+  // _accessorRegister : _accessorRegister,
+  // _accessorAct : _accessorAct,
+  // _accessor : _accessor,
+  //
+  // accessor : accessor,
+  // accessorForbid : accessorForbid,
+  // _accessorForbid : _accessorForbid,
+  //
+  // accessorForbidOwns : accessorForbidOwns,
+  // accessorReadOnly : accessorReadOnly,
+  //
+  // accessorsSupplement : accessorsSupplement,
+  //
+  // constant : constant,
+  // hide : hide,
+  // restrictReadOnly : restrictReadOnly,
+  //
+  // // accessorToElement : accessorToElement,
+  // accessorHas : accessorHas,
 
   // fields group
 
@@ -4572,16 +4567,16 @@ var Routines =
 
   // getter / setter functors
 
-  setterMapCollection_functor : setterMapCollection_functor,
-  setterArrayCollection_functor : setterArrayCollection_functor,
-
-  setterFriend_functor : setterFriend_functor,
-  setterCopyable_functor : setterCopyable_functor,
-  setterBufferFrom_functor : setterBufferFrom_functor,
-  setterChangesTracking_functor : setterChangesTracking_functor,
-
-  setterAlias_functor : setterAlias_functor,
-  getterAlias_functor : getterAlias_functor,
+  // setterMapCollection_functor : setterMapCollection_functor,
+  // setterArrayCollection_functor : setterArrayCollection_functor,
+  //
+  // setterFriend_functor : setterFriend_functor,
+  // setterCopyable_functor : setterCopyable_functor,
+  // setterBufferFrom_functor : setterBufferFrom_functor,
+  // setterChangesTracking_functor : setterChangesTracking_functor,
+  //
+  // setterAlias_functor : setterAlias_functor,
+  // getterAlias_functor : getterAlias_functor,
 
   // property
 
@@ -4667,7 +4662,7 @@ var Routines =
 _.define = Define;
 _.mapExtend( _, Routines );
 _.mapExtend( _, Fields );
-_.accessorForbid( _, Forbids );
+// _.accessor.forbid( _, Forbids );
 
 // --
 // export
@@ -4687,7 +4682,8 @@ module[ 'exports' ] = Self;
 if( typeof module !== 'undefined' )
 {
 
-  if( !_.construction )
+  require( './Accessor.s' );
+  // if( !_.construction )
   require( './ProtoLike.s' );
 
 }

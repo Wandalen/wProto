@@ -228,7 +228,7 @@ function accessor( test )
       Composes : {}
     }
   });
-  _.accessor( Alpha.prototype, { a : 'a' } );
+  _.accessor.declare( Alpha.prototype, { a : 'a' } );
   var x = new Alpha();
   x.a = 5;
   var got = x.a;
@@ -250,7 +250,7 @@ function accessor( test )
       Composes : {}
     }
   });
-  _.accessor( Alpha.prototype, { a : 'a' } );
+  _.accessor.declare( Alpha.prototype, { a : 'a' } );
   var x = new Alpha();
   x.a = 5;
   var got = x.a;
@@ -276,7 +276,7 @@ function accessor( test )
       Composes : {}
     }
   });
-  _.accessor( Alpha.prototype, { a : 'a' } );
+  _.accessor.declare( Alpha.prototype, { a : 'a' } );
   var x = new Alpha();
   x.a = 5;
   var got = x.a;
@@ -289,31 +289,31 @@ function accessor( test )
   test.case = 'empty call'; /**/
   test.shouldThrowError( function()
   {
-    _.accessor( );
+    _.accessor.declare( );
   });
 
   test.case = 'invalid first argument type'; /**/
   test.shouldThrowError( function()
   {
-    _.accessor( 1, { a : 'a' } );
+    _.accessor.declare( 1, { a : 'a' } );
   });
 
   test.case = 'invalid second argument type'; /**/
   test.shouldThrowError( function()
   {
-    _.accessor( {}, [] );
+    _.accessor.declare( {}, [] );
   });
 
   test.case = 'does not have Composes'; /**/
   test.shouldThrowError( function()
   {
-    _.accessor( { constructor : function(){}, },{ a : 'a' } );
+    _.accessor.declare( { constructor : function(){}, },{ a : 'a' } );
   });
 
   test.case = 'does not have constructor'; /**/
   test.shouldThrowError( function()
   {
-    _.accessor( { Composes : {}, },{ a : 'a' } );
+    _.accessor.declare( { Composes : {}, },{ a : 'a' } );
   });
 
 }
@@ -354,7 +354,7 @@ function accessorIsClean( test )
 
   debugger;
   var methods = Object.create( null );
-  _.accessor
+  _.accessor.declare
   ({
     object : BasicConstructor.prototype,
     names : { f2 : { readOnly : 1 } },
@@ -399,7 +399,7 @@ function accessorForbid( test )
 
   test.case = 'accessor forbid getter&setter';
   var Alpha = { };
-  _.accessorForbid( Alpha, { a : 'a' } );
+  _.accessor.forbid( Alpha, { a : 'a' } );
   try
   {
     Alpha.a = 5;
@@ -427,7 +427,7 @@ function accessorForbid( test )
   test.shouldThrowError( function()
   {
     var Alpha = { };
-    _.accessorForbid( Alpha, { a : 'a' } );
+    _.accessor.forbid( Alpha, { a : 'a' } );
     Alpha.a;
   });
 
@@ -435,26 +435,26 @@ function accessorForbid( test )
   test.shouldThrowError( function()
   {
     var Alpha = { };
-    _.accessorForbid( Alpha, { a : 'a' } );
+    _.accessor.forbid( Alpha, { a : 'a' } );
     Alpha.a = 5;
   });
 
   test.case = 'empty call';
   test.shouldThrowError( function()
   {
-    _.accessorForbid( );
+    _.accessor.forbid( );
   });
 
   test.case = 'invalid first argument type';
   test.shouldThrowError( function()
   {
-    _.accessorForbid( 1, { a : 'a' } );
+    _.accessor.forbid( 1, { a : 'a' } );
   });
 
   test.case = 'invalid second argument type';
   test.shouldThrowError( function()
   {
-    _.accessorForbid( {}, 1 );
+    _.accessor.forbid( {}, 1 );
   });
 
 }
@@ -472,7 +472,7 @@ function accessorReadOnly( test )
     parent : null,
     extend : { Composes : { a : null } }
   });
-  _.accessorReadOnly( Alpha.prototype,{ a : 'a' });
+  _.accessor.readOnly( Alpha.prototype,{ a : 'a' });
   var x = new Alpha();
   test.shouldThrowError( () => x.a = 1 );
   var descriptor = Object.getOwnPropertyDescriptor( Alpha.prototype, 'a' );
@@ -491,7 +491,7 @@ function accessorReadOnly( test )
     parent : null,
     extend : { Composes : { a : 6 } }
   });
-  _.accessorReadOnly( Alpha.prototype, { a : 'a' } );
+  _.accessor.readOnly( Alpha.prototype, { a : 'a' } );
   var x = new Alpha( 5 );
   test.shouldThrowError( () => x.a = 1 );
   var descriptor = Object.getOwnPropertyDescriptor( Alpha.prototype, 'a' );
@@ -506,7 +506,7 @@ function accessorReadOnly( test )
   test.shouldThrowError( function()
   {
     var Alpha = { };
-    _.accessorReadOnly( Alpha, { a : 'a' } );
+    _.accessor.readOnly( Alpha, { a : 'a' } );
     Alpha.a = 5;
   });
 
@@ -514,25 +514,25 @@ function accessorReadOnly( test )
   test.shouldThrowError( function()
   {
     var Alpha = { _aSet : function() { } };
-    _.accessorReadOnly( Alpha, { a : 'a' } );
+    _.accessor.readOnly( Alpha, { a : 'a' } );
   });
 
   test.case = 'empty call';
   test.shouldThrowError( function()
   {
-    _.accessorReadOnly( );
+    _.accessor.readOnly( );
   });
 
   test.case = 'invalid first argument type';
   test.shouldThrowError( function()
   {
-    _.accessorReadOnly( 1, { a : 'a' } );
+    _.accessor.readOnly( 1, { a : 'a' } );
   });
 
   test.case = 'invalid second argument type';
   test.shouldThrowError( function()
   {
-    _.accessorReadOnly( {}, [] );
+    _.accessor.readOnly( {}, [] );
   });
 
 }
@@ -553,7 +553,7 @@ function forbids( test )
 
   var instance = Object.create( null );
 
-  _.accessorForbid( instance, Forbids );
+  _.accessor.forbid( instance, Forbids );
 
   test.case = 'inline no method';
 
@@ -631,28 +631,28 @@ function constant( test )
 
   test.case = 'second argument is map';
   var dstMap = {};
-  _.constant( dstMap, { a : 5 } );
+  _.accessor.constant( dstMap, { a : 5 } );
   var descriptor = Object.getOwnPropertyDescriptor( dstMap, 'a' );
   test.identical( descriptor.writable, false );
   test.identical( dstMap.a, 5 );
 
   test.case = 'rewrites existing field';
   var dstMap = { a : 5 };
-  _.constant( dstMap, { a : 1 } );
+  _.accessor.constant( dstMap, { a : 1 } );
   var descriptor = Object.getOwnPropertyDescriptor( dstMap, 'a' );
   test.identical( descriptor.writable, false );
   test.identical( dstMap.a, 1 );
 
   test.case = '3 arguments';
   var dstMap = {};
-  _.constant( dstMap, 'a', 5 );
+  _.accessor.constant( dstMap, 'a', 5 );
   var descriptor = Object.getOwnPropertyDescriptor( dstMap, 'a' );
   test.identical( descriptor.writable, false );
   test.identical( dstMap.a, 5 );
 
   test.case = '2 arguments, no value';
   var dstMap = {};
-  _.constant( dstMap, 'a' );
+  _.accessor.constant( dstMap, 'a' );
   var descriptor = Object.getOwnPropertyDescriptor( dstMap, 'a' );
   test.identical( descriptor.writable, false );
   test.identical( dstMap.a, undefined );
@@ -660,7 +660,7 @@ function constant( test )
 
   test.case = 'second argument is array';
   var dstMap = {};
-  _.constant( dstMap, [ 'a' ], 5 );
+  _.accessor.constant( dstMap, [ 'a' ], 5 );
   var descriptor = Object.getOwnPropertyDescriptor( dstMap, 'a' );
   test.identical( descriptor.writable, false );
   test.identical( dstMap.a, 5 );
@@ -671,19 +671,19 @@ function constant( test )
   test.case = 'empty call';
   test.shouldThrowError( function()
   {
-    _.constant( );
+    _.accessor.constant( );
   });
 
   test.case = 'invalid first argument type';
   test.shouldThrowError( function()
   {
-    _.constant( 1, { a : 'a' } );
+    _.accessor.constant( 1, { a : 'a' } );
   });
 
   test.case = 'invalid second argument type';
   test.shouldThrowError( function()
   {
-    _.constant( {}, 13 );
+    _.accessor.constant( {}, 13 );
   });
 
 }
