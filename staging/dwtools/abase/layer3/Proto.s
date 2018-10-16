@@ -3639,7 +3639,7 @@ function prototypeHasPrototype( srcProto,insProto )
 
 function prototypeHasProperty( srcPrototype,names )
 {
-  let names = _nameFielded( names );
+  names = _nameFielded( names );
   _.assert( _.objectIs( srcPrototype ) );
 
   do
