@@ -1,4 +1,4 @@
-( function _Accessor_s_() {
+( function _ProtoAccessor_s_() {
 
 'use strict';
 
@@ -108,10 +108,10 @@ function _accessorDeclare_pre( routine, args )
 
 //
 
-function _accessorDeclareRegister( o )
+function _accessorRegister( o )
 {
 
-  _.routineOptions( _accessorDeclareRegister, arguments );
+  _.routineOptions( _accessorRegister, arguments );
   _.assert( _.prototypeIsStandard( o.proto ), 'expects formal prototype' );
   _.assert( _.strDefined( o.declaratorName ) );
   _.assert( _.arrayIs( o.declaratorArgs ) );
@@ -168,7 +168,7 @@ function _accessorDeclareRegister( o )
   return descriptor;
 }
 
-_accessorDeclareRegister.defaults =
+_accessorRegister.defaults =
 {
   name : null,
   proto : null,
@@ -288,7 +288,7 @@ function _accessorDeclareAct( o )
     if( getterSetter.get )
     o2.methods[ '_' + o.name + 'Get' ] = getterSetter.get;
 
-    _.accessor._accessorDeclareRegister
+    _.accessor._accessorRegister
     ({
       proto : o.object,
       name : o.name,
@@ -712,7 +712,7 @@ function _accessorDeclareForbid()
     delete o2.protoName;
     delete o2.fieldName;
 
-    _.accessor._accessorDeclareRegister
+    _.accessor._accessorRegister
     ({
       proto : o.object,
       name : o.fieldName,
@@ -788,13 +788,13 @@ function accessorsSupplement( dst,src )
 
   /* */
 
-  function supplement( accessor )
+  function supplement( name, accessor )
   {
 
     _.assert( _.arrayIs( accessor.declaratorArgs ) );
     _.assert( !accessor.combining || accessor.combining === 'rewrite' || accessor.combining === 'supplement' || accessor.combining === 'append','not implemented' );
 
-    if( _.objectIs( dst._Accessors[ a ] ) )
+    if( _.objectIs( dst._Accessors[ name ] ) )
     return;
 
     if( accessor.declaratorName !== 'accessor' )
@@ -822,9 +822,9 @@ function accessorsSupplement( dst,src )
     let accessor = src._Accessors[ a ];
 
     if( _.objectIs( accessor ) )
-    supplement( accessor );
+    supplement( name, accessor );
     else for( let i = 0 ; i < accessor.length ; i++ )
-    supplement( accessor[ i ] );
+    supplement( name, accessor[ i ] );
 
   }
 
@@ -1548,7 +1548,7 @@ let Routines =
   // accessor
 
   _accessorDeclare_pre : _accessorDeclare_pre,
-  _accessorDeclareRegister : _accessorDeclareRegister,
+  _accessorRegister : _accessorRegister,
   _accessorDeclareAct : _accessorDeclareAct,
   _accessorDeclare : _accessorDeclare,
 

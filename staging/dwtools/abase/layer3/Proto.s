@@ -353,7 +353,7 @@ _.assert( _.routineIs( _nameFielded ),'wProto needs wTools/staging/dwtools/abase
 //     if( settrGetter.get )
 //     o2.methods[ '_' + o.name + 'Get' ] = settrGetter.get;
 //
-//     _._accessorRegister
+//     _.accessor._accessorRegister
 //     ({
 //       proto : o.object,
 //       name : o.name,
@@ -802,7 +802,7 @@ _.assert( _.routineIs( _nameFielded ),'wProto needs wTools/staging/dwtools/abase
 //     delete o2.protoName;
 //     delete o2.fieldName;
 //
-//     _._accessorRegister
+//     _.accessor._accessorRegister
 //     ({
 //       proto : o.object,
 //       name : o.fieldName,
@@ -3174,7 +3174,7 @@ to prioritize ordinary facets adjustment order should be
       if( !_ObjectHasOwnProperty.call( o.prototype.Statics, s ) )
       continue;
 
-      _.declareStatic
+      _.staticDecalre
       ({
         name : s,
         value : o.prototype.Statics[ s ],
@@ -3218,7 +3218,7 @@ classExtend.defaults =
 
 //
 
-function declareStatic( o )
+function staticDecalre( o )
 {
 
   if( !( 'value' in o ) )
@@ -3227,7 +3227,7 @@ function declareStatic( o )
   if( _.definitionIs( o.value ) )
   _.mapExtend( o, o.value.valueGet() );
 
-  _.routineOptions( declareStatic, arguments );
+  _.routineOptions( staticDecalre, arguments );
   _.assert( _.strIs( o.name ) );
   _.assert( arguments.length === 1 );
 
@@ -3356,7 +3356,7 @@ function declareStatic( o )
   return true;
 }
 
-var defaults = declareStatic.defaults = Object.create( null );
+var defaults = staticDecalre.defaults = Object.create( null );
 
 defaults.name = null;
 defaults.value = null;
@@ -4605,7 +4605,7 @@ let Routines =
   classDeclare : classDeclare,
   classExtend : classExtend,
 
-  declareStatic : declareStatic,
+  staticDecalre : staticDecalre,
 
   constructorGet : constructorGet,
 
@@ -4682,7 +4682,7 @@ module[ 'exports' ] = Self;
 if( typeof module !== 'undefined' )
 {
 
-  require( './Accessor.s' );
+  require( './ProtoAccessor.s' );
   // if( !_.construction )
   require( './ProtoLike.s' );
 
