@@ -1206,15 +1206,15 @@ function setterFriend_functor( o )
 {
 
   let name = _.nameUnfielded( o.name ).coded;
-  let nameOfLink = o.nameOfLink;
+  let friendName = o.friendName;
   let maker = o.maker;
   let symbol = Symbol.for( name );
 
   _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.strIs( name ) );
-  _.assert( _.strIs( nameOfLink ) );
-  _.assert( _.routineIs( maker ) );
-  _.assertMapHasOnly( o,setterFriend_functor.defaults );
+  _.assert( _.strIs( friendName ) );
+  _.assert( _.routineIs( maker ), 'Expects maker {-o.maker-}' );
+  _.assertMapHasOnly( o, setterFriend_functor.defaults );
 
   return function setterFriend( src )
   {
@@ -1235,7 +1235,7 @@ function setterFriend_functor( o )
       if( _.mapIs( src ) )
       {
         let o2 = Object.create( null );
-        o2[ nameOfLink ] = self;
+        o2[ friendName ] = self;
         o2.name = name;
         self[ symbol ] = maker( o2 );
         self[ symbol ].copy( src );
@@ -1254,8 +1254,8 @@ function setterFriend_functor( o )
 
     }
 
-    if( self[ symbol ][ nameOfLink ] !== self )
-    self[ symbol ][ nameOfLink ] = self;
+    if( self[ symbol ][ friendName ] !== self )
+    self[ symbol ][ friendName ] = self;
 
     return self[ symbol ];
   }
@@ -1265,7 +1265,7 @@ function setterFriend_functor( o )
 setterFriend_functor.defaults =
 {
   name : null,
-  nameOfLink : null,
+  friendName : null,
   maker : null,
 }
 
