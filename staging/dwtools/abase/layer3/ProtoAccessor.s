@@ -642,6 +642,9 @@ function _accessorDeclareForbid()
   let getterName = '_' + o.fieldName + 'Get';
   let messageLine = o.protoName + o.fieldName + ' : ' + o.message;
 
+  // if( o.fieldName === 'originPath' )
+  // debugger;
+
   // _.assert( o.fieldName === o.fieldValue );
   _.assert( _.strIs( o.protoName ) );
   _.assert( _.objectIs( o.methods ) );
