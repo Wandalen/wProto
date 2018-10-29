@@ -785,7 +785,7 @@ function accessorsSupplement( dst,src )
 
   _.fieldsGroupFor( dst,'_Accessors' );
 
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
   _.assert( _ObjectHasOwnProperty.call( dst,'_Accessors' ),'accessorsSupplement : dst should has _Accessors map' );
   _.assert( _ObjectHasOwnProperty.call( src,'_Accessors' ),'accessorsSupplement : src should has _Accessors map' );
 
@@ -964,7 +964,7 @@ function restrictReadOnly( dstPrototype, namesObject )
     namesObject[ namesObject ] = namesObject;
   }
 
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
   _.assert( _.objectLikeOrRoutine( dstPrototype ),'_.constant :','dstPrototype is needed :', dstPrototype );
   _.assert( _.mapIs( namesObject ),'_.constant :','namesObject is needed :', namesObject );
 

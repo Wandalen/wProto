@@ -872,7 +872,7 @@ _.assert( _.routineIs( _nameFielded ),'wProto needs wTools/staging/dwtools/abase
 //
 //   _.fieldsGroupFor( dst,'_Accessors' );
 //
-//   _.assert( arguments.length === 2, 'expects exactly two arguments' );
+//   _.assert( arguments.length === 2, 'Expects exactly two arguments' );
 //   _.assert( _ObjectHasOwnProperty.call( dst,'_Accessors' ),'accessorsSupplement : dst should has _Accessors map' );
 //   _.assert( _ObjectHasOwnProperty.call( src,'_Accessors' ),'accessorsSupplement : src should has _Accessors map' );
 //
@@ -1051,7 +1051,7 @@ _.assert( _.routineIs( _nameFielded ),'wProto needs wTools/staging/dwtools/abase
 //     namesObject[ namesObject ] = namesObject;
 //   }
 //
-//   _.assert( arguments.length === 2, 'expects exactly two arguments' );
+//   _.assert( arguments.length === 2, 'Expects exactly two arguments' );
 //   _.assert( _.objectLikeOrRoutine( dstPrototype ),'_.constant :','dstPrototype is needed :', dstPrototype );
 //   _.assert( _.mapIs( namesObject ),'_.constant :','namesObject is needed :', namesObject );
 //
@@ -1154,7 +1154,7 @@ function fieldsGroupsGet( src )
 function fieldsGroupFor( dst, fieldsGroupName )
 {
 
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
   _.assert( _.strIs( fieldsGroupName ) );
   _.assert( !_.primitiveIs( dst ) );
 
@@ -1257,7 +1257,7 @@ fieldsGroupDeclare.defaults =
 function fieldsGroupComposesExtend( dstPrototype, srcMap )
 {
 
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
 
   let fieldsGroupName = 'Composes';
   return _.fieldsGroupDeclare
@@ -1290,7 +1290,7 @@ function fieldsGroupComposesExtend( dstPrototype, srcMap )
 function fieldsGroupAggregatesExtend( dstPrototype,srcMap )
 {
 
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
 
   let fieldsGroupName = 'Aggregates';
   return _.fieldsGroupDeclare
@@ -1323,7 +1323,7 @@ function fieldsGroupAggregatesExtend( dstPrototype,srcMap )
 function fieldsGroupAssociatesExtend( dstPrototype,srcMap )
 {
 
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
 
   let fieldsGroupName = 'Associates';
   return _.fieldsGroupDeclare
@@ -1356,7 +1356,7 @@ function fieldsGroupAssociatesExtend( dstPrototype,srcMap )
 function fieldsGroupRestrictsExtend( dstPrototype,srcMap )
 {
 
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
 
   let fieldsGroupName = 'Restricts';
   return _.fieldsGroupDeclare
@@ -1389,7 +1389,7 @@ function fieldsGroupRestrictsExtend( dstPrototype,srcMap )
 function fieldsGroupComposesSupplement( dstPrototype, srcMap )
 {
 
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
 
   let fieldsGroupName = 'Composes';
   return _.fieldsGroupDeclare
@@ -1422,7 +1422,7 @@ function fieldsGroupComposesSupplement( dstPrototype, srcMap )
 function fieldsGroupAggregatesSupplement( dstPrototype,srcMap )
 {
 
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
 
   let fieldsGroupName = 'Aggregates';
   return _.fieldsGroupDeclare
@@ -1455,7 +1455,7 @@ function fieldsGroupAggregatesSupplement( dstPrototype,srcMap )
 function fieldsGroupAssociatesSupplement( dstPrototype,srcMap )
 {
 
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
 
   let fieldsGroupName = 'Associates';
   return _.fieldsGroupDeclare
@@ -1488,7 +1488,7 @@ function fieldsGroupAssociatesSupplement( dstPrototype,srcMap )
 function fieldsGroupRestrictsSupplement( dstPrototype,srcMap )
 {
 
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
 
   let fieldsGroupName = 'Restricts';
   return _.fieldsGroupDeclare
@@ -2023,7 +2023,7 @@ function propertyDescriptorForAccessor( object, name )
   result.object = null;
   result.descriptor = null;
 
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
 
   do
   {
@@ -2049,7 +2049,7 @@ function propertyDescriptorGet( object, name )
   result.object = null;
   result.descriptor = null;
 
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
 
   do
   {
@@ -2181,7 +2181,7 @@ function _propertyGetterSetterGet( object, propertyName )
 {
   let result = Object.create( null );
 
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
   _.assert( _.objectIs( object ) );
   _.assert( _.strIs( propertyName ) );
 
@@ -2200,7 +2200,7 @@ function _propertyGetterSetterGet( object, propertyName )
 // {
 //   let result = Object.create( null );
 //
-//   _.assert( arguments.length === 2, 'expects exactly two arguments' );
+//   _.assert( arguments.length === 2, 'Expects exactly two arguments' );
 //   _.assert( _.strIs( propertyName ) );
 //
 //   result.set = object[ '_' + propertyName + 'Set' ] || object[ '' + propertyName + 'Set' ];
@@ -2274,7 +2274,7 @@ function ifDebugProxyReadOnly( ins )
 function proxyMap( dst,original )
 {
 
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
   _.assert( !!dst );
   _.assert( !!original );
 
@@ -2469,7 +2469,7 @@ let MixinDescriptorFields =
 function mixinApply( mixinDescriptor, dstPrototype )
 {
 
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
   _.assert( _.objectIs( dstPrototype ), () => 'second argument {-dstPrototype-} does not look like prototype, got ' + _.strTypeOf( dstPrototype ) );
   _.assert( _.routineIs( mixinDescriptor.mixin ), 'first argument does not look like mixin descriptor' );
   _.assert( _.objectIs( mixinDescriptor ) );
@@ -2519,7 +2519,7 @@ function mixinHas( proto,mixin )
   proto = _.prototypeGet( proto );
 
   _.assert( _.prototypeIsStandard( proto ) );
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
 
   if( _.strIs( mixin ) )
   {
@@ -3403,7 +3403,7 @@ function subclassOf( subCls, cls )
 
   _.assert( _.routineIs( cls ) );
   _.assert( _.routineIs( subCls ) );
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
 
   if( cls === subCls )
   return true;
@@ -3418,7 +3418,7 @@ function subOf( sub, parent )
 
   _.assert( !!parent );
   _.assert( !!sub );
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
 
   if( parent === sub )
   return true;
@@ -3689,7 +3689,7 @@ function prototypeHasField( src, fieldName )
 
   _.assert( _.prototypeIs( prototype ) );
   _.assert( _.prototypeIsStandard( prototype ),'expects standard prototype' );
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
   _.assert( _.strIs( fieldName ) );
 
   for( let f in _.DefaultFieldsGroupsRelations )
