@@ -45,7 +45,7 @@ function like()
     value : function copy( o )
     {
       // debugger;
-      _.assert( arguments.length === 1, 'expects single argument' );
+      _.assert( arguments.length === 1, 'Expects single argument' );
       _.mapExtend( this,o );
       return this;
     }
@@ -130,7 +130,7 @@ function like()
 
 function name( src )
 {
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   return this;
 }
 
@@ -138,7 +138,7 @@ function name( src )
 
 function also( src )
 {
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.mapExtend( this.proto,src );
   return this;
 }
@@ -147,7 +147,7 @@ function also( src )
 
 function but( src )
 {
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.mapDelete( this.proto,src );
   return this;
 }
@@ -173,7 +173,7 @@ function isLike( instance,parent )
 
 function is( instance )
 {
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   if( !instance )
   return false;
   if( !instance.constructor )

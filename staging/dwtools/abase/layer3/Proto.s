@@ -155,8 +155,8 @@ _.assert( _.routineIs( _nameFielded ),'wProto needs wTools/staging/dwtools/abase
 //   o.names = { [ o.names ] : o.names }
 //
 //   _.routineOptions( routine, o );
-//   _.assert( !_.primitiveIs( o.object ),'expects object as argument but got', o.object );
-//   _.assert( _.objectIs( o.names ) || _.arrayIs( o.names ),'expects object names as argument but got', o.names );
+//   _.assert( !_.primitiveIs( o.object ),'Expects object as argument but got', o.object );
+//   _.assert( _.objectIs( o.names ) || _.arrayIs( o.names ),'Expects object names as argument but got', o.names );
 //
 //   return o;
 // }
@@ -167,7 +167,7 @@ _.assert( _.routineIs( _nameFielded ),'wProto needs wTools/staging/dwtools/abase
 // {
 //
 //   _.routineOptions( _accessorRegister, arguments );
-//   _.assert( _.prototypeIsStandard( o.proto ), 'expects formal prototype' );
+//   _.assert( _.prototypeIsStandard( o.proto ), 'Expects formal prototype' );
 //   _.assert( _.strDefined( o.declaratorName ) );
 //   _.assert( _.arrayIs( o.declaratorArgs ) );
 //   _.fieldsGroupFor( o.proto, '_Accessors' );
@@ -514,8 +514,8 @@ _.assert( _.routineIs( _nameFielded ),'wProto needs wTools/staging/dwtools/abase
 //   }
 //
 //   // debugger;
-//   _.assert( _.objectLikeOrRoutine( o.object ), () => 'expects object {-object-}, but got ' + _.toStrShort( o.object ) );
-//   _.assert( _.objectIs( o.names ), () => 'expects object {-names-}, but got ' + _.toStrShort( o.names ) );
+//   _.assert( _.objectLikeOrRoutine( o.object ), () => 'Expects object {-object-}, but got ' + _.toStrShort( o.object ) );
+//   _.assert( _.objectIs( o.names ), () => 'Expects object {-names-}, but got ' + _.toStrShort( o.names ) );
 //
 //   /* */
 //
@@ -641,8 +641,8 @@ _.assert( _.routineIs( _nameFielded ),'wProto needs wTools/staging/dwtools/abase
 //
 //   /* verification */
 //
-//   _.assert( _.objectLikeOrRoutine( o.object ), () => 'expects object {-o.object-} but got ' + _.toStrShort( o.object ) );
-//   _.assert( _.objectIs( o.names ) || _.arrayIs( o.names ), () => 'expects object {-o.names-} as argument but got ' + _.toStrShort( o.names ) );
+//   _.assert( _.objectLikeOrRoutine( o.object ), () => 'Expects object {-o.object-} but got ' + _.toStrShort( o.object ) );
+//   _.assert( _.objectIs( o.names ) || _.arrayIs( o.names ), () => 'Expects object {-o.names-} as argument but got ' + _.toStrShort( o.names ) );
 //
 //   /* message */
 //
@@ -1079,7 +1079,7 @@ _.assert( _.routineIs( _nameFielded ),'wProto needs wTools/staging/dwtools/abase
 // // function accessorToElement( o )
 // // {
 // //
-// //   _.assert( arguments.length === 1, 'expects single argument' );
+// //   _.assert( arguments.length === 1, 'Expects single argument' );
 // //   _.assert( _.objectIs( o.names ) );
 // //   _.routineOptions( accessorToElement,o );
 // //
@@ -1140,7 +1140,7 @@ _.assert( _.routineIs( _nameFielded ),'wProto needs wTools/staging/dwtools/abase
 
 function fieldsGroupsGet( src )
 {
-  _.assert( _.objectIs( src ), () => 'expects map {-src-}, but got ' + _.strTypeOf( src ) );
+  _.assert( _.objectIs( src ), () => 'Expects map {-src-}, but got ' + _.strTypeOf( src ) );
   _.assert( src.Groups === undefined || _.objectIs( src.Groups ) );
 
   if( src.Groups )
@@ -1215,8 +1215,8 @@ function fieldsGroupDeclare( o )
   o = o || Object.create( null );
 
   _.routineOptions( fieldsGroupDeclare,o );
-  _.assert( arguments.length === 1, 'expects single argument' );
-  _.assert( o.srcMap === null || !_.primitiveIs( o.srcMap ),'expects object {-o.srcMap-}, got', _.strTypeOf( o.srcMap ) );
+  _.assert( arguments.length === 1, 'Expects single argument' );
+  _.assert( o.srcMap === null || !_.primitiveIs( o.srcMap ),'Expects object {-o.srcMap-}, got', _.strTypeOf( o.srcMap ) );
   _.assert( _.strIs( o.fieldsGroupName ) );
   _.assert( _.routineIs( o.filter ) && _.strIs( o.filter.functionFamily ) );
 
@@ -1507,8 +1507,8 @@ function fieldsGroupsDeclare( o )
 {
 
   _.routineOptions( fieldsGroupsDeclare,o );
-  _.assert( arguments.length === 1, 'expects single argument' );
-  _.assert( o.srcMap === null || !_.primitiveIs( o.srcMap ),'expects object {-o.srcMap-}, got', _.strTypeOf( o.srcMap ) );
+  _.assert( arguments.length === 1, 'Expects single argument' );
+  _.assert( o.srcMap === null || !_.primitiveIs( o.srcMap ),'Expects object {-o.srcMap-}, got', _.strTypeOf( o.srcMap ) );
 
   if( !o.srcMap )
   return;
@@ -1768,7 +1768,7 @@ fieldsGroupsDeclareForEachFilter.defaults =
 //   let maker = o.maker;
 //   let symbol = Symbol.for( name );
 //
-//   _.assert( arguments.length === 1, 'expects single argument' );
+//   _.assert( arguments.length === 1, 'Expects single argument' );
 //   _.assert( _.strIs( name ) );
 //   _.assert( _.strIs( friendName ) );
 //   _.assert( _.routineIs( maker ) );
@@ -1837,7 +1837,7 @@ fieldsGroupsDeclareForEachFilter.defaults =
 //   let symbol = Symbol.for( name );
 //   let debug = o.debug;
 //
-//   _.assert( arguments.length === 1, 'expects single argument' );
+//   _.assert( arguments.length === 1, 'Expects single argument' );
 //   _.assert( _.strIs( name ) );
 //   _.assert( _.routineIs( maker ) );
 //   _.assertMapHasOnly( o,setterCopyable_functor.defaults );
@@ -1895,7 +1895,7 @@ fieldsGroupsDeclareForEachFilter.defaults =
 //   let bufferConstructor = o.bufferConstructor;
 //   let symbol = Symbol.for( name );
 //
-//   _.assert( arguments.length === 1, 'expects single argument' );
+//   _.assert( arguments.length === 1, 'Expects single argument' );
 //   _.assert( _.strIs( name ) );
 //   _.assert( _.routineIs( bufferConstructor ) );
 //   _.routineOptions( setterBufferFrom_functor,o );
@@ -1933,7 +1933,7 @@ fieldsGroupsDeclareForEachFilter.defaults =
 //   let name = Symbol.for( _.nameUnfielded( o.name ).coded );
 //   let nameOfChangeFlag = Symbol.for( _.nameUnfielded( o.nameOfChangeFlag ).coded );
 //
-//   _.assert( arguments.length === 1, 'expects single argument' );
+//   _.assert( arguments.length === 1, 'Expects single argument' );
 //   _.routineOptions( setterChangesTracking_functor,o );
 //
 //   throw _.err( 'not tested' );
@@ -1968,7 +1968,7 @@ fieldsGroupsDeclareForEachFilter.defaults =
 //   let original = o.original;
 //   let alias = o.alias;
 //
-//   _.assert( arguments.length === 1, 'expects single argument' );
+//   _.assert( arguments.length === 1, 'Expects single argument' );
 //   _.routineOptions( setterAlias_functor,o );
 //
 //   return function setterAlias( src )
@@ -1996,7 +1996,7 @@ fieldsGroupsDeclareForEachFilter.defaults =
 //   let original = o.original;
 //   let alias = o.alias;
 //
-//   _.assert( arguments.length === 1, 'expects single argument' );
+//   _.assert( arguments.length === 1, 'Expects single argument' );
 //   _.routineOptions( getterAlias_functor,o );
 //
 //   return function getterAlias( src )
@@ -2317,9 +2317,9 @@ function proxyMap( dst,original )
 function _mixinDelcare( o )
 {
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.mapIs( o ) || _.routineIs( o ) );
-  _.assert( _.routineIs( o.onMixin ) || o.onMixin === undefined || o.onMixin === null, 'expects routine {-o.onMixin-}, but got', _.strTypeOf( o ) );
+  _.assert( _.routineIs( o.onMixin ) || o.onMixin === undefined || o.onMixin === null, 'Expects routine {-o.onMixin-}, but got', _.strTypeOf( o ) );
   _.assert( _.strDefined( o.name ), 'mixin should have name' );
   _.assert( _.objectIs( o.extend ) || o.extend === undefined || o.extend === null );
   _.assert( _.objectIs( o.supplementOwn ) || o.supplementOwn === undefined || o.supplementOwn === null );
@@ -2334,8 +2334,8 @@ function _mixinDelcare( o )
     let md = this.__mixin__;
 
     _.assert( _.objectIs( md ) );
-    _.assert( arguments.length === 1, 'expects single argument' );
-    _.assert( _.routineIs( dstClass ), 'expects constructor' );
+    _.assert( arguments.length === 1, 'Expects single argument' );
+    _.assert( _.routineIs( dstClass ), 'Expects constructor' );
     _.assert( dstClass === dstClass.prototype.constructor );
     _.assertMapHasOnly( this, [ _.KnownConstructorFields, { mixin : 'mixin', __mixin__ : '__mixin__' }, this.prototype.Statics || {} ] );
 
@@ -2349,8 +2349,8 @@ function _mixinDelcare( o )
   {
     let md = this.__mixin__;
 
-    _.assert( arguments.length === 1, 'expects single argument' );
-    _.assert( _.routineIs( dstClass ), 'expects constructor' );
+    _.assert( arguments.length === 1, 'Expects single argument' );
+    _.assert( _.routineIs( dstClass ), 'Expects constructor' );
     _.assert( dstClass === dstClass.prototype.constructor );
     _.assertMapHasOnly( this, [ _.KnownConstructorFields, { mixin : 'mixin', __mixin__ : '__mixin__' }, this.prototype.Statics || {} ] );
 
@@ -2480,7 +2480,7 @@ function mixinApply( mixinDescriptor, dstPrototype )
 
   if( !_.mapIs( dstPrototype ) )
   {
-    _.assert( dstPrototype.constructor.prototype === dstPrototype,'mixin :','expects prototype with own constructor field' );
+    _.assert( dstPrototype.constructor.prototype === dstPrototype,'mixin :','Expects prototype with own constructor field' );
     _.assert( dstPrototype.constructor.name.length || dstPrototype.constructor._name.length,'mixin :','constructor should has name' );
     _.assert( _.routineIs( dstPrototype.init ) );
   }
@@ -2527,8 +2527,8 @@ function mixinHas( proto,mixin )
   }
   else
   {
-    _.assert( _.routineIs( mixin.mixin ),'expects mixin, but got not mixin',_.strTypeOf( mixin ) );
-    _.assert( _.strDefined( mixin.name ),'expects mixin, but got not mixin',_.strTypeOf( mixin ) );
+    _.assert( _.routineIs( mixin.mixin ),'Expects mixin, but got not mixin',_.strTypeOf( mixin ) );
+    _.assert( _.strDefined( mixin.name ),'Expects mixin, but got not mixin',_.strTypeOf( mixin ) );
     return proto._mixinsMap && proto._mixinsMap[ mixin.name ];
   }
 
@@ -2649,7 +2649,7 @@ function classDeclare( o )
     Self : 'Self',
   }
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.objectIs( o ) );
   _.assertOwnNoConstructor( o,'options for classDeclare should have no constructor' );
   _.assert( !( 'parent' in o ) || o.parent !== undefined,'parent is "undefined", something is wrong' );
@@ -2657,7 +2657,7 @@ function classDeclare( o )
   if( o.withClass )
   {
 
-    _.assert( _.routineIs( o.cls ),'expects {-o.cls-}' );
+    _.assert( _.routineIs( o.cls ),'Expects {-o.cls-}' );
     _.assert( _.routineIs( o.cls ),'classDeclare expects constructor' );
     _.assert( _.strIs( o.cls.name ) || _.strIs( o.cls._name ),'constructor should have name' );
     _.assert( _ObjectHasOwnProperty.call( o.cls.prototype,'constructor' ) );
@@ -2930,7 +2930,7 @@ function classExtend( o )
   _.assert( _.objectIs( o.extend ) || o.extend === undefined || o.extend === null );
   _.assert( _.objectIs( o.supplementOwn ) || o.supplementOwn === undefined || o.supplementOwn === null );
   _.assert( _.objectIs( o.supplement ) || o.supplement === undefined || o.supplement === null );
-  _.assert( _.routineIs( o.cls ) || _.objectIs( o.prototype ), 'expects class constructor or class prototype' );
+  _.assert( _.routineIs( o.cls ) || _.objectIs( o.prototype ), 'Expects class constructor or class prototype' );
 
   /*
   mixin could could have none class constructor
@@ -2939,7 +2939,7 @@ function classExtend( o )
   if( o.cls /*|| !o.prototype*/ )
   {
 
-    _.assert( _.routineIs( o.cls ), 'expects constructor of class ( o.cls )' );
+    _.assert( _.routineIs( o.cls ), 'Expects constructor of class ( o.cls )' );
     _.assert( _.strIs( o.cls.name ) || _.strIs( o.cls._name ), 'class constructor should have name' );
     _.assert( !!o.prototype );
     // if( !o.prototype.Statics )
@@ -3372,7 +3372,7 @@ function constructorGet( src )
 {
   let proto;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
 
   if( _ObjectHasOwnProperty.call( src,'constructor' ) )
   {
@@ -3439,7 +3439,7 @@ function parentGet( src )
 {
   let c = constructorGet( src );
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
 
   let proto = Object.getPrototypeOf( c.prototype );
   let result = proto ? proto.constructor : null;
@@ -3500,7 +3500,7 @@ function prototypeGet( src )
 
   let c = constructorGet( src );
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
 
   return c.prototype;
 }
@@ -3688,7 +3688,7 @@ function prototypeHasField( src, fieldName )
   let prototype = _.prototypeGet( src );
 
   _.assert( _.prototypeIs( prototype ) );
-  _.assert( _.prototypeIsStandard( prototype ),'expects standard prototype' );
+  _.assert( _.prototypeIsStandard( prototype ),'Expects standard prototype' );
   _.assert( arguments.length === 2, 'Expects exactly two arguments' );
   _.assert( _.strIs( fieldName ) );
 
@@ -3828,7 +3828,7 @@ function _fieldsOfRelationsGroups( src )
   let result = Object.create( null );
 
   _.assert( _.objectIs( src ) );
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
 
   for( let g in _.DefaultFieldsGroupsRelations )
   {
@@ -3848,8 +3848,8 @@ function fieldsOfRelationsGroups( src )
   let prototype = _.prototypeGet( src );
 
   _.assert( _.prototypeIs( prototype ) );
-  _.assert( _.prototypeIsStandard( prototype ),'expects standard prototype' );
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( _.prototypeIsStandard( prototype ),'Expects standard prototype' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
 
   let result = _._fieldsOfRelationsGroups( prototype );
 
@@ -3864,8 +3864,8 @@ function fieldsOfCopyableGroups( src )
   let result = Object.create( null );
 
   _.assert( _.prototypeIs( prototype ) );
-  _.assert( _.prototypeIsStandard( prototype ),'expects standard prototype' );
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( _.prototypeIsStandard( prototype ),'Expects standard prototype' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
 
   for( let g in _.DefaultFieldsGroupsCopyable )
   {
@@ -3886,8 +3886,8 @@ function fieldsOfTightGroups( src )
   let result = Object.create( null );
 
   _.assert( _.prototypeIs( prototype ) );
-  _.assert( _.prototypeIsStandard( prototype ),'expects standard prototype' );
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( _.prototypeIsStandard( prototype ),'Expects standard prototype' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
 
   for( let g in _.DefaultFieldsGroupsTight )
   {
@@ -3908,8 +3908,8 @@ function fieldsOfInputGroups( src )
   let result = Object.create( null );
 
   _.assert( _.prototypeIs( prototype ) );
-  _.assert( _.prototypeIsStandard( prototype ),'expects standard prototype' );
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( _.prototypeIsStandard( prototype ),'Expects standard prototype' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
 
   for( let g in _.DefaultFieldsGroupsInput )
   {
@@ -3986,7 +3986,7 @@ function instanceFinit( src )
 
   _.assert( !Object.isFrozen( src ) );
   _.assert( _.objectLikeOrRoutine( src ) );
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
 
   // let validator =
   // {
@@ -4207,7 +4207,7 @@ function defaultProxy( map )
 {
 
   _.assert( _.objectIs( map ) );
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
 
   let validator =
   {
@@ -4234,7 +4234,7 @@ function defaultProxyFlatteningToArray( src )
 {
   let result = [];
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.objectIs( src ) || _.arrayIs( src ) );
 
   function flatten( src )

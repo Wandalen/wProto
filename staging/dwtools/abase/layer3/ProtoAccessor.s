@@ -100,8 +100,8 @@ function _accessorDeclare_pre( routine, args )
   o.names = { [ o.names ] : o.names }
 
   _.routineOptions( routine, o );
-  _.assert( !_.primitiveIs( o.object ),'expects object as argument but got', o.object );
-  _.assert( _.objectIs( o.names ) || _.arrayIs( o.names ),'expects object names as argument but got', o.names );
+  _.assert( !_.primitiveIs( o.object ),'Expects object as argument but got', o.object );
+  _.assert( _.objectIs( o.names ) || _.arrayIs( o.names ),'Expects object names as argument but got', o.names );
 
   return o;
 }
@@ -112,7 +112,7 @@ function _accessorRegister( o )
 {
 
   _.routineOptions( _accessorRegister, arguments );
-  _.assert( _.prototypeIsStandard( o.proto ), 'expects formal prototype' );
+  _.assert( _.prototypeIsStandard( o.proto ), 'Expects formal prototype' );
   _.assert( _.strDefined( o.declaratorName ) );
   _.assert( _.arrayIs( o.declaratorArgs ) );
   _.fieldsGroupFor( o.proto, '_Accessors' );
@@ -449,8 +449,8 @@ function _accessorDeclare( o )
   }
 
   // debugger;
-  _.assert( _.objectLikeOrRoutine( o.object ), () => 'expects object {-object-}, but got ' + _.toStrShort( o.object ) );
-  _.assert( _.objectIs( o.names ), () => 'expects object {-names-}, but got ' + _.toStrShort( o.names ) );
+  _.assert( _.objectLikeOrRoutine( o.object ), () => 'Expects object {-object-}, but got ' + _.toStrShort( o.object ) );
+  _.assert( _.objectIs( o.names ), () => 'Expects object {-names-}, but got ' + _.toStrShort( o.names ) );
 
   /* */
 
@@ -554,8 +554,8 @@ function accessorForbid( o )
 
   /* verification */
 
-  _.assert( _.objectLikeOrRoutine( o.object ), () => 'expects object {-o.object-} but got ' + _.toStrShort( o.object ) );
-  _.assert( _.objectIs( o.names ) || _.arrayIs( o.names ), () => 'expects object {-o.names-} as argument but got ' + _.toStrShort( o.names ) );
+  _.assert( _.objectLikeOrRoutine( o.object ), () => 'Expects object {-o.object-} but got ' + _.toStrShort( o.object ) );
+  _.assert( _.objectIs( o.names ) || _.arrayIs( o.names ), () => 'Expects object {-o.names-} as argument but got ' + _.toStrShort( o.names ) );
 
   /* message */
 
@@ -1006,7 +1006,7 @@ function toElement( o )
   let r = Object.create( null );
 
   _.assert( 0, 'not tested' );
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.objectIs( o.names ) );
   _.assert( _.strIs( o.name ) );
   _.assert( _.strIs( o.storageName ) );
@@ -1213,7 +1213,7 @@ function setterFriend_functor( o )
   let maker = o.maker;
   let symbol = Symbol.for( name );
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.strIs( name ) );
   _.assert( _.strIs( friendName ) );
   _.assert( _.routineIs( maker ), 'Expects maker {-o.maker-}' );
@@ -1282,7 +1282,7 @@ function setterCopyable_functor( o )
   let symbol = Symbol.for( name );
   let debug = o.debug;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.strIs( name ) );
   _.assert( _.routineIs( maker ) );
   _.assertMapHasOnly( o,setterCopyable_functor.defaults );
@@ -1340,7 +1340,7 @@ function setterBufferFrom_functor( o )
   let bufferConstructor = o.bufferConstructor;
   let symbol = Symbol.for( name );
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.strIs( name ) );
   _.assert( _.routineIs( bufferConstructor ) );
   _.routineOptions( setterBufferFrom_functor,o );
@@ -1378,7 +1378,7 @@ function setterChangesTracking_functor( o )
   let name = Symbol.for( _.nameUnfielded( o.name ).coded );
   let nameOfChangeFlag = Symbol.for( _.nameUnfielded( o.nameOfChangeFlag ).coded );
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.routineOptions( setterChangesTracking_functor,o );
 
   throw _.err( 'not tested' );
@@ -1413,7 +1413,7 @@ function setterAlias_functor( o )
   let original = o.original;
   let alias = o.alias;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.routineOptions( setterAlias_functor,o );
 
   return function setterAlias( src )
@@ -1441,7 +1441,7 @@ function getterAlias_functor( o )
   let original = o.original;
   let alias = o.alias;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.routineOptions( getterAlias_functor,o );
 
   return function getterAlias( src )
@@ -1463,7 +1463,7 @@ getterAlias_functor.defaults =
 // function accessorToElement( o )
 // {
 //
-//   _.assert( arguments.length === 1, 'expects single argument' );
+//   _.assert( arguments.length === 1, 'Expects single argument' );
 //   _.assert( _.objectIs( o.names ) );
 //   _.routineOptions( accessorToElement,o );
 //
