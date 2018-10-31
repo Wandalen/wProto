@@ -206,7 +206,7 @@ function _accessorDeclareAct( o )
       _.strIs( o.combining ), () =>
       'overriding of property ' + o.name + '\n' +
       '{-o.combining-} suppose to be ' + _.strQuote( _.accessor.Combining ) + ' if accessor overided, ' +
-      'but is' + _.strQuote( o.combining )
+      'but it is ' + _.strQuote( o.combining )
     );
 
     _.assert( o.combining === 'rewrite' || o.combining === 'append' || o.combining === 'supplement','not implemented' );
