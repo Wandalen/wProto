@@ -64,7 +64,7 @@ function like()
       if( o instanceof proto.constructor )
       return o;
       else
-      return new( _.routineJoin( proto.constructor, proto.constructor, arguments ) );
+      return new( _.constructorJoin( proto.constructor, arguments ) );
 
       _.assertMapHasOnly( this,proto,'Prototype of the object ' + ( location ? 'defined at\n' + location + '\n' : '' ) + 'does not have requested fields.' );
 

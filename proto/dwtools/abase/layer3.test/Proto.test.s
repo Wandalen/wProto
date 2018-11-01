@@ -1823,8 +1823,9 @@ function customFieldsGroups( test )
 
 //
 
-function experimentStaticFields( test )
+function staticFieldsPreserving( test )
 {
+
   function BasicConstructor(){}
 
   function init()
@@ -1881,8 +1882,15 @@ function experimentStaticFields( test )
 
   /* problem */
 
-  var instance = DerivedConstructor1();
   test.identical( BasicConstructor.prototype.set, basicSet );
+  test.identical( DerivedConstructor1.prototype.set, derivedSet );
+
+  debugger;
+  var instance = DerivedConstructor1();
+  debugger;
+
+  test.identical( BasicConstructor.prototype.set, basicSet );
+  test.identical( DerivedConstructor1.prototype.set, derivedSet );
 
   /* works fine with new */
 
@@ -1927,7 +1935,7 @@ var Self =
 
     customFieldsGroups : customFieldsGroups,
 
-    experimentStaticFields : experimentStaticFields,
+    staticFieldsPreserving : staticFieldsPreserving,
 
   },
 

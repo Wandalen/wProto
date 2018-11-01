@@ -3938,7 +3938,7 @@ function fieldsOfInputGroups( src )
   if( o instanceof Self )
   return o;
   else
-  return new( _.routineJoin( Self, Self, arguments ) );
+  return new( _.constructorJoin( Self, arguments ) );
   return Self.prototype.init.apply( this,arguments );
 
 */
@@ -3960,7 +3960,7 @@ function instanceConstructor( cls, context, args )
   }
   else
   {
-    return new( _.routineJoin( cls, cls, args ) );
+    return new( _.constructorJoin( cls, args ) );
   }
 
   return cls.prototype.init.apply( context, args );
@@ -4274,7 +4274,7 @@ function Definition( o )
   if( o instanceof Definition )
   return o;
   else
-  return new( _.routineJoin( Definition, Definition, arguments ) );
+  return new( _.constructorJoin( Definition, arguments ) );
   _.mapExtend( this, o );
   return this;
 }
