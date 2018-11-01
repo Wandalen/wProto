@@ -1821,6 +1821,76 @@ function customFieldsGroups( test )
 
 }
 
+//
+
+function experimentStaticFields( test )
+{
+  function BasicConstructor(){}
+
+  function init()
+  {
+  }
+
+  function basicSet()
+  {
+    console.log( 'basicSet' )
+  }
+
+  var Extend =
+  {
+    init : init,
+    Statics :
+    {
+      set : basicSet
+    }
+  }
+
+  _.classDeclare
+  ({
+    cls : BasicConstructor,
+    parent : null,
+    extend : Extend,
+  });
+
+  /* */
+
+  var DerivedConstructor1 = function DerivedConstructor1()
+  {
+    return _.instanceConstructor( DerivedConstructor1, this, arguments );
+  }
+
+  function derivedSet()
+  {
+    console.log( 'derivedSet' )
+  }
+
+  var Extend =
+  {
+    Statics :
+    {
+      set : derivedSet
+    }
+  }
+
+  _.classDeclare
+  ({
+    parent : BasicConstructor,
+    cls : DerivedConstructor1,
+    extend : Extend,
+  });
+
+  /* problem */
+
+  var instance = DerivedConstructor1();
+  test.identical( BasicConstructor.prototype.set, basicSet );
+
+  /* works fine with new */
+
+  // var instance = new DerivedConstructor1();
+  // test.identical( BasicConstructor.prototype.set, basicSet );
+
+}
+
 // --
 // declare
 // --
@@ -1856,6 +1926,8 @@ var Self =
     mixinStaticsWithDefinition : mixinStaticsWithDefinition,
 
     customFieldsGroups : customFieldsGroups,
+
+    experimentStaticFields : experimentStaticFields,
 
   },
 
