@@ -28,8 +28,8 @@ if( typeof module !== 'undefined' )
 
   if( !_.isIncluded( 'wProto' ) )
   {
-    require( '../../abase/layer3/Proto.s' );
-    require( '../../abase/layer3/ProtoLike.s' );
+    require( '../../abase/l3/Proto.s' );
+    require( '../../abase/l3/ProtoLike.s' );
   }
 
 }

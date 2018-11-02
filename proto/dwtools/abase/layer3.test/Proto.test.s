@@ -27,7 +27,7 @@ if( typeof module !== 'undefined' )
   _.include( 'wTesting' );
 
   if( !_.isIncluded( 'wProto' ) )
-  require( '../../abase/layer3/Proto.s' );
+  require( '../../abase/l3/Proto.s' );
 
 }
 
