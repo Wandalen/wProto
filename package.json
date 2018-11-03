@@ -15,14 +15,14 @@
       "email": "volodymyr.migdal@gmail.com"
     }
   ],
-  "main": "staging/dwtools/abase/layer3/Proto.s",
+  "main": "proto/dwtools/abase/l3/Proto.s",
   "files": [
     "npm-shrinkwrap.json",
-    "staging/dwtools/abase/layer3",
+    "proto/dwtools/abase/l3",
     "production"
   ],
   "scripts": {
-    "test": "wtest staging",
+    "test": "wtest proto",
     "make_doc": "./doc.sh"
   },
   "repository": {
