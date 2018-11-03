@@ -37,6 +37,7 @@
   },
   "devDependencies": {
     "wProto": "file:.",
+    "wcomparator" : "",
     "wTesting": ""
   },
   "keywords": [

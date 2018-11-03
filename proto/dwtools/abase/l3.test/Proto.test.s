@@ -25,8 +25,8 @@ if( typeof module !== 'undefined' )
   var _ = _global_.wTools;
 
   _.include( 'wTesting' );
+  _.include( 'wComparator' );
 
-  if( !_.isIncluded( 'wProto' ) )
   require( '../../abase/l3/Proto.s' );
 
 }
