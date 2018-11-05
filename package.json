@@ -19,7 +19,7 @@
   "files": [
     "npm-shrinkwrap.json",
     "proto/dwtools/abase/l3",
-    "production"
+    "proto/dwtools/Tools.s", "production"
   ],
   "scripts": {
     "test": "wtest proto",
