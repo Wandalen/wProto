@@ -6,10 +6,6 @@
   @module Tools/base/Proto - Relations module. Collection of routines to define classes and relations between them. Proto leverages multiple inheritances, mixins, accessors, fields groups defining, introspection and more. Use it as a skeleton of the application.
 */
 
-/*
-  xxx : replace let -> let
-*/
-
 /**
 * Definitions :
 
@@ -37,7 +33,7 @@
     :: A has B.
     :: A exists because of B, but B exists without A.
     :: A має B.
-  A associate B
+  A associates B
     :: A has link on B
     :: A is linked with B
     :: A посилається на B.
@@ -49,25 +45,12 @@
 
 */
 
+// debugger;
+
 if( typeof module !== 'undefined' )
 {
 
-  if( typeof _global_ === 'undefined' || !_global_.wBase )
-  {
-    let toolsPath = '../../../dwtools/Base.s';
-    let toolsExternal = 0;
-    try
-    {
-      toolsPath = require.resolve( toolsPath );
-    }
-    catch( err )
-    {
-      toolsExternal = 1;
-      require( 'wTools' );
-    }
-    if( !toolsExternal )
-    require( toolsPath );
-  }
+  let _ = require( '../../Tools.s' );
 
   if( !_global_.wTools.nameFielded )
   try
@@ -3199,7 +3182,7 @@ _.mapExtend( _, Fields );
 
 if( typeof module !== 'undefined' )
 if( _global_.WTOOLS_PRIVATE )
-delete require.cache[ module.id ];
+{ /* delete require.cache[ module.id ]; */ }
 
 if( typeof module !== 'undefined' && module !== null )
 module[ 'exports' ] = Self;

@@ -5,7 +5,8 @@
 if( typeof module !== 'undefined' )
 {
 
-  require( './Proto.s' );
+  // debugger;
+  // require( './Proto.s' );
 
 }
 
@@ -15,8 +16,9 @@ var _ObjectHasOwnProperty = Object.hasOwnProperty;
 var _nameFielded = _.nameFielded;
 
 _.assert( !_.construction )
-if( _.construction )
-return;
+
+// if( _.construction )
+// return;
 
 //
 
@@ -246,7 +248,7 @@ _.accessor.readOnly
 
 if( typeof module !== 'undefined' )
 if( _global_.WTOOLS_PRIVATE )
-delete require.cache[ module.id ];
+{ /* delete require.cache[ module.id ]; */ }
 
 if( typeof module !== 'undefined' && module !== null )
 module[ 'exports' ] = Self;
