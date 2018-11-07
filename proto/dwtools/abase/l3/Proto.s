@@ -2490,6 +2490,7 @@ function fieldsOfInputGroups( src )
 
 function instanceConstructor( cls, context, args )
 {
+
   _.assert( args.length === 0 || args.length === 1 );
   _.assert( arguments.length === 3 );
   _.routineIs( cls );
