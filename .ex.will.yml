@@ -1,9 +1,10 @@
 
+
 about :
 
   name : wProto
   description : Relations module. Collection of routines to define classes and relations between them. Proto leverages multiple inheritances, mixins, accessors, fields groups defining, introspection and more. Use it as a skeleton of the application.
-  version : 0.4.94
+  version : 0.4.108
   enabled : 1
   interpreters :
   - nodejs >= 6.0.0
@@ -22,30 +23,34 @@ path :
 
   repository : git+https://github.com/Wandalen/wProto.git
   bugs : https://github.com/Wandalen/wProto/issues
-  entry.debug : '{path::out.debug}/dwtools/abase/____'
-  entry.release : '{path::out.release}/dwtools/abase/____'
 
 build :
 
-  .debug.raw.export :
-    default : 1
-    filesPath : path::out.debug
-    entryPath : path::entry.debug
-    setting :
+  debug.raw.export :
+    exportDirPath : path::out.debug
+    criterion :
+      default : 1
       debug : 1
       raw : 1
       export : 1
+      tar : 0
     steps :
-      - build::.debug
+      # - build::.debug.raw
       - step::export
 
-  .release.compiled.export :
-    filesPath : path::out.release
-    entryPath : path::entry.release
-    setting :
+  release.compiled.export :
+    exportDirPath : path::out.release
+    criterion :
       debug : 0
       raw : 0
       export : 1
+      tar : 0
     steps :
-      - build::.release.compiled
+      - build::release.compiled
       - step::export
+
+  export.all :
+    steps :
+      - build::debug.raw.export
+      - build::release.compiled.export
+
