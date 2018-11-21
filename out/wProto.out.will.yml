@@ -6,7 +6,7 @@ about:
     between them. Proto leverages multiple inheritances, mixins, accessors,
     fields groups defining, introspection and more. Use it as a skeleton of the
     application.
-  version: 0.4.109
+  version: 0.4.110
   enabled: 1
   interpreters:
     - nodejs >= 6.0.0
@@ -280,7 +280,7 @@ build:
       - 'step::export.proto'
 exported:
   proto.export:
-    version: 0.4.109
+    version: 0.4.110
     criterion:
       default: 1
       debug: 1
