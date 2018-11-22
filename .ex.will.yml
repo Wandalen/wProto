@@ -1,9 +1,9 @@
 
 about :
 
-  name : wProto
-  description : 'Relations module. Collection of routines to define classes and relations between them. Proto leverages multiple inheritances, mixins, accessors, fields groups defining, introspection and more. Use it as a skeleton of the application.'
-  version : 0.4.110
+  name : "wProto"
+  description : "Relations module. Collection of routines to define classes and relations between them. Proto leverages multiple inheritances, mixins, accessors, fields groups defining, introspection and more. Use it as a skeleton of the application."
+  version : "0.4.111"
   enabled : 1
   interpreters :
   - nodejs >= 6.0.0
