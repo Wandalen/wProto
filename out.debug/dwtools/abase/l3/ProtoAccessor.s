@@ -1226,7 +1226,7 @@ function setterFriend_functor( o )
   {
 
     let self = this;
-    _.assert( src === null || _.objectIs( src ),'setterFriend : expects null or object, but got ' + _.strTypeOf( src ) );
+    _.assert( src === null || _.objectIs( src ),'setterFriend : expects null or object, but got ' + _.strType( src ) );
 
     if( !src )
     {
