@@ -816,29 +816,50 @@ function ifDebugProxyReadOnly( ins )
 
 //
 
-function proxyMap( dst,original )
+function proxyMap( dst, original )
 {
 
   _.assert( arguments.length === 2, 'Expects exactly two arguments' );
   _.assert( !!dst );
   _.assert( !!original );
 
+  // let handler =
+  // {
+  //   get : function( obj, k )
+  //   {
+  //     if( obj[ k ] !== undefined )
+  //     return obj[ k ];
+  //     return original[ k ];
+  //   },
+  //   set : function( obj, k, val, target )
+  //   {
+  //     if( obj[ k ] !== undefined )
+  //     obj[ k ] = val;
+  //     else if( original[ k ] !== undefined )
+  //     original[ k ] = val;
+  //     else
+  //     obj[ k ] = val;
+  //     return true;
+  //   },
+  // }
+
   let handler =
   {
-    get : function( obj, k )
+    get : function( dst, k, proxy )
     {
-      if( obj[ k ] !== undefined )
-      return obj[ k ];
+      if( dst[ k ] !== undefined )
+      return dst[ k ];
       return original[ k ];
     },
-    set : function( obj, k, val, target )
+    set : function( dst, k, val, proxy )
     {
-      if( obj[ k ] !== undefined )
-      obj[ k ] = val;
+      debugger;
+      if( dst[ k ] !== undefined )
+      dst[ k ] = val;
       else if( original[ k ] !== undefined )
       original[ k ] = val;
       else
-      obj[ k ] = val;
+      dst[ k ] = val;
       return true;
     },
   }
