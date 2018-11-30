@@ -1889,7 +1889,7 @@ function staticFieldsPreserving( test )
 var Self =
 {
 
-  name : 'Tools/base/layer3/proto',
+  name : 'Tools/base/l3/proto',
   silencing : 1,
   // verbosity : 7,
   // routineTimeOut : 300000,

@@ -77,7 +77,7 @@ function isLike( test )
 var Self =
 {
 
-  name : 'Tools/base/layer3/ProtoLike',
+  name : 'Tools/base/l3/ProtoLike',
   silencing : 1,
 
   tests :
