@@ -853,7 +853,6 @@ function proxyMap( dst, original )
     },
     set : function( dst, k, val, proxy )
     {
-      debugger;
       if( dst[ k ] !== undefined )
       dst[ k ] = val;
       else if( original[ k ] !== undefined )
