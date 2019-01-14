@@ -3,7 +3,8 @@
 'use strict';
 
 /**
-  @module Tools/base/Proto - Relations module. Collection of routines to define classes and relations between them. Proto leverages multiple inheritances, mixins, accessors, fields groups defining, introspection and more. Use it as a skeleton of the application.
+ * Relations module. Collection of routines to define classes and relations between them. Proto leverages multiple inheritances, mixins, accessors, fields groups defining, introspection and more. Use it as a skeleton of the application.
+  @module Tools/base/Proto
 */
 
 /**
