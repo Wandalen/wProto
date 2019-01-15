@@ -62,6 +62,8 @@ path:
       - ./dwtools/abase/l3.test
       - ./dwtools/abase/l3.test/Proto.test.s
       - ./dwtools/abase/l3.test/ProtoLike.test.s
+      - ./dwtools/amid
+      - ./dwtools/atop
     criterion:
       default: 1
       debug: 1
@@ -92,6 +94,8 @@ reflector:
     filePath:
       ./proto: ./out.release
     srcFilter:
+      filePath:
+        ./proto: ./out.release
       maskAll:
         excludeAny:
           - !<tag:yaml.org,2002:js/regexp> /(\W|^)node_modules(\W|$)/
@@ -115,6 +119,8 @@ reflector:
     filePath:
       ./proto: ./out.debug
     srcFilter:
+      filePath:
+        ./proto: ./out.debug
       maskAll:
         excludeAny:
           - !<tag:yaml.org,2002:js/regexp> /(\W|^)node_modules(\W|$)/
@@ -154,6 +160,7 @@ reflector:
   exported.0:
     filePath: ./proto
     srcFilter:
+      filePath: ./proto
       prefixPath: .
     dstFilter:
       prefixPath: .
@@ -167,6 +174,13 @@ reflector:
       ./dwtools/abase/l3.test/Proto.test.s: true
       ./dwtools/abase/l3.test/ProtoLike.test.s: true
     srcFilter:
+      filePath:
+        ./dwtools/Tools.s: true
+        ./dwtools/abase/l3/Proto.s: true
+        ./dwtools/abase/l3/ProtoAccessor.s: true
+        ./dwtools/abase/l3/ProtoLike.s: true
+        ./dwtools/abase/l3.test/Proto.test.s: true
+        ./dwtools/abase/l3.test/ProtoLike.test.s: true
       basePath: .
       prefixPath: proto
     dstFilter:
