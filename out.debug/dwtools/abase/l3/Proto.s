@@ -2732,9 +2732,9 @@ function defaultApply( src )
 {
 
   _.assert( _.objectIs( src ) || _.longIs( src ) );
-  _.assert( def === _.def );
+  // _.assert( def === _.def );
 
-  let defVal = src[ def ];
+  let defVal = src[ _.def ];
 
   if( !defVal )
   return src;
