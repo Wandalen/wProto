@@ -2527,7 +2527,17 @@ function instanceConstructor( cls, context, args )
   }
   else
   {
-    return new( _.constructorJoin( cls, args ) );
+    if( args.length === 1 && _.arrayLike( args[ 0 ] ) )
+    {
+      let result = [];
+      for( let i = 0 ; i < args[ 0 ].length ; i++ )
+      result[ i ] = new( _.constructorJoin( cls, [ args[ 0 ][ i ] ] ) );
+      return result;
+    }
+    else
+    {
+      return new( _.constructorJoin( cls, args ) );
+    }
   }
 
   return cls.prototype.init.apply( context, args );
