@@ -1882,6 +1882,99 @@ function staticFieldsPreserving( test )
 
 }
 
+//
+
+function instanceConstructor( test )
+{
+
+  function BasicConstructor()
+  {
+    return _.instanceConstructor( BasicConstructor, this, arguments );
+  }
+
+  function init()
+  {
+    counter += 1;
+  }
+
+  var counter = 0;
+  var Extend =
+  {
+    init,
+  }
+
+  _.classDeclare
+  ({
+    cls : BasicConstructor,
+    parent : null,
+    extend : Extend,
+  });
+
+  // /* */
+  //
+  // test.case = 'no new';
+  //
+  // counter = 0;
+  // var instance = BasicConstructor();
+  // test.is( instance instanceof BasicConstructor );
+  // test.is( instance.constructor === BasicConstructor );
+  // test.is( instance.init === init );
+  // test.identical( counter, 1 );
+  //
+  // var instance2 = BasicConstructor( instance );
+  // test.is( instance2 instanceof BasicConstructor );
+  // test.is( instance2.constructor === BasicConstructor );
+  // test.is( instance2.init === init );
+  // test.is( instance === instance2 );
+  // test.identical( counter, 1 );
+  //
+  // /* */
+  //
+  // test.case = 'with new';
+  //
+  // counter = 0;
+  // var instance = new BasicConstructor();
+  // test.is( instance instanceof BasicConstructor );
+  // test.is( instance.constructor === BasicConstructor );
+  // test.is( instance.init === init );
+  // test.identical( counter, 1 );
+  //
+  // var instance2 = new BasicConstructor( instance );
+  // test.is( instance2 instanceof BasicConstructor );
+  // test.is( instance2.constructor === BasicConstructor );
+  // test.is( instance2.init === init );
+  // test.is( instance !== instance2 );
+  // test.identical( counter, 2 );
+
+  /* */
+
+  test.case = 'array';
+
+  counter = 0;
+  var instances = BasicConstructor([ 1,null,3 ]);
+  test.identical( instances.length, 2 );
+  test.is( instances[ 0 ] instanceof BasicConstructor );
+  test.is( instances[ 0 ].constructor === BasicConstructor );
+  test.is( instances[ 0 ].init === init );
+  test.is( instances[ 1 ] instanceof BasicConstructor );
+  test.is( instances[ 1 ].constructor === BasicConstructor );
+  test.is( instances[ 1 ].init === init );
+  test.identical( counter, 2 );
+
+  var instances2 = BasicConstructor( instances );
+  test.identical( instances2.length, 2 );
+  test.is( instances2[ 0 ] instanceof BasicConstructor );
+  test.is( instances2[ 0 ].constructor === BasicConstructor );
+  test.is( instances2[ 0 ].init === init );
+  test.is( instances2[ 1 ] instanceof BasicConstructor );
+  test.is( instances2[ 1 ].constructor === BasicConstructor );
+  test.is( instances2[ 1 ].init === init );
+  test.is( instances2[ 0 ] === instances[ 0 ] );
+  test.is( instances2[ 1 ] === instances[ 1 ] );
+  test.identical( counter, 2 );
+
+}
+
 // --
 // declare
 // --
@@ -1897,28 +1990,29 @@ var Self =
   tests :
   {
 
-    instanceIs : instanceIs,
-    prototypeIs : prototypeIs,
-    constructorIs : constructorIs,
-    prototypeIsStandard : prototypeIsStandard,
+    instanceIs,
+    prototypeIs,
+    constructorIs,
+    prototypeIsStandard,
 
-    accessor : accessor,
-    accessorIsClean : accessorIsClean,
+    accessor,
+    accessorIsClean,
 
-    accessorForbid : accessorForbid,
-    accessorReadOnly : accessorReadOnly,
-    forbids : forbids,
+    accessorForbid,
+    accessorReadOnly,
+    forbids,
 
-    constant : constant,
+    constant,
 
-    classDeclare : classDeclare,
-    staticsDeclare : staticsDeclare,
-    staticsOverwrite : staticsOverwrite,
-    mixinStaticsWithDefinition : mixinStaticsWithDefinition,
+    classDeclare,
+    staticsDeclare,
+    staticsOverwrite,
+    mixinStaticsWithDefinition,
 
-    customFieldsGroups : customFieldsGroups,
+    customFieldsGroups,
 
-    staticFieldsPreserving : staticFieldsPreserving,
+    staticFieldsPreserving,
+    instanceConstructor,
 
   },
 

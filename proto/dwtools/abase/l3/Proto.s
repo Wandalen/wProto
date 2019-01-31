@@ -824,26 +824,6 @@ function proxyMap( dst, original )
   _.assert( !!dst );
   _.assert( !!original );
 
-  // let handler =
-  // {
-  //   get : function( obj, k )
-  //   {
-  //     if( obj[ k ] !== undefined )
-  //     return obj[ k ];
-  //     return original[ k ];
-  //   },
-  //   set : function( obj, k, val, target )
-  //   {
-  //     if( obj[ k ] !== undefined )
-  //     obj[ k ] = val;
-  //     else if( original[ k ] !== undefined )
-  //     original[ k ] = val;
-  //     else
-  //     obj[ k ] = val;
-  //     return true;
-  //   },
-  // }
-
   let handler =
   {
     get : function( dst, k, proxy )
@@ -2531,7 +2511,15 @@ function instanceConstructor( cls, context, args )
     {
       let result = [];
       for( let i = 0 ; i < args[ 0 ].length ; i++ )
-      result[ i ] = new( _.constructorJoin( cls, [ args[ 0 ][ i ] ] ) );
+      {
+        let o = args[ 0 ][ i ];
+        if( o === null )
+        continue;
+        if( o instanceof cls )
+        result.push( o );
+        else
+        result.push( new( _.constructorJoin( cls, [ o ] ) ) );
+      }
       return result;
     }
     else
