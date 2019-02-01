@@ -2943,7 +2943,6 @@ function contained( src )
   }
 
   _.accessor.hide( definition, 'valueGet' );
-
   Object.freeze( definition );
   return definition;
 }
