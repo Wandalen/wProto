@@ -2881,7 +2881,7 @@ function own( src )
 
 //
 
-function ownInstanceOf( src )
+function instanceOf( src )
 {
   let definition = new Definition({ value : src });
 
@@ -3058,7 +3058,7 @@ let Define =
   Definition : Definition,
   common : common,
   own : own,
-  ownInstanceOf : ownInstanceOf,
+  instanceOf : instanceOf,
   ownMadeBy : ownMadeBy,
   contained : contained,
 }
