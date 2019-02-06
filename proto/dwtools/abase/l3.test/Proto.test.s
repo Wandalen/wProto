@@ -44,11 +44,13 @@ function instanceIs( t )
   t.is( !_.instanceIs( function(){} ) );
   t.is( !_.instanceIs( Self.constructor ) );
 
-  t.will = 'object-like';
+  t.will = 'long';
   t.is( _.instanceIs( [] ) );
+  t.is( _.instanceIs( new Float32Array() ) );
+
+  t.will = 'object-like';
   t.is( _.instanceIs( /x/ ) );
   t.is( _.instanceIs( new Date() ) );
-  t.is( _.instanceIs( new Float32Array() ) );
   t.is( _.instanceIs( new (function(){})() ) );
   t.is( _.instanceIs( Self ) );
 
@@ -59,6 +61,51 @@ function instanceIs( t )
   t.is( !_.instanceIs( Object.getPrototypeOf( new Float32Array() ) ) );
   t.is( !_.instanceIs( Object.getPrototypeOf( new (function(){})() ) ) );
   t.is( !_.instanceIs( Object.getPrototypeOf( Self ) ) );
+
+}
+
+//
+
+function instanceIsStandard( t )
+{
+  var self = this;
+
+  t.will = 'pure map';
+  t.is( !_.instanceIsStandard( Object.create( null ) ) );
+
+  t.will = 'map';
+  t.is( !_.instanceIsStandard( {} ) );
+
+  t.will = 'primitive';
+  t.is( !_.instanceIsStandard( 0 ) );
+  t.is( !_.instanceIsStandard( 1 ) );
+  t.is( !_.instanceIsStandard( '1' ) );
+  t.is( !_.instanceIsStandard( null ) );
+  t.is( !_.instanceIsStandard( undefined ) );
+
+  t.will = 'routine';
+  t.is( !_.instanceIsStandard( Date ) );
+  t.is( !_.instanceIsStandard( Float32Array ) );
+  t.is( !_.instanceIsStandard( function(){} ) );
+  t.is( !_.instanceIsStandard( Self.constructor ) );
+
+  t.will = 'long';
+  t.is( !_.instanceIsStandard( [] ) );
+  t.is( !_.instanceIsStandard( new Float32Array() ) );
+
+  t.will = 'object-like';
+  t.is( !_.instanceIsStandard( /x/ ) );
+  t.is( !_.instanceIsStandard( new Date() ) );
+  t.is( !_.instanceIsStandard( new (function(){})() ) );
+  t.is( !_.instanceIsStandard( Self ) );
+
+  t.will = 'object-like prototype';
+  t.is( !_.instanceIsStandard( Object.getPrototypeOf( [] ) ) );
+  t.is( !_.instanceIsStandard( Object.getPrototypeOf( /x/ ) ) );
+  t.is( !_.instanceIsStandard( Object.getPrototypeOf( new Date() ) ) );
+  t.is( !_.instanceIsStandard( Object.getPrototypeOf( new Float32Array() ) ) );
+  t.is( !_.instanceIsStandard( Object.getPrototypeOf( new (function(){})() ) ) );
+  t.is( !_.instanceIsStandard( Object.getPrototypeOf( Self ) ) );
 
 }
 
@@ -1991,6 +2038,7 @@ var Self =
   {
 
     instanceIs,
+    instanceIsStandard,
     prototypeIs,
     constructorIs,
     prototypeIsStandard,
