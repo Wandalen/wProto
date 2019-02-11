@@ -6,7 +6,7 @@ about:
     between them. Proto leverages multiple inheritances, mixins, accessors,
     fields groups defining, introspection and more. Use it as a skeleton of the
     application.
-  version: 0.4.129
+  version: 0.4.131
   enabled: 1
   interpreters:
     - nodejs >= 6.0.0
@@ -26,11 +26,11 @@ path:
   out:
     path: out
   out.debug:
-    path: ./out.debug
+    path: ./out/debug
     criterion:
       debug: 1
   out.release:
-    path: ./out.release
+    path: ./out/release
     criterion:
       debug: 0
   repository:
@@ -49,19 +49,19 @@ path:
       public: 1
   exportedFiles.proto.export:
     path:
-      - .
-      - ./dwtools
-      - ./dwtools/Tools.s
-      - ./dwtools/abase
-      - ./dwtools/abase/l3
-      - ./dwtools/abase/l3/Proto.s
-      - ./dwtools/abase/l3/ProtoAccessor.s
-      - ./dwtools/abase/l3/ProtoLike.s
-      - ./dwtools/abase/l3.test
-      - ./dwtools/abase/l3.test/Proto.test.s
-      - ./dwtools/abase/l3.test/ProtoLike.test.s
-      - ./dwtools/amid
-      - ./dwtools/atop
+      - proto
+      - proto/dwtools
+      - proto/dwtools/Tools.s
+      - proto/dwtools/abase
+      - proto/dwtools/abase/l3
+      - proto/dwtools/abase/l3/Proto.s
+      - proto/dwtools/abase/l3/ProtoAccessor.s
+      - proto/dwtools/abase/l3/ProtoLike.s
+      - proto/dwtools/abase/l3.test
+      - proto/dwtools/abase/l3.test/Proto.test.s
+      - proto/dwtools/abase/l3.test/ProtoLike.test.s
+      - proto/dwtools/amid
+      - proto/dwtools/atop
     criterion:
       default: 1
       debug: 1
@@ -75,7 +75,7 @@ reflector:
   reflect.proto.:
     srcFilter:
       filePath:
-        ./proto: ./out.release
+        ./proto: ./out/release
       maskAll:
         excludeAny:
           - !<tag:yaml.org,2002:js/regexp> /(\W|^)node_modules(\W|$)/
@@ -96,7 +96,7 @@ reflector:
   reflect.proto.debug:
     srcFilter:
       filePath:
-        ./proto: ./out.debug
+        ./proto: ./out/debug
       maskAll:
         excludeAny:
           - !<tag:yaml.org,2002:js/regexp> /(\W|^)node_modules(\W|$)/
@@ -147,18 +147,18 @@ reflector:
     srcFilter:
       filePath:
         .: true
-        ./dwtools: true
-        ./dwtools/Tools.s: true
-        ./dwtools/abase: true
-        ./dwtools/abase/l3: true
-        ./dwtools/abase/l3/Proto.s: true
-        ./dwtools/abase/l3/ProtoAccessor.s: true
-        ./dwtools/abase/l3/ProtoLike.s: true
-        ./dwtools/abase/l3.test: true
-        ./dwtools/abase/l3.test/Proto.test.s: true
-        ./dwtools/abase/l3.test/ProtoLike.test.s: true
-        ./dwtools/amid: true
-        ./dwtools/atop: true
+        dwtools: true
+        dwtools/Tools.s: true
+        dwtools/abase: true
+        dwtools/abase/l3: true
+        dwtools/abase/l3/Proto.s: true
+        dwtools/abase/l3/ProtoAccessor.s: true
+        dwtools/abase/l3/ProtoLike.s: true
+        dwtools/abase/l3.test: true
+        dwtools/abase/l3.test/Proto.test.s: true
+        dwtools/abase/l3.test/ProtoLike.test.s: true
+        dwtools/amid: true
+        dwtools/atop: true
       basePath: .
       prefixPath: proto
     criterion:
@@ -289,7 +289,7 @@ build:
       - 'step::export.proto'
 exported:
   proto.export:
-    version: 0.4.129
+    version: 0.4.131
     criterion:
       default: 1
       debug: 1
