@@ -97,7 +97,7 @@ function instanceIsStandard( t )
   t.is( !_.instanceIsStandard( /x/ ) );
   t.is( !_.instanceIsStandard( new Date() ) );
   t.is( !_.instanceIsStandard( new (function(){})() ) );
-  t.is( !_.instanceIsStandard( Self ) );
+  t.is( _.instanceIsStandard( Self ) );
 
   t.will = 'object-like prototype';
   t.is( !_.instanceIsStandard( Object.getPrototypeOf( [] ) ) );

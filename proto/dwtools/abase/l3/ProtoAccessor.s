@@ -865,7 +865,7 @@ function constant( dstPrototype, name, value )
 
   if( _.containerIs( name ) )
   {
-    _.eachName( name, ( n, v ) =>
+    _.eachKey( name, ( n, v ) =>
     {
       if( value !== undefined )
       _.accessor.constant( dstPrototype, n, value );
@@ -905,7 +905,7 @@ function hide( dstPrototype, name, value )
 
   if( _.containerIs( name ) )
   {
-    _.eachName( name, ( n, v ) =>
+    _.eachKey( name, ( n, v ) =>
     {
       if( value !== undefined )
       _.accessor.hide( dstPrototype, n, value );
