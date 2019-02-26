@@ -442,6 +442,183 @@ function fieldsGroupRestrictsSupplement( dstPrototype,srcMap )
 
 }
 
+// //
+//
+// function _fieldsOfRelationsGroups( src )
+// {
+//   let result = Object.create( null );
+//
+//   _.assert( _.objectIs( src ) );
+//   _.assert( arguments.length === 1, 'Expects single argument' );
+//
+//   for( let g in _.DefaultFieldsGroupsRelations )
+//   {
+//
+//     if( src[ g ] )
+//     _.mapExtend( result, src[ g ] );
+//
+//   }
+//
+//   return result;
+// }
+
+//
+
+function fieldsOfRelationsGroupsFromPrototype( src )
+{
+  let prototype = src;
+  let result = Object.create( null );
+
+  // debugger;
+  _.assert( _.objectIs( prototype ) );
+  _.assert( arguments.length === 1, 'Expects single argument' );
+
+  for( let g in _.DefaultFieldsGroupsRelations )
+  {
+    if( src[ g ] )
+    _.mapExtend( result, src[ g ] );
+  }
+
+  return result;
+}
+
+//
+
+function fieldsOfCopyableGroupsFromPrototype( src )
+{
+  let prototype = src;
+  let result = Object.create( null );
+
+  _.assert( _.objectIs( prototype ) );
+  _.assert( arguments.length === 1, 'Expects single argument' );
+
+  for( let g in _.DefaultFieldsGroupsCopyable )
+  {
+    if( src[ g ] )
+    _.mapExtend( result, src[ g ] );
+  }
+
+  return result;
+}
+
+//
+
+function fieldsOfTightGroupsFromPrototype( src )
+{
+  let prototype = src;
+  let result = Object.create( null );
+
+  _.assert( _.objectIs( prototype ) );
+  _.assert( arguments.length === 1, 'Expects single argument' );
+
+  for( let g in _.DefaultFieldsGroupsTight )
+  {
+    if( src[ g ] )
+    _.mapExtend( result, src[ g ] );
+  }
+
+  return result;
+}
+
+//
+
+function fieldsOfInputGroupsFromPrototype( src )
+{
+  let prototype = src;
+  let result = Object.create( null );
+
+  _.assert( _.objectIs( prototype ) );
+  _.assert( arguments.length === 1, 'Expects single argument' );
+
+  for( let g in _.DefaultFieldsGroupsInput )
+  {
+    if( src[ g ] )
+    _.mapExtend( result, src[ g ] );
+  }
+
+  return result;
+}
+
+//
+
+function fieldsOfRelationsGroups( src )
+{
+  let prototype = src;
+
+  if( !_.prototypeIs( prototype ) )
+  prototype = _.prototypeGet( src );
+
+  _.assert( _.prototypeIs( prototype ) );
+  _.assert( _.prototypeIsStandard( prototype ),'Expects standard prototype' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
+
+  if( _.instanceIs( src ) )
+  {
+    return _.mapOnly( src, _.fieldsOfRelationsGroupsFromPrototype( prototype ) );
+  }
+
+  return _.fieldsOfRelationsGroupsFromPrototype( prototype );
+}
+
+//
+
+function fieldsOfCopyableGroups( src )
+{
+  let prototype = src;
+
+  if( !_.prototypeIs( prototype ) )
+  prototype = _.prototypeGet( src );
+
+  _.assert( _.prototypeIs( prototype ) );
+  _.assert( _.prototypeIsStandard( prototype ),'Expects standard prototype' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
+
+  if( _.instanceIs( src ) )
+  return _.mapOnly( src, _.fieldsOfCopyableGroupsFromPrototype( prototype ) );
+
+  return _.fieldsOfCopyableGroupsFromPrototype( prototype );
+}
+
+//
+
+function fieldsOfTightGroups( src )
+{
+  let prototype = src;
+
+  if( !_.prototypeIs( prototype ) )
+  prototype = _.prototypeGet( src );
+
+  _.assert( _.prototypeIs( prototype ) );
+  _.assert( _.prototypeIsStandard( prototype ),'Expects standard prototype' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
+
+  if( _.instanceIs( src ) )
+  return _.mapOnly( src, _.fieldsOfTightGroupsFromPrototype( prototype ) );
+
+  debugger;
+  return _.fieldsOfTightGroupsFromPrototype( prototype );
+}
+
+//
+
+function fieldsOfInputGroups( src )
+{
+  let prototype = src;
+
+  if( !_.prototypeIs( prototype ) )
+  prototype = _.prototypeGet( src );
+
+  _.assert( _.prototypeIs( prototype ) );
+  _.assert( _.prototypeIsStandard( prototype ),'Expects standard prototype' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
+
+  if( _.instanceIs( src ) )
+  return _.mapOnly( src, _.fieldsOfInputGroupsFromPrototype( prototype ) );
+
+  debugger;
+  return _.fieldsOfInputGroupsFromPrototype( prototype );
+}
+
 //
 
 function fieldsGroupsDeclare( o )
@@ -1601,7 +1778,7 @@ to prioritize ordinary facets adjustment order should be
 
   /* statics */
 
-  let fieldsOfRelationsGroups = _._fieldsOfRelationsGroups( o.prototype );
+  let fieldsOfRelationsGroups = _.fieldsOfRelationsGroupsFromPrototype( o.prototype );
 
   if( o.supplement && o.supplement.Statics )
   declareStaticsForClass( o.supplement.Statics, 0, 0 );
@@ -1783,7 +1960,7 @@ function staticDecalre( o )
   // debugger;
 
   if( !o.fieldsOfRelationsGroups )
-  o.fieldsOfRelationsGroups = _._fieldsOfRelationsGroups( o.prototype );
+  o.fieldsOfRelationsGroups = _.fieldsOfRelationsGroupsFromPrototype( o.prototype );
 
   let pd = _.propertyDescriptorGet( o.prototype, o.name );
   let cd = _.propertyDescriptorGet( o.prototype.constructor, o.name );
@@ -2366,107 +2543,6 @@ function prototypeEach( proto,onEach )
 
   }
   while( proto );
-
-  return result;
-}
-
-//
-
-function _fieldsOfRelationsGroups( src )
-{
-  let result = Object.create( null );
-
-  _.assert( _.objectIs( src ) );
-  _.assert( arguments.length === 1, 'Expects single argument' );
-
-  for( let g in _.DefaultFieldsGroupsRelations )
-  {
-
-    if( src[ g ] )
-    _.mapExtend( result, src[ g ] );
-
-  }
-
-  return result;
-}
-
-//
-
-function fieldsOfRelationsGroups( src )
-{
-  let prototype = _.prototypeGet( src );
-
-  _.assert( _.prototypeIs( prototype ) );
-  _.assert( _.prototypeIsStandard( prototype ),'Expects standard prototype' );
-  _.assert( arguments.length === 1, 'Expects single argument' );
-
-  let result = _._fieldsOfRelationsGroups( prototype );
-
-  return result;
-}
-
-//
-
-function fieldsOfCopyableGroups( src )
-{
-  let prototype = _.prototypeGet( src );
-  let result = Object.create( null );
-
-  _.assert( _.prototypeIs( prototype ) );
-  _.assert( _.prototypeIsStandard( prototype ),'Expects standard prototype' );
-  _.assert( arguments.length === 1, 'Expects single argument' );
-
-  for( let g in _.DefaultFieldsGroupsCopyable )
-  {
-
-    if( prototype[ g ] )
-    _.mapExtend( result,prototype[ g ] );
-
-  }
-
-  return result;
-}
-
-//
-
-function fieldsOfTightGroups( src )
-{
-  let prototype = _.prototypeGet( src );
-  let result = Object.create( null );
-
-  _.assert( _.prototypeIs( prototype ) );
-  _.assert( _.prototypeIsStandard( prototype ),'Expects standard prototype' );
-  _.assert( arguments.length === 1, 'Expects single argument' );
-
-  for( let g in _.DefaultFieldsGroupsTight )
-  {
-
-    if( prototype[ g ] )
-    _.mapExtend( result,prototype[ g ] );
-
-  }
-
-  return result;
-}
-
-//
-
-function fieldsOfInputGroups( src )
-{
-  let prototype = _.prototypeGet( src );
-  let result = Object.create( null );
-
-  _.assert( _.prototypeIs( prototype ) );
-  _.assert( _.prototypeIsStandard( prototype ),'Expects standard prototype' );
-  _.assert( arguments.length === 1, 'Expects single argument' );
-
-  for( let g in _.DefaultFieldsGroupsInput )
-  {
-
-    if( prototype[ g ] )
-    _.mapExtend( result,prototype[ g ] );
-
-  }
 
   return result;
 }
@@ -3072,99 +3148,103 @@ let Routines =
 
   // fields group
 
-  fieldsGroupsGet : fieldsGroupsGet,
-  fieldsGroupFor : fieldsGroupFor, /* experimental */
-  fieldsGroupDeclare : fieldsGroupDeclare,  /* experimental */
+  fieldsGroupsGet,
+  fieldsGroupFor, /* experimental */
+  fieldsGroupDeclare,  /* experimental */
 
-  fieldsGroupComposesExtend : fieldsGroupComposesExtend, /* experimental */
-  fieldsGroupAggregatesExtend : fieldsGroupAggregatesExtend, /* experimental */
-  fieldsGroupAssociatesExtend : fieldsGroupAssociatesExtend, /* experimental */
-  fieldsGroupRestrictsExtend : fieldsGroupRestrictsExtend, /* experimental */
+  fieldsGroupComposesExtend, /* experimental */
+  fieldsGroupAggregatesExtend, /* experimental */
+  fieldsGroupAssociatesExtend, /* experimental */
+  fieldsGroupRestrictsExtend, /* experimental */
 
-  fieldsGroupComposesSupplement : fieldsGroupComposesSupplement, /* experimental */
-  fieldsGroupAggregatesSupplement : fieldsGroupAggregatesSupplement, /* experimental */
-  fieldsGroupAssociatesSupplement : fieldsGroupAssociatesSupplement, /* experimental */
-  fieldsGroupRestrictsSupplement : fieldsGroupRestrictsSupplement, /* experimental */
+  fieldsGroupComposesSupplement, /* experimental */
+  fieldsGroupAggregatesSupplement, /* experimental */
+  fieldsGroupAssociatesSupplement, /* experimental */
+  fieldsGroupRestrictsSupplement, /* experimental */
 
-  fieldsGroupsDeclare : fieldsGroupsDeclare,
-  fieldsGroupsDeclareForEachFilter : fieldsGroupsDeclareForEachFilter,
+  fieldsOfRelationsGroupsFromPrototype,
+  fieldsOfCopyableGroupsFromPrototype,
+  fieldsOfTightGroupsFromPrototype,
+  fieldsOfInputGroupsFromPrototype,
+
+  fieldsOfRelationsGroups,
+  fieldsOfCopyableGroups,
+  fieldsOfTightGroups,
+  fieldsOfInputGroups,
+
+  fieldsGroupsDeclare,
+  fieldsGroupsDeclareForEachFilter,
 
   // property
 
-  propertyDescriptorForAccessor : propertyDescriptorForAccessor,
-  propertyDescriptorGet : propertyDescriptorGet,
-  _propertyGetterSetterNames : _propertyGetterSetterNames,
-  _propertyGetterSetterMake : _propertyGetterSetterMake,
-  _propertyGetterSetterGet : _propertyGetterSetterGet,
+  propertyDescriptorForAccessor,
+  propertyDescriptorGet,
+  _propertyGetterSetterNames,
+  _propertyGetterSetterMake,
+  _propertyGetterSetterGet,
 
   // proxy
 
-  proxyNoUndefined : proxyNoUndefined,
-  proxyReadOnly : proxyReadOnly,
-  ifDebugProxyReadOnly : ifDebugProxyReadOnly,
-  proxyMap : proxyMap,
+  proxyNoUndefined,
+  proxyReadOnly,
+  ifDebugProxyReadOnly,
+  proxyMap,
 
   // mixin
 
-  _mixinDelcare : _mixinDelcare,
-  mixinDelcare : mixinDelcare,
-  mixinApply : mixinApply,
-  mixinHas : mixinHas,
+  _mixinDelcare,
+  mixinDelcare,
+  mixinApply,
+  mixinHas,
 
   // class
 
-  classDeclare : classDeclare,
-  classExtend : classExtend,
+  classDeclare,
+  classExtend,
 
-  staticDecalre : staticDecalre,
+  staticDecalre,
 
-  constructorGet : constructorGet,
+  constructorGet,
 
-  subclassOf : subclassOf,
-  subPrototypeOf : subPrototypeOf,
+  subclassOf,
+  subPrototypeOf,
 
-  parentGet : parentGet,
-  _classConstructorAndPrototypeGet : _classConstructorAndPrototypeGet,
+  parentGet,
+  _classConstructorAndPrototypeGet,
 
   // prototype
 
-  prototypeGet : prototypeGet,
+  prototypeGet,
 
-  prototypeUnitedInterface : prototypeUnitedInterface, /* experimental */
+  prototypeUnitedInterface, /* experimental */
 
-  prototypeAppend : prototypeAppend, /* experimental */
-  prototypeHasPrototype : prototypeHasPrototype, /* experimental */
-  prototypeHasProperty : prototypeHasProperty, /* experimental */
-  prototypeArchyGet : prototypeArchyGet, /* experimental */
-  prototypeHasField : prototypeHasField,
+  prototypeAppend, /* experimental */
+  prototypeHasPrototype, /* experimental */
+  prototypeHasProperty, /* experimental */
+  prototypeArchyGet, /* experimental */
+  prototypeHasField,
 
-  prototypeCrossRefer : prototypeCrossRefer, /* experimental */
-  prototypeEach : prototypeEach, /* experimental */
-
-  _fieldsOfRelationsGroups : _fieldsOfRelationsGroups,
-  fieldsOfRelationsGroups : fieldsOfRelationsGroups,
-  fieldsOfCopyableGroups : fieldsOfCopyableGroups,
-  fieldsOfTightGroups : fieldsOfTightGroups,
-  fieldsOfInputGroups : fieldsOfInputGroups,
+  prototypeCrossRefer, /* experimental */
+  prototypeEach, /* experimental */
 
   // instance
 
-  instanceConstructor : instanceConstructor,
+  instanceConstructor,
 
-  instanceIsFinited : instanceIsFinited,
-  instanceFinit : instanceFinit,
+  instanceIsFinited,
+  instanceFinit,
 
-  instanceInit : instanceInit,
-  instanceInitExtending : instanceInitExtending,
-  instanceFilterInit : instanceFilterInit, /* deprecated */
+  instanceInit,
+  instanceInitExtending,
+  instanceFilterInit, /* deprecated */
 
-  assertInstanceDoesNotHaveReduntantFields : assertInstanceDoesNotHaveReduntantFields,
+  assertInstanceDoesNotHaveReduntantFields,
 
   // default
 
-  defaultApply : defaultApply,
-  defaultProxy : defaultProxy,
-  defaultProxyFlatteningToArray : defaultProxyFlatteningToArray,
+  defaultApply,
+  defaultProxy,
+  defaultProxyFlatteningToArray,
 
 }
 
