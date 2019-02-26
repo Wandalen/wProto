@@ -457,7 +457,7 @@ function fieldsGroupsDeclare( o )
   if( !o.fieldsGroups )
   o.fieldsGroups = _.fieldsGroupsGet( o.dstPrototype );
 
-  _.assert( _.subOf( o.fieldsGroups, _.DefaultFieldsGroups ) );
+  _.assert( _.subPrototypeOf( o.fieldsGroups, _.DefaultFieldsGroups ) );
 
   for( let f in o.fieldsGroups )
   {
@@ -1962,7 +1962,7 @@ function subclassOf( subCls, cls )
 
 //
 
-function subOf( sub, parent )
+function subPrototypeOf( sub, parent )
 {
 
   _.assert( !!parent );
@@ -3033,22 +3033,6 @@ DefaultForbiddenNames.Static = 'Static';
 DefaultForbiddenNames.Type = 'Type';
 Object.freeze( DefaultForbiddenNames );
 
-// let DefaultAccessorsMap = Object.create( null );
-// DefaultAccessorsMap.Accessors = accessor;
-// DefaultAccessorsMap.Forbids = accessorForbid;
-// DefaultAccessorsMap.AccessorsForbid = accessorForbid;
-// DefaultAccessorsMap.AccessorsReadOnly = accessorReadOnly;
-//
-// let Forbids =
-// {
-//   _ArrayDescriptor : '_ArrayDescriptor',
-//   ArrayDescriptor : 'ArrayDescriptor',
-//   _ArrayDescriptors : '_ArrayDescriptors',
-//   ArrayDescriptors : 'ArrayDescriptors',
-//   arrays : 'arrays',
-//   arrayOf : 'arrayOf',
-// }
-
 // --
 // define
 // --
@@ -3068,8 +3052,6 @@ let Define =
 let Fields =
 {
 
-  // AccessorDefaults : AccessorDefaults,
-  // Combining : Combining,
   KnownConstructorFields : KnownConstructorFields,
 
   DefaultFieldsGroups : DefaultFieldsGroups,
@@ -3079,8 +3061,6 @@ let Fields =
   DefaultFieldsGroupsInput : DefaultFieldsGroupsInput,
 
   DefaultForbiddenNames : DefaultForbiddenNames,
-  // DefaultAccessorsMap : DefaultAccessorsMap,
-
   CallableObject : wCallableObject,
 
 }
@@ -3141,7 +3121,7 @@ let Routines =
   constructorGet : constructorGet,
 
   subclassOf : subclassOf,
-  subOf : subOf,
+  subPrototypeOf : subPrototypeOf,
 
   parentGet : parentGet,
   _classConstructorAndPrototypeGet : _classConstructorAndPrototypeGet,
@@ -3193,15 +3173,14 @@ let Routines =
 _.define = Define;
 _.mapExtend( _, Routines );
 _.mapExtend( _, Fields );
-// _.accessor.forbid( _, Forbids );
 
 // --
 // export
 // --
 
-if( typeof module !== 'undefined' )
-if( _global_.WTOOLS_PRIVATE )
-{ /* delete require.cache[ module.id ]; */ }
+// if( typeof module !== 'undefined' )
+// if( _global_.WTOOLS_PRIVATE )
+// { /* delete require.cache[ module.id ]; */ }
 
 if( typeof module !== 'undefined' && module !== null )
 module[ 'exports' ] = Self;

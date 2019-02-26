@@ -45,7 +45,7 @@ let AccessorDefaults =
  * Can be called in three ways:
  * - First by passing all options in one object;
  * - Second by passing object and name options;
- * - Third by passing object,names and message option as third parameter.
+ * - Third by passing object, names and message option as third parameter.
  * @param {wTools~accessorOptions} o - options {@link wTools~accessorOptions}.
  *
  * @example
@@ -56,7 +56,7 @@ let AccessorDefaults =
  * // message: [ 'set/get call' ] }
  *
  * let Self = function ClassName( o ) { };
- * _.accessor._accessorDeclare_pre( Self,{ a : 'a', b : 'b' }, 'set/get call' );
+ * _.accessor._accessorDeclare_pre( Self, { a : 'a', b : 'b' }, 'set/get call' );
  *
  * @private
  * @method _accessorDeclare_pre
@@ -100,8 +100,8 @@ function _accessorDeclare_pre( routine, args )
   o.names = { [ o.names ] : o.names }
 
   _.routineOptions( routine, o );
-  _.assert( !_.primitiveIs( o.object ),'Expects object as argument but got', o.object );
-  _.assert( _.objectIs( o.names ) || _.arrayIs( o.names ),'Expects object names as argument but got', o.names );
+  _.assert( !_.primitiveIs( o.object ), 'Expects object as argument but got', o.object );
+  _.assert( _.objectIs( o.names ) || _.arrayIs( o.names ), 'Expects object names as argument but got', o.names );
 
   return o;
 }
@@ -131,13 +131,13 @@ function _accessorRegister( o )
       !accessors[ o.name ],
       'defined at' + '\n',
       stack,
-      '\naccessor',o.name,'of',o.proto.constructor.name
+      '\naccessor', o.name, 'of', o.proto.constructor.name
     );
     if( accessors[ o.name ] )
     debugger;
   }
 
-  _.assert( !o.combining || o.combining === 'rewrite' || o.combining === 'append' || o.combining === 'supplement', 'not supported ( o.combining )',o.combining );
+  _.assert( !o.combining || o.combining === 'rewrite' || o.combining === 'append' || o.combining === 'supplement', 'not supported ( o.combining )', o.combining );
   _.assert( _.strIs( o.name ) );
 
   if( accessors[ o.name ] && o.combining === 'supplement' )
@@ -212,7 +212,7 @@ function _accessorDeclareAct( o )
       'but it is ' + _.strQuote( o.combining )
     );
 
-    _.assert( o.combining === 'rewrite' || o.combining === 'append' || o.combining === 'supplement','not implemented' );
+    _.assert( o.combining === 'rewrite' || o.combining === 'append' || o.combining === 'supplement', 'not implemented' );
 
     if( o.combining === 'supplement' )
     return;
@@ -234,7 +234,7 @@ function _accessorDeclareAct( o )
     //   if( o.methods[ rawName + 'Get' ] === propertyDescriptor.descriptor.get )
     //   o.methods[ rawName + 'Get' ] = null;
     //
-    //   let settrGetterSecond = _propertyGetterSetterMake( o,o.methods,rawName );
+    //   let settrGetterSecond = _propertyGetterSetterMake( o, o.methods, rawName );
     //
     //   if( o.methods[ '_' + rawName + 'Set' ] )
     //   o.methods[ '_' + rawName + 'Set' ] = null;
@@ -248,9 +248,9 @@ function _accessorDeclareAct( o )
     //   o.methods[ '_' + rawName + 'Set' ] = function appendingSet( src )
     //   {
     //     debugger;
-    //     src = propertyDescriptor.descriptor.set.call( this,src );
+    //     src = propertyDescriptor.descriptor.set.call( this, src );
     //     _.assert( src !== undefined );
-    //     return settrGetterSecond.set.call( this,src );
+    //     return settrGetterSecond.set.call( this, src );
     //   }
     //
     //   o.methods[ '_' + rawName + 'Get' ] = settrGetterSecond.get;
@@ -280,7 +280,7 @@ function _accessorDeclareAct( o )
   if( o.prime )
   {
 
-    let o2 = _.mapExtend( null,o );
+    let o2 = _.mapExtend( null, o );
     o2.names = o.name;
     if( o2.methods === o2.object )
     o2.methods = Object.create( null );
@@ -335,7 +335,7 @@ function _accessorDeclareAct( o )
       'not ' + forbiddenName,
     ].join( '' );
 
-    if( !_.prototypeIsStandard( o.object ) || ( _.prototypeIsStandard( o.object ) && !_.prototypeHasField( o.object,forbiddenName ) ) )
+    if( !_.prototypeIsStandard( o.object ) || ( _.prototypeIsStandard( o.object ) && !_.prototypeHasField( o.object, forbiddenName ) ) )
     _.accessor.forbid
     ({
       object : o.object,
@@ -440,7 +440,7 @@ function _accessorDeclare( o )
       constructor : 'constructor',
     }
 
-    _.assertMapOwnAll( o.object,has );
+    _.assertMapOwnAll( o.object, has );
     _.accessor.forbid
     ({
       object : o.object,
@@ -466,7 +466,7 @@ function _accessorDeclare( o )
 
     if( _.strIs( o2 ) )
     {
-      _.assert( o2 === n,'map for forbid should have same key and value' );
+      _.assert( o2 === n, 'map for forbid should have same key and value' );
       o2 = _.mapExtend( null, o );
     }
     else
@@ -504,7 +504,7 @@ defaults.names = null;
  *
  * @example
  * let Self = function ClassName( o ) { };
- * _.accessor.declare( Self,{ a : 'a' }, 'set/get call' )
+ * _.accessor.declare( Self, { a : 'a' }, 'set/get call' )
  * Self.a = 1; // set/get call
  * Self.a;
  * // returns
@@ -577,7 +577,7 @@ function accessorForbid( o )
 
   // /* _accessorDeclareForbid */
   //
-  // let encodedName,rawName;
+  // let encodedName, rawName;
 
   /* property */
 
@@ -712,7 +712,7 @@ function _accessorDeclareForbid()
   {
 
     /* !!! not tested */
-    let o2 = _.mapExtend( null,o );
+    let o2 = _.mapExtend( null, o );
     o2.names = o.fieldName;
     o2.object = null;
     delete o2.protoName;
@@ -751,12 +751,12 @@ defaults.protoName = null;
 
 //
 
-function accessorForbidOwns( object,name )
+function accessorForbidOwns( object, name )
 {
-  if( !_ObjectHasOwnProperty.call( object,name ) )
+  if( !_ObjectHasOwnProperty.call( object, name ) )
   return false;
 
-  let descriptor = Object.getOwnPropertyDescriptor( object,name );
+  let descriptor = Object.getOwnPropertyDescriptor( object, name );
   if( _.routineIs( descriptor.get ) && descriptor.get.isForbid )
   {
     return true;
@@ -783,14 +783,14 @@ defaults.readOnly = true;
 
 //
 
-function accessorsSupplement( dst,src )
+function accessorsSupplement( dst, src )
 {
 
-  _.fieldsGroupFor( dst,'_Accessors' );
+  _.fieldsGroupFor( dst, '_Accessors' );
 
   _.assert( arguments.length === 2, 'Expects exactly two arguments' );
-  _.assert( _ObjectHasOwnProperty.call( dst,'_Accessors' ),'accessorsSupplement : dst should has _Accessors map' );
-  _.assert( _ObjectHasOwnProperty.call( src,'_Accessors' ),'accessorsSupplement : src should has _Accessors map' );
+  _.assert( _ObjectHasOwnProperty.call( dst, '_Accessors' ), 'accessorsSupplement : dst should has _Accessors map' );
+  _.assert( _ObjectHasOwnProperty.call( src, '_Accessors' ), 'accessorsSupplement : src should has _Accessors map' );
 
   /* */
 
@@ -798,20 +798,20 @@ function accessorsSupplement( dst,src )
   {
 
     _.assert( _.arrayIs( accessor.declaratorArgs ) );
-    _.assert( !accessor.combining || accessor.combining === 'rewrite' || accessor.combining === 'supplement' || accessor.combining === 'append','not implemented' );
+    _.assert( !accessor.combining || accessor.combining === 'rewrite' || accessor.combining === 'supplement' || accessor.combining === 'append', 'not implemented' );
 
     if( _.objectIs( dst._Accessors[ name ] ) )
     return;
 
     if( accessor.declaratorName !== 'accessor' )
     {
-      _.assert( _.routineIs( dst[ accessor.declaratorName ] ),'dst does not have accessor maker',accessor.declaratorName );
-      dst[ accessor.declaratorName ].apply( dst,accessor.declaratorArgs );
+      _.assert( _.routineIs( dst[ accessor.declaratorName ] ), 'dst does not have accessor maker', accessor.declaratorName );
+      dst[ accessor.declaratorName ].apply( dst, accessor.declaratorArgs );
     }
     else
     {
       _.assert( accessor.declaratorArgs.length === 1 );
-      let optionsForAccessor = _.mapExtend( null,accessor.declaratorArgs[ 0 ] );
+      let optionsForAccessor = _.mapExtend( null, accessor.declaratorArgs[ 0 ] );
       optionsForAccessor.object = dst;
       if( !optionsForAccessor.methods )
       optionsForAccessor.methods = dst;
@@ -846,7 +846,7 @@ function accessorsSupplement( dst,src )
  * @example
  * let Self = function ClassName( o ) { };
  * let Constants = { num : 100  };
- * _.constant ( Self.prototype,Constants );
+ * _.constant ( Self.prototype, Constants );
  * console.log( Self.prototype ); // returns { num: 100 }
  * Self.prototype.num = 1;// error assign to read only property
  *
@@ -947,7 +947,7 @@ function hide( dstPrototype, name, value )
  * let Self = function ClassName( o ) { };
  * Self.prototype.num = 100;
  * let ReadOnly = { num : null, num2 : null  };
- * _.restrictReadOnly ( Self.prototype,ReadOnly );
+ * _.restrictReadOnly ( Self.prototype, ReadOnly );
  * console.log( Self.prototype ); // returns { num: 100, num2: undefined }
  * Self.prototype.num2 = 1; // error assign to read only property
  *
@@ -968,8 +968,8 @@ function restrictReadOnly( dstPrototype, namesObject )
   }
 
   _.assert( arguments.length === 2, 'Expects exactly two arguments' );
-  _.assert( _.objectLikeOrRoutine( dstPrototype ),'_.constant :','dstPrototype is needed :', dstPrototype );
-  _.assert( _.mapIs( namesObject ),'_.constant :','namesObject is needed :', namesObject );
+  _.assert( _.objectLikeOrRoutine( dstPrototype ), '_.constant :', 'dstPrototype is needed :', dstPrototype );
+  _.assert( _.mapIs( namesObject ), '_.constant :', 'namesObject is needed :', namesObject );
 
   for( let n in namesObject )
   {
@@ -1070,7 +1070,7 @@ toElement.defaults =
 function setterMapCollection_functor( o )
 {
 
-  _.assertMapHasOnly( o,setterMapCollection_functor.defaults );
+  _.assertMapHasOnly( o, setterMapCollection_functor.defaults );
   _.assert( _.strIs( o.name ) );
   _.assert( _.routineIs( o.elementMaker ) );
   let symbol = Symbol.for( o.name );
@@ -1082,7 +1082,7 @@ function setterMapCollection_functor( o )
   elementMaker = function elementMaker( src )
   {
     src[ friendField ] = this;
-    return elementMakerOriginal.call( this,src );
+    return elementMakerOriginal.call( this, src );
   }
 
   return function _setterMapCollection( src )
@@ -1109,7 +1109,7 @@ function setterMapCollection_functor( o )
     for( let d in src )
     {
       if( src[ d ] !== null )
-      self[ symbol ][ d ] = elementMaker.call( self,src[ d ] );
+      self[ symbol ][ d ] = elementMaker.call( self, src[ d ] );
     }
 
     return self[ symbol ];
@@ -1150,7 +1150,7 @@ function setterArrayCollection_functor( o )
   elementMaker = function elementMaker( src )
   {
     src[ friendField ] = this;
-    return elementMakerOriginal.call( this,src );
+    return elementMakerOriginal.call( this, src );
   }
 
   return function _setterArrayCollection( src )
@@ -1169,7 +1169,7 @@ function setterArrayCollection_functor( o )
     {
 
       if( src !== self[ symbol ] )
-      self[ symbol ].splice( 0,self[ symbol ].length );
+      self[ symbol ].splice( 0, self[ symbol ].length );
 
     }
     else
@@ -1208,6 +1208,32 @@ setterArrayCollection_functor.defaults =
 
 //
 
+function setterOwn_functor( op )
+{
+  let symbol = Symbol.for( op.name );
+
+  _.routineOptions( setterOwn_functor, arguments );
+
+  return function ownSet( src )
+  {
+    let self = this;
+
+    _.assert( arguments.length === 1 );
+
+    self[ symbol ] = _.entityShallowClone( src );
+
+    return self[ symbol ];
+  }
+
+}
+
+setterOwn_functor.defaults =
+{
+  name : null,
+}
+
+//
+
 function setterFriend_functor( o )
 {
 
@@ -1226,7 +1252,7 @@ function setterFriend_functor( o )
   {
 
     let self = this;
-    _.assert( src === null || _.objectIs( src ),'setterFriend : expects null or object, but got ' + _.strType( src ) );
+    _.assert( src === null || _.objectIs( src ), 'setterFriend : expects null or object, but got ' + _.strType( src ) );
 
     if( !src )
     {
@@ -1288,7 +1314,7 @@ function setterCopyable_functor( o )
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.strIs( name ) );
   _.assert( _.routineIs( maker ) );
-  _.assertMapHasOnly( o,setterCopyable_functor.defaults );
+  _.assertMapHasOnly( o, setterCopyable_functor.defaults );
 
   return function setterCopyable( data )
   {
@@ -1346,7 +1372,7 @@ function setterBufferFrom_functor( o )
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.strIs( name ) );
   _.assert( _.routineIs( bufferConstructor ) );
-  _.routineOptions( setterBufferFrom_functor,o );
+  _.routineOptions( setterBufferFrom_functor, o );
 
   return function setterBufferFrom( data )
   {
@@ -1382,7 +1408,7 @@ function setterChangesTracking_functor( o )
   let nameOfChangeFlag = Symbol.for( _.nameUnfielded( o.nameOfChangeFlag ).coded );
 
   _.assert( arguments.length === 1, 'Expects single argument' );
-  _.routineOptions( setterChangesTracking_functor,o );
+  _.routineOptions( setterChangesTracking_functor, o );
 
   throw _.err( 'not tested' );
 
@@ -1417,7 +1443,7 @@ function setterAlias_functor( o )
   let alias = o.alias;
 
   _.assert( arguments.length === 1, 'Expects single argument' );
-  _.routineOptions( setterAlias_functor,o );
+  _.routineOptions( setterAlias_functor, o );
 
   return function setterAlias( src )
   {
@@ -1445,7 +1471,7 @@ function getterAlias_functor( o )
   let alias = o.alias;
 
   _.assert( arguments.length === 1, 'Expects single argument' );
-  _.routineOptions( getterAlias_functor,o );
+  _.routineOptions( getterAlias_functor, o );
 
   return function getterAlias( src )
   {
@@ -1468,7 +1494,7 @@ getterAlias_functor.defaults =
 //
 //   _.assert( arguments.length === 1, 'Expects single argument' );
 //   _.assert( _.objectIs( o.names ) );
-//   _.routineOptions( accessorToElement,o );
+//   _.routineOptions( accessorToElement, o );
 //
 //   let names = Object.create( null );
 //   for( let n in o.names ) (function()
@@ -1515,7 +1541,7 @@ getterAlias_functor.defaults =
 // fields
 // --
 
-let Combining = [ 'rewrite','supplement','apppend','prepend' ];
+let Combining = [ 'rewrite', 'supplement', 'apppend', 'prepend' ];
 
 let DefaultAccessorsMap = Object.create( null );
 DefaultAccessorsMap.Accessors = accessorDeclare;
@@ -1596,6 +1622,7 @@ let Setter =
   mapCollection : setterMapCollection_functor,
   arrayCollection : setterArrayCollection_functor,
 
+  own : setterOwn_functor,
   friend : setterFriend_functor,
   copyable : setterCopyable_functor,
   bufferFrom : setterBufferFrom_functor,
