@@ -615,7 +615,6 @@ function fieldsOfInputGroups( src )
   if( _.instanceIs( src ) )
   return _.mapOnly( src, _.fieldsOfInputGroupsFromPrototype( prototype ) );
 
-  debugger;
   return _.fieldsOfInputGroupsFromPrototype( prototype );
 }
 
