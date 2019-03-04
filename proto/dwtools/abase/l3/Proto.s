@@ -3035,7 +3035,7 @@ class wCallableObject extends Function
 {
   constructor()
   {
-    super( 'return this.self.__call__.apply( this.self,arguments );' );
+    super( 'return this.self.__call__.apply( this.self, arguments );' );
 
     let context = Object.create( null );
     let self = this.bind( context );
