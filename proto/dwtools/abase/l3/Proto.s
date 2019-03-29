@@ -1896,7 +1896,7 @@ to prioritize ordinary facets adjustment order should be
       if( !_ObjectHasOwnProperty.call( o.prototype.Statics, s ) )
       continue;
 
-      _.staticDecalre
+      _.staticDeclare
       ({
         name : s,
         value : o.prototype.Statics[ s ],
@@ -1943,7 +1943,7 @@ classExtend.defaults =
 
 //
 
-function staticDecalre( o )
+function staticDeclare( o )
 {
 
   if( !( 'value' in o ) )
@@ -1952,7 +1952,7 @@ function staticDecalre( o )
   if( _.definitionIs( o.value ) )
   _.mapExtend( o, o.value.valueGet() );
 
-  _.routineOptions( staticDecalre, arguments );
+  _.routineOptions( staticDeclare, arguments );
   _.assert( _.strIs( o.name ) );
   _.assert( arguments.length === 1 );
 
@@ -2081,7 +2081,7 @@ function staticDecalre( o )
   return true;
 }
 
-var defaults = staticDecalre.defaults = Object.create( null );
+var defaults = staticDeclare.defaults = Object.create( null );
 
 defaults.name = null;
 defaults.value = null;
@@ -3201,7 +3201,7 @@ let Routines =
   classDeclare,
   classExtend,
 
-  staticDecalre,
+  staticDeclare,
 
   constructorGet,
 
