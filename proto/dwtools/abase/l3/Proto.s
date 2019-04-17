@@ -834,6 +834,9 @@ function _propertyGetterSetterMake( o )
   _.assert( !!o.object );
   _.assertRoutineOptions( _propertyGetterSetterMake, o );
 
+  if( o.getterSetter )
+  _.assertMapHasOnly( o.getterSetter, { get : null, set : null } );
+
   if( o.getter )
   result.get = o.getter;
   else if( o.getterSetter && o.getterSetter.get )
@@ -846,7 +849,7 @@ function _propertyGetterSetterMake( o )
   if( o.setter )
   result.set = o.setter;
   else if( o.getterSetter && o.getterSetter.set )
-  result.set = o.setterSetter.set;
+  result.set = o.getterSetter.set;
   else if( o.methods[ '' + o.name + 'Set' ] )
   result.set = o.methods[ o.name + 'Set' ];
   else if( o.methods[ '_' + o.name + 'Set' ] )
@@ -3149,7 +3152,7 @@ let Routines =
 
   fieldsGroupsGet,
   fieldsGroupFor, /* experimental */
-  fieldsGroupDeclare,  /* experimental */
+  fieldsGroupDeclare, /* experimental */
 
   fieldsGroupComposesExtend, /* experimental */
   fieldsGroupAggregatesExtend, /* experimental */
