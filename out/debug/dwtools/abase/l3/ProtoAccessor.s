@@ -34,6 +34,7 @@ let AccessorDefaults =
   setter : null,
   getterSetter : null,
 
+
 }
 
 // --
@@ -187,16 +188,8 @@ function _accessorDeclareAct( o )
   _.assert( _.strIs( o.name ) );
   _.assertRoutineOptions( _accessorDeclareAct, arguments );
 
-  // let appending = 0;
-
   if( o.combining === 'append' )
   debugger;
-
-  // if( o.name === 'nickName' && o.object && o.object.constructor.shortName === 'Module' )
-  // debugger;
-
-  // if( o.name === 'array' )
-  // debugger;
 
   /* */
 
@@ -261,6 +254,9 @@ function _accessorDeclareAct( o )
   }
 
   /* */
+
+  // if( o.getterSetter )
+  // debugger;
 
   let getterSetter = _._propertyGetterSetterMake
   ({
@@ -486,7 +482,6 @@ function _accessorDeclare( o )
 }
 
 var defaults = _accessorDeclare.defaults = Object.create( _accessorDeclareAct.defaults );
-
 defaults.names = null;
 
 //
@@ -998,6 +993,57 @@ function accessorHas( proto, name )
   return !!accessors[ name ];
 }
 
+//
+
+function accessorMakerFrom_functor( fop )
+{
+
+  if( arguments.length === 2 )
+  fop = { getterFunctor : arguments[ 0 ], setterFunctor : arguments[ 1 ] }
+
+  _.routineOptions( accessorMakerFrom_functor, fop );
+
+  let defaults;
+
+  if( fop.getterFunctor )
+  defaults = _.mapExtend( null, fop.getterFunctor.defaults );
+  else
+  defaults = _.mapExtend( null, fop.setterFunctor.defaults );
+
+  // debugger;
+
+  if( fop.getterFunctor && _.entityIdentical )
+  _.assert( _.entityIdentical( defaults, _.mapExtend( null, fop.getterFunctor.defaults ) ) );
+  if( fop.setterFunctor && _.entityIdentical )
+  _.assert( _.entityIdentical( defaults, _.mapExtend( null, fop.setterFunctor.defaults ) ) );
+
+  // debugger;
+
+  accessorMaker.defaults = defaults;
+
+  return accessorMaker;
+
+  /* */
+
+  function accessorMaker( o )
+  {
+    let r = Object.create( null );
+    _.routineOptions( accessorMaker, arguments );
+    if( fop.setterFunctor )
+    r.set = fop.setterFunctor( o );
+    if( fop.getterFunctor )
+    r.get = fop.getterFunctor( o );
+    return r;
+  }
+
+}
+
+accessorMakerFrom_functor.defaults =
+{
+  getterFunctor : null,
+  setterFunctor : null,
+}
+
 // --
 // getter / setter functors
 // --
@@ -1015,6 +1061,8 @@ function toElement( o )
   _.assert( _.strIs( o.storageName ) );
   _.assert( _.numberIs( o.index ) );
   _.routineOptions( toElement, o );
+
+  debugger;
 
   // let names = Object.create( null );
   // for( let n in o.names ) (function()
@@ -1436,56 +1484,131 @@ setterChangesTracking_functor.defaults =
 
 //
 
-function setterAlias_functor( o )
+function alias_pre( routine, args )
 {
 
-  let original = o.original;
-  let alias = o.alias;
+  let o = args[ 0 ];
+  if( _.strIs( args[ 0 ] ) )
+  o = { originalName : args[ 0 ], aliasName : args[ 1 ] }
 
-  _.assert( arguments.length === 1, 'Expects single argument' );
-  _.routineOptions( setterAlias_functor, o );
+  _.routineOptions( routine, o );
 
-  return function setterAlias( src )
-  {
-    let self = this;
+  if( o.aliasName === null )
+  o.aliasName = o.originalName;
+  if( o.originalName === null )
+  o.originalName = o.aliasName;
 
-    self[ original ] = src;
+  _.assert( args.length === 1 || args.length === 2, 'Expects single argument' );
+  _.assert( _.strIs( o.aliasName ) );
+  _.assert( _.strIs( o.originalName ) );
 
-    return self[ original ];
-  }
-
-}
-
-setterAlias_functor.defaults =
-{
-  original : null,
-  alias : null,
+  return o;
 }
 
 //
 
-function getterAlias_functor( o )
+function aliasSetter_functor_body( o )
 {
 
-  let original = o.original;
-  let alias = o.alias;
+  let containerName = o.containerName;
+  let originalName = o.originalName;
+  let aliasName = o.aliasName;
 
-  _.assert( arguments.length === 1, 'Expects single argument' );
-  _.routineOptions( getterAlias_functor, o );
+  _.assertRoutineOptions( aliasSetter_functor_body, arguments );
 
-  return function getterAlias( src )
+  if( containerName )
+  return function setterAlias( src )
   {
     let self = this;
-    return self[ original ];
+    self[ containerName ][ originalName ] = src;
+    return self[ containerName ][ originalName ];
+  }
+  else
+  return function setterAlias( src )
+  {
+    let self = this;
+    self[ originalName ] = src;
+    return self[ originalName ];
   }
 
 }
 
-getterAlias_functor.defaults =
+aliasSetter_functor_body.defaults =
 {
-  original : null,
-  alias : null,
+  containerName : null,
+  originalName : null,
+  aliasName : null,
 }
+
+let aliasSetter_functor = _.routineFromPreAndBody( alias_pre, aliasSetter_functor_body );
+
+//
+
+function aliasGetter_functor_body( o )
+{
+
+  let containerName = o.containerName;
+  let originalName = o.originalName;
+  let aliasName = o.aliasName;
+
+  _.assertRoutineOptions( aliasGetter_functor_body, arguments );
+
+  if( containerName )
+  return function aliasGet( src )
+  {
+    let self = this;
+    return self[ containerName ][ originalName ];
+  }
+  else
+  return function aliasSet( src )
+  {
+    let self = this;
+    return self[ originalName ];
+  }
+
+}
+
+aliasGetter_functor_body.defaults = Object.create( aliasSetter_functor.defaults );
+
+let aliasGetter_functor = _.routineFromPreAndBody( alias_pre, aliasGetter_functor_body );
+
+//
+
+let aliasAccessor = accessorMakerFrom_functor( aliasGetter_functor_body, aliasSetter_functor );
+
+// //
+//
+// function getterStorage_functor( o )
+// {
+//
+//   let name = o.name;
+//   let fieldName = o.fieldName;
+//   let containerName = o.containerName;
+//
+//   _.assert( arguments.length === 1, 'Expects single argument' );
+//   _.routineOptions( getterStorage_functor, o );
+//
+//   if( containerName )
+//   return function getterStorage( src )
+//   {
+//     let self = this;
+//     return self[ containerName ][ fieldName ];
+//   }
+//   else
+//   return function getterStorage( src )
+//   {
+//     let self = this;
+//     return self[ fieldName ];
+//   }
+//
+// }
+//
+// getterStorage_functor.defaults =
+// {
+//   name : null,
+//   fieldName : null,
+//   containerName : null,
+// }
 
 //
 //
@@ -1599,6 +1722,8 @@ let Routines =
 
   accessorHas : accessorHas,
 
+  accessorMakerFrom_functor,
+
 }
 
 let GetterSetter =
@@ -1612,7 +1737,8 @@ let GetterSetter =
 let Getter =
 {
 
-  alias : getterAlias_functor,
+  alias : aliasGetter_functor_body,
+  // storage : getterStorage_functor,
 
 }
 
@@ -1628,7 +1754,14 @@ let Setter =
   bufferFrom : setterBufferFrom_functor,
   changesTracking : setterChangesTracking_functor,
 
-  alias : setterAlias_functor,
+  alias : aliasSetter_functor,
+
+}
+
+let Accessor =
+{
+
+  alias : aliasAccessor,
 
 }
 
@@ -1652,13 +1785,16 @@ _.mapExtend( _.accessor.getter, Getter );
 _.accessor.setter = _.accessor.setter || Object.create( null );
 _.mapExtend( _.accessor.setter, Setter );
 
+_.accessor.accessor = _.accessor.accessor || Object.create( null );
+_.mapExtend( _.accessor.accessor, Accessor );
+
 // --
 // export
 // --
 
-if( typeof module !== 'undefined' )
-if( _global_.WTOOLS_PRIVATE )
-{ /* delete require.cache[ module.id ]; */ }
+// if( typeof module !== 'undefined' )
+// if( _global_.WTOOLS_PRIVATE )
+// { /* delete require.cache[ module.id ]; */ }
 
 if( typeof module !== 'undefined' && module !== null )
 module[ 'exports' ] = Self;
