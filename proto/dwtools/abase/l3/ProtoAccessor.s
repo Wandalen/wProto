@@ -15,26 +15,30 @@ _.assert( _.routineIs( _nameFielded ), 'wProto needs wTools/staging/dwtools/l3/N
 
 /**
  * Collection of routines for declaring accessors
- * @namespace Accessor
+ * @namespace "wTools.accessor"
+ * @augments wTools
  * @memberof module:Tools/base/Proto
  */
 
 /**
  * Collection of routines for declaring getters
- * @namespace Getter
- * @memberof module:Tools/base/Proto.Accessor
+ * @namespace "wTools.accessor.getter"
+ * @augments wTools.accessor
+ * @memberof module:Tools/base/Proto
  */
 
  /**
  * Collection of routines for declaring setters
- * @namespace Setter
- * @memberof module:Tools/base/Proto.Accessor
+ * @namespace "wTools.accessor.setter"
+ * @augments wTools.accessor
+ * @memberof module:Tools/base/Proto
  */
 
 /**
  * Collection of routines for declaring getters and setters
- * @namespace GetterSetter
- * @memberof module:Tools/base/Proto.Accessor
+ * @namespace "wTools.accessor.getterSetter"
+ * @augments wTools.accessor
+ * @memberof module:Tools/base/Proto
  */
 
 // --
@@ -55,7 +59,7 @@ _.assert( _.routineIs( _nameFielded ), 'wProto needs wTools/staging/dwtools/l3/N
  * @property {Function} [ getter=null ]
  * @property {Function} [ setter=null ]
  * @property {Function} [ getterSetter=null ]
- * @memberof module:Tools/base/Proto.Accessor
+ * @memberof module:Tools/base/Proto.wTools.accessor
  **/
 
 let AccessorDefaults =
@@ -88,7 +92,7 @@ let AccessorDefaults =
  * - First by passing all options in one object;
  * - Second by passing object and name options;
  * - Third by passing object, names and message option as third parameter.
- * @param {Object} o - options {@link module:Tools/base/Proto.Accessor~AccessorOptions}.
+ * @param {Object} o - options {@link module:Tools/base/Proto.wTools.accessor~AccessorOptions}.
  *
  * @example
  * //returns
@@ -102,7 +106,7 @@ let AccessorDefaults =
  *
  * @private
  * @function _accessorDeclare_pre
- * @memberof module:Tools/base/Proto.Accessor
+ * @memberof module:Tools/base/Proto.wTools.accessor
  */
 
 function _accessorDeclare_pre( routine, args )
@@ -164,7 +168,7 @@ function _accessorDeclare_pre( routine, args )
  * @param {String} o.combining - combining method
  * @private
  * @function _accessorRegister
- * @memberof module:Tools/base/Proto.Accessor
+ * @memberof module:Tools/base/Proto.wTools.accessor
  */
 
 function _accessorRegister( o )
@@ -432,7 +436,7 @@ defaults.methods = null;
  * @property {Function} [ setter=null ]
  * @property {Function} [ getterSetter=null ]
  *
- * @memberof module:Tools/base/Proto.Accessor
+ * @memberof module:Tools/base/Proto.wTools.accessor
  **/
 
 /**
@@ -442,7 +446,7 @@ defaults.methods = null;
  * to object( o.object ) property. Field can be accessed by use of Symbol.for( rawName ) function,
  * where( rawName ) is value of property from( o.names ) object.
  *
- * @param {Object} o - options {@link module:Tools/base/Proto.Accessor~AccessorOptions}.
+ * @param {Object} o - options {@link module:Tools/base/Proto.wTools.accessor~AccessorOptions}.
  *
  * @example
  * let Self = function ClassName( o ) { };
@@ -465,7 +469,7 @@ defaults.methods = null;
  * @throws {exception} If( o ) is extented by unknown property.
  * @throws {exception} If( o.strict ) is true and object doesn't have own constructor.
  * @throws {exception} If( o.readOnly ) is true and property has own setter.
- * @memberof module:Tools/base/Proto.Accessor
+ * @memberof module:Tools/base/Proto.wTools.accessor
  */
 
 function _accessorDeclare( o )
@@ -553,15 +557,15 @@ defaults.names = null;
 //
 
 /**
- * Short-cut for {@link module:Tools/base/Proto.Accessor._accessorDeclare } function.
+ * Short-cut for {@link module:Tools/base/Proto.wTools.accessor._accessorDeclare } function.
  * Defines set/get functions on source object( o.object ) properties if they dont have them.
- * For more details {@link module:Tools/base/Proto.Accessor._accessorDeclare }.
+ * For more details {@link module:Tools/base/Proto.wTools.accessor._accessorDeclare }.
  * Can be called in three ways:
  * - First by passing all options in one object( o );
  * - Second by passing ( object ) and ( names ) options;
  * - Third by passing ( object ), ( names ) and ( message ) option as third parameter.
  *
- * @param {Object} o - options {@link module:Tools/base/Proto.Accessor~AccessorOptions}.
+ * @param {Object} o - options {@link module:Tools/base/Proto.wTools.accessor~AccessorOptions}.
  *
  * @example
  * let Self = function ClassName( o ) { };
@@ -573,7 +577,7 @@ defaults.names = null;
  * // 1
  *
  * @function declare
- * @memberof module:Tools/base/Proto.Accessor
+ * @memberof module:Tools/base/Proto.wTools.accessor
  */
 
 function accessorDeclare( o )
@@ -590,7 +594,7 @@ accessorDeclare.defaults = Object.create( _accessorDeclare.defaults );
  * @summary Declares forbid accessor.
  * @description
  * Forbid accessor throws an Error when user tries to get value of the property.
- * @param {Object} o - options {@link module:Tools/base/Proto.Accessor~AccessorOptions}.
+ * @param {Object} o - options {@link module:Tools/base/Proto.wTools.accessor~AccessorOptions}.
  *
  * @example
  * let Self = function ClassName( o ) { };
@@ -598,7 +602,7 @@ accessorDeclare.defaults = Object.create( _accessorDeclare.defaults );
  * Self.a; // throw an Error
  *
  * @function accessorForbid
- * @memberof module:Tools/base/Proto.Accessor
+ * @memberof module:Tools/base/Proto.wTools.accessor
  */
 
 function accessorForbid( o )
@@ -839,7 +843,7 @@ defaults.protoName = null;
  * _.accessor.forbidOwns( Self, 'b' ) // returns false
  *
  * @function accessorForbidOwns
- * @memberof module:Tools/base/Proto.Accessor
+ * @memberof module:Tools/base/Proto.wTools.accessor
  */
 
 function accessorForbidOwns( object, name )
@@ -863,7 +867,7 @@ function accessorForbidOwns( object, name )
 
 /**
  * @summary Declares read-only accessor( s ).
- * @description Expects two arguments: (object), (names) or single as options map {@link module:Tools/base/Proto.Accessor~AccessorOptions}
+ * @description Expects two arguments: (object), (names) or single as options map {@link module:Tools/base/Proto.wTools.accessor~AccessorOptions}
  *
  * @param {Object} object - target object
  * @param {Object} names - contains names of properties that will get read-only accessor
@@ -879,7 +883,7 @@ function accessorForbidOwns( object, name )
  * _.accessor.readOnly( Alpha.prototype,{ a : 'a' });
  *
  * @function accessorForbid
- * @memberof module:Tools/base/Proto.Accessor
+ * @memberof module:Tools/base/Proto.wTools.accessor
  */
 
 function accessorReadOnly( object, names )
@@ -911,7 +915,7 @@ defaults.readOnly = true;
  * @throws {Exception} If one of object doesn't have _Accessors map
  * @function accessorsSupplement
  *
- * @memberof module:Tools/base/Proto.Accessor
+ * @memberof module:Tools/base/Proto.wTools.accessor
  */
 
 function accessorsSupplement( dst, src )
@@ -985,7 +989,7 @@ function accessorsSupplement( dst, src )
  * @throws {exception} If no argument provided.
  * @throws {exception} If( dstPrototype ) is not a Object.
  * @throws {exception} If( name ) is not a Map.
- * @memberof module:Tools/base/Proto.Accessor
+ * @memberof module:Tools/base/Proto.wTools.accessor
  */
 
 function constant( dstPrototype, name, value )
@@ -1044,7 +1048,7 @@ function constant( dstPrototype, name, value )
  * @throws {Exception} If dstPrototype is not an Object
  * @function hide
  *
- * @memberof module:Tools/base/Proto.Accessor
+ * @memberof module:Tools/base/Proto.wTools.accessor
  */
 
 function hide( dstPrototype, name, value )
@@ -1105,7 +1109,7 @@ function hide( dstPrototype, name, value )
  * @throws {exception} If no argument provided.
  * @throws {exception} If( dstPrototype ) is not a Object.
  * @throws {exception} If( namesObject ) is not a Map.
- * @memberof module:Tools/base/Proto.Accessor
+ * @memberof module:Tools/base/Proto.wTools.accessor
  */
 
 function restrictReadOnly( dstPrototype, namesObject )
@@ -1145,7 +1149,7 @@ function restrictReadOnly( dstPrototype, namesObject )
  * @param {Object} proto - target object
  * @param {String} name - name of accessor
  * @function accessorHas
- * @memberof module:Tools/base/Proto.Accessor
+ * @memberof module:Tools/base/Proto.wTools.accessor
  */
 
 function accessorHas( proto, name )
@@ -1218,7 +1222,7 @@ accessorMakerFrom_functor.defaults =
  * @param {Number} o.index
  * @param {String} o.storageName
  * @function toElement
- * @memberof module:Tools/base/Proto.Accessor.GetterSetter
+ * @memberof module:Tools/base/Proto.wTools.accessor.getterSetter
  */
 
 // debugger;
@@ -1436,7 +1440,7 @@ setterArrayCollection_functor.defaults =
  * @returns {Function} Returns setter function.
  * @function setterOwn_functor
  * @alias own
- * @memberof module:Tools/base/Proto.Accessor.Setter
+ * @memberof module:Tools/base/Proto.wTools.accessor.setter
  */
 
 function setterOwn_functor( op )
@@ -1601,7 +1605,7 @@ setterCopyable_functor.defaults =
  * @returns {Function} Returns setter function.
  * @function setterBufferFrom_functor
  * @alias bufferFrom
- * @memberof module:Tools/base/Proto.Accessor.Setter
+ * @memberof module:Tools/base/Proto.wTools.accessor.setter
  */
 
 function setterBufferFrom_functor( o )
@@ -1684,9 +1688,8 @@ setterChangesTracking_functor.defaults =
  * @param {Object} o.original - name of source property
  * @param {Object} o.alias - name of alias
  * @returns {Function} Returns setter function.
- * @function setterAlias_functor
- * @alias alias
- * @memberof module:Tools/base/Proto.Accessor.Setter
+ * @function alias
+ * @memberof module:Tools/base/Proto.wTools.accessor.setter
  */
 
 function alias_pre( routine, args )
@@ -1755,9 +1758,8 @@ let aliasSetter_functor = _.routineFromPreAndBody( alias_pre, aliasSetter_functo
  * @param {Object} o.original - name of source property
  * @param {Object} o.alias - name of alias
  * @returns {Function} Returns getter function.
- * @function getterAlias_functor
- * @alias alias
- * @memberof module:Tools/base/Proto.Accessor.Getter
+ * @function alias
+ * @memberof module:Tools/base/Proto.wTools.accessor.getter
  */
 
 function aliasGetter_functor_body( o )
