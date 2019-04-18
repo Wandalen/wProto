@@ -9,7 +9,8 @@
 
 /**
  * Collection of routines to define classes and relations between them.
- * @namespace Proto
+ * @namespace wTools(module:Proto)
+ * @augments wTools
  * @memberof module:Tools/base/Proto
  */
 
@@ -150,11 +151,11 @@ function fieldsGroupFor( dst, fieldsGroupName )
  * });
  * console.log( Self.prototype ); // returns { Composes: { a: 1, b: 2 } }
  *
- * @method fieldsGroupDeclare
+ * @function fieldsGroupDeclare
  * @throws {exception} If no argument provided.
  * @throws {exception} If( o.srcMap ) is not a Object.
  * @throws {exception} If( o ) is extented by unknown property.
- * @memberof module:Tools/base/Proto.Proto
+ * @memberof module:Tools/base/Proto.wTools(module:Proto)
  */
 
 function fieldsGroupDeclare( o )
@@ -196,9 +197,9 @@ fieldsGroupDeclare.defaults =
  * _.fieldsGroupComposesExtend( Self.prototype, Composes );
  * console.log( Self.prototype ); // returns { Composes: { tree: null } }
  *
- * @method fieldsGroupComposesExtend
+ * @function fieldsGroupComposesExtend
  * @throws {exception} If no arguments provided.
- * @memberof module:Tools/base/Proto.Proto
+ * @memberof module:Tools/base/Proto.wTools(module:Proto)
  */
 
 function fieldsGroupComposesExtend( dstPrototype, srcMap )
@@ -229,9 +230,9 @@ function fieldsGroupComposesExtend( dstPrototype, srcMap )
  * _.fieldsGroupAggregatesExtend( Self.prototype, Aggregates );
  * console.log( Self.prototype ); // returns { Aggregates: { tree: null } }
  *
- * @method fieldsGroupAggregatesExtend
+ * @function fieldsGroupAggregatesExtend
  * @throws {exception} If no arguments provided.
- * @memberof module:Tools/base/Proto.Proto
+ * @memberof module:Tools/base/Proto.wTools(module:Proto)
  */
 
 function fieldsGroupAggregatesExtend( dstPrototype,srcMap )
@@ -262,9 +263,9 @@ function fieldsGroupAggregatesExtend( dstPrototype,srcMap )
  * _.fieldsGroupAssociatesExtend( Self.prototype, Associates );
  * console.log( Self.prototype ); // returns { Associates: { tree: null } }
  *
- * @method fieldsGroupAssociatesExtend
+ * @function fieldsGroupAssociatesExtend
  * @throws {exception} If no arguments provided.
- * @memberof module:Tools/base/Proto.Proto
+ * @memberof module:Tools/base/Proto.wTools(module:Proto)
  */
 
 function fieldsGroupAssociatesExtend( dstPrototype,srcMap )
@@ -295,9 +296,9 @@ function fieldsGroupAssociatesExtend( dstPrototype,srcMap )
  * _.fieldsGroupRestrictsExtend( Self.prototype, Restricts );
  * console.log( Self.prototype ); // returns { Restricts: { tree: null } }
  *
- * @method fieldsGroupRestrictsExtend
+ * @function fieldsGroupRestrictsExtend
  * @throws {exception} If no arguments provided.
- * @memberof module:Tools/base/Proto.Proto
+ * @memberof module:Tools/base/Proto.wTools(module:Proto)
  */
 
 function fieldsGroupRestrictsExtend( dstPrototype,srcMap )
@@ -328,9 +329,9 @@ function fieldsGroupRestrictsExtend( dstPrototype,srcMap )
  * _.fieldsGroupComposesSupplement( Self.prototype, Composes );
  * console.log( Self.prototype ); // returns { Composes: { tree: null } }
  *
- * @method fieldsGroupComposesSupplement
+ * @function fieldsGroupComposesSupplement
  * @throws {exception} If no arguments provided.
- * @memberof module:Tools/base/Proto.Proto
+ * @memberof module:Tools/base/Proto.wTools(module:Proto)
  */
 
 function fieldsGroupComposesSupplement( dstPrototype, srcMap )
@@ -361,9 +362,9 @@ function fieldsGroupComposesSupplement( dstPrototype, srcMap )
  * _.fieldsGroupAggregatesSupplement( Self.prototype, Aggregates );
  * console.log( Self.prototype ); // returns { Aggregates: { tree: null } }
  *
- * @method fieldsGroupAggregatesSupplement
+ * @function fieldsGroupAggregatesSupplement
  * @throws {exception} If no arguments provided.
- * @memberof module:Tools/base/Proto.Proto
+ * @memberof module:Tools/base/Proto.wTools(module:Proto)
  */
 
 function fieldsGroupAggregatesSupplement( dstPrototype,srcMap )
@@ -394,9 +395,9 @@ function fieldsGroupAggregatesSupplement( dstPrototype,srcMap )
  * _.fieldsGroupAssociatesSupplement( Self.prototype, Associates );
  * console.log( Self.prototype ); // returns { Associates: { tree: null } }
  *
- * @method fieldsGroupAssociatesSupplement
+ * @function fieldsGroupAssociatesSupplement
  * @throws {exception} If no arguments provided.
- * @memberof module:Tools/base/Proto.Proto
+ * @memberof module:Tools/base/Proto.wTools(module:Proto)
  */
 
 function fieldsGroupAssociatesSupplement( dstPrototype,srcMap )
@@ -427,9 +428,9 @@ function fieldsGroupAssociatesSupplement( dstPrototype,srcMap )
  * _.fieldsGroupRestrictsSupplement( Self.prototype, Restricts );
  * console.log( Self.prototype ); // returns { Restricts: { tree: null } }
  *
- * @method fieldsGroupRestrictsSupplement
+ * @function fieldsGroupRestrictsSupplement
  * @throws {exception} If no arguments provided.
- * @memberof module:Tools/base/Proto.Proto
+ * @memberof module:Tools/base/Proto.wTools(module:Proto)
  */
 
 function fieldsGroupRestrictsSupplement( dstPrototype,srcMap )
@@ -1041,8 +1042,8 @@ function proxyMap( dst, original )
 /**
  * Make mixin which could be mixed into prototype of another object.
  * @param {object} o - options.
- * @method _mixinDelcare
- * @memberof module:Tools/base/Proto.Proto
+ * @function _mixinDelcare
+ * @memberof module:Tools/base/Proto.wTools(module:Proto)
  */
 
 function _mixinDelcare( o )
@@ -1175,8 +1176,8 @@ mixinDelcare.defaults = Object.create( _mixinDelcare.defaults );
 /**
  * Mixin methods and fields into prototype of another object.
  * @param {object} o - options.
- * @method mixinApply
- * @memberof module:Tools/base/Proto.Proto
+ * @function mixinApply
+ * @memberof module:Tools/base/Proto.wTools(module:Proto)
  */
 
 let MixinDescriptorFields =
@@ -1330,7 +1331,7 @@ function mixinHas( proto,mixin )
  *  console.log( Parent.prototype.isPrototypeOf( betta ) ); //returns true
  *  console.log( betta.a, betta.b, betta.c ); //returns 1 2 5
  *
- * @method classDeclare
+ * @function classDeclare
  * @throws {exception} If no argument provided.
  * @throws {exception} If( o ) is not a Object.
  * @throws {exception} If( o.cls ) is not a Routine.
@@ -1344,7 +1345,7 @@ function mixinHas( proto,mixin )
  * @throws {exception} If function cant rewrite constructor using original prototype.
  * @throws {exception} If( o.usingOriginalPrototype ) is false and ( o.cls.prototype ) has manually defined properties.
  * @throws {exception} If( o.cls.prototype.constructor ) is not equal( o.cls  ).
- * @memberof module:Tools/base/Proto.Proto
+ * @memberof module:Tools/base/Proto.wTools(module:Proto)
  */
 
 /*
@@ -1629,7 +1630,7 @@ classDeclare.defaults =
  * });
  * console.log( Self.prototype === proto ); //returns true
  *
- * @method classExtend
+ * @function classExtend
  * @throws {exception} If no argument provided.
  * @throws {exception} If( o ) is not a Object.
  * @throws {exception} If( o.cls ) is not a Routine.
@@ -1642,7 +1643,7 @@ classDeclare.defaults =
  * @throws {exception} If( o.static) is not a Object.
  * @throws {exception} If( o.cls.prototype.Constitutes ) is defined.
  * @throws {exception} If( o.cls.prototype ) is not equal( prototype ).
- * @memberof module:Tools/base/Proto.Proto
+ * @memberof module:Tools/base/Proto.wTools(module:Proto)
  */
 
 function classExtend( o )
@@ -2165,7 +2166,7 @@ function subPrototypeOf( sub, parent )
 
 /**
  * Get parent's constructor.
- * @method parentGet
+ * @function parentGet
  * @memberof wCopyable#
  */
 
@@ -2245,8 +2246,8 @@ function prototypeGet( src )
  * Make united interface for several maps. Access to single map cause read and write to original maps.
  * @param {array} protos - maps to united.
  * @return {object} united interface.
- * @method prototypeUnitedInterface
- * @memberof module:Tools/base/Proto.Proto
+ * @function prototypeUnitedInterface
+ * @memberof module:Tools/base/Proto.wTools(module:Proto)
  */
 
 function prototypeUnitedInterface( protos )
@@ -2315,8 +2316,8 @@ function prototypeUnitedInterface( protos )
 /**
  * Append prototype to object. Find archi parent and replace its proto.
  * @param {object} dstMap - dst object to append proto.
- * @method prototypeAppend
- * @memberof module:Tools/base/Proto.Proto
+ * @function prototypeAppend
+ * @memberof module:Tools/base/Proto.wTools(module:Proto)
  */
 
 function prototypeAppend( dstMap )
@@ -2344,8 +2345,8 @@ function prototypeAppend( dstMap )
  * Does srcProto has insProto as prototype.
  * @param {object} srcProto - proto stack to investigate.
  * @param {object} insProto - proto to look for.
- * @method prototypeHasPrototype
- * @memberof module:Tools/base/Proto.Proto
+ * @function prototypeHasPrototype
+ * @memberof module:Tools/base/Proto.wTools(module:Proto)
  */
 
 function prototypeHasPrototype( srcProto,insProto )
@@ -2367,8 +2368,8 @@ function prototypeHasPrototype( srcProto,insProto )
 /**
  * Return proto owning names.
  * @param {object} srcPrototype - src object to investigate proto stack.
- * @method prototypeHasProperty
- * @memberof module:Tools/base/Proto.Proto
+ * @function prototypeHasProperty
+ * @memberof module:Tools/base/Proto.wTools(module:Proto)
  */
 
 function prototypeHasProperty( srcPrototype,names )
@@ -2400,8 +2401,8 @@ function prototypeHasProperty( srcPrototype,names )
 /**
  * Returns parent which has default proto.
  * @param {object} srcPrototype - dst object to append proto.
- * @method prototypeArchyGet
- * @memberof module:Tools/base/Proto.Proto
+ * @function prototypeArchyGet
+ * @memberof module:Tools/base/Proto.wTools(module:Proto)
  */
 
 function prototypeArchyGet( srcPrototype )
@@ -2522,8 +2523,8 @@ prototypeCrossRefer.defaults =
 /**
  * Iterate through prototypes.
  * @param {object} proto - prototype
- * @method prototypeEach
- * @memberof module:Tools/base/Proto.Proto
+ * @function prototypeEach
+ * @memberof module:Tools/base/Proto.wTools(module:Proto)
  */
 
 function prototypeEach( proto,onEach )
@@ -2619,7 +2620,7 @@ function instanceConstructor( cls, context, args )
 
 /**
  * Is this instance finited.
- * @method instanceIsFinited
+ * @function instanceIsFinited
  * @param {object} src - instance of any class
  * @memberof wCopyable#
  */
@@ -2681,8 +2682,8 @@ function instanceFinit( src )
  * console.log( _.instanceInit( obj ) ); //returns Alpha { a: 1, b: 2 }
  *
  * @return {object} Returns complemented instance.
- * @method instanceInit
- * @memberof module:Tools/base/Proto.Proto
+ * @function instanceInit
+ * @memberof module:Tools/base/Proto.wTools(module:Proto)
  */
 
 function instanceInit( instance,prototype )
@@ -2784,8 +2785,8 @@ instanceFilterInit.defaults =
 /**
  * Make sure src does not have redundant fields.
  * @param {object} src - source object of the class.
- * @method assertInstanceDoesNotHaveReduntantFields
- * @memberof module:Tools/base/Proto.Proto
+ * @function assertInstanceDoesNotHaveReduntantFields
+ * @memberof module:Tools/base/Proto.wTools(module:Proto)
  */
 
 function assertInstanceDoesNotHaveReduntantFields( src )
@@ -2919,13 +2920,13 @@ function defaultProxyFlatteningToArray( src )
 /**
 * @classdesc Class container for creating property-like entity from non-primitive value.
   Is used by routines:
-  @see {@link module:Tools/base/Proto.Define.own}
-  @see {@link module:Tools/base/Proto.Define.common}
-  @see {@link module:Tools/base/Proto.Define.instanceOf}
-  @see {@link module:Tools/base/Proto.Define.ownMadeBy}
-  @see {@link module:Tools/base/Proto.Define.contained}
+  @see {@link module:Tools/base/Proto.wTools.define.own}
+  @see {@link module:Tools/base/Proto.wTools.define.common}
+  @see {@link module:Tools/base/Proto.wTools.define.instanceOf}
+  @see {@link module:Tools/base/Proto.wTools.define.ownMadeBy}
+  @see {@link module:Tools/base/Proto.wTools.define.contained}
 * @class Definition
-* @memberof module:Tools/base/Proto.Define
+* @memberof module:Tools/base/Proto.wTools.define
 */
 
 function Definition( o )
@@ -2945,9 +2946,9 @@ function Definition( o )
 /**
 * Creates property-like entity with getter that returns reference to source object.
 * @param {Object-like|Long} src - source value
-* @returns {module:Tools/base/Proto.Define.Definition}
+* @returns {module:Tools/base/Proto.wTools.define.Definition}
 * @function common
-* @memberof module:Tools/base/Proto.Define
+* @memberof module:Tools/base/Proto.wTools.define
 */
 
 function common( src )
@@ -2970,9 +2971,9 @@ function common( src )
 /**
 * Creates property-like entity with getter that returns shallow copy of source object.
 * @param {Object-like|Long} src - source value
-* @returns {module:Tools/base/Proto.Define.Definition}
+* @returns {module:Tools/base/Proto.wTools.define.Definition}
 * @function own
-* @memberof module:Tools/base/Proto.Define
+* @memberof module:Tools/base/Proto.wTools.define
 */
 
 function own( src )
@@ -2996,9 +2997,9 @@ function own( src )
 /**
 * Creates property-like entity with getter that returns new instance of source constructor.
 * @param {Function} src - source constructor
-* @returns {module:Tools/base/Proto.Define.Definition}
+* @returns {module:Tools/base/Proto.wTools.define.Definition}
 * @function instanceOf
-* @memberof module:Tools/base/Proto.Define
+* @memberof module:Tools/base/Proto.wTools.define
 */
 
 function instanceOf( src )
@@ -3021,9 +3022,9 @@ function instanceOf( src )
 /**
 * Creates property-like entity with getter that returns result of source routine call.
 * @param {Function} src - source routine
-* @returns {module:Tools/base/Proto.Define.Definition}
+* @returns {module:Tools/base/Proto.wTools.define.Definition}
 * @function ownMadeBy
-* @memberof module:Tools/base/Proto.Define
+* @memberof module:Tools/base/Proto.wTools.define
 */
 
 function ownMadeBy( src )
@@ -3045,9 +3046,9 @@ function ownMadeBy( src )
 
 /**
 * @param {Object} src
-* @returns {module:Tools/base/Proto.Define.Definition}
+* @returns {module:Tools/base/Proto.wTools.define.Definition}
 * @function contained
-* @memberof module:Tools/base/Proto.Define
+* @memberof module:Tools/base/Proto.wTools.define
 */
 
 function contained( src )
@@ -3208,7 +3209,8 @@ Object.freeze( DefaultForbiddenNames );
 
 /**
 * Collection of routines to create a property-like entity.
-* @namespace Define
+* @namespace "wTools.define"
+* @augments wTools
 * @memberof module:Tools/base/Proto
 */
 
