@@ -9,7 +9,7 @@
 
 /**
  * Collection of routines to define classes and relations between them.
- * @namespace wTools(module:Proto)
+ * @namespace Tools( module::Proto )
  * @augments wTools
  * @memberof module:Tools/base/Proto
  */
@@ -155,7 +155,7 @@ function fieldsGroupFor( dst, fieldsGroupName )
  * @throws {exception} If no argument provided.
  * @throws {exception} If( o.srcMap ) is not a Object.
  * @throws {exception} If( o ) is extented by unknown property.
- * @memberof module:Tools/base/Proto.wTools(module:Proto)
+ * @memberof module:Tools/base/Proto.Tools( module::Proto )
  */
 
 function fieldsGroupDeclare( o )
@@ -199,7 +199,7 @@ fieldsGroupDeclare.defaults =
  *
  * @function fieldsGroupComposesExtend
  * @throws {exception} If no arguments provided.
- * @memberof module:Tools/base/Proto.wTools(module:Proto)
+ * @memberof module:Tools/base/Proto.Tools( module::Proto )
  */
 
 function fieldsGroupComposesExtend( dstPrototype, srcMap )
@@ -232,7 +232,7 @@ function fieldsGroupComposesExtend( dstPrototype, srcMap )
  *
  * @function fieldsGroupAggregatesExtend
  * @throws {exception} If no arguments provided.
- * @memberof module:Tools/base/Proto.wTools(module:Proto)
+ * @memberof module:Tools/base/Proto.Tools( module::Proto )
  */
 
 function fieldsGroupAggregatesExtend( dstPrototype,srcMap )
@@ -265,7 +265,7 @@ function fieldsGroupAggregatesExtend( dstPrototype,srcMap )
  *
  * @function fieldsGroupAssociatesExtend
  * @throws {exception} If no arguments provided.
- * @memberof module:Tools/base/Proto.wTools(module:Proto)
+ * @memberof module:Tools/base/Proto.Tools( module::Proto )
  */
 
 function fieldsGroupAssociatesExtend( dstPrototype,srcMap )
@@ -298,7 +298,7 @@ function fieldsGroupAssociatesExtend( dstPrototype,srcMap )
  *
  * @function fieldsGroupRestrictsExtend
  * @throws {exception} If no arguments provided.
- * @memberof module:Tools/base/Proto.wTools(module:Proto)
+ * @memberof module:Tools/base/Proto.Tools( module::Proto )
  */
 
 function fieldsGroupRestrictsExtend( dstPrototype,srcMap )
@@ -331,7 +331,7 @@ function fieldsGroupRestrictsExtend( dstPrototype,srcMap )
  *
  * @function fieldsGroupComposesSupplement
  * @throws {exception} If no arguments provided.
- * @memberof module:Tools/base/Proto.wTools(module:Proto)
+ * @memberof module:Tools/base/Proto.Tools( module::Proto )
  */
 
 function fieldsGroupComposesSupplement( dstPrototype, srcMap )
@@ -364,7 +364,7 @@ function fieldsGroupComposesSupplement( dstPrototype, srcMap )
  *
  * @function fieldsGroupAggregatesSupplement
  * @throws {exception} If no arguments provided.
- * @memberof module:Tools/base/Proto.wTools(module:Proto)
+ * @memberof module:Tools/base/Proto.Tools( module::Proto )
  */
 
 function fieldsGroupAggregatesSupplement( dstPrototype,srcMap )
@@ -397,7 +397,7 @@ function fieldsGroupAggregatesSupplement( dstPrototype,srcMap )
  *
  * @function fieldsGroupAssociatesSupplement
  * @throws {exception} If no arguments provided.
- * @memberof module:Tools/base/Proto.wTools(module:Proto)
+ * @memberof module:Tools/base/Proto.Tools( module::Proto )
  */
 
 function fieldsGroupAssociatesSupplement( dstPrototype,srcMap )
@@ -430,7 +430,7 @@ function fieldsGroupAssociatesSupplement( dstPrototype,srcMap )
  *
  * @function fieldsGroupRestrictsSupplement
  * @throws {exception} If no arguments provided.
- * @memberof module:Tools/base/Proto.wTools(module:Proto)
+ * @memberof module:Tools/base/Proto.Tools( module::Proto )
  */
 
 function fieldsGroupRestrictsSupplement( dstPrototype,srcMap )
@@ -1043,7 +1043,7 @@ function proxyMap( dst, original )
  * Make mixin which could be mixed into prototype of another object.
  * @param {object} o - options.
  * @function _mixinDelcare
- * @memberof module:Tools/base/Proto.wTools(module:Proto)
+ * @memberof module:Tools/base/Proto.Tools( module::Proto )
  */
 
 function _mixinDelcare( o )
@@ -1177,7 +1177,7 @@ mixinDelcare.defaults = Object.create( _mixinDelcare.defaults );
  * Mixin methods and fields into prototype of another object.
  * @param {object} o - options.
  * @function mixinApply
- * @memberof module:Tools/base/Proto.wTools(module:Proto)
+ * @memberof module:Tools/base/Proto.Tools( module::Proto )
  */
 
 let MixinDescriptorFields =
@@ -1345,7 +1345,7 @@ function mixinHas( proto,mixin )
  * @throws {exception} If function cant rewrite constructor using original prototype.
  * @throws {exception} If( o.usingOriginalPrototype ) is false and ( o.cls.prototype ) has manually defined properties.
  * @throws {exception} If( o.cls.prototype.constructor ) is not equal( o.cls  ).
- * @memberof module:Tools/base/Proto.wTools(module:Proto)
+ * @memberof module:Tools/base/Proto.Tools( module::Proto )
  */
 
 /*
@@ -1643,7 +1643,7 @@ classDeclare.defaults =
  * @throws {exception} If( o.static) is not a Object.
  * @throws {exception} If( o.cls.prototype.Constitutes ) is defined.
  * @throws {exception} If( o.cls.prototype ) is not equal( prototype ).
- * @memberof module:Tools/base/Proto.wTools(module:Proto)
+ * @memberof module:Tools/base/Proto.Tools( module::Proto )
  */
 
 function classExtend( o )
@@ -2247,7 +2247,7 @@ function prototypeGet( src )
  * @param {array} protos - maps to united.
  * @return {object} united interface.
  * @function prototypeUnitedInterface
- * @memberof module:Tools/base/Proto.wTools(module:Proto)
+ * @memberof module:Tools/base/Proto.Tools( module::Proto )
  */
 
 function prototypeUnitedInterface( protos )
@@ -2317,7 +2317,7 @@ function prototypeUnitedInterface( protos )
  * Append prototype to object. Find archi parent and replace its proto.
  * @param {object} dstMap - dst object to append proto.
  * @function prototypeAppend
- * @memberof module:Tools/base/Proto.wTools(module:Proto)
+ * @memberof module:Tools/base/Proto.Tools( module::Proto )
  */
 
 function prototypeAppend( dstMap )
@@ -2346,7 +2346,7 @@ function prototypeAppend( dstMap )
  * @param {object} srcProto - proto stack to investigate.
  * @param {object} insProto - proto to look for.
  * @function prototypeHasPrototype
- * @memberof module:Tools/base/Proto.wTools(module:Proto)
+ * @memberof module:Tools/base/Proto.Tools( module::Proto )
  */
 
 function prototypeHasPrototype( srcProto,insProto )
@@ -2369,7 +2369,7 @@ function prototypeHasPrototype( srcProto,insProto )
  * Return proto owning names.
  * @param {object} srcPrototype - src object to investigate proto stack.
  * @function prototypeHasProperty
- * @memberof module:Tools/base/Proto.wTools(module:Proto)
+ * @memberof module:Tools/base/Proto.Tools( module::Proto )
  */
 
 function prototypeHasProperty( srcPrototype,names )
@@ -2402,7 +2402,7 @@ function prototypeHasProperty( srcPrototype,names )
  * Returns parent which has default proto.
  * @param {object} srcPrototype - dst object to append proto.
  * @function prototypeArchyGet
- * @memberof module:Tools/base/Proto.wTools(module:Proto)
+ * @memberof module:Tools/base/Proto.Tools( module::Proto )
  */
 
 function prototypeArchyGet( srcPrototype )
@@ -2524,7 +2524,7 @@ prototypeCrossRefer.defaults =
  * Iterate through prototypes.
  * @param {object} proto - prototype
  * @function prototypeEach
- * @memberof module:Tools/base/Proto.wTools(module:Proto)
+ * @memberof module:Tools/base/Proto.Tools( module::Proto )
  */
 
 function prototypeEach( proto,onEach )
@@ -2683,7 +2683,7 @@ function instanceFinit( src )
  *
  * @return {object} Returns complemented instance.
  * @function instanceInit
- * @memberof module:Tools/base/Proto.wTools(module:Proto)
+ * @memberof module:Tools/base/Proto.Tools( module::Proto )
  */
 
 function instanceInit( instance,prototype )
@@ -2786,7 +2786,7 @@ instanceFilterInit.defaults =
  * Make sure src does not have redundant fields.
  * @param {object} src - source object of the class.
  * @function assertInstanceDoesNotHaveReduntantFields
- * @memberof module:Tools/base/Proto.wTools(module:Proto)
+ * @memberof module:Tools/base/Proto.Tools( module::Proto )
  */
 
 function assertInstanceDoesNotHaveReduntantFields( src )
