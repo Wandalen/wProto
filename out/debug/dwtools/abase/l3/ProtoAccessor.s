@@ -14,30 +14,26 @@ _.assert( _.objectIs( _.field ), 'wProto needs wTools/staging/dwtools/abase/l1/F
 _.assert( _.routineIs( _nameFielded ), 'wProto needs wTools/staging/dwtools/l3/NameTools.s' );
 
 /**
- * Collection of routines for declaring accessors
+ * @summary Collection of routines for declaring accessors
  * @namespace "wTools.accessor"
- * @augments wTools
  * @memberof module:Tools/base/Proto
  */
 
 /**
- * Collection of routines for declaring getters
+ * @summary Collection of routines for declaring getters
  * @namespace "wTools.accessor.getter"
- * @augments wTools.accessor
  * @memberof module:Tools/base/Proto
  */
 
  /**
- * Collection of routines for declaring setters
+ * @summary Collection of routines for declaring setters
  * @namespace "wTools.accessor.setter"
- * @augments wTools.accessor
  * @memberof module:Tools/base/Proto
  */
 
 /**
- * Collection of routines for declaring getters and setters
+ * @summary Collection of routines for declaring getters and setters
  * @namespace "wTools.accessor.getterSetter"
- * @augments wTools.accessor
  * @memberof module:Tools/base/Proto
  */
 
@@ -1438,8 +1434,7 @@ setterArrayCollection_functor.defaults =
  * @param {Object} o - options map
  * @param {Object} o.name - name of property
  * @returns {Function} Returns setter function.
- * @function setterOwn_functor
- * @alias own
+ * @function own
  * @memberof module:Tools/base/Proto.wTools.accessor.setter
  */
 
@@ -1603,8 +1598,7 @@ setterCopyable_functor.defaults =
  * @param {Object} o.name - name of property
  * @param {Object} o.bufferConstructor - buffer constructor
  * @returns {Function} Returns setter function.
- * @function setterBufferFrom_functor
- * @alias bufferFrom
+ * @function bufferFrom
  * @memberof module:Tools/base/Proto.wTools.accessor.setter
  */
 
