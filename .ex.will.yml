@@ -22,7 +22,7 @@ execution :
 path :
 
   repository : git+https:///github.com/Wandalen/wProto.git
-  bugs : https://github.com/Wandalen/wProto/issues
+  bugs : https:///github.com/Wandalen/wProto/issues
 
 step :
 
