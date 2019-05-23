@@ -1719,14 +1719,14 @@ function aliasSetter_functor_body( o )
   _.assertRoutineOptions( aliasSetter_functor_body, arguments );
 
   if( containerName )
-  return function setterAlias( src )
+  return function aliasSet( src )
   {
     let self = this;
     self[ containerName ][ originalName ] = src;
     return self[ containerName ][ originalName ];
   }
   else
-  return function setterAlias( src )
+  return function aliasSet( src )
   {
     let self = this;
     self[ originalName ] = src;
