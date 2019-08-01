@@ -77,6 +77,7 @@ path:
       - ../proto/dwtools/abase
       - ../proto/dwtools/abase/l3
       - ../proto/dwtools/abase/l3/Proto.s
+      - ../proto/dwtools/abase/l3/Proto0Workpiece.s
       - ../proto/dwtools/abase/l3/ProtoAccessor.s
       - ../proto/dwtools/abase/l3/ProtoLike.s
       - ../proto/dwtools/abase/l3.test
@@ -369,6 +370,7 @@ module:
           - proto/dwtools/abase
           - proto/dwtools/abase/l3
           - proto/dwtools/abase/l3/Proto.s
+          - proto/dwtools/abase/l3/Proto0Workpiece.s
           - proto/dwtools/abase/l3/ProtoAccessor.s
           - proto/dwtools/abase/l3/ProtoLike.s
           - proto/dwtools/abase/l3.test
