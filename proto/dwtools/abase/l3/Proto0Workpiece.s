@@ -519,7 +519,6 @@ function fieldsOfTightGroups( src )
   if( _.instanceIs( src ) )
   return _.mapOnly( src, _.workpiece.fieldsOfTightGroupsFromPrototype( prototype ) );
 
-  debugger;
   return _.workpiece.fieldsOfTightGroupsFromPrototype( prototype );
 }
 
@@ -959,7 +958,7 @@ function className( instance )
 
 //
 
-function nickName( instance )
+function qualifiedName( instance )
 {
   _.assert( _.instanceIs( instance ) );
   _.assert( arguments.length === 1 );
@@ -971,7 +970,7 @@ function nickName( instance )
   if( Object.hasOwnProperty.call( instance, 'id' ) )
   name += '#id' + instance.id;
 
-  let result = name + '::' + _.workpiece.className( instance );
+  let result = _.workpiece.className( instance ) + '::' + name;
 
   return result;
 }
@@ -997,7 +996,7 @@ function toStr( instance, options )
   _.assert( arguments.length === 1 || arguments.length === 2 );
 
   if( !o.jsLike && !o.jsonLike )
-  result += _.workpiece.nickName( instance ) + '\n';
+  result += _.workpiece.qualifiedName( instance ) + '\n';
 
   var fields = _.workpiece.fieldsOfTightGroups( instance );
 
@@ -1193,7 +1192,7 @@ let Routines =
 
   lowClassName,
   className,
-  nickName,
+  qualifiedName,
   uname,
   toStr,
 
