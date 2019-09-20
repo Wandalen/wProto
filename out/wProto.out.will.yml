@@ -1,321 +1,15 @@
-format: willfile-1.0.0
-about:
-  name: wProto
-  description: >-
-    Relations module. Collection of routines to define classes and relations
-    between them. Proto leverages multiple inheritances, mixins, accessors,
-    fields groups defining, introspection and more. Use it as a skeleton of the
-    application.
-  enabled: 1
-  version: 0.4.169
-  interpreters: &ref_0
-    - njs >= 8.0.0
-    - chrome >= 60.0.0
-    - firefox >= 60.0.0
-  keywords: &ref_1
-    - wTools
-    - wProto
-    - mixin
-    - Class
-    - Object
-    - Prototype
-    - Incapsulation
-  license: MIT
-  author: Kostiantyn Wandalen <wanalen@willbe.so>
-  contributors: &ref_2
-    - Kostiantyn Wandalen <wanalen@willbe.so>
-    - Volodymyr M. <volodymyr.migdal@gmail.com>
-  npm.name: wProto
-  npm.scripts: &ref_3
-    test: wtest .run proto/**
-    docgen: wdocgen .build proto
-path:
-  module.willfiles:
-    criterion:
-      predefined: 1
-    path: wProto.out.will.yml
-  module.common:
-    criterion:
-      predefined: 1
-    path: wProto.out
-  module.original.willfiles:
-    criterion:
-      predefined: 1
-    path:
-      - ../.im.will.yml
-      - ../.ex.will.yml
-  local:
-    criterion:
-      predefined: 1
-  remote:
-    criterion:
-      predefined: 1
-  in:
-    criterion:
-      predefined: 0
-    path: .
-  temp:
-    path: .
-  out:
-    criterion:
-      predefined: 0
-    path: .
-  out.debug:
-    criterion:
-      debug: 1
-    path: debug
-  out.release:
-    criterion:
-      debug: 0
-    path: release
-  proto:
-    path: ../proto
-  repository:
-    path: 'git+https:///github.com/Wandalen/wProto.git'
-  bugtracker:
-    path: 'https:///github.com/Wandalen/wProto/issues'
-  exported.dir.proto.export:
-    criterion:
-      content: proto
-      export: 1
-    path: ../proto
-  exported.files.proto.export:
-    criterion:
-      content: proto
-      export: 1
-    path:
-      - ../proto
-      - ../proto/dwtools
-      - ../proto/dwtools/Tools.s
-      - ../proto/dwtools/abase
-      - ../proto/dwtools/abase/l3
-      - ../proto/dwtools/abase/l3/Proto.s
-      - ../proto/dwtools/abase/l3/Proto0Workpiece.s
-      - ../proto/dwtools/abase/l3/ProtoAccessor.s
-      - ../proto/dwtools/abase/l3/ProtoLike.s
-      - ../proto/dwtools/abase/l3.test
-      - ../proto/dwtools/abase/l3.test/Proto.test.s
-      - ../proto/dwtools/abase/l3.test/ProtoLike.test.s
-      - ../proto/dwtools/amid
-      - ../proto/dwtools/atop
-submodule: {}
-reflector:
-  reflect.proto.:
-    src:
-      filePath:
-        'path::proto': 'path::out.*=1'
-    mandatory: 1
-    criterion:
-      debug: 0
-    inherit:
-      - predefined.*
-  reflect.proto.debug:
-    src:
-      filePath:
-        'path::proto': 'path::out.*=1'
-    mandatory: 1
-    criterion:
-      debug: 1
-    inherit:
-      - predefined.*
-  reflect.submodules:
-    src:
-      filePath:
-        'submodule::*/exported::*=1/path::exportedDir*=1': 'path::out.*=1'
-    mandatory: 1
-    criterion:
-      debug: 1
-    inherit:
-      - predefined.*
-  exported.proto.export:
-    src:
-      filePath:
-        .: ''
-      prefixPath: ../proto
-    mandatory: 1
-    criterion:
-      content: proto
-      export: 1
-  exported.files.proto.export:
-    src:
-      filePath:
-        'path::exported.files.proto.export': ''
-      basePath: .
-      prefixPath: 'path::exported.dir.proto.export'
-    recursive: 0
-    mandatory: 1
-    criterion:
-      content: proto
-      export: 1
-step:
-  clean.out.:
-    opts:
-      filePath: 'path::out.debug'
-    criterion:
-      debug: 0
-    inherit:
-      - files.delete
-  clean.out.debug:
-    opts:
-      filePath: 'path::out.debug'
-    criterion:
-      debug: 1
-    inherit:
-      - files.delete
-  reflect.proto.:
-    opts:
-      reflector: 'reflector::reflect.proto.*=1'
-    criterion:
-      debug: 0
-      raw: 0
-    inherit:
-      - files.reflect
-  reflect.proto.debug:
-    opts:
-      reflector: 'reflector::reflect.proto.*=1'
-    criterion:
-      debug: 1
-      raw: 0
-    inherit:
-      - files.reflect
-  reflect.proto.raw:
-    opts:
-      reflector: 'reflector::reflect.proto.*=1'
-    criterion:
-      debug: 0
-      raw: 1
-    inherit:
-      - files.reflect
-  reflect.proto.debug.raw:
-    opts:
-      reflector: 'reflector::reflect.proto.*=1'
-    criterion:
-      debug: 1
-      raw: 1
-    inherit:
-      - files.reflect
-  reflect.submodules.:
-    opts:
-      reflector: 'reflector::reflect.submodules*=1'
-    criterion:
-      debug: 1
-      raw: 0
-    inherit:
-      - files.reflect
-  reflect.submodules.raw:
-    opts:
-      reflector: 'reflector::reflect.submodules*=1'
-    criterion:
-      debug: 1
-      raw: 1
-    inherit:
-      - files.reflect
-  reflect.submodules:
-    opts:
-      reflector: 'reflector::reflect.submodules*'
-    criterion:
-      debug: 1
-    inherit:
-      - files.reflect
-  proto.export:
-    opts:
-      export: 'path::proto'
-      tar: 0
-    criterion:
-      content: proto
-    inherit:
-      - module.export
-  doc.export:
-    opts:
-      export: 'path::doc'
-      tar: 0
-    criterion:
-      content: doc
-    inherit:
-      - module.export
-  npm.export:
-    opts:
-      export: out.npm
-      tar: 0
-    criterion:
-      content: npm
-    inherit:
-      - module.export
-  npm.publish:
-    opts:
-      shell: npm publish
-    inherit:
-      - shell.run
-build:
-  debug.raw:
-    steps:
-      - 'step::clean.out*=1'
-      - 'step::reflect.proto.*=1'
-    criterion:
-      default: 1
-      debug: 1
-      raw: 1
-  debug.compiled:
-    steps:
-      - 'step::clean.out*=1'
-      - 'step::reflect.proto.*=1'
-    criterion:
-      debug: 1
-      raw: 0
-  release.raw:
-    steps:
-      - 'step::clean.out*=1'
-      - 'step::reflect.proto.*=1'
-    criterion:
-      debug: 0
-      raw: 1
-  release.compiled:
-    steps:
-      - 'step::clean.out*=1'
-      - 'step::reflect.proto.*=1'
-    criterion:
-      debug: 0
-      raw: 0
-  all:
-    steps:
-      - 'build::debug.raw'
-      - 'build::release.compiled'
-  proto.export:
-    steps:
-      - 'step::proto.export'
-    criterion:
-      content: proto
-      export: 1
-  doc.export:
-    steps:
-      - 'step::doc.export'
-    criterion:
-      content: doc
-      export: 1
-  npm.export:
-    steps:
-      - 'step::npm.publish'
-    criterion:
-      content: npm
-      export: 1
-  export:
-    steps:
-      - 'build::proto.export'
-    criterion:
-      default: 1
-      export: 1
-exported:
-  proto.export:
-    version: 0.4.169
-    exportedReflector: 'reflector::exported.proto.export'
-    exportedFilesReflector: 'reflector::exported.files.proto.export'
-    exportedDirPath: 'path::exported.dir.proto.export'
-    exportedFilesPath: 'path::exported.files.proto.export'
-    criterion:
-      content: proto
-      export: 1
+format: outwillfile-2.0
+root:
+  - wProto.out
+consistency:
+  ../.ex.will.yml: &ref_0
+    hash: 489fef7ea6b7f1cba4b3a6857351552b
+    size: 1911
+  ../.im.will.yml: &ref_1
+    hash: 844ab52058e80d039128df770afd6bfa
+    size: 1692
 module:
-  ../:
+  wProto.out:
     about:
       name: wProto
       description: >-
@@ -325,84 +19,105 @@ module:
         the application.
       enabled: 1
       version: 0.4.169
-      interpreters: *ref_0
-      keywords: *ref_1
+      interpreters: &ref_2
+        - njs >= 8.0.0
+        - chrome >= 60.0.0
+        - firefox >= 60.0.0
+      keywords: &ref_3
+        - wTools
+        - wProto
+        - mixin
+        - Class
+        - Object
+        - Prototype
+        - Incapsulation
       license: MIT
       author: Kostiantyn Wandalen <wanalen@willbe.so>
-      contributors: *ref_2
+      contributors: &ref_4
+        - Kostiantyn Wandalen <wanalen@willbe.so>
+        - Volodymyr M. <volodymyr.migdal@gmail.com>
       npm.name: wProto
-      npm.scripts: *ref_3
+      npm.scripts: &ref_5
+        test: wtest .run proto/**
+        docgen: wdocgen .build proto
     path:
       module.willfiles:
         criterion:
           predefined: 1
-        path:
-          - .im.will.yml
-          - .ex.will.yml
+        path: wProto.out.will.yml
+      module.common:
+        criterion:
+          predefined: 1
+        path: wProto.out
       module.original.willfiles:
         criterion:
           predefined: 1
         path:
-          - .im.will.yml
-          - .ex.will.yml
-      module.common:
+          - ../.ex.will.yml
+          - ../.im.will.yml
+      module.peer.willfiles:
         criterion:
           predefined: 1
-        path: ./
+        path:
+          - ../.ex.will.yml
+          - ../.im.will.yml
       local:
         criterion:
           predefined: 1
+        path: ../.ex.will.yml
       remote:
         criterion:
           predefined: 1
+      repository:
+        path: 'git+https:///github.com/Wandalen/wProto.git'
+      bugtracker:
+        path: 'https:///github.com/Wandalen/wProto/issues'
       in:
         criterion:
           predefined: 0
         path: .
       temp:
-        path: out
+        path: .
       out:
         criterion:
           predefined: 0
-        path: out
+        path: .
       out.debug:
         criterion:
           debug: 1
-        path: ./out/debug
+        path: debug
       out.release:
         criterion:
           debug: 0
-        path: ./out/release
+        path: release
       proto:
-        path: ./proto
-      repository:
-        path: 'git+https:///github.com/Wandalen/wProto.git'
-      bugtracker:
-        path: 'https:///github.com/Wandalen/wProto/issues'
-      exported.dir.proto.export:
+        path: ../proto
+      export:
+        path: '{path::proto}/**'
+      exported.dir.export:
         criterion:
-          content: proto
+          default: 1
           export: 1
-        path: ./proto
-      exported.files.proto.export:
+        path: ../proto
+      exported.files.export:
         criterion:
-          content: proto
+          default: 1
           export: 1
         path:
-          - proto
-          - proto/dwtools
-          - proto/dwtools/Tools.s
-          - proto/dwtools/abase
-          - proto/dwtools/abase/l3
-          - proto/dwtools/abase/l3/Proto.s
-          - proto/dwtools/abase/l3/Proto0Workpiece.s
-          - proto/dwtools/abase/l3/ProtoAccessor.s
-          - proto/dwtools/abase/l3/ProtoLike.s
-          - proto/dwtools/abase/l3.test
-          - proto/dwtools/abase/l3.test/Proto.test.s
-          - proto/dwtools/abase/l3.test/ProtoLike.test.s
-          - proto/dwtools/amid
-          - proto/dwtools/atop
+          - ../proto
+          - ../proto/dwtools
+          - ../proto/dwtools/Tools.s
+          - ../proto/dwtools/abase
+          - ../proto/dwtools/abase/l3
+          - ../proto/dwtools/abase/l3/Proto.s
+          - ../proto/dwtools/abase/l3/Proto0Workpiece.s
+          - ../proto/dwtools/abase/l3/ProtoAccessor.s
+          - ../proto/dwtools/abase/l3/ProtoLike.s
+          - ../proto/dwtools/abase/l3.test
+          - ../proto/dwtools/abase/l3.test/Proto.test.s
+          - ../proto/dwtools/abase/l3.test/ProtoLike.test.s
+          - ../proto/dwtools/amid
+          - ../proto/dwtools/atop
     submodule: {}
     reflector:
       reflect.proto.:
@@ -432,27 +147,57 @@ module:
           debug: 1
         inherit:
           - predefined.*
-      exported.proto.export:
+      exported.export:
         src:
           filePath:
-            .: ''
-          prefixPath: proto
+            '**': ''
+          prefixPath: ../proto
         mandatory: 1
         criterion:
-          content: proto
+          default: 1
           export: 1
-      exported.files.proto.export:
+      exported.files.export:
         src:
           filePath:
-            'path::exported.files.proto.export': ''
+            'path::exported.files.export': ''
           basePath: .
-          prefixPath: 'path::exported.dir.proto.export'
+          prefixPath: 'path::exported.dir.export'
+          recursive: 0
         recursive: 0
         mandatory: 1
         criterion:
-          content: proto
+          default: 1
           export: 1
     step:
+      proto.export:
+        opts:
+          export: 'path::export'
+          tar: 0
+        criterion:
+          content: proto
+        inherit:
+          - module.export
+      doc.export:
+        opts:
+          export: 'path::doc'
+          tar: 0
+        criterion:
+          content: doc
+        inherit:
+          - module.export
+      npm.export:
+        opts:
+          export: out.npm
+          tar: 0
+        criterion:
+          content: npm
+        inherit:
+          - module.export
+      npm.publish:
+        opts:
+          shell: npm publish
+        inherit:
+          - shell.run
       clean.out.:
         opts:
           filePath: 'path::out.debug'
@@ -522,36 +267,31 @@ module:
           debug: 1
         inherit:
           - files.reflect
+    build:
       proto.export:
-        opts:
-          export: 'path::proto'
-          tar: 0
+        steps:
+          - 'step::proto.export'
         criterion:
           content: proto
-        inherit:
-          - module.export
+          export: 1
       doc.export:
-        opts:
-          export: 'path::doc'
-          tar: 0
+        steps:
+          - 'step::doc.export'
         criterion:
           content: doc
-        inherit:
-          - module.export
+          export: 1
       npm.export:
-        opts:
-          export: out.npm
-          tar: 0
+        steps:
+          - 'step::npm.publish'
         criterion:
           content: npm
-        inherit:
-          - module.export
-      npm.publish:
-        opts:
-          shell: npm publish
-        inherit:
-          - shell.run
-    build:
+          export: 1
+      export:
+        steps:
+          - 'build::proto.export'
+        criterion:
+          default: 1
+          export: 1
       debug.raw:
         steps:
           - 'step::clean.out*=1'
@@ -585,6 +325,267 @@ module:
         steps:
           - 'build::debug.raw'
           - 'build::release.compiled'
+    exported:
+      export:
+        version: 0.4.169
+        recursive: 0
+        withIntegrated: 2
+        tar: 0
+        exportedReflector: 'reflector::exported.export'
+        exportedFilesReflector: 'reflector::exported.files.export'
+        exportedDirPath: 'path::exported.dir.export'
+        exportedFilesPath: 'path::exported.files.export'
+        criterion:
+          default: 1
+          export: 1
+    consistency:
+      ../.ex.will.yml: *ref_0
+      ../.im.will.yml: *ref_1
+  ../:
+    about:
+      name: wProto
+      description: >-
+        Relations module. Collection of routines to define classes and relations
+        between them. Proto leverages multiple inheritances, mixins, accessors,
+        fields groups defining, introspection and more. Use it as a skeleton of
+        the application.
+      enabled: 1
+      version: 0.4.169
+      interpreters: *ref_2
+      keywords: *ref_3
+      license: MIT
+      author: Kostiantyn Wandalen <wanalen@willbe.so>
+      contributors: *ref_4
+      npm.name: wProto
+      npm.scripts: *ref_5
+    path:
+      module.willfiles:
+        criterion:
+          predefined: 1
+        path:
+          - .ex.will.yml
+          - .im.will.yml
+      module.original.willfiles:
+        criterion:
+          predefined: 1
+        path:
+          - .ex.will.yml
+          - .im.will.yml
+      module.peer.willfiles:
+        criterion:
+          predefined: 1
+        path: out/wProto.out.will.yml
+      module.common:
+        criterion:
+          predefined: 1
+        path: ./
+      local:
+        criterion:
+          predefined: 1
+        path: .ex.will.yml
+      remote:
+        criterion:
+          predefined: 1
+      repository:
+        path: 'git+https:///github.com/Wandalen/wProto.git'
+      bugtracker:
+        path: 'https:///github.com/Wandalen/wProto/issues'
+      in:
+        criterion:
+          predefined: 0
+        path: .
+      temp:
+        path: out
+      out:
+        criterion:
+          predefined: 0
+        path: out
+      out.debug:
+        criterion:
+          debug: 1
+        path: ./out/debug
+      out.release:
+        criterion:
+          debug: 0
+        path: ./out/release
+      proto:
+        path: ./proto
+      export:
+        path: '{path::proto}/**'
+      exported.dir.export:
+        criterion:
+          default: 1
+          export: 1
+        path: ./proto
+      exported.files.export:
+        criterion:
+          default: 1
+          export: 1
+        path:
+          - proto
+          - proto/dwtools
+          - proto/dwtools/Tools.s
+          - proto/dwtools/abase
+          - proto/dwtools/abase/l3
+          - proto/dwtools/abase/l3/Proto.s
+          - proto/dwtools/abase/l3/Proto0Workpiece.s
+          - proto/dwtools/abase/l3/ProtoAccessor.s
+          - proto/dwtools/abase/l3/ProtoLike.s
+          - proto/dwtools/abase/l3.test
+          - proto/dwtools/abase/l3.test/Proto.test.s
+          - proto/dwtools/abase/l3.test/ProtoLike.test.s
+          - proto/dwtools/amid
+          - proto/dwtools/atop
+    submodule: {}
+    reflector:
+      reflect.proto.:
+        src:
+          filePath:
+            'path::proto': 'path::out.*=1'
+        mandatory: 1
+        criterion:
+          debug: 0
+        inherit:
+          - predefined.*
+      reflect.proto.debug:
+        src:
+          filePath:
+            'path::proto': 'path::out.*=1'
+        mandatory: 1
+        criterion:
+          debug: 1
+        inherit:
+          - predefined.*
+      reflect.submodules:
+        src:
+          filePath:
+            'submodule::*/exported::*=1/path::exportedDir*=1': 'path::out.*=1'
+        mandatory: 1
+        criterion:
+          debug: 1
+        inherit:
+          - predefined.*
+      exported.export:
+        src:
+          filePath:
+            '**': ''
+          prefixPath: proto
+        mandatory: 1
+        criterion:
+          default: 1
+          export: 1
+      exported.files.export:
+        src:
+          filePath:
+            'path::exported.files.export': ''
+          basePath: .
+          prefixPath: 'path::exported.dir.export'
+          recursive: 0
+        recursive: 0
+        mandatory: 1
+        criterion:
+          default: 1
+          export: 1
+    step:
+      proto.export:
+        opts:
+          export: 'path::export'
+          tar: 0
+        criterion:
+          content: proto
+        inherit:
+          - module.export
+      doc.export:
+        opts:
+          export: 'path::doc'
+          tar: 0
+        criterion:
+          content: doc
+        inherit:
+          - module.export
+      npm.export:
+        opts:
+          export: out.npm
+          tar: 0
+        criterion:
+          content: npm
+        inherit:
+          - module.export
+      npm.publish:
+        opts:
+          shell: npm publish
+        inherit:
+          - shell.run
+      clean.out.:
+        opts:
+          filePath: 'path::out.debug'
+        criterion:
+          debug: 0
+        inherit:
+          - files.delete
+      clean.out.debug:
+        opts:
+          filePath: 'path::out.debug'
+        criterion:
+          debug: 1
+        inherit:
+          - files.delete
+      reflect.proto.:
+        opts:
+          reflector: 'reflector::reflect.proto.*=1'
+        criterion:
+          debug: 0
+          raw: 0
+        inherit:
+          - files.reflect
+      reflect.proto.debug:
+        opts:
+          reflector: 'reflector::reflect.proto.*=1'
+        criterion:
+          debug: 1
+          raw: 0
+        inherit:
+          - files.reflect
+      reflect.proto.raw:
+        opts:
+          reflector: 'reflector::reflect.proto.*=1'
+        criterion:
+          debug: 0
+          raw: 1
+        inherit:
+          - files.reflect
+      reflect.proto.debug.raw:
+        opts:
+          reflector: 'reflector::reflect.proto.*=1'
+        criterion:
+          debug: 1
+          raw: 1
+        inherit:
+          - files.reflect
+      reflect.submodules.:
+        opts:
+          reflector: 'reflector::reflect.submodules*=1'
+        criterion:
+          debug: 1
+          raw: 0
+        inherit:
+          - files.reflect
+      reflect.submodules.raw:
+        opts:
+          reflector: 'reflector::reflect.submodules*=1'
+        criterion:
+          debug: 1
+          raw: 1
+        inherit:
+          - files.reflect
+      reflect.submodules:
+        opts:
+          reflector: 'reflector::reflect.submodules*'
+        criterion:
+          debug: 1
+        inherit:
+          - files.reflect
+    build:
       proto.export:
         steps:
           - 'step::proto.export'
@@ -609,14 +610,56 @@ module:
         criterion:
           default: 1
           export: 1
-    exported:
-      proto.export:
-        version: 0.4.169
-        exportedReflector: 'reflector::exported.proto.export'
-        exportedFilesReflector: 'reflector::exported.files.proto.export'
-        exportedDirPath: 'path::exported.dir.proto.export'
-        exportedFilesPath: 'path::exported.files.proto.export'
+      debug.raw:
+        steps:
+          - 'step::clean.out*=1'
+          - 'step::reflect.proto.*=1'
         criterion:
-          content: proto
+          default: 1
+          debug: 1
+          raw: 1
+      debug.compiled:
+        steps:
+          - 'step::clean.out*=1'
+          - 'step::reflect.proto.*=1'
+        criterion:
+          debug: 1
+          raw: 0
+      release.raw:
+        steps:
+          - 'step::clean.out*=1'
+          - 'step::reflect.proto.*=1'
+        criterion:
+          debug: 0
+          raw: 1
+      release.compiled:
+        steps:
+          - 'step::clean.out*=1'
+          - 'step::reflect.proto.*=1'
+        criterion:
+          debug: 0
+          raw: 0
+      all:
+        steps:
+          - 'build::debug.raw'
+          - 'build::release.compiled'
+    exported:
+      export:
+        version: 0.4.169
+        recursive: 0
+        withIntegrated: 2
+        tar: 0
+        exportedReflector: 'reflector::exported.export'
+        exportedFilesReflector: 'reflector::exported.files.export'
+        exportedDirPath: 'path::exported.dir.export'
+        exportedFilesPath: 'path::exported.files.export'
+        criterion:
+          default: 1
           export: 1
-  wProto.out: root
+    consistency:
+      ../.ex.will.yml:
+        hash: 489fef7ea6b7f1cba4b3a6857351552b
+        size: 1911
+      ../.im.will.yml:
+        hash: 844ab52058e80d039128df770afd6bfa
+        size: 1692
