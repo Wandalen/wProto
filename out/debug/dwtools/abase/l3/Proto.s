@@ -2027,7 +2027,7 @@ function field( o )
   else if( o.iniToIns === 'shallow' )
   {
     debugger;
-    definition.initialValueGet = function get() { return _.entityShallowClone( this.ini ) }
+    definition.initialValueGet = function get() { return _.entityMake( this.ini ) }
   }
   else if( o.iniToIns === 'deep' )
   {
@@ -2046,7 +2046,7 @@ function field( o )
   }
   else _.assert( 0 );
 
-  // definition.initialValueGet = function get() { return _.entityShallowClone( this.ini ) }
+  // definition.initialValueGet = function get() { return _.entityMake( this.ini ) }
   // definition.initialValueGet = function get() { return _.cloneJust( this.ini ) }
 
 /*
@@ -2144,7 +2144,7 @@ function own( src )
   _.assert( src !== undefined, () => 'Expects object-like or long, but got ' + _.strType( src ) );
   _.assert( arguments.length === 1 );
 
-  // definition.initialValueGet = function get() { return _.entityShallowClone( this.ini ) }
+  // definition.initialValueGet = function get() { return _.entityMake( this.ini ) }
   definition.initialValueGet = function get() { return _.cloneJust( this.ini ) }
 
   _.propertyHide( definition, 'initialValueGet' );
@@ -2233,7 +2233,7 @@ function contained( src )
   definition.initialValueGet = function get()
   {
     let result = this.container;
-    result.value = _.entityShallowClone( definition.ini );
+    result.value = _.entityMake( definition.ini );
     return result;
   }
   else
@@ -2263,18 +2263,18 @@ class wCallableObject extends Function
 {
   constructor()
   {
-    super( 'return this.self.__call__.apply( this.self, arguments );' );
-
+    super( 'return this.routine.__call__.apply( this.routine, arguments );' );
     let context = Object.create( null );
-    let self = this.bind( context );
-    context.self = self;
+    let routine = this.bind( context );
+    context.routine = routine;
     Object.freeze( context );
-
-    return self;
+    return routine;
   }
+  static shortName = 'CallableObject';
 }
 
-wCallableObject.shortName = 'CallableObject';
+// wCallableObject.shortName = 'CallableObject';
+_.assert( wCallableObject.shortName === 'CallableObject' );
 
 // --
 // fields
