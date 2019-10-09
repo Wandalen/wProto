@@ -1798,13 +1798,13 @@ function toStructureGet_functor( o )
 
     let proxy = new Proxy( original, handlers );
 
-    Object.defineProperty( proxy, 'original',
-    {
-      original,
-      enumerable : false,
-      writable : false,
-      configurable : false,
-    });
+    // Object.defineProperty( proxy, 'original',
+    // {
+    //   original,
+    //   enumerable : false,
+    //   writable : false,
+    //   configurable : false,
+    // });
 
     return proxy;
   }
