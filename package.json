@@ -15,10 +15,9 @@
       "email": "volodymyr.migdal@gmail.com"
     }
   ],
-  "main": "proto/dwtools/abase/l3/Proto.s",
+  "main": "proto/dwtools/abase/l3_proto/Include.s",
   "files": [
-    "npm-shrinkwrap.json",
-    "proto/dwtools/abase/l3",
+    "proto/dwtools/abase/l3_proto",
     "proto/dwtools/Tools.s",
     "out"
   ],

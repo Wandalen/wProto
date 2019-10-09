@@ -1,11 +1,11 @@
-( function _Proto0Workpiece_s_() {
+( function _Workpiece_s_() {
 
 'use strict';
 
-if( typeof module !== 'undefined' )
-{
-  let _ = require( '../../Tools.s' );
-}
+// if( typeof module !== 'undefined' )
+// {
+//   let _ = require( '../../Tools.s' );
+// }
 
 /*
 qqq : repair and improve doc
