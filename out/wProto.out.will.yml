@@ -6,7 +6,7 @@ consistency:
     hash: 489fef7ea6b7f1cba4b3a6857351552b
     size: 1911
   ../.im.will.yml: &ref_1
-    hash: 3cf061048d855a5d354c83b4e135ac88
+    hash: 326cd23a2ce9335c335b1a9916f8664c
     size: 4919
 module:
   wProto.out:
@@ -41,20 +41,14 @@ module:
         test: wtest .run proto/**
         docgen: wdocgen .build proto
     path:
-      module.common:
-        criterion:
-          predefined: 1
-        path: wProto.out
       module.willfiles:
         criterion:
           predefined: 1
         path: wProto.out.will.yml
-      module.download:
+      module.common:
         criterion:
           predefined: 1
-      remote:
-        criterion:
-          predefined: 1
+        path: wProto.out
       module.original.willfiles:
         criterion:
           predefined: 1
@@ -67,6 +61,12 @@ module:
         path:
           - ../.ex.will.yml
           - ../.im.will.yml
+      download:
+        criterion:
+          predefined: 1
+      remote:
+        criterion:
+          predefined: 1
       repository:
         path: 'git+https:///github.com/Wandalen/wProto.git'
       bugtracker:
@@ -143,14 +143,14 @@ module:
           raw: compiled
           content: prime
         path: '{path::out.*=}/source/Index.s'
-      exported.dir.export:
+      exported.dir.proto.export:
         criterion:
-          default: 1
+          content: proto
           export: 1
         path: ../proto
-      exported.files.export:
+      exported.files.proto.export:
         criterion:
-          default: 1
+          content: proto
           export: 1
         path:
           - ../proto
@@ -177,7 +177,7 @@ module:
           - ../proto/dwtools/atop
     submodule:
       wTools:
-        path: 'npm:///wFiles'
+        path: 'npm:///wProto'
         autoExporting: 0
         enabled: 0
       Self:
@@ -339,26 +339,26 @@ module:
           content: prime
         inherit:
           - predefined.*
-      exported.export:
+      exported.proto.export:
         src:
           filePath:
             '**': ''
           prefixPath: ../proto
         mandatory: 1
         criterion:
-          default: 1
+          content: proto
           export: 1
-      exported.files.export:
+      exported.files.proto.export:
         src:
           filePath:
-            'path::exported.files.export': ''
+            'path::exported.files.proto.export': ''
           basePath: .
-          prefixPath: 'path::exported.dir.export'
+          prefixPath: 'path::exported.dir.proto.export'
           recursive: 0
         recursive: 0
         mandatory: 1
         criterion:
-          default: 1
+          content: proto
           export: 1
     step:
       proto.export:
@@ -786,17 +786,17 @@ module:
           - 'build::release'
           - 'build::npm'
     exported:
-      export:
+      proto.export:
         version: 0.4.169
         recursive: 0
         withIntegrated: 2
         tar: 0
-        exportedReflector: 'reflector::exported.export'
-        exportedFilesReflector: 'reflector::exported.files.export'
-        exportedDirPath: 'path::exported.dir.export'
-        exportedFilesPath: 'path::exported.files.export'
+        exportedReflector: 'reflector::exported.proto.export'
+        exportedFilesReflector: 'reflector::exported.files.proto.export'
+        exportedDirPath: 'path::exported.dir.proto.export'
+        exportedFilesPath: 'path::exported.files.proto.export'
         criterion:
-          default: 1
+          content: proto
           export: 1
     consistency:
       ../.ex.will.yml: *ref_0
@@ -819,16 +819,12 @@ module:
       npm.name: wProto
       npm.scripts: *ref_5
     path:
-      module.download:
+      module.willfiles:
         criterion:
           predefined: 1
-      remote:
-        criterion:
-          predefined: 1
-      module.common:
-        criterion:
-          predefined: 1
-        path: ./
+        path:
+          - .ex.will.yml
+          - .im.will.yml
       module.original.willfiles:
         criterion:
           predefined: 1
@@ -839,12 +835,16 @@ module:
         criterion:
           predefined: 1
         path: out/wProto.out.will.yml
-      module.willfiles:
+      module.common:
         criterion:
           predefined: 1
-        path:
-          - .ex.will.yml
-          - .im.will.yml
+        path: ./
+      download:
+        criterion:
+          predefined: 1
+      remote:
+        criterion:
+          predefined: 1
       repository:
         path: 'git+https:///github.com/Wandalen/wProto.git'
       bugtracker:
@@ -921,41 +921,9 @@ module:
           raw: compiled
           content: prime
         path: '{path::out.*=}/source/Index.s'
-      exported.dir.export:
-        criterion:
-          default: 1
-          export: 1
-        path: ./proto
-      exported.files.export:
-        criterion:
-          default: 1
-          export: 1
-        path:
-          - proto
-          - proto/dwtools
-          - proto/dwtools/Tools.s
-          - proto/dwtools/abase
-          - proto/dwtools/abase/l3_proto
-          - proto/dwtools/abase/l3_proto/Include.s
-          - proto/dwtools/abase/l3_proto/l1
-          - proto/dwtools/abase/l3_proto/l1/Define.s
-          - proto/dwtools/abase/l3_proto/l1/Proto.s
-          - proto/dwtools/abase/l3_proto/l1/Workpiece.s
-          - proto/dwtools/abase/l3_proto/l3
-          - proto/dwtools/abase/l3_proto/l3/Accessor.s
-          - proto/dwtools/abase/l3_proto/l3/Class.s
-          - proto/dwtools/abase/l3_proto/l3/Complex.s
-          - proto/dwtools/abase/l3_proto/l3/Like.s
-          - proto/dwtools/abase/l3_proto.test
-          - proto/dwtools/abase/l3_proto.test/Class.test.s
-          - proto/dwtools/abase/l3_proto.test/Complex.test.s
-          - proto/dwtools/abase/l3_proto.test/Like.test.s
-          - proto/dwtools/abase/l3_proto.test/Proto.test.s
-          - proto/dwtools/amid
-          - proto/dwtools/atop
     submodule:
       wTools:
-        path: 'npm:///wFiles'
+        path: 'npm:///wProto'
         autoExporting: 0
         enabled: 0
       Self:
@@ -1090,27 +1058,6 @@ module:
           content: prime
         inherit:
           - predefined.*
-      exported.export:
-        src:
-          filePath:
-            '**': ''
-          prefixPath: proto
-        mandatory: 1
-        criterion:
-          default: 1
-          export: 1
-      exported.files.export:
-        src:
-          filePath:
-            'path::exported.files.export': ''
-          basePath: .
-          prefixPath: 'path::exported.dir.export'
-          recursive: 0
-        recursive: 0
-        mandatory: 1
-        criterion:
-          default: 1
-          export: 1
     step:
       proto.export:
         opts:
@@ -1536,23 +1483,10 @@ module:
           - 'build::raw.release'
           - 'build::release'
           - 'build::npm'
-    exported:
-      export:
-        version: 0.4.169
-        recursive: 0
-        withIntegrated: 2
-        tar: 0
-        exportedReflector: 'reflector::exported.export'
-        exportedFilesReflector: 'reflector::exported.files.export'
-        exportedDirPath: 'path::exported.dir.export'
-        exportedFilesPath: 'path::exported.files.export'
-        criterion:
-          default: 1
-          export: 1
     consistency:
       ../.ex.will.yml:
         hash: 489fef7ea6b7f1cba4b3a6857351552b
         size: 1911
       ../.im.will.yml:
-        hash: 3cf061048d855a5d354c83b4e135ac88
+        hash: 326cd23a2ce9335c335b1a9916f8664c
         size: 4919
