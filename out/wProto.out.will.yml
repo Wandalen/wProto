@@ -6,7 +6,7 @@ consistency:
     hash: 489fef7ea6b7f1cba4b3a6857351552b
     size: 1911
   ../.im.will.yml: &ref_1
-    hash: 60a060dd37569f7323165a28fc7cbb29
+    hash: 676aa293abc42e9f89c4a7cfdf81007b
     size: 4919
 module:
   wProto.out:
@@ -190,7 +190,7 @@ module:
         enabled: 0
         criterion:
           development: 1
-      wequaler:
+      wEqualer:
         path: 'npm:///wequaler'
         autoExporting: 0
         enabled: 0
@@ -940,7 +940,7 @@ module:
         enabled: 0
         criterion:
           development: 1
-      wequaler:
+      wEqualer:
         path: 'npm:///wequaler'
         autoExporting: 0
         enabled: 0
@@ -1496,5 +1496,5 @@ module:
         hash: 489fef7ea6b7f1cba4b3a6857351552b
         size: 1911
       ../.im.will.yml:
-        hash: 60a060dd37569f7323165a28fc7cbb29
+        hash: 676aa293abc42e9f89c4a7cfdf81007b
         size: 4919

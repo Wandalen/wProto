@@ -8,7 +8,7 @@ submodule :
    enabled : 0
    criterion :
      development : 1
-  wequaler :
+  wEqualer :
     path : npm:///wequaler
     enabled : 0
     criterion :
