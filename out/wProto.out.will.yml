@@ -61,6 +61,10 @@ module:
         path:
           - ../.ex.will.yml
           - ../.im.will.yml
+      module.peer.in:
+        criterion:
+          predefined: 1
+        path: ..
       download:
         criterion:
           predefined: 1
@@ -835,6 +839,10 @@ module:
         criterion:
           predefined: 1
         path: out/wProto.out.will.yml
+      module.peer.in:
+        criterion:
+          predefined: 1
+        path: out
       module.common:
         criterion:
           predefined: 1
