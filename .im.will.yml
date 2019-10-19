@@ -1,7 +1,7 @@
 submodule :
 
   wTools :
-    path : npm:///wProto
+    path : npm:///wTools
     enabled : 0
   Self :
    path : hd://.

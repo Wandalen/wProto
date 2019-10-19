@@ -6,7 +6,7 @@ consistency:
     hash: 489fef7ea6b7f1cba4b3a6857351552b
     size: 1911
   ../.im.will.yml: &ref_1
-    hash: 326cd23a2ce9335c335b1a9916f8664c
+    hash: 60a060dd37569f7323165a28fc7cbb29
     size: 4919
 module:
   wProto.out:
@@ -181,7 +181,7 @@ module:
           - ../proto/dwtools/atop
     submodule:
       wTools:
-        path: 'npm:///wProto'
+        path: 'npm:///wTools'
         autoExporting: 0
         enabled: 0
       Self:
@@ -931,7 +931,7 @@ module:
         path: '{path::out.*=}/source/Index.s'
     submodule:
       wTools:
-        path: 'npm:///wProto'
+        path: 'npm:///wTools'
         autoExporting: 0
         enabled: 0
       Self:
@@ -1496,5 +1496,5 @@ module:
         hash: 489fef7ea6b7f1cba4b3a6857351552b
         size: 1911
       ../.im.will.yml:
-        hash: 326cd23a2ce9335c335b1a9916f8664c
+        hash: 60a060dd37569f7323165a28fc7cbb29
         size: 4919
