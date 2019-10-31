@@ -6,12 +6,13 @@ consistency:
     hash: 82bb441a25d7921c033e7a75d402c3d4
     size: 1991
   ../.im.will.yml: &ref_1
-    hash: 676aa293abc42e9f89c4a7cfdf81007b
-    size: 4919
+    hash: 87e32f491779e3459c0ce81f63008984
+    size: 4993
 module:
   wProto.out:
     about:
       name: wProto
+      org: noorg
       description: >-
         Relations module. Collection of routines to define classes and relations
         between them. Proto leverages multiple inheritances, mixins, accessors,
@@ -68,9 +69,6 @@ module:
       download:
         criterion:
           predefined: 1
-      remote:
-        criterion:
-          predefined: 1
       repository:
         path: 'git+https:///github.com/Wandalen/wProto.git'
       origins:
@@ -80,15 +78,15 @@ module:
       bugtracker:
         path: 'https:///github.com/Wandalen/wProto/issues'
       in:
-        criterion:
-          predefined: 0
         path: .
       out:
-        criterion:
-          predefined: 0
         path: .
       temp:
-        path: 'path::out'
+        path:
+          - 'path::out'
+          - ../package-lock.json
+          - ../package.json
+          - ../node_modules
       proto:
         path: ../proto
       export:
@@ -153,11 +151,13 @@ module:
         path: '{path::out.*=}/source/Index.s'
       exported.dir.proto.export:
         criterion:
+          generated: 1
           content: proto
           export: 1
         path: ../proto
       exported.files.proto.export:
         criterion:
+          generated: 1
           content: proto
           export: 1
         path:
@@ -354,6 +354,7 @@ module:
           prefixPath: ../proto
         mandatory: 1
         criterion:
+          generated: 1
           content: proto
           export: 1
       exported.files.proto.export:
@@ -366,6 +367,7 @@ module:
         recursive: 0
         mandatory: 1
         criterion:
+          generated: 1
           content: proto
           export: 1
     step:
@@ -812,6 +814,7 @@ module:
   ../:
     about:
       name: wProto
+      org: noorg
       description: >-
         Relations module. Collection of routines to define classes and relations
         between them. Proto leverages multiple inheritances, mixins, accessors,
@@ -854,9 +857,6 @@ module:
       download:
         criterion:
           predefined: 1
-      remote:
-        criterion:
-          predefined: 1
       repository:
         path: 'git+https:///github.com/Wandalen/wProto.git'
       origins:
@@ -866,21 +866,21 @@ module:
       bugtracker:
         path: 'https:///github.com/Wandalen/wProto/issues'
       in:
-        criterion:
-          predefined: 0
         path: .
       out:
-        criterion:
-          predefined: 0
         path: out
       temp:
-        path: 'path::out'
+        path:
+          - 'path::out'
+          - package-lock.json
+          - package.json
+          - node_modules
       proto:
-        path: ./proto
+        path: proto
       export:
         path: '{path::proto}/**'
       doc:
-        path: ./doc
+        path: doc
       out.raw.debug:
         criterion:
           debug: debug
@@ -1504,5 +1504,5 @@ module:
         hash: 82bb441a25d7921c033e7a75d402c3d4
         size: 1991
       ../.im.will.yml:
-        hash: 676aa293abc42e9f89c4a7cfdf81007b
-        size: 4919
+        hash: 87e32f491779e3459c0ce81f63008984
+        size: 4993
