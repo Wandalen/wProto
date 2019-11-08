@@ -52,9 +52,9 @@ function field( o )
   o = _.routineOptions( field, arguments );
   _.assert( arguments.length === 1 );
   _.assert( _.strIs( o.iniToIns ) );
-  _.assert( _.arrayHas( [ 'scalar' , 'array' , 'map' ], o.collection ) );
+  _.assert( _.longHas( [ 'scalar' , 'array' , 'map' ], o.collection ) );
   _.assert( 'scalar' === o.collection, 'not implemented' );
-  _.assert( _.arrayHas( [ 'val' , 'shallow' , 'deep' , 'make' , 'construct' ], o.iniToIns ) );
+  _.assert( _.longHas( [ 'val' , 'shallow' , 'deep' , 'make' , 'construct' ], o.iniToIns ) );
 
   let definition = new _.Definition( o );
 
