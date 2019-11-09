@@ -18,7 +18,7 @@
   {
     "url" : "https://github.com/Wandalen/wProto/issues"
   }, 
-  "dependencies" : { "wTools" : "" }, 
-  "devDependencies" : { "wProto" : "file:.", "wequaler" : "", "wTesting" : "" }, 
+  "dependencies" : { "wTools" : "alpha" }, 
+  "devDependencies" : { "wProto" : "file:.", "wequaler" : "alpha", "wTesting" : "alpha" }, 
   "keywords" : [ "wTools", "wProto", "mixin", "Class", "Object", "Prototype", "Incapsulation" ]
 }
