@@ -1,4 +1,4 @@
-( function _Complex_test_s_( ) {
+( function _Blueprint_test_s_( ) {
 
 'use strict';
 
@@ -32,28 +32,28 @@ function construct( test )
     return 'x' + arg;
   }
 
-  var Complex1 = _.complex
+  var Blueprint1 = _.blueprint
   ({
     field1 : null,
   });
 
-  var instance = _.complex.make( Complex1 );
+  var instance = _.blueprint.construct( Blueprint1 );
   instance.field1 = _getter;
 
-  var prototypes = _.prototypeEach( _.complex.Complex );
+  var prototypes = _.prototypeEach( _.Blueprint );
   test.is( prototypes.length === 1 );
-  test.is( prototypes[ 0 ] === _.complex.Complex );
-  var prototypes = _.prototypeEach( Complex1 );
+  test.is( prototypes[ 0 ] === _.Blueprint );
+  var prototypes = _.prototypeEach( Blueprint1 );
   test.is( prototypes.length === 2 );
-  test.is( prototypes[ 0 ] === Complex1 );
-  test.is( prototypes[ 1 ] === _.complex.Complex );
+  test.is( prototypes[ 0 ] === Blueprint1 );
+  test.is( prototypes[ 1 ] === _.Blueprint );
   var prototypes = _.prototypeEach( instance );
   test.is( prototypes.length === 3 );
   test.is( prototypes[ 0 ] === instance );
-  test.is( prototypes[ 1 ] === Complex1 );
-  test.is( prototypes[ 2 ] === _.complex.Complex );
+  test.is( prototypes[ 1 ] === Blueprint1 );
+  test.is( prototypes[ 2 ] === _.Blueprint );
 
-  test.is( _.prototypeHasPrototype( instance, Complex1 ) );
+  test.is( _.prototypeHasPrototype( instance, Blueprint1 ) );
   test.is( _.objectIs( instance ) );
   test.is( !_.mapIs( instance ) );
   test.is( _.mapLike( instance ) );
@@ -74,28 +74,28 @@ function constructWithNew( test )
     return 'x' + arg;
   }
 
-  var Complex1 = new _.complex
+  var Blueprint1 = new _.blueprint
   ({
     field1 : null,
   });
 
-  var instance = _.complex.make( Complex1 );
+  var instance = _.blueprint.construct( Blueprint1 );
   instance.field1 = _getter;
 
-  var prototypes = _.prototypeEach( _.complex.Complex );
+  var prototypes = _.prototypeEach( _.Blueprint );
   test.is( prototypes.length === 1 );
-  test.is( prototypes[ 0 ] === _.complex.Complex );
-  var prototypes = _.prototypeEach( Complex1 );
+  test.is( prototypes[ 0 ] === _.Blueprint );
+  var prototypes = _.prototypeEach( Blueprint1 );
   test.is( prototypes.length === 2 );
-  test.is( prototypes[ 0 ] === Complex1 );
-  test.is( prototypes[ 1 ] === _.complex.Complex );
+  test.is( prototypes[ 0 ] === Blueprint1 );
+  test.is( prototypes[ 1 ] === _.Blueprint );
   var prototypes = _.prototypeEach( instance );
   test.is( prototypes.length === 3 );
   test.is( prototypes[ 0 ] === instance );
-  test.is( prototypes[ 1 ] === Complex1 );
-  test.is( prototypes[ 2 ] === _.complex.Complex );
+  test.is( prototypes[ 1 ] === Blueprint1 );
+  test.is( prototypes[ 2 ] === _.Blueprint );
 
-  test.is( _.prototypeHasPrototype( instance, Complex1 ) );
+  test.is( _.prototypeHasPrototype( instance, Blueprint1 ) );
   test.is( _.objectIs( instance ) );
   test.is( !_.mapIs( instance ) );
   test.is( _.mapLike( instance ) );
@@ -110,14 +110,14 @@ function constructWithNew( test )
 function constructSingleReuse( test )
 {
 
-  var Complex1 = _.complex
+  var Blueprint1 = _.blueprint
   ({
     field1 : null,
   });
 
-  var Complex2 = _.complex( Complex1 );
+  var Blueprint2 = _.blueprint( Blueprint1 );
 
-  var instance = _.complex.make( Complex2 );
+  var instance = _.blueprint.construct( Blueprint2 );
   instance.field1 = '1';
 
   test.shouldThrowErrorSync( () =>
@@ -125,21 +125,21 @@ function constructSingleReuse( test )
     instance.field2 = 2;
   });
 
-  var prototypes = _.prototypeEach( _.complex.Complex );
+  var prototypes = _.prototypeEach( _.Blueprint );
   test.is( prototypes.length === 1 );
-  test.is( prototypes[ 0 ] === _.complex.Complex );
-  var prototypes = _.prototypeEach( Complex2 );
+  test.is( prototypes[ 0 ] === _.Blueprint );
+  var prototypes = _.prototypeEach( Blueprint2 );
   test.is( prototypes.length === 2 );
-  test.is( prototypes[ 0 ] === Complex2 );
-  test.is( prototypes[ 1 ] === _.complex.Complex );
+  test.is( prototypes[ 0 ] === Blueprint2 );
+  test.is( prototypes[ 1 ] === _.Blueprint );
   var prototypes = _.prototypeEach( instance );
   test.is( prototypes.length === 3 );
   test.is( prototypes[ 0 ] === instance );
-  test.is( prototypes[ 1 ] === Complex2 );
-  test.is( prototypes[ 2 ] === _.complex.Complex );
+  test.is( prototypes[ 1 ] === Blueprint2 );
+  test.is( prototypes[ 2 ] === _.Blueprint );
 
-  test.is( !_.prototypeHasPrototype( instance, Complex1 ) );
-  test.is( _.prototypeHasPrototype( instance, Complex2 ) );
+  test.is( !_.prototypeHasPrototype( instance, Blueprint1 ) );
+  test.is( _.prototypeHasPrototype( instance, Blueprint2 ) );
   test.is( _.objectIs( instance ) );
   test.is( !_.mapIs( instance ) );
   test.is( _.mapLike( instance ) );
@@ -154,36 +154,36 @@ function constructSingleReuse( test )
 function constructMultipleReuse( test )
 {
 
-  var Complex1 = _.complex
+  var Blueprint1 = _.blueprint
   ({
     field1 : null,
   });
 
-  var Complex2 = _.complex
+  var Blueprint2 = _.blueprint
   ({
     field2 : null,
   });
 
-  var Complex3 = _.complex( Complex1, Complex2, { field3 : '3' } );
+  var Blueprint3 = _.blueprint( Blueprint1, Blueprint2, { field3 : '3' } );
 
-  var instance = _.complex.make( Complex3 );
+  var instance = _.blueprint.construct( Blueprint3 );
 
-  var prototypes = _.prototypeEach( _.complex.Complex );
+  var prototypes = _.prototypeEach( _.Blueprint );
   test.is( prototypes.length === 1 );
-  test.is( prototypes[ 0 ] === _.complex.Complex );
-  var prototypes = _.prototypeEach( Complex3 );
+  test.is( prototypes[ 0 ] === _.Blueprint );
+  var prototypes = _.prototypeEach( Blueprint3 );
   test.is( prototypes.length === 2 );
-  test.is( prototypes[ 0 ] === Complex3 );
-  test.is( prototypes[ 1 ] === _.complex.Complex );
+  test.is( prototypes[ 0 ] === Blueprint3 );
+  test.is( prototypes[ 1 ] === _.Blueprint );
   var prototypes = _.prototypeEach( instance );
   test.is( prototypes.length === 3 );
   test.is( prototypes[ 0 ] === instance );
-  test.is( prototypes[ 1 ] === Complex3 );
-  test.is( prototypes[ 2 ] === _.complex.Complex );
+  test.is( prototypes[ 1 ] === Blueprint3 );
+  test.is( prototypes[ 2 ] === _.Blueprint );
 
-  test.is( !_.prototypeHasPrototype( instance, Complex1 ) );
-  test.is( !_.prototypeHasPrototype( instance, Complex2 ) );
-  test.is( _.prototypeHasPrototype( instance, Complex3 ) );
+  test.is( !_.prototypeHasPrototype( instance, Blueprint1 ) );
+  test.is( !_.prototypeHasPrototype( instance, Blueprint2 ) );
+  test.is( _.prototypeHasPrototype( instance, Blueprint3 ) );
   test.is( _.objectIs( instance ) );
   test.is( !_.mapIs( instance ) );
   test.is( _.mapLike( instance ) );
@@ -204,31 +204,31 @@ function callable( test )
     return 'x' + arg;
   }
 
-  var Complex1 = _.complex
+  var Blueprint1 = _.blueprint
   ({
     functor : null,
     '__call__' : _.define.ownerCallback( 'functor' ),
   });
 
-  var instance = _.complex.make( Complex1 );
+  var instance = _.blueprint.construct( Blueprint1 );
   instance.functor = _getter;
 
   debugger;
-  var prototypes = _.prototypeEach( _.complex.Complex );
+  var prototypes = _.prototypeEach( _.Blueprint );
   test.is( prototypes.length === 1 );
-  test.is( prototypes[ 0 ] === _.complex.Complex );
-  var prototypes = _.prototypeEach( Complex1 );
+  test.is( prototypes[ 0 ] === _.Blueprint );
+  var prototypes = _.prototypeEach( Blueprint1 );
   test.is( prototypes.length === 2 );
-  test.is( prototypes[ 0 ] === Complex1 );
-  test.is( prototypes[ 1 ] === _.complex.Complex );
+  test.is( prototypes[ 0 ] === Blueprint1 );
+  test.is( prototypes[ 1 ] === _.Blueprint );
   var prototypes = _.prototypeEach( instance );
   test.is( prototypes.length === 3 );
   test.is( prototypes[ 0 ] === instance );
-  test.is( prototypes[ 1 ] === Complex1 );
-  test.is( prototypes[ 2 ] === _.complex.Complex );
+  test.is( prototypes[ 1 ] === Blueprint1 );
+  test.is( prototypes[ 2 ] === _.Blueprint );
   debugger;
 
-  test.is( _.prototypeHasPrototype( instance, Complex1 ) );
+  test.is( _.prototypeHasPrototype( instance, Blueprint1 ) );
   test.is( _.routineIs( instance ) );
   // test.identical( _.mapKeys( instance ), [ 'functor' ] );
   // test.identical( _.mapAllKeys( instance ), [ 'functor' ] );
@@ -245,20 +245,57 @@ function callable( test )
 function is( test )
 {
 
-  var Complex1 = _.complex
+  var Blueprint1 = _.blueprint
   ({
     field1 : null,
   });
 
-  var Complex2 = _.complex( Complex1 );
+  var Blueprint2 = _.blueprint( Blueprint1 );
 
-  var instance = _.complex.make( Complex2 );
+  var instance = _.blueprint.construct( Blueprint2 );
 
-  test.identical( _.complex.is( _.complex ), false );
-  test.identical( _.complex.is( _.complex.Complex ), true );
-  test.identical( _.complex.is( Complex1 ), true );
-  test.identical( _.complex.is( Complex2 ), true );
-  test.identical( _.complex.is( instance ), true );
+  test.identical( _.blueprint.is( _.blueprint ), false );
+  test.identical( _.blueprint.is( _.Blueprint ), true );
+  test.identical( _.blueprint.is( Blueprint1 ), true );
+  test.identical( _.blueprint.is( Blueprint2 ), true );
+  test.identical( _.blueprint.is( instance ), true );
+
+}
+
+//
+
+function blueprintExtend( test )
+{
+
+  test.is( _.routineIs( _.accessor.define.getter.alias ) );
+
+  var container =
+  {
+    Begin : function Begin(){ return 'Begin' },
+    End : function End(){ return 'End' },
+    Str : 'Str',
+  }
+
+  var alias = ( originalName ) => _.accessor.define.getter.alias({ originalName, container : container });
+  var blueprint =
+  {
+    begin : alias( 'Begin' ),
+    end : alias( 'End' ),
+    str : alias( 'Str' ),
+    container1 : container,
+  }
+
+  debugger;
+  var map = _.construction.extend( null, blueprint );
+  debugger;
+  test.identical( map.begin, container.Begin );
+  debugger;
+
+  test.is( _.mapIs( map ) );
+  test.is( _.mapIsPure( map ) );
+  test.identical( _.mapKeys( map ), [ 'begin', 'end', 'str', 'container1' ] );
+  test.identical( map.str, container.Str );
+  test.is( _.routineIs( map.begin ) );
 
 }
 
@@ -269,7 +306,7 @@ function is( test )
 var Self =
 {
 
-  name : 'Tools.base.l3.Complex',
+  name : 'Tools.base.l3.Blueprint',
   silencing : 1,
 
   tests :
@@ -281,6 +318,8 @@ var Self =
     constructMultipleReuse,
     is,
     // callable,
+
+    blueprintExtend,
 
   },
 

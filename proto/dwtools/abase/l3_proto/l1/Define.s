@@ -2,13 +2,6 @@
 
 'use strict';
 
-// if( typeof module !== 'undefined' )
-// {
-//
-//   let _ = require( '../../Tools.s' );
-//
-// }
-
 let Self = _global_.wTools;
 let _global = _global_;
 let _ = _global_.wTools;
@@ -41,6 +34,8 @@ function Definition( o )
   _.assert( this.ini !== undefined );
   return this;
 }
+
+Object.setPrototypeOf( Definition, null );
 
 //
 
@@ -322,6 +317,149 @@ ownerCallback.defaults =
   callback : null,
 }
 
+//
+
+function accessor( o )
+{
+  // if( !_.mapIs( o ) )
+  // o = { callback : arguments[ 0 ] };
+  // _.assert( _.routineIs( o.callback ) || _.strIs( o.callback ) );
+
+  if( _.routineIs( o ) )
+  o = { routine : arguments[ 0 ] }
+
+  _.routineOptions( accessor, o );
+
+  o.kind = 'accessor';
+  // if( o.getter === null )
+  // o.getter = getter;
+  // if( o.setter === null )
+  // o.setter = setter;
+  o.OnConstructionExtend = OnConstructionExtend;
+
+  _.assert( _.routineIs( o.routine ) );
+  // _.assert( _.mapIs( o.ini ) );
+  _.assert( arguments.length === 1 );
+
+  let definition = new _.Definition( o );
+  _.propertyHide( definition, 'OnConstructionExtend' );
+  return definition;
+
+  /* */
+
+  function OnConstructionExtend( dst, key )
+  {
+    let instanceIsStandard = _.instanceIsStandard( dst );
+    _.assert( arguments.length === 2 );
+    debugger;
+
+    let args = _.structureClone( o.ini );
+    let o2;
+    if( o.routine.pre )
+    {
+      o2 = o.routine.pre( o.routine, args );
+    }
+    else
+    {
+      _.assert( args.length === 0 );
+      o2 = args[ 0 ];
+    }
+
+    if( o.routine.defaults.fieldName !== undefined )
+    if( o2.fieldName === undefined || o2.fieldName === null )
+    {
+      _.assert( 0, 'not tested' );
+      o2.fieldName = key;
+    }
+
+    let r;
+    if( o.routine.body )
+    r = o.routine.body( o2 );
+    else
+    r = o.routine( o2 );
+
+    if( _.boolLike( o.getter ) && !o.getter && o.setter === null )
+    {
+      _.assert( 0, 'not tested' );
+      if( _.routineIs( r ) )
+      o.setter = r;
+      else if( _.mapIs( r ) )
+      o.setter = r.setter
+      else _.assert( 0 );
+    }
+    else if( _.boolLike( o.setter ) && !o.setter && o.getter === null )
+    {
+      _.assert( 0, 'not tested' );
+      if( _.routineIs( r ) )
+      o.getter = r;
+      else if( _.mapIs( r ) )
+      o.getter = r.getter
+      else _.assert( 0 );
+    }
+    else
+    {
+      if( mapIs( r ) )
+      {
+        if( o.getter === null )
+        o.getter = r.getter;
+        if( o.setter === null )
+        o.setter = r.setter
+      }
+    }
+
+    _.assert( _.boolLikeFalse( o.getter ) || _.routineIs( o.getter ) );
+    _.assert( _.boolLikeFalse( o.setter ) || _.routineIs( o.setter ) );
+
+    _.accessor.declare
+    ({
+      object : dst,
+      names : key,
+      getter : o.getter,
+      setter : o.setter,
+      prime : instanceIsStandard,
+      strict : instanceIsStandard,
+    });
+
+  }
+
+  /* */
+
+}
+
+accessor.defaults =
+{
+  ini : null,
+  routine : null,
+  getter : null,
+  setter : null,
+  // args : null,
+}
+
+//
+
+function getter( o )
+{
+
+  if( _.routineIs( o ) )
+  o = { routine : arguments[ 0 ] }
+
+  _.routineOptions( getter, o );
+
+  debugger;
+
+  o.getter = null;
+  o.setter = false;
+
+  return _.define.accessor( o );
+}
+
+getter.defaults =
+{
+  ini : null,
+  routine : null,
+  // args : null,
+}
+
 // --
 // define
 // --
@@ -343,6 +481,9 @@ let Define =
   makeWith,
   contained,
   ownerCallback,
+
+  accessor,
+  getter,
 
 }
 

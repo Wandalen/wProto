@@ -12,8 +12,9 @@ if( typeof module !== 'undefined' )
   require( './l1/Proto.s' );
 
   require( './l3/Accessor.s' );
+  require( './l3/Blueprint.s' );
   require( './l3/Class.s' );
-  require( './l3/Complex.s' );
+  require( './l3/Construction.s' );
   require( './l3/Like.s' );
 
 }
