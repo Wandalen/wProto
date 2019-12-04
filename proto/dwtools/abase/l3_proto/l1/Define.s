@@ -353,7 +353,7 @@ function accessor( o )
     _.assert( arguments.length === 2 );
     debugger;
 
-    let args = _.structureClone( o.ini );
+    let args = _.structureExtend( null, o.ini );
     let o2;
     if( o.routine.pre )
     {
