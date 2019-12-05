@@ -264,17 +264,19 @@ function is( test )
 
 //
 
-function blueprintExtend( test )
+function blueprintExtendGetterAlias( test )
 {
 
   test.is( _.routineIs( _.accessor.define.getter.alias ) );
 
-  var container =
+  var f1 = function f1(){};
+  var _container =
   {
     Begin : function Begin(){ return 'Begin' },
     End : function End(){ return 'End' },
     Str : 'Str',
   }
+  var container = _.mapExtend( function(){}, _container );
 
   var alias = ( originalName ) => _.accessor.define.getter.alias({ originalName, container : container });
   var blueprint =
@@ -283,19 +285,119 @@ function blueprintExtend( test )
     end : alias( 'End' ),
     str : alias( 'Str' ),
     container1 : container,
+    f1 : f1,
   }
 
-  debugger;
   var map = _.construction.extend( null, blueprint );
-  debugger;
-  test.identical( map.begin, container.Begin );
-  debugger;
 
   test.is( _.mapIs( map ) );
   test.is( _.mapIsPure( map ) );
-  test.identical( _.mapKeys( map ), [ 'begin', 'end', 'str', 'container1' ] );
+  test.identical( _.mapKeys( map ), [ 'begin', 'end', 'str', 'container1', 'f1' ] );
+  test.identical( map.begin, container.Begin );
   test.identical( map.str, container.Str );
   test.is( _.routineIs( map.begin ) );
+  test.identical( map.str, 'Str' );
+  test.identical( container.Str, 'Str' );
+
+  container.Str = 'Str2';
+  test.identical( map.str, 'Str2' );
+  test.identical( container.Str, 'Str2' );
+
+  test.shouldThrowErrorSync( () =>
+  {
+    map.str = 'Str2';
+  });
+
+}
+
+//
+
+function blueprintExtendSetterAlias( test )
+{
+
+  test.is( _.routineIs( _.accessor.define.setter.alias ) );
+
+  var f1 = function f1(){};
+  var _container =
+  {
+    Begin : function Begin(){ return 'Begin' },
+    End : function End(){ return 'End' },
+    Str : 'Str',
+  }
+  var container = _.mapExtend( function(){}, _container );
+
+  var alias = ( originalName ) => _.accessor.define.setter.alias({ originalName, container : container });
+  var blueprint =
+  {
+    begin : alias( 'Begin' ),
+    end : alias( 'End' ),
+    str : alias( 'Str' ),
+    container1 : container,
+    f1 : f1,
+  }
+
+  var map = _.construction.extend( null, blueprint );
+
+  test.is( _.mapIs( map ) );
+  test.is( _.mapIsPure( map ) );
+  test.identical( _.mapKeys( map ), [ 'begin', 'end', 'str', 'container1', 'f1' ] );
+  test.identical( map.begin, undefined );
+  test.identical( map.str, undefined );
+
+  container.Str = 'Str2';
+  test.identical( map.str, undefined );
+  test.identical( container.Str, 'Str2' );
+
+  map.str = 'Str3';
+  test.identical( map.str, undefined );
+  test.identical( container.Str, 'Str3' );
+
+}
+
+//
+
+function blueprintExtendAccessorAlias( test )
+{
+
+  test.is( _.routineIs( _.accessor.define.suite.alias ) );
+
+  var f1 = function f1(){};
+  var _container =
+  {
+    Begin : function Begin(){ return 'Begin' },
+    End : function End(){ return 'End' },
+    Str : 'Str',
+  }
+  var container = _.mapExtend( function(){}, _container );
+
+  var alias = ( originalName ) => _.accessor.define.suite.alias({ originalName, container : container });
+  var blueprint =
+  {
+    begin : alias( 'Begin' ),
+    end : alias( 'End' ),
+    str : alias( 'Str' ),
+    container1 : container,
+    f1 : f1,
+  }
+
+  var map = _.construction.extend( null, blueprint );
+
+  test.is( _.mapIs( map ) );
+  test.is( _.mapIsPure( map ) );
+  test.identical( _.mapKeys( map ), [ 'begin', 'end', 'str', 'container1', 'f1' ] );
+  test.identical( map.begin, container.Begin );
+  test.identical( map.str, container.Str );
+  test.is( _.routineIs( map.begin ) );
+  test.identical( map.str, 'Str' );
+  test.identical( container.Str, 'Str' );
+
+  container.Str = 'Str2';
+  test.identical( map.str, 'Str2' );
+  test.identical( container.Str, 'Str2' );
+
+  map.str = 'Str3';
+  test.identical( map.str, 'Str3' );
+  test.identical( container.Str, 'Str3' );
 
 }
 
@@ -319,7 +421,9 @@ var Self =
     is,
     // callable,
 
-    blueprintExtend,
+    blueprintExtendGetterAlias,
+    blueprintExtendSetterAlias,
+    blueprintExtendAccessorAlias,
 
   },
 
@@ -331,4 +435,4 @@ Self = wTestSuite( Self );
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );
 
-} )( );
+})();

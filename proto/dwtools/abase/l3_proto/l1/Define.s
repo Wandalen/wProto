@@ -321,9 +321,6 @@ ownerCallback.defaults =
 
 function accessor( o )
 {
-  // if( !_.mapIs( o ) )
-  // o = { callback : arguments[ 0 ] };
-  // _.assert( _.routineIs( o.callback ) || _.strIs( o.callback ) );
 
   if( _.routineIs( o ) )
   o = { routine : arguments[ 0 ] }
@@ -331,14 +328,9 @@ function accessor( o )
   _.routineOptions( accessor, o );
 
   o.kind = 'accessor';
-  // if( o.getter === null )
-  // o.getter = getter;
-  // if( o.setter === null )
-  // o.setter = setter;
   o.OnConstructionExtend = OnConstructionExtend;
 
   _.assert( _.routineIs( o.routine ) );
-  // _.assert( _.mapIs( o.ini ) );
   _.assert( arguments.length === 1 );
 
   let definition = new _.Definition( o );
@@ -351,9 +343,10 @@ function accessor( o )
   {
     let instanceIsStandard = _.instanceIsStandard( dst );
     _.assert( arguments.length === 2 );
-    debugger;
 
-    let args = _.structureExtend( null, o.ini );
+    let args = []
+    for( let i = 0 ; i < o.ini.length ; i++ )
+    args[ i ] = _.make( o.ini[ i ] );
     let o2;
     if( o.routine.pre )
     {
@@ -361,9 +354,12 @@ function accessor( o )
     }
     else
     {
-      _.assert( args.length === 0 );
+      debugger;
+      _.assert( args.length === 1 );
       o2 = args[ 0 ];
     }
+
+    _.assert( _.mapIs( o2 ) );
 
     if( o.routine.defaults.fieldName !== undefined )
     if( o2.fieldName === undefined || o2.fieldName === null )
@@ -380,7 +376,8 @@ function accessor( o )
 
     if( _.boolLike( o.getter ) && !o.getter && o.setter === null )
     {
-      _.assert( 0, 'not tested' );
+      // _.assert( 0, 'not tested' );
+      // debugger;
       if( _.routineIs( r ) )
       o.setter = r;
       else if( _.mapIs( r ) )
@@ -389,7 +386,6 @@ function accessor( o )
     }
     else if( _.boolLike( o.setter ) && !o.setter && o.getter === null )
     {
-      _.assert( 0, 'not tested' );
       if( _.routineIs( r ) )
       o.getter = r;
       else if( _.mapIs( r ) )
@@ -398,12 +394,12 @@ function accessor( o )
     }
     else
     {
-      if( mapIs( r ) )
+      if( _.mapIs( r ) )
       {
         if( o.getter === null )
-        o.getter = r.getter;
+        o.getter = r.get;
         if( o.setter === null )
-        o.setter = r.setter
+        o.setter = r.set
       }
     }
 
@@ -432,7 +428,6 @@ accessor.defaults =
   routine : null,
   getter : null,
   setter : null,
-  // args : null,
 }
 
 //
@@ -445,8 +440,6 @@ function getter( o )
 
   _.routineOptions( getter, o );
 
-  debugger;
-
   o.getter = null;
   o.setter = false;
 
@@ -457,7 +450,28 @@ getter.defaults =
 {
   ini : null,
   routine : null,
-  // args : null,
+}
+
+//
+
+function setter( o )
+{
+
+  if( _.routineIs( o ) )
+  o = { routine : arguments[ 0 ] }
+
+  _.routineOptions( setter, o );
+
+  o.getter = false;
+  o.setter = null;
+
+  return _.define.accessor( o );
+}
+
+setter.defaults =
+{
+  ini : null,
+  routine : null,
 }
 
 // --
@@ -484,6 +498,7 @@ let Define =
 
   accessor,
   getter,
+  setter,
 
 }
 
