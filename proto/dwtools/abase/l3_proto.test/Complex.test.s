@@ -9,7 +9,7 @@ if( typeof module !== 'undefined' )
 
   _.include( 'wTesting' );
 
-  if( !_.isIncluded( 'wProto' ) )
+  if( !_.module.isIncluded( 'wProto' ) )
   {
     require( '../../abase/l3_proto/Include.s' );
   }
