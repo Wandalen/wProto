@@ -1,4 +1,4 @@
-( function _Sample_s_(){
+( function _Sample_js_(){
 
 'use strict';
 
@@ -13,12 +13,7 @@ var _ = wTools;
 var Parent = null;
 var Self = function BaseClass()
 {
-  if( !( this instanceof Self ) )
-  if( o instanceof Self )
-  return o;
-  else
-  return new( _.routineJoin( Self, Self, arguments ) );
-  return Self.prototype.init.apply( this,arguments );
+  return _.workpiece.construct( Self, this, arguments );
 }
 
 // --
@@ -31,10 +26,9 @@ function init()
 {
   var self = this; /* context */
 
-  _.instanceInit( self );/* extends object by fields from relationships */
+  _.workpiece.initFields( self ); /* extends object by fields from relationships */
 
   Object.preventExtensions( self ); /* disables object extending */
-
 }
 
 //
@@ -44,9 +38,7 @@ function init()
 function finit()
 {
   var self = this;
-
   Object.freeze( self );
-
 }
 
 //
@@ -54,9 +46,7 @@ function finit()
 function print()
 {
   var self = this;
-
   console.log( self.name,'a :',self.a );
-
 }
 
 //
@@ -99,7 +89,6 @@ var Proto =
 
   print : print,
 
-  constructor : Self,
   Composes : Composes,
   Statics : Statics,
 
