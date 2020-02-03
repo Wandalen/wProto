@@ -2,11 +2,6 @@
 
 'use strict';
 
-// if( typeof module !== 'undefined' )
-// {
-//   let _ = require( '../../Tools.s' );
-// }
-
 /*
 qqq : repair and improve doc
 */
@@ -718,6 +713,8 @@ function construct( cls, context, args )
     }
   }
 
+  // debugger;
+  // _.assert( 0 );
   return cls.prototype.init.apply( context, args );
 }
 
