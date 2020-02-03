@@ -2,15 +2,12 @@ format: outwillfile-2.0
 root:
   - wProto.out
 consistency:
-  wProto.out.will.yml: &ref_0
-    hash: f827c10ddc96320cb16665a0117760da
-    size: 39438
-  ../.ex.will.yml: &ref_1
+  ../.ex.will.yml: &ref_0
     hash: 82bb441a25d7921c033e7a75d402c3d4
     size: 1991
-  ../.im.will.yml: &ref_2
-    hash: 87e32f491779e3459c0ce81f63008984
-    size: 4993
+  ../.im.will.yml: &ref_1
+    hash: 9a9fd1f83c6347611464c699fac74bd5
+    size: 5053
 module:
   wProto.out:
     about:
@@ -23,11 +20,11 @@ module:
         the application.
       enabled: 1
       version: 0.4.169
-      interpreters:
+      interpreters: &ref_2
         - njs >= 8.0.0
         - chrome >= 60.0.0
         - firefox >= 60.0.0
-      keywords:
+      keywords: &ref_3
         - wTools
         - wProto
         - mixin
@@ -37,11 +34,11 @@ module:
         - Incapsulation
       license: MIT
       author: Kostiantyn Wandalen <wanalen@willbe.so>
-      contributors:
+      contributors: &ref_4
         - Kostiantyn Wandalen <wanalen@willbe.so>
         - Volodymyr M. <volodymyr.migdal@gmail.com>
       npm.name: wProto
-      npm.scripts:
+      npm.scripts: &ref_5
         test: wtest .run proto/**
         docgen: wdocgen .build proto
     path:
@@ -168,21 +165,36 @@ module:
           - ../proto/dwtools
           - ../proto/dwtools/Tools.s
           - ../proto/dwtools/abase
+          - ../proto/dwtools/abase/-l3_proto
+          - ../proto/dwtools/abase/-l3_proto/Include.s
+          - ../proto/dwtools/abase/-l3_proto/l1
+          - ../proto/dwtools/abase/-l3_proto/l1/Define.s
+          - ../proto/dwtools/abase/-l3_proto/l1/Proto.s
+          - ../proto/dwtools/abase/-l3_proto/l1/Workpiece.s
+          - ../proto/dwtools/abase/-l3_proto/l3
+          - ../proto/dwtools/abase/-l3_proto/l3/Accessor.s
+          - ../proto/dwtools/abase/-l3_proto/l3/Blueprint.s
+          - ../proto/dwtools/abase/-l3_proto/l3/Class.s
+          - ../proto/dwtools/abase/-l3_proto/l3/Construction.s
+          - ../proto/dwtools/abase/-l3_proto/l3/Like.s
+          - ../proto/dwtools/abase/-l3_proto.test
+          - ../proto/dwtools/abase/-l3_proto.test/Class.test.s
+          - ../proto/dwtools/abase/-l3_proto.test/Complex.test.s
+          - ../proto/dwtools/abase/-l3_proto.test/Like.test.s
+          - ../proto/dwtools/abase/-l3_proto.test/Proto.test.s
           - ../proto/dwtools/abase/l3_proto
           - ../proto/dwtools/abase/l3_proto/Include.s
           - ../proto/dwtools/abase/l3_proto/l1
           - ../proto/dwtools/abase/l3_proto/l1/Define.s
           - ../proto/dwtools/abase/l3_proto/l1/Proto.s
           - ../proto/dwtools/abase/l3_proto/l1/Workpiece.s
-          - ../proto/dwtools/abase/l3_proto/l3
-          - ../proto/dwtools/abase/l3_proto/l3/Accessor.s
-          - ../proto/dwtools/abase/l3_proto/l3/Blueprint.s
-          - ../proto/dwtools/abase/l3_proto/l3/Class.s
-          - ../proto/dwtools/abase/l3_proto/l3/Construction.s
-          - ../proto/dwtools/abase/l3_proto/l3/Like.s
+          - ../proto/dwtools/abase/l3_proto/l5
+          - ../proto/dwtools/abase/l3_proto/l5/Accessor.s
+          - ../proto/dwtools/abase/l3_proto/l5/Class.s
+          - ../proto/dwtools/abase/l3_proto/l5/Like.s
           - ../proto/dwtools/abase/l3_proto.test
+          - ../proto/dwtools/abase/l3_proto.test/Blueprint.test.s
           - ../proto/dwtools/abase/l3_proto.test/Class.test.s
-          - ../proto/dwtools/abase/l3_proto.test/Complex.test.s
           - ../proto/dwtools/abase/l3_proto.test/Like.test.s
           - ../proto/dwtools/abase/l3_proto.test/Proto.test.s
           - ../proto/dwtools/amid
@@ -190,6 +202,10 @@ module:
     submodule:
       wTools:
         path: 'npm:///wTools'
+        autoExporting: 0
+        enabled: 0
+      wBlueprint:
+        path: 'npm:///wblueprint'
         autoExporting: 0
         enabled: 0
       Self:
@@ -725,24 +741,6 @@ module:
           content: prime
         inherit:
           - files.transpile
-      exported.proto.export:
-        opts:
-          reflector: 'reflector::exported.proto.export*'
-        criterion:
-          generated: 1
-          content: proto
-          export: 1
-        inherit:
-          - files.reflect
-      exported.files.proto.export:
-        opts:
-          reflector: 'reflector::exported.files.proto.export*'
-        criterion:
-          generated: 1
-          content: proto
-          export: 1
-        inherit:
-          - files.reflect
     build:
       proto.export:
         steps:
@@ -831,9 +829,8 @@ module:
           content: proto
           export: 1
     consistency:
-      wProto.out.will.yml: *ref_0
-      ../.ex.will.yml: *ref_1
-      ../.im.will.yml: *ref_2
+      ../.ex.will.yml: *ref_0
+      ../.im.will.yml: *ref_1
   ../:
     about:
       name: wProto
@@ -845,27 +842,13 @@ module:
         the application.
       enabled: 1
       version: 0.4.169
-      interpreters:
-        - njs >= 8.0.0
-        - chrome >= 60.0.0
-        - firefox >= 60.0.0
-      keywords:
-        - wTools
-        - wProto
-        - mixin
-        - Class
-        - Object
-        - Prototype
-        - Incapsulation
+      interpreters: *ref_2
+      keywords: *ref_3
       license: MIT
       author: Kostiantyn Wandalen <wanalen@willbe.so>
-      contributors:
-        - Kostiantyn Wandalen <wanalen@willbe.so>
-        - Volodymyr M. <volodymyr.migdal@gmail.com>
+      contributors: *ref_4
       npm.name: wProto
-      npm.scripts:
-        test: wtest .run proto/**
-        docgen: wdocgen .build proto
+      npm.scripts: *ref_5
     path:
       module.willfiles:
         criterion:
@@ -977,6 +960,10 @@ module:
     submodule:
       wTools:
         path: 'npm:///wTools'
+        autoExporting: 0
+        enabled: 0
+      wBlueprint:
+        path: 'npm:///wblueprint'
         autoExporting: 0
         enabled: 0
       Self:
@@ -1541,6 +1528,5 @@ module:
         hash: 82bb441a25d7921c033e7a75d402c3d4
         size: 1991
       ../.im.will.yml:
-        hash: 87e32f491779e3459c0ce81f63008984
-        size: 4993
-      wProto.out.will.yml: *ref_0
+        hash: 9a9fd1f83c6347611464c699fac74bd5
+        size: 5053
