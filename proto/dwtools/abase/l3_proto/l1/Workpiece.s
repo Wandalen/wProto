@@ -975,8 +975,28 @@ function qualifiedName( instance )
   _.assert( _.instanceIs( instance ) );
   _.assert( arguments.length === 1 );
 
+  if( _.routineIs( instance._qualifiedNameGet ) )
+  return instance._qualifiedNameGet();
+
+  if( instance.qualifiedName !== undefined )
+  {
+    _.assert( !_.routineIs( instance.qualifiedName ) );
+    return instance.qualifiedName;
+  }
+
+  return _.workpiece._qualifiedNameGet( instance );
+}
+
+//
+
+function _qualifiedNameGet( instance )
+{
+  _.assert( _.instanceIs( instance ) );
+  _.assert( arguments.length === 1 );
+
   let name = ( instance.key || instance.name || '' );
   let index = '';
+
   if( _.numberIs( instance.instanceIndex ) )
   name += '#in' + instance.instanceIndex;
   if( Object.hasOwnProperty.call( instance, 'id' ) )
@@ -986,6 +1006,25 @@ function qualifiedName( instance )
 
   return result;
 }
+
+// //
+//
+// function qualifiedName( instance )
+// {
+//   _.assert( _.instanceIs( instance ) );
+//   _.assert( arguments.length === 1 );
+//
+//   let name = ( instance.key || instance.name || '' );
+//   let index = '';
+//   if( _.numberIs( instance.instanceIndex ) )
+//   name += '#in' + instance.instanceIndex;
+//   if( Object.hasOwnProperty.call( instance, 'id' ) )
+//   name += '#id' + instance.id;
+//
+//   let result = _.workpiece.className( instance ) + '::' + name;
+//
+//   return result;
+// }
 
 //
 
@@ -1040,6 +1079,97 @@ function assertDoesNotHaveReduntantFields( src )
   _.assertMapOwnOnly( src, [ Composes, Aggregates, Associates, Restricts ] );
 
   return dst;
+}
+
+//
+
+function exportStructure( self, ... args )
+{
+  let o = _.routineOptions( exportStructure, args );
+
+  _.assert( _.instanceIs( self ) );
+
+  if( o.src === null )
+  o.src = self;
+
+  if( o.dst === null )
+  o.dst = Object.create( null );
+
+  o.dst = _.replicate
+  ({
+    src : o.src,
+    dst : o.dst,
+    onSrcChanged : onSrcChanged,
+    onAscend : onAscend,
+  });
+
+  return o.dst;
+
+  function onSrcChanged()
+  {
+    let it = this;
+
+    if( !it.iterable )
+    if( _.instanceIs( it.src ) )
+    {
+      if( it.src === self )
+      {
+        it.srcToIterate = _.mapOnly( it.src, it.src.Export || it.src.Import );
+        it.iterable = _.looker.containerNameToIdMap.map;
+      }
+    }
+
+  }
+
+  function onAscend()
+  {
+    let it = this;
+
+    if( !it.iterable && _.instanceIs( it.src ) )
+    {
+      it.dst = _.routineCallButOnly( it.src, 'exportStructure', o, [ 'src', 'dst' ] );
+    }
+    else
+    {
+      _.Looker.Iterator.onAscend.call( this );
+    }
+
+  }
+
+}
+
+exportStructure.defaults =
+{
+  src : null,
+  dst : null,
+}
+
+//
+
+function exportInfo( self, ... args )
+{
+  let o = _.routineOptions( exportInfo, args );
+
+  _.assert( _.instanceIs( self ) );
+  _.assert( o.style === 'nice' );
+
+  o.dst = o.dst || '';
+
+  if( o.src === null )
+  o.src = _.routineCallButOnly( self, 'exportStructure', o, [ 'dst' ] )
+
+  o.dst += _.workpiece.qualifiedName( self ) + '\n';
+  o.dst += _.toStrNice( o.src );
+
+  return o.dst;
+}
+
+exportInfo.defaults =
+{
+  ... exportStructure.defaults,
+  dst : '',
+  src : null,
+  style : 'nice',
 }
 
 // --
@@ -1206,10 +1336,16 @@ let Routines =
   className,
   qualifiedNameTry,
   qualifiedName,
+  _qualifiedNameGet,
   uname,
   toStr,
 
   assertDoesNotHaveReduntantFields,
+
+  //
+
+  exportStructure,
+  exportInfo,
 
 }
 
