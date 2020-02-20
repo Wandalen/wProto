@@ -1323,6 +1323,50 @@ function workpieceConstruct( test )
 
 }
 
+// //
+//
+// function defineShallow( test )
+// {
+//
+//   var Settings = _.blueprint
+//   .define
+//   ({
+//     size : _.define.shallow([ 2,2,2 ]),
+//     usingExploding : 0,
+//   })
+//
+//   var Composes =
+//   {
+//   }
+//
+//   debugger;
+//   _.construction.extend( Composes, Settings );
+//   debugger;
+//
+//   function Cls()
+//   {
+//     _.workpiece.initFields( this );
+//   }
+//
+//   _.classDeclare
+//   ({
+//     cls : Cls,
+//     parent : null,
+//     extend :
+//     {
+//       Composes,
+//     }
+//   });
+//
+//   debugger;
+//   var instance = new Cls();
+//   debugger;
+//   test.identical( instance.size, [ 2, 2, 2 ] );
+//   test.identical( instance.usingExploding, 0 );
+//   test.is( instance.size !== Settings.size );
+//
+// }
+
 // --
 // declare
 // --
@@ -1345,6 +1389,8 @@ var Self =
 
     staticFieldsPreserving,
     workpieceConstruct,
+
+    // defineShallow,
 
   },
 
