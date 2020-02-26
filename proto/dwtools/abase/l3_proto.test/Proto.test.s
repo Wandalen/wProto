@@ -1567,7 +1567,7 @@ function accessorSupplement( test )
   x.a = 2;
   x.b = 4;
   test.identical( x.a, 2 );
-  test.identical( x.b, 2 );
+  test.identical( x.b, 4 );
     
   //
   
@@ -1629,7 +1629,7 @@ function accessorSupplement( test )
   });
   _.accessor.declare( Alpha.prototype, { a : 'a' } );
   _.accessor.declare( Alpha.prototype, { b : 'b' } );
-  _.accessor.declare( Alpha.prototype, { b : 'c' } );
+  _.accessor.declare( Alpha.prototype, { c : 'c' } );
   
   var Beta = function _Beta(){}
   _.classDeclare
