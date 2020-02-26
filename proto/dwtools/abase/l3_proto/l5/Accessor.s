@@ -1121,9 +1121,9 @@ function supplement( dst, src )
     let accessor = src._Accessors[ a ];
 
     if( _.objectIs( accessor ) )
-    supplement( name, accessor );
+    supplement( a, accessor );
     else for( let i = 0 ; i < accessor.length ; i++ )
-    supplement( name, accessor[ i ] );
+    supplement( a, accessor[ i ] );
 
   }
 
