@@ -1592,6 +1592,10 @@ function setterCopyable_functor( o )
       self[ symbol ] = maker( data );
 
     }
+    else if( _.objectIs( self[ symbol ] ) && !self[ symbol ].copy )
+    {
+      self[ symbol ] = maker( data );
+    }
     else
     {
 
