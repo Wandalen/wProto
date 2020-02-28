@@ -423,7 +423,7 @@ function _declareAct( o )
   _.assert( arguments.length === 1 );
   _.assert( _.strIs( o.name ) );
   _.assertRoutineOptions( _declareAct, arguments );
-  _.assert( _.longHas( [ null, 'rewrite', 'supplement' ], o.combining ), 'not tested' );
+  _.assert( _.longHas( [ null, 0, false, 'rewrite', 'supplement' ], o.combining ), 'not tested' );
 
   if( o.prime === null )
   o.prime = _.prototypeIsStandard( o.object );
