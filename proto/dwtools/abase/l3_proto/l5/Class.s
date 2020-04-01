@@ -37,7 +37,7 @@ _.assert( _.routineIs( _nameFielded ), 'wProto needs Tools/dwtools/l3/NameTools.
  * Make mixin which could be mixed into prototype of another object.
  * @param {object} o - options.
  * @function _mixinDelcare
- * @memberof module:Tools/base/Proto.Tools( module::Proto )
+ * @memberof module:Tools/base/Proto.Tools.Proto
  */
 
 function _mixinDelcare( o )
@@ -149,7 +149,7 @@ mixinDelcare.defaults = Object.create( _mixinDelcare.defaults );
  * Mixin methods and fields into prototype of another object.
  * @param {object} o - options.
  * @function mixinApply
- * @memberof module:Tools/base/Proto.Tools( module::Proto )
+ * @memberof module:Tools/base/Proto.Tools.Proto
  */
 
 function mixinApply( mixinDescriptor, dstPrototype )
@@ -304,7 +304,7 @@ function mixinHas( proto, mixin )
  * @throws {exception} If function cant rewrite constructor using original prototype.
  * @throws {exception} If( o.usingOriginalPrototype ) is false and ( o.cls.prototype ) has manually defined properties.
  * @throws {exception} If( o.cls.prototype.constructor ) is not equal( o.cls  ).
- * @memberof module:Tools/base/Proto.Tools( module::Proto )
+ * @memberof module:Tools/base/Proto.Tools.Proto
  */
 
 /*
@@ -593,7 +593,7 @@ classDeclare.defaults =
  * @throws {exception} If( o.static) is not a Object.
  * @throws {exception} If( o.cls.prototype.Constitutes ) is defined.
  * @throws {exception} If( o.cls.prototype ) is not equal( prototype ).
- * @memberof module:Tools/base/Proto.Tools( module::Proto )
+ * @memberof module:Tools/base/Proto.Tools.Proto
  */
 
 function classExtend( o )

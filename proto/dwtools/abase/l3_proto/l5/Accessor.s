@@ -16,24 +16,28 @@ _.assert( _.routineIs( _nameFielded ), 'wProto needs wTools/staging/dwtools/l3/N
 /**
  * @summary Collection of routines for declaring accessors
  * @namespace "wTools.accessor"
+ * @extends Tools
  * @memberof module:Tools/base/Proto
  */
 
 /**
  * @summary Collection of routines for declaring getters
  * @namespace "wTools.accessor.getter"
+ * @extends Tools.accessor
  * @memberof module:Tools/base/Proto
  */
 
  /**
  * @summary Collection of routines for declaring setters
  * @namespace "wTools.accessor.setter"
+ * @extends Tools.accessor
  * @memberof module:Tools/base/Proto
  */
 
 /**
  * @summary Collection of routines for declaring getters and setters
  * @namespace "wTools.accessor.getterSetter"
+ * @extends Tools.accessor
  * @memberof module:Tools/base/Proto
  */
 
@@ -480,7 +484,7 @@ function _declareAct( o )
     if( o2.methods === o2.object )
     o2.methods = Object.create( null );
     o2.object = null;
-    
+
     delete o2.name;
 
     if( getterSetter.set )

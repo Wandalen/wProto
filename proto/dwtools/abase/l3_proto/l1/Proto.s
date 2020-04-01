@@ -4,9 +4,6 @@
 
 /**
  * Collection of routines to define classes and relations between them.
- * @namespace Tools.Proto 
- * @augments wTools
- * @memberof module:Tools/base/Proto
  */
 
 /**
@@ -137,7 +134,7 @@ function isSubPrototypeOf( sub, parent )
 /**
  * Get parent's constructor.
  * @function parentOf
- * @memberof wCopyable#
+ * @memberofs "module:Tools/base/Proto","module:Tools/base/Fundamental.wTools"
  */
 
 function parentOf( src )
@@ -218,7 +215,7 @@ function prototypeOf( src )
  * @param {array} protos - maps to united.
  * @return {object} united interface.
  * @function prototypeUnitedInterface
- * @memberof module:Tools/base/Proto.Tools( module::Proto )
+ * @memberofs "module:Tools/base/Proto","module:Tools/base/Fundamental.wTools"
  */
 
 function prototypeUnitedInterface( protos )
@@ -288,7 +285,7 @@ function prototypeUnitedInterface( protos )
  * Append prototype to object. Find archi parent and replace its proto.
  * @param {object} dstMap - dst object to append proto.
  * @function prototypeAppend
- * @memberof module:Tools/base/Proto.Tools( module::Proto )
+ * @memberofs "module:Tools/base/Proto","module:Tools/base/Fundamental.wTools"
  */
 
 function prototypeAppend( dstMap )
@@ -316,7 +313,7 @@ function prototypeAppend( dstMap )
  * Returns parent which has default proto.
  * @param {object} srcPrototype - dst object to append proto.
  * @function prototypeArchyGet
- * @memberof module:Tools/base/Proto.Tools( module::Proto )
+ * @memberofs "module:Tools/base/Proto","module:Tools/base/Fundamental.wTools"
  */
 
 function prototypeArchyGet( srcPrototype )
@@ -439,7 +436,7 @@ prototypeCrossRefer.defaults =
 //  * Iterate through prototypes.
 //  * @param {object} proto - prototype
 //  * @function prototypeEach
-//  * @memberof module:Tools/base/Proto.Tools( module::Proto )
+//  * @memberofs "module:Tools/base/Proto","module:Tools/base/Fundamental.wTools"
 //  */
 //
 // function prototypeEach( proto, onEach )
@@ -584,9 +581,9 @@ function propertyDescriptorGet( object, name )
  *
  * @throws {Exception} If number of arguments is not supported.
  * @throws {Exception} If dstPrototype is not an Object
-   * @function propertyHide
+ * @function propertyHide
  *
- * @memberof module:Tools/base/Proto.wTools.accessor
+ * @memberofs "module:Tools/base/Proto","module:Tools/base/Fundamental.wTools"
  */
 
 function propertyHide( dstPrototype, name, value )
@@ -644,7 +641,7 @@ function propertyHide( dstPrototype, name, value )
  * @throws {exception} If no argument provided.
  * @throws {exception} If( dstPrototype ) is not a Object.
  * @throws {exception} If( name ) is not a Map.
- * @memberof module:Tools/base/Proto.wTools.accessor
+ * @memberofs "module:Tools/base/Proto","module:Tools/base/Fundamental.wTools"
  */
 
 function propertyConstant( dstPrototype, name, value )
