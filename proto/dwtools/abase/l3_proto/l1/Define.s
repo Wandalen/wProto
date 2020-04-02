@@ -19,7 +19,7 @@ let _ = _global_.wTools;
 //   @see {@link module:Tools/base/Proto.wTools.define.makeWith}
 //   @see {@link module:Tools/base/Proto.wTools.define.contained}
 // * @class Definition
-// * @memberof module:Tools/base/Proto.wTools.define
+// * @memberof namespace:wTools.define
 // */
 //
 // function Definition( o )
@@ -215,7 +215,7 @@ let _ = _global_.wTools;
 * @param {Object-like|Long} src - source value
 * @returns {module:Tools/base/Proto.wTools.define.Definition}
 * @function common
-* @memberof module:Tools/base/Proto.wTools.define
+* @memberof namespace:wTools.define
 */
 
 function common( src )
@@ -243,7 +243,7 @@ function common( src )
 * @param {Object-like|Long} src - source value
 * @returns {module:Tools/base/Proto.wTools.define.Definition}
 * @function own
-* @memberof module:Tools/base/Proto.wTools.define
+* @memberof namespace:wTools.define
 */
 
 function own( src )
@@ -272,7 +272,7 @@ function own( src )
 * @param {Function} src - source constructor
 * @returns {module:Tools/base/Proto.wTools.define.Definition}
 * @function instanceOf
-* @memberof module:Tools/base/Proto.wTools.define
+* @memberof namespace:wTools.define
 */
 
 function instanceOf( src )
@@ -300,7 +300,7 @@ function instanceOf( src )
 * @param {Function} src - source routine
 * @returns {module:Tools/base/Proto.wTools.define.Definition}
 * @function makeWith
-* @memberof module:Tools/base/Proto.wTools.define
+* @memberof namespace:wTools.define
 */
 
 function makeWith( src )
@@ -327,7 +327,7 @@ function makeWith( src )
 * @param {Object} src
 * @returns {module:Tools/base/Proto.wTools.define.Definition}
 * @function contained
-* @memberof module:Tools/base/Proto.wTools.define
+* @memberof namespace:wTools.define
 */
 
 /*

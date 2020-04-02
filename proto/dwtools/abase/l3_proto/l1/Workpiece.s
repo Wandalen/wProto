@@ -2,6 +2,12 @@
 
 'use strict';
 
+/**
+* @namespace "wTools.workpiece"
+* @extends Tools
+* @memberof module:Tools/base/Proto
+*/
+
 /*
 qqq : repair and improve doc
 */
@@ -88,7 +94,7 @@ function fieldsGroupFor( dst, fieldsGroupName )
  * @throws {exception} If no argument provided.
  * @throws {exception} If( o.srcMap ) is not a Object.
  * @throws {exception} If( o ) is extented by unknown property.
- * @memberof module:Tools/base/Proto.Tools.Proto
+ * @memberof namespace:Tools.workpiece
  */
 
 function fieldsGroupDeclare( o )
@@ -132,7 +138,7 @@ fieldsGroupDeclare.defaults =
  *
  * @function _.workpiece.fieldsGroupComposesExtend
  * @throws {exception} If no arguments provided.
- * @memberof module:Tools/base/Proto.Tools.Proto
+ * @memberof namespace:Tools.workpiece
  */
 
 function fieldsGroupComposesExtend( dstPrototype, srcMap )
@@ -165,7 +171,7 @@ function fieldsGroupComposesExtend( dstPrototype, srcMap )
  *
  * @function fieldsGroupAggregatesExtend
  * @throws {exception} If no arguments provided.
- * @memberof module:Tools/base/Proto.Tools.Proto
+ * @memberof namespace:Tools.workpiece
  */
 
 function fieldsGroupAggregatesExtend( dstPrototype, srcMap )
@@ -198,7 +204,7 @@ function fieldsGroupAggregatesExtend( dstPrototype, srcMap )
  *
  * @function fieldsGroupAssociatesExtend
  * @throws {exception} If no arguments provided.
- * @memberof module:Tools/base/Proto.Tools.Proto
+ * @memberof namespace:Tools.workpiece
  */
 
 function fieldsGroupAssociatesExtend( dstPrototype, srcMap )
@@ -231,7 +237,7 @@ function fieldsGroupAssociatesExtend( dstPrototype, srcMap )
  *
  * @function _.workpiece.fieldsGroupRestrictsExtend
  * @throws {exception} If no arguments provided.
- * @memberof module:Tools/base/Proto.Tools.Proto
+ * @memberof namespace:Tools.workpiece
  */
 
 function fieldsGroupRestrictsExtend( dstPrototype, srcMap )
@@ -264,7 +270,7 @@ function fieldsGroupRestrictsExtend( dstPrototype, srcMap )
  *
  * @function fieldsGroupComposesSupplement
  * @throws {exception} If no arguments provided.
- * @memberof module:Tools/base/Proto.Tools.Proto
+ * @memberof namespace:Tools.workpiece
  */
 
 function fieldsGroupComposesSupplement( dstPrototype, srcMap )
@@ -297,7 +303,7 @@ function fieldsGroupComposesSupplement( dstPrototype, srcMap )
  *
  * @function _.workpiece.fieldsGroupAggregatesSupplement
  * @throws {exception} If no arguments provided.
- * @memberof module:Tools/base/Proto.Tools.Proto
+ * @memberof namespace:Tools.workpiece
  */
 
 function fieldsGroupAggregatesSupplement( dstPrototype, srcMap )
@@ -330,7 +336,7 @@ function fieldsGroupAggregatesSupplement( dstPrototype, srcMap )
  *
  * @function fieldsGroupAssociatesSupplement
  * @throws {exception} If no arguments provided.
- * @memberof module:Tools/base/Proto.Tools.Proto
+ * @memberof namespace:Tools.workpiece
  */
 
 function fieldsGroupAssociatesSupplement( dstPrototype, srcMap )
@@ -363,7 +369,7 @@ function fieldsGroupAssociatesSupplement( dstPrototype, srcMap )
  *
  * @function fieldsGroupRestrictsSupplement
  * @throws {exception} If no arguments provided.
- * @memberof module:Tools/base/Proto.Tools.Proto
+ * @memberof namespace:Tools.workpiece
  */
 
 function fieldsGroupRestrictsSupplement( dstPrototype, srcMap )
@@ -785,7 +791,7 @@ function finit( src )
  *
  * @return {object} Returns complemented instance.
  * @function initFields
- * @memberof module:Tools/base/Proto.Tools.Proto
+ * @memberof namespace:Tools.workpiece
  */
 
 function initFields( instance, prototype )
@@ -1064,7 +1070,7 @@ function toStr( instance, options )
  * Make sure src does not have redundant fields.
  * @param {object} src - source object of the class.
  * @function assertDoesNotHaveReduntantFields
- * @memberof module:Tools/base/Proto.Tools.Proto
+ * @memberof namespace:Tools.workpiece
  */
 
 function assertDoesNotHaveReduntantFields( src )
