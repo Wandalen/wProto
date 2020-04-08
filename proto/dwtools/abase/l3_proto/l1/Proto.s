@@ -134,7 +134,8 @@ function isSubPrototypeOf( sub, parent )
 /**
  * Get parent's constructor.
  * @function parentOf
- * @memberofs "module:Tools/base/Proto","module:Tools/base/Fundamental.wTools"
+ * @namespace Tools
+ * @module Tools/base/Proto
  */
 
 function parentOf( src )
@@ -215,7 +216,8 @@ function prototypeOf( src )
  * @param {array} protos - maps to united.
  * @return {object} united interface.
  * @function prototypeUnitedInterface
- * @memberofs "module:Tools/base/Proto","module:Tools/base/Fundamental.wTools"
+ * @namespace Tools
+ * @module Tools/base/Proto
  */
 
 function prototypeUnitedInterface( protos )
@@ -285,7 +287,8 @@ function prototypeUnitedInterface( protos )
  * Append prototype to object. Find archi parent and replace its proto.
  * @param {object} dstMap - dst object to append proto.
  * @function prototypeAppend
- * @memberofs "module:Tools/base/Proto","module:Tools/base/Fundamental.wTools"
+ * @namespace Tools
+ * @module Tools/base/Proto
  */
 
 function prototypeAppend( dstMap )
@@ -313,7 +316,8 @@ function prototypeAppend( dstMap )
  * Returns parent which has default proto.
  * @param {object} srcPrototype - dst object to append proto.
  * @function prototypeArchyGet
- * @memberofs "module:Tools/base/Proto","module:Tools/base/Fundamental.wTools"
+ * @namespace Tools
+ * @module Tools/base/Proto
  */
 
 function prototypeArchyGet( srcPrototype )
@@ -436,7 +440,8 @@ prototypeCrossRefer.defaults =
 //  * Iterate through prototypes.
 //  * @param {object} proto - prototype
 //  * @function prototypeEach
-//  * @memberofs "module:Tools/base/Proto","module:Tools/base/Fundamental.wTools"
+//  * @namespace Tools
+// * @module Tools/base/Proto
 //  */
 //
 // function prototypeEach( proto, onEach )
@@ -583,7 +588,8 @@ function propertyDescriptorGet( object, name )
  * @throws {Exception} If dstPrototype is not an Object
  * @function propertyHide
  *
- * @memberofs "module:Tools/base/Proto","module:Tools/base/Fundamental.wTools"
+ * @namespace Tools
+ * @module Tools/base/Proto
  */
 
 function propertyHide( dstPrototype, name, value )
@@ -641,7 +647,8 @@ function propertyHide( dstPrototype, name, value )
  * @throws {exception} If no argument provided.
  * @throws {exception} If( dstPrototype ) is not a Object.
  * @throws {exception} If( name ) is not a Map.
- * @memberofs "module:Tools/base/Proto","module:Tools/base/Fundamental.wTools"
+ * @namespace Tools
+ * @module Tools/base/Proto
  */
 
 function propertyConstant( dstPrototype, name, value )
@@ -967,32 +974,32 @@ let Combining = [ 'rewrite', 'supplement', 'apppend', 'prepend' ];
 
 /**
  * @typedef {Object} DefaultFieldsGroups - contains predefined class fields groups.
- * @memberof module:Tools/base/Proto
+ * @module Tools/base/Proto
  */
 
 /**
  * @typedef {Object} DefaultFieldsGroupsRelations - contains predefined class relationship types.
- * @memberof module:Tools/base/Proto
+ * @module Tools/base/Proto
  */
 
 /**
  * @typedef {Object} DefaultFieldsGroupsCopyable - contains predefined copyable class fields groups.
- * @memberof module:Tools/base/Proto
+ * @module Tools/base/Proto
  */
 
 /**
  * @typedef {Object} DefaultFieldsGroupsTight
- * @memberof module:Tools/base/Proto
+ * @module Tools/base/Proto
  */
 
 /**
  * @typedef {Object} DefaultFieldsGroupsInput
- * @memberof module:Tools/base/Proto
+ * @module Tools/base/Proto
  */
 
 /**
  * @typedef {Object} DefaultForbiddenNames - contains names of forbidden properties
- * @memberof module:Tools/base/Proto
+ * @module Tools/base/Proto
  */
 
 let DefaultFieldsGroups = Object.create( null );

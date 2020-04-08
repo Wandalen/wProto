@@ -17,28 +17,28 @@ _.assert( _.routineIs( _nameFielded ), 'wProto needs wTools/staging/dwtools/l3/N
  * @summary Collection of routines for declaring accessors
  * @namespace "wTools.accessor"
  * @extends Tools
- * @memberof module:Tools/base/Proto
+ * @module Tools/base/Proto
  */
 
 /**
  * @summary Collection of routines for declaring getters
  * @namespace "wTools.accessor.getter"
  * @extends Tools.accessor
- * @memberof module:Tools/base/Proto
+ * @module Tools/base/Proto
  */
 
  /**
  * @summary Collection of routines for declaring setters
  * @namespace "wTools.accessor.setter"
  * @extends Tools.accessor
- * @memberof module:Tools/base/Proto
+ * @module Tools/base/Proto
  */
 
 /**
  * @summary Collection of routines for declaring getters and setters
  * @namespace "wTools.accessor.getterSetter"
  * @extends Tools.accessor
- * @memberof module:Tools/base/Proto
+ * @module Tools/base/Proto
  */
 
 // --
@@ -59,7 +59,7 @@ _.assert( _.routineIs( _nameFielded ), 'wProto needs wTools/staging/dwtools/l3/N
  * @property {Function} [ getter=null ]
  * @property {Function} [ setter=null ]
  * @property {Function} [ getterSetter=null ]
- * @memberof namespace:wTools.accessor
+ * @namespace Tools.accessor
  **/
 
 let AccessorDefaults =
@@ -346,7 +346,7 @@ copyIterationMake.defaults =
  * @param {String} o.combining - combining method
  * @private
  * @function _register
- * @memberof namespace:wTools.accessor
+ * @namespace Tools.accessor
  */
 
 function _register( o )
@@ -594,7 +594,7 @@ defaults.methods = null;
  *
  * @private
  * @function _declare_pre
- * @memberof namespace:wTools.accessor
+ * @namespace Tools.accessor
  */
 
 function _declare_pre( routine, args )
@@ -654,7 +654,7 @@ function _declare_pre( routine, args )
  * @property {Function} [ setter=null ]
  * @property {Function} [ getterSetter=null ]
  *
- * @memberof namespace:wTools.accessor
+ * @namespace Tools.accessor
  **/
 
 /**
@@ -688,7 +688,7 @@ function _declare_pre( routine, args )
  * @throws {exception} If( o.strict ) is true and object doesn't have own constructor.
  * @throws {exception} If( o.readOnly ) is true and property has own setter.
  * @function declare
- * @memberof namespace:wTools.accessor
+ * @namespace Tools.accessor
  */
 
 function declare_body( o )
@@ -799,7 +799,7 @@ let declare = _.routineFromPreAndBody( _declare_pre, declare_body );
  * Self.a; // throw an Error
  *
  * @function forbid
- * @memberof namespace:wTools.accessor
+ * @namespace Tools.accessor
  */
 
 function forbid_body( o )
@@ -1032,7 +1032,7 @@ defaults.protoName = null;
  * _.accessor.ownForbid( Self, 'b' ) // returns false
  *
  * @function ownForbid
- * @memberof namespace:wTools.accessor
+ * @namespace Tools.accessor
  */
 
 function ownForbid( object, name )
@@ -1074,7 +1074,7 @@ function ownForbid( object, name )
  * _.accessor.readOnly( Alpha.prototype,{ a : 'a' });
  *
  * @function forbid
- * @memberof namespace:wTools.accessor
+ * @namespace Tools.accessor
  */
 
 function readOnly_body( o )
@@ -1107,7 +1107,7 @@ let readOnly = _.routineFromPreAndBody( _declare_pre, readOnly_body );
  * @throws {Exception} If one of object doesn't have _Accessors map
  * @function supplement
  *
- * @memberof namespace:wTools.accessor
+ * @namespace Tools.accessor
  */
 
 function supplement( dst, src )
@@ -1183,7 +1183,7 @@ function supplement( dst, src )
 //  * @throws {exception} If no argument provided.
 //  * @throws {exception} If( dstPrototype ) is not a Object.
 //  * @throws {exception} If( name ) is not a Map.
-//  * @memberof namespace:wTools.accessor
+//  * @namespace Tools.accessor
 //  */
 //
 // function constant( dstPrototype, name, value )
@@ -1226,7 +1226,7 @@ function supplement( dst, src )
  * @param {Object} proto - target object
  * @param {String} name - name of accessor
  * @function has
- * @memberof namespace:wTools.accessor
+ * @namespace Tools.accessor
  */
 
 function has( proto, name )
@@ -1464,7 +1464,7 @@ setterArrayCollection_functor.defaults =
  * @param {Object} o.name - name of property
  * @returns {Function} Returns setter function.
  * @function own
- * @memberof namespace:wTools.accessor.setter
+ * @namespace Tools.accessor.setter
  */
 
 function setterOwn_functor( op )
@@ -1632,7 +1632,7 @@ setterCopyable_functor.defaults =
  * @param {Object} o.bufferConstructor - buffer constructor
  * @returns {Function} Returns setter function.
  * @function bufferFrom
- * @memberof namespace:wTools.accessor.setter
+ * @namespace Tools.accessor.setter
  */
 
 function setterBufferFrom_functor( o )
@@ -1716,7 +1716,7 @@ setterChangesTracking_functor.defaults =
  * @param {Number} o.index
  * @param {String} o.storageName
  * @function toElement
- * @memberof namespace:wTools.accessor.getterSetter
+ * @namespace Tools.accessor.getterSetter
  */
 
 function toElementSet_functor( o )
@@ -2009,7 +2009,7 @@ let toElementSuite = suiteMakerFrom_functor( toElementGet_functor, toElementSet_
  * @param {Object} o.alias - name of alias
  * @returns {Function} Returns setter function.
  * @function alias
- * @memberof namespace:wTools.accessor.setter
+ * @namespace Tools.accessor.setter
  */
 
 function alias_pre( routine, args )
@@ -2088,7 +2088,7 @@ let aliasSet_functor = _.routineFromPreAndBody( alias_pre, aliasSetter_functor_b
  * @param {Object} o.alias - name of alias
  * @returns {Function} Returns getter function.
  * @function alias
- * @memberof namespace:wTools.accessor.getter
+ * @namespace Tools.accessor.getter
  */
 
 function aliasGet_functor_body( o )

@@ -19,7 +19,7 @@ let _ = _global_.wTools;
 //   @see {@link module:Tools/base/Proto.wTools.define.makeWith}
 //   @see {@link module:Tools/base/Proto.wTools.define.contained}
 // * @class Definition
-// * @memberof namespace:wTools.define
+// * @namespace Tools.define
 // */
 //
 // function Definition( o )
@@ -215,7 +215,7 @@ let _ = _global_.wTools;
 * @param {Object-like|Long} src - source value
 * @returns {module:Tools/base/Proto.wTools.define.Definition}
 * @function common
-* @memberof namespace:wTools.define
+* @namespace Tools.define
 */
 
 function common( src )
@@ -243,7 +243,7 @@ function common( src )
 * @param {Object-like|Long} src - source value
 * @returns {module:Tools/base/Proto.wTools.define.Definition}
 * @function own
-* @memberof namespace:wTools.define
+* @namespace Tools.define
 */
 
 function own( src )
@@ -272,7 +272,7 @@ function own( src )
 * @param {Function} src - source constructor
 * @returns {module:Tools/base/Proto.wTools.define.Definition}
 * @function instanceOf
-* @memberof namespace:wTools.define
+* @namespace Tools.define
 */
 
 function instanceOf( src )
@@ -300,7 +300,7 @@ function instanceOf( src )
 * @param {Function} src - source routine
 * @returns {module:Tools/base/Proto.wTools.define.Definition}
 * @function makeWith
-* @memberof namespace:wTools.define
+* @namespace Tools.define
 */
 
 function makeWith( src )
@@ -327,7 +327,7 @@ function makeWith( src )
 * @param {Object} src
 * @returns {module:Tools/base/Proto.wTools.define.Definition}
 * @function contained
-* @memberof namespace:wTools.define
+* @namespace Tools.define
 */
 
 /*
@@ -570,7 +570,7 @@ setter.defaults =
 * Collection of definitions for constructions.
 * @namespace "wTools.define"
 * @extends Tools
-* @memberof module:Tools/base/Proto
+* @module Tools/base/Proto
 */
 
 let DefineExtension =
@@ -599,7 +599,7 @@ _.mapExtend( _.define, DefineExtension );
 * Routines to manipulate definitions.
 * @namespace "wTools.definition"
 * @extends Tools
-* @memberof module:Tools/base/Proto
+* @module Tools/base/Proto
 */
 
 let DefinitionExtension =

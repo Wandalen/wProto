@@ -5,7 +5,7 @@
 /**
 * @namespace "wTools.workpiece"
 * @extends Tools
-* @memberof module:Tools/base/Proto
+* @module Tools/base/Proto
 */
 
 /*
@@ -94,7 +94,7 @@ function fieldsGroupFor( dst, fieldsGroupName )
  * @throws {exception} If no argument provided.
  * @throws {exception} If( o.srcMap ) is not a Object.
  * @throws {exception} If( o ) is extented by unknown property.
- * @memberof namespace:Tools.workpiece
+ * @namespace Tools.workpiece
  */
 
 function fieldsGroupDeclare( o )
@@ -138,7 +138,7 @@ fieldsGroupDeclare.defaults =
  *
  * @function _.workpiece.fieldsGroupComposesExtend
  * @throws {exception} If no arguments provided.
- * @memberof namespace:Tools.workpiece
+ * @namespace Tools.workpiece
  */
 
 function fieldsGroupComposesExtend( dstPrototype, srcMap )
@@ -171,7 +171,7 @@ function fieldsGroupComposesExtend( dstPrototype, srcMap )
  *
  * @function fieldsGroupAggregatesExtend
  * @throws {exception} If no arguments provided.
- * @memberof namespace:Tools.workpiece
+ * @namespace Tools.workpiece
  */
 
 function fieldsGroupAggregatesExtend( dstPrototype, srcMap )
@@ -204,7 +204,7 @@ function fieldsGroupAggregatesExtend( dstPrototype, srcMap )
  *
  * @function fieldsGroupAssociatesExtend
  * @throws {exception} If no arguments provided.
- * @memberof namespace:Tools.workpiece
+ * @namespace Tools.workpiece
  */
 
 function fieldsGroupAssociatesExtend( dstPrototype, srcMap )
@@ -237,7 +237,7 @@ function fieldsGroupAssociatesExtend( dstPrototype, srcMap )
  *
  * @function _.workpiece.fieldsGroupRestrictsExtend
  * @throws {exception} If no arguments provided.
- * @memberof namespace:Tools.workpiece
+ * @namespace Tools.workpiece
  */
 
 function fieldsGroupRestrictsExtend( dstPrototype, srcMap )
@@ -270,7 +270,7 @@ function fieldsGroupRestrictsExtend( dstPrototype, srcMap )
  *
  * @function fieldsGroupComposesSupplement
  * @throws {exception} If no arguments provided.
- * @memberof namespace:Tools.workpiece
+ * @namespace Tools.workpiece
  */
 
 function fieldsGroupComposesSupplement( dstPrototype, srcMap )
@@ -303,7 +303,7 @@ function fieldsGroupComposesSupplement( dstPrototype, srcMap )
  *
  * @function _.workpiece.fieldsGroupAggregatesSupplement
  * @throws {exception} If no arguments provided.
- * @memberof namespace:Tools.workpiece
+ * @namespace Tools.workpiece
  */
 
 function fieldsGroupAggregatesSupplement( dstPrototype, srcMap )
@@ -336,7 +336,7 @@ function fieldsGroupAggregatesSupplement( dstPrototype, srcMap )
  *
  * @function fieldsGroupAssociatesSupplement
  * @throws {exception} If no arguments provided.
- * @memberof namespace:Tools.workpiece
+ * @namespace Tools.workpiece
  */
 
 function fieldsGroupAssociatesSupplement( dstPrototype, srcMap )
@@ -369,7 +369,7 @@ function fieldsGroupAssociatesSupplement( dstPrototype, srcMap )
  *
  * @function fieldsGroupRestrictsSupplement
  * @throws {exception} If no arguments provided.
- * @memberof namespace:Tools.workpiece
+ * @namespace Tools.workpiece
  */
 
 function fieldsGroupRestrictsSupplement( dstPrototype, srcMap )
@@ -730,7 +730,8 @@ function construct( cls, context, args )
  * Is this instance finited.
  * @function isFinited
  * @param {object} src - instance of any class
- * @memberof wCopyable#
+ * @namespace Tools.workpiece
+ * @module Tools/base/Proto
  */
 
 function isFinited( src )
@@ -791,7 +792,7 @@ function finit( src )
  *
  * @return {object} Returns complemented instance.
  * @function initFields
- * @memberof namespace:Tools.workpiece
+ * @namespace Tools.workpiece
  */
 
 function initFields( instance, prototype )
@@ -1070,7 +1071,7 @@ function toStr( instance, options )
  * Make sure src does not have redundant fields.
  * @param {object} src - source object of the class.
  * @function assertDoesNotHaveReduntantFields
- * @memberof namespace:Tools.workpiece
+ * @namespace Tools.workpiece
  */
 
 function assertDoesNotHaveReduntantFields( src )
@@ -1188,7 +1189,7 @@ exportInfo.defaults =
  * @property {String} _name - private name
  * @property {String} shortName - short name
  * @property {Object} prototype - prototype object
- * @memberof module:Tools/base/Proto
+ * @module Tools/base/Proto
  */
 
 let KnownConstructorFields =
@@ -1201,32 +1202,32 @@ let KnownConstructorFields =
 
 /**
  * @typedef {Object} DefaultFieldsGroups - contains predefined class fields groups.
- * @memberof module:Tools/base/Proto
+ * @module Tools/base/Proto
  */
 
 /**
  * @typedef {Object} DefaultFieldsGroupsRelations - contains predefined class relationship types.
- * @memberof module:Tools/base/Proto
+ * @module Tools/base/Proto
  */
 
 /**
  * @typedef {Object} DefaultFieldsGroupsCopyable - contains predefined copyable class fields groups.
- * @memberof module:Tools/base/Proto
+ * @module Tools/base/Proto
  */
 
 /**
  * @typedef {Object} DefaultFieldsGroupsTight
- * @memberof module:Tools/base/Proto
+ * @module Tools/base/Proto
  */
 
 /**
  * @typedef {Object} DefaultFieldsGroupsInput
- * @memberof module:Tools/base/Proto
+ * @module Tools/base/Proto
  */
 
 /**
  * @typedef {Object} DefaultForbiddenNames - contains names of forbidden properties
- * @memberof module:Tools/base/Proto
+ * @module Tools/base/Proto
  */
 
 let DefaultFieldsGroups = Object.create( null );
