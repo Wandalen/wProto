@@ -37,7 +37,8 @@ _.assert( _.routineIs( _nameFielded ), 'wProto needs Tools/dwtools/l3/NameTools.
  * Make mixin which could be mixed into prototype of another object.
  * @param {object} o - options.
  * @function _mixinDelcare
- * @memberof module:Tools/base/Proto.Tools( module::Proto )
+ * @namespace Tools
+ * @module Tools/base/Proto
  */
 
 function _mixinDelcare( o )
@@ -149,7 +150,8 @@ mixinDelcare.defaults = Object.create( _mixinDelcare.defaults );
  * Mixin methods and fields into prototype of another object.
  * @param {object} o - options.
  * @function mixinApply
- * @memberof module:Tools/base/Proto.Tools( module::Proto )
+ * @namespace Tools
+ * @module Tools/base/Proto
  */
 
 function mixinApply( mixinDescriptor, dstPrototype )
@@ -304,7 +306,8 @@ function mixinHas( proto, mixin )
  * @throws {exception} If function cant rewrite constructor using original prototype.
  * @throws {exception} If( o.usingOriginalPrototype ) is false and ( o.cls.prototype ) has manually defined properties.
  * @throws {exception} If( o.cls.prototype.constructor ) is not equal( o.cls  ).
- * @memberof module:Tools/base/Proto.Tools( module::Proto )
+ * @namespace Tools
+ * @module Tools/base/Proto
  */
 
 /*
@@ -593,7 +596,8 @@ classDeclare.defaults =
  * @throws {exception} If( o.static) is not a Object.
  * @throws {exception} If( o.cls.prototype.Constitutes ) is defined.
  * @throws {exception} If( o.cls.prototype ) is not equal( prototype ).
- * @memberof module:Tools/base/Proto.Tools( module::Proto )
+ * @namespace Tools
+ * @module Tools/base/Proto
  */
 
 function classExtend( o )
@@ -1034,7 +1038,8 @@ defaults.readOnly = 0;
  * @property {String} _name - private name
  * @property {String} shortName - short name
  * @property {Object} prototype - prototype object
- * @memberof module:Tools/base/Proto
+ * @namespace Tools
+ * @module Tools/base/Proto
  */
 
 let KnownConstructorFields =
@@ -1048,7 +1053,8 @@ let KnownConstructorFields =
 /**
  * @typedef {Object} MixinDescriptorFields - fields of mixin descriptor.
  * @property {String} name - full name
- * @memberof module:Tools/base/Proto
+ * @namespace Tools
+ * @module Tools/base/Proto
  */
 
 let MixinDescriptorFields =
