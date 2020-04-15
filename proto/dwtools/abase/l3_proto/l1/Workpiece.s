@@ -3,7 +3,7 @@
 'use strict';
 
 /**
-* @namespace "wTools.workpiece"
+* @namespace wTools.workpiece
 * @extends Tools
 * @module Tools/base/Proto
 */
