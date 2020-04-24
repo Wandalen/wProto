@@ -2318,6 +2318,7 @@ function toValueGet_functor( o )
     // {
     //   helper = this[ symbol ] = proxyMake( this );
     // }
+    // debugger;
     let helper = proxyMake( this );
     let o2 =
     {
@@ -2340,6 +2341,7 @@ function toValueGet_functor( o )
         let method = getter[ fieldName ];
         if( method )
         return end();
+        // debugger;
 
         if( fieldName === spaceName )
         {
@@ -2365,24 +2367,26 @@ function toValueGet_functor( o )
 
         if( _.routineIs( original[ getName1 ] ) )
         {
-          method = getter[ fieldName ] = function get( value )
+          method = getter[ fieldName ] = function get()
           {
-            return original[ getName1 ]();
+            return this[ getName1 ]();
           }
           return end();
         }
 
         if( _.routineIs( original[ getName2 ] ) )
         {
-          method = getter[ fieldName ] = function get( value )
+          method = getter[ fieldName ] = function get()
           {
-            return original[ getName2 ]();
+            if( original !== this )
+            debugger;
+            return this[ getName2 ]();
           }
           return end();
         }
 
         let symbol = Symbol.for( fieldName );
-        method = getter[ fieldName ] = function get( value )
+        method = getter[ fieldName ] = function get()
         {
           return this[ symbol ];
         }
