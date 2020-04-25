@@ -168,32 +168,17 @@ module:
           - ../proto/dwtools
           - ../proto/dwtools/Tools.s
           - ../proto/dwtools/abase
-          - ../proto/dwtools/abase/-l3_proto
-          - ../proto/dwtools/abase/-l3_proto/Include.s
-          - ../proto/dwtools/abase/-l3_proto/l1
-          - ../proto/dwtools/abase/-l3_proto/l1/Define.s
-          - ../proto/dwtools/abase/-l3_proto/l1/Proto.s
-          - ../proto/dwtools/abase/-l3_proto/l1/Workpiece.s
-          - ../proto/dwtools/abase/-l3_proto/l3
-          - ../proto/dwtools/abase/-l3_proto/l3/Accessor.s
-          - ../proto/dwtools/abase/-l3_proto/l3/Blueprint.s
-          - ../proto/dwtools/abase/-l3_proto/l3/Class.s
-          - ../proto/dwtools/abase/-l3_proto/l3/Construction.s
-          - ../proto/dwtools/abase/-l3_proto/l3/Like.s
-          - ../proto/dwtools/abase/-l3_proto.test
-          - ../proto/dwtools/abase/-l3_proto.test/Class.test.s
-          - ../proto/dwtools/abase/-l3_proto.test/Complex.test.s
-          - ../proto/dwtools/abase/-l3_proto.test/Like.test.s
-          - ../proto/dwtools/abase/-l3_proto.test/Proto.test.s
           - ../proto/dwtools/abase/l3_proto
           - ../proto/dwtools/abase/l3_proto/Include.s
           - ../proto/dwtools/abase/l3_proto/l1
           - ../proto/dwtools/abase/l3_proto/l1/Define.s
           - ../proto/dwtools/abase/l3_proto/l1/Proto.s
           - ../proto/dwtools/abase/l3_proto/l1/Workpiece.s
+          - ../proto/dwtools/abase/l3_proto/l3
+          - ../proto/dwtools/abase/l3_proto/l3/Accessor.s
           - ../proto/dwtools/abase/l3_proto/l5
-          - ../proto/dwtools/abase/l3_proto/l5/Accessor.s
           - ../proto/dwtools/abase/l3_proto/l5/Class.s
+          - ../proto/dwtools/abase/l3_proto/l5/Collection.s
           - ../proto/dwtools/abase/l3_proto/l5/Like.s
           - ../proto/dwtools/abase/l3_proto.test
           - ../proto/dwtools/abase/l3_proto.test/Blueprint.test.s
