@@ -1343,7 +1343,7 @@ function accessorUnfunct( test )
   ({
     object,
     names : { a : {} },
-    getterSetter : accessor_functor,
+    suite : accessor_functor,
     prime : 0,
     strict : 0,
   });
@@ -1622,9 +1622,10 @@ function accessorUnfunctGetSuite( test )
   };
   var names =
   {
-    _ : { getterSetter : get_functor },
+    _ : { suite : get_functor },
     a : {},
   }
+
   _.accessor.declare
   ({
     object,
@@ -1669,7 +1670,7 @@ function accessorUnfunctGetSuite( test )
   };
   var names =
   {
-    _ : { getterSetter : get_functor, configurable : false },
+    _ : { suite : get_functor, configurable : false },
     a : {},
   }
   _.accessor.declare
@@ -2269,7 +2270,7 @@ function getterToValue( test )
   };
   var names =
   {
-    _ : { getterSetter : _.accessor.suite.toValue },
+    _ : { suite : _.accessor.suite.toValue },
     a : {},
   }
   _.accessor.declare
@@ -2326,7 +2327,7 @@ function getterToValue( test )
   };
   var names =
   {
-    _ : { getterSetter : _.accessor.suite.toValue, configurable : false },
+    _ : { suite : _.accessor.suite.toValue, configurable : false },
     a : {},
   }
   _.accessor.declare

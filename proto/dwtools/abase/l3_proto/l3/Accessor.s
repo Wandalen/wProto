@@ -65,7 +65,7 @@ _.assert( _.routineIs( _nameFielded ), 'wProto needs wTools/staging/dwtools/l3/N
  * @property {Boolean} [ configurable=0 ]
  * @property {Function} [ getter=null ]
  * @property {Function} [ setter=null ]
- * @property {Function} [ getterSetter=null ]
+ * @property {Function} [ suite=null ]
  * @namespace Tools.accessor
  **/
 
@@ -87,7 +87,7 @@ let AccessorDefaults =
   set : null,
   put : null,
   copy : null,
-  getterSetter : null, /* xxx : rename? */
+  suite : null, /* xxx : rename? */
 
 }
 
@@ -109,7 +109,7 @@ let AccessorPreferences =
   set : null,
   put : null,
   copy : null,
-  getterSetter : null, /* xxx : rename? */
+  suite : null, /* xxx : rename? */
 
 }
 
@@ -146,20 +146,20 @@ function _methodsMake( o )
   _.assert( !!o.object );
   _.assertRoutineOptions( _methodsMake, o );
 
-  if( o.getterSetter )
+  if( o.suite )
   {
-    // _.assertMapHasOnly( o.getterSetter, { get : null, set : null, put : null, copy : null } );
+    // _.assertMapHasOnly( o.suite, { get : null, set : null, put : null, copy : null } );
     // debugger;
-    _.assertMapHasOnly( o.getterSetter, _.accessor.AccessorType );
+    _.assertMapHasOnly( o.suite, _.accessor.AccessorType );
   }
 
-  if( o.getterSetter && o.set === null && o.getterSetter.set )
-  o.set = o.getterSetter.set;
+  if( o.suite && o.set === null && o.suite.set )
+  o.set = o.suite.set;
   if( _.boolLike( o.set ) )
   o.set = !!o.set;
 
-  if( o.getterSetter && o.get === null && o.getterSetter.get )
-  o.get = o.getterSetter.get;
+  if( o.suite && o.get === null && o.suite.get )
+  o.get = o.suite.get;
   if( _.boolLike( o.get ) )
   o.get = !!o.get;
 
@@ -167,8 +167,8 @@ function _methodsMake( o )
   {
     if( o.get )
     result.get = o.get;
-    else if( o.getterSetter && o.getterSetter.get )
-    result.get = o.getterSetter.get;
+    else if( o.suite && o.suite.get )
+    result.get = o.suite.get;
     else if( o.methods[ '' + o.name + 'Get' ] )
     result.get = o.methods[ o.name + 'Get' ];
     else if( o.methods[ '_' + o.name + 'Get' ] )
@@ -179,8 +179,8 @@ function _methodsMake( o )
   {
     if( o.set )
     result.set = o.set;
-    else if( o.getterSetter && o.getterSetter.set )
-    result.set = o.getterSetter.set;
+    else if( o.suite && o.suite.set )
+    result.set = o.suite.set;
     else if( o.methods[ '' + o.name + 'Set' ] )
     result.set = o.methods[ o.name + 'Set' ];
     else if( o.methods[ '_' + o.name + 'Set' ] )
@@ -191,8 +191,8 @@ function _methodsMake( o )
   {
     if( o.put )
     result.put = o.put;
-    else if( o.getterSetter && o.getterSetter.put )
-    result.put = o.getterSetter.put;
+    else if( o.suite && o.suite.put )
+    result.put = o.suite.put;
     else if( o.methods[ '' + o.name + 'Put' ] )
     result.put = o.methods[ o.name + 'Put' ];
     else if( o.methods[ '_' + o.name + 'Put' ] )
@@ -205,8 +205,8 @@ function _methodsMake( o )
   {
     if( o.copy )
     result.copy = o.copy;
-    else if( o.getterSetter && o.getterSetter.copy )
-    result.copy = o.getterSetter.copy;
+    else if( o.suite && o.suite.copy )
+    result.copy = o.suite.copy;
     else if( o.methods[ '' + o.name + 'Copy' ] )
     result.copy = o.methods[ o.name + 'Copy' ];
     else if( o.methods[ '_' + o.name + 'Copy' ] )
@@ -226,7 +226,6 @@ function _methodsMake( o )
     if( !result.set && o.set === null )
     result.set = function set( src )
     {
-      debugger;
       let it = _.accessor.copyIterationMake
       ({
         dstInstance : this,
@@ -240,7 +239,6 @@ function _methodsMake( o )
     if( !result.get && o.get === null )
     result.get = function get()
     {
-      debugger;
       let it = _.accessor.copyIterationMake
       ({
         srcInstance : this,
@@ -361,7 +359,7 @@ _methodsMake.defaults =
   set : null,
   get : null,
   put : null,
-  getterSetter : null,
+  suite : null,
 }
 
 //
@@ -706,14 +704,14 @@ function _declareAct( o )
 
   /* */
 
-  o.getterSetter = _.accessor._methodUnfunct
+  o.suite = _.accessor._methodUnfunct
   ({
-    amethod : o.getterSetter,
+    amethod : o.suite,
     accessor : o,
     kind : 'suite',
   });
 
-  o.amethods = _.accessor._methodsMake
+  o.amethods = _.accessor._methodsMake /* xxx : rename amethods -> suite */
   ({
     name : o.name,
     methods : o.methods,
@@ -723,7 +721,7 @@ function _declareAct( o )
     copy : o.copy,
     get : o.get,
     set : o.readOnly ? false : o.set,
-    getterSetter : o.getterSetter,
+    suite : o.suite,
   });
 
   o.amethods = _.accessor._methodsUnfunct( o );
@@ -972,7 +970,7 @@ function _declare_pre( routine, args )
  * @property {Boolean} [ configurable=false ]
  * @property {Function} [ get=null ]
  * @property {Function} [ set=null ]
- * @property {Function} [ getterSetter=null ]
+ * @property {Function} [ suite=null ]
  *
  * @namespace Tools.accessor
  **/
@@ -1075,7 +1073,7 @@ function declare_body( o )
     // o2 = _.accessor._methodUnfunct({ amethod : o2, accessor : o, kind : 'suite' });
 
     if( _.routineIs( o2 ) && o2.rubrics && _.longHas( o2.rubrics, 'functor' ) )
-    o2 = { getterSetter : o2 }
+    o2 = { suite : o2 }
 
     _.assert
     (

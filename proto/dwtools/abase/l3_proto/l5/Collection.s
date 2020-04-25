@@ -409,7 +409,7 @@ setterChangesTracking_functor.defaults =
  * @param {Number} o.index
  * @param {String} o.storageName
  * @function toElement
- * @namespace Tools.accessor.getterSetter
+ * @namespace Tools.accessor.suite
  */
 
 function toElementSet_functor( o )
