@@ -463,54 +463,54 @@ function accessor( o )
     else
     r = o.routine( o2 );
 
-    if( _.boolLike( o.getter ) && !o.getter && o.setter === null )
+    if( _.boolLike( o.get ) && !o.get && o.set === null )
     {
       if( _.routineIs( r ) )
       {
-        o.setter = r;
-        if( o.putter === null || _.boolLikeTrue( o.putter ) )
-        o.putter = r;
+        o.set = r;
+        if( o.put === null || _.boolLikeTrue( o.put ) )
+        o.put = r;
       }
       else if( _.mapIs( r ) )
       {
-        o.setter = r.set;
-        if( o.putter === null || _.boolLikeTrue( o.putter ) )
+        o.set = r.set;
+        if( o.put === null || _.boolLikeTrue( o.put ) )
         if( r.put )
-        o.putter = r.put;
+        o.put = r.put;
       }
       else _.assert( 0 );
     }
-    else if( _.boolLike( o.setter ) && !o.setter && o.getter === null )
+    else if( _.boolLike( o.set ) && !o.set && o.get === null )
     {
       if( _.routineIs( r ) )
-      o.getter = r;
+      o.get = r;
       else if( _.mapIs( r ) )
-      o.getter = r.get
+      o.get = r.get
       else _.assert( 0 );
     }
     else
     {
       if( _.mapIs( r ) )
       {
-        if( o.getter === null || _.boolLikeTrue( o.getter ) )
-        o.getter = r.get;
-        if( o.setter === null || _.boolLikeTrue( o.setter ) )
-        o.setter = r.set;
-        if( o.putter === null || _.boolLikeTrue( o.putter ) )
-        o.putter = r.put;
+        if( o.get === null || _.boolLikeTrue( o.get ) )
+        o.get = r.get;
+        if( o.set === null || _.boolLikeTrue( o.set ) )
+        o.set = r.set;
+        if( o.put === null || _.boolLikeTrue( o.put ) )
+        o.put = r.put;
       }
     }
 
-    _.assert( _.boolLikeFalse( o.getter ) || _.routineIs( o.getter ) );
-    _.assert( _.boolLikeFalse( o.setter ) || _.routineIs( o.setter ) );
+    _.assert( _.boolLikeFalse( o.get ) || _.routineIs( o.get ) );
+    _.assert( _.boolLikeFalse( o.set ) || _.routineIs( o.set ) );
 
     _.accessor.declare
     ({
       object : dst,
       names : key,
-      getter : o.getter,
-      setter : o.setter,
-      put : o.putter,
+      get : o.get,
+      set : o.set,
+      put : o.put,
       prime : instanceIsStandard,
       strict : instanceIsStandard,
     });
@@ -525,9 +525,9 @@ accessor.defaults =
 {
   ini : null,
   routine : null,
-  getter : null,
-  setter : null,
-  putter : null,
+  get : null,
+  set : null,
+  put : null,
 }
 
 //
@@ -540,9 +540,9 @@ function getter( o )
 
   _.routineOptions( getter, o );
 
-  o.getter = null;
-  o.putter = false;
-  o.setter = false;
+  o.get = null;
+  o.put = false;
+  o.set = false;
 
   return _.define.accessor( o );
 }
@@ -563,9 +563,9 @@ function setter( o )
 
   _.routineOptions( setter, o );
 
-  o.getter = false;
-  o.putter = null;
-  o.setter = null;
+  o.get = false;
+  o.put = null;
+  o.set = null;
 
   return _.define.accessor( o );
 }
@@ -586,9 +586,9 @@ function putter( o )
 
   _.routineOptions( putter, o );
 
-  o.getter = false;
-  o.setter = false;
-  o.putter = null;
+  o.get = false;
+  o.set = false;
+  o.put = null;
 
   return _.define.accessor( o );
 }
@@ -642,13 +642,6 @@ _.mapExtend( _.define, DefineExtension );
 
 let DefinitionExtension =
 {
-
-  // routines
-  // is : _.definitionIs,
-
-  // fields
-  // KnownFields,
-
 }
 
 _.definition = _.definition || Object.create( null );

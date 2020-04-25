@@ -15,18 +15,15 @@ if( typeof module !== 'undefined' )
 
   _.include( 'wBlueprint' );
 
-  // require( './l0/Definition.s' );
-
   require( './l1/Define.s' );
   require( './l1/Proto.s' );
   require( './l1/Workpiece.s' );
 
-  require( './l5/Accessor.s' );
-  // require( './l5/Blueprint.s' );
+  require( './l3/Accessor.s' );
+
   require( './l5/Class.s' );
-  // require( './l5/Construction.s' );
+  require( './l5/Collection.s' );
   require( './l5/Like.s' );
-  // require( './l5/Trait.s' );
 
 }
 
