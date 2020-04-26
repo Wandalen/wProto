@@ -547,7 +547,7 @@ function withSymbolGet_functor( o ) /* xxx : deprecate in favor of toValueGet_fu
           return end();
         }
 
-        debugger;
+        // debugger;
         let symbol = _.symbolIs( fieldName ) ? fieldName : Symbol.for( fieldName );
         method = getter[ fieldName ] = function get( value )
         {
@@ -644,10 +644,10 @@ function toStructureGet_functor( o ) /* xxx : deprecate in favor of toValueGet_f
         let symbol = _.symbolIs( fieldName ) ? fieldName : Symbol.for( fieldName );
         if( original.hasField( fieldName ) || Object.hasOwnProperty.call( original, symbol ) )
         {
-          debugger;
+          // debugger;
           method = getter[ fieldName ] = function get( value )
           {
-            debugger;
+            // debugger;
             return this[ symbol ];
           }
           return end();
