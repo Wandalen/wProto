@@ -1,6 +1,6 @@
 {
   "name" : "wProto",
-  "version" : "0.4.244",
+  "version" : "0.4.245",
   "engine" : "node >= 8.0.0",
   "description" : "Relations module. Collection of routines to define classes and relations between them. Proto leverages multiple inheritances, mixins, accessors, fields groups defining, introspection and more. Use it as a skeleton of the application.",
   "author" : "Kostiantyn Wandalen <wanalen@willbe.so>",
@@ -18,7 +18,7 @@
   {
     "url" : "https://github.com/Wandalen/wProto/issues"
   },
-  "dependencies" : { "wTools" : "gamma", "wblueprint" : "gamma" },
-  "devDependencies" : { "wProto" : "file:.", "wequaler" : "gamma", "wTesting" : "gamma" },
+  "dependencies" : { "wTools" : "alpha", "wblueprint" : "alpha" },
+  "devDependencies" : { "wProto" : "file:.", "wequaler" : "alpha", "wTesting" : "alpha" },
   "keywords" : [ "wTools", "wProto", "mixin", "Class", "Object", "Prototype", "Incapsulation" ]
 }
