@@ -2392,16 +2392,18 @@ function getterToValueAccess( test )
 
   /* */
 
-  test.case = 'basic';
+  test.case = 'had value, addingMethods : 1';
   var object =
   {
     'a' : 'a1',
     'b' : 'b1',
+    'c' : 'c1',
   };
   var names =
   {
     _ : { suite : _.accessor.suite.toValue },
     a : {},
+    b : {},
   }
   _.accessor.declare
   ({
@@ -2416,22 +2418,252 @@ function getterToValueAccess( test )
     'get' : object._Get,
     'set' : object._Set,
     'enumerable' : true,
-    'configurable' : false
+    'configurable' : true
   }
   test.identical( _.mapBut( _.propertyDescriptorGet( object, '_' ).descriptor, [ 'value' ] ), exp );
   var exp =
   {
     'a' : 'a1',
     'b' : 'b1',
-    'aSet' : object.aSet,
-    'aGet' : object.aGet,
-    'aPut' : object.aPut,
+    'c' : 'c1',
     '_Get' : object._Get,
     '_Put' : object._Put,
     '_Set' : object._Set,
+    'aSet' : object.aSet,
+    'aGet' : object.aGet,
+    'aPut' : object.aPut,
+    'bSet' : object.bSet,
+    'bGet' : object.bGet,
+    'bPut' : object.bPut,
     '_' :
     {
       'a' : 'a1',
+      'b' : 'b1',
+      'c' : undefined,
+      '_Get' : undefined,
+      '_Put' : undefined,
+      '_Set' : undefined,
+      'aSet' : undefined,
+      'aGet' : undefined,
+      'aPut' : undefined,
+      'bSet' : undefined,
+      'bGet' : undefined,
+      'bPut' : undefined,
+    }
+  }
+
+  test.identical( object, exp );
+  var exp =
+  {
+    'enumerable' : false,
+    'configurable' : false,
+    'writable' : false,
+  }
+  test.identical( _.mapBut( _.propertyDescriptorGet( object, '_' ).descriptor, [ 'value' ] ), exp );
+  test.identical( object.a, 'a1' );
+  test.identical( object._.a, 'a1' );
+  test.identical( object.b, 'b1' );
+  test.identical( object._.b, 'b1' );
+  test.identical( object.c, 'c1' );
+  test.identical( object._.c, undefined );
+
+  object._.a = 'a2';
+  test.identical( object.a, 'a2' );
+  test.identical( object._.a, 'a2' );
+  test.identical( object.b, 'b1' );
+  test.identical( object._.b, 'b1' );
+  test.identical( object.c, 'c1' );
+  test.identical( object._.c, undefined );
+
+  object.a = 'a3';
+  test.identical( object.a, 'a3' );
+  test.identical( object._.a, 'a3' );
+  test.identical( object.b, 'b1' );
+  test.identical( object._.b, 'b1' );
+  test.identical( object.c, 'c1' );
+  test.identical( object._.c, undefined );
+
+  object.b = 'b2';
+  test.identical( object.a, 'a3' );
+  test.identical( object._.a, 'a3' );
+  test.identical( object.b, 'b2' );
+  test.identical( object._.b, 'b2' );
+  test.identical( object.c, 'c1' );
+  test.identical( object._.c, undefined );
+
+  object._.b = 'b3';
+  test.identical( object.a, 'a3' );
+  test.identical( object._.a, 'a3' );
+  test.identical( object.b, 'b3' );
+  test.identical( object._.b, 'b3' );
+  test.identical( object.c, 'c1' );
+  test.identical( object._.c, undefined );
+
+  object.c = 'c2';
+  test.identical( object.a, 'a3' );
+  test.identical( object._.a, 'a3' );
+  test.identical( object.b, 'b3' );
+  test.identical( object._.b, 'b3' );
+  test.identical( object.c, 'c2' );
+  test.identical( object._.c, undefined );
+
+  object._.c = 'c3';
+  test.identical( object.a, 'a3' );
+  test.identical( object._.a, 'a3' );
+  test.identical( object.b, 'b3' );
+  test.identical( object._.b, 'b3' );
+  test.identical( object.c, 'c2' );
+  test.identical( object._.c, 'c3' );
+
+  /* */
+
+  test.case = 'had value, addingMethods : 0';
+  var object =
+  {
+    'a' : 'a1',
+    'b' : 'b1',
+    'c' : 'c1',
+  };
+  var names =
+  {
+    _ : { suite : _.accessor.suite.toValue },
+    a : {},
+    b : {},
+  }
+  _.accessor.declare
+  ({
+    object,
+    names,
+    prime : 0,
+    strict : 0,
+    addingMethods : 0,
+  });
+  var exp =
+  {
+    'enumerable' : true,
+    'configurable' : true
+  }
+  test.identical( _.mapBut( _.propertyDescriptorGet( object, '_' ).descriptor, [ 'value', 'set', 'get' ] ), exp );
+  var exp =
+  {
+    'a' : 'a1',
+    'b' : 'b1',
+    'c' : 'c1',
+    '_' :
+    {
+      'a' : 'a1',
+      'b' : 'b1',
+      'c' : undefined,
+    }
+  }
+
+  test.identical( object, exp );
+  var exp =
+  {
+    'enumerable' : false,
+    'configurable' : false,
+    'writable' : false,
+  }
+  test.identical( _.mapBut( _.propertyDescriptorGet( object, '_' ).descriptor, [ 'value' ] ), exp );
+  test.identical( object.a, 'a1' );
+  test.identical( object._.a, 'a1' );
+  test.identical( object.b, 'b1' );
+  test.identical( object._.b, 'b1' );
+  test.identical( object.c, 'c1' );
+  test.identical( object._.c, undefined );
+
+  object._.a = 'a2';
+  test.identical( object.a, 'a2' );
+  test.identical( object._.a, 'a2' );
+  test.identical( object.b, 'b1' );
+  test.identical( object._.b, 'b1' );
+  test.identical( object.c, 'c1' );
+  test.identical( object._.c, undefined );
+
+  object.a = 'a3';
+  test.identical( object.a, 'a3' );
+  test.identical( object._.a, 'a3' );
+  test.identical( object.b, 'b1' );
+  test.identical( object._.b, 'b1' );
+  test.identical( object.c, 'c1' );
+  test.identical( object._.c, undefined );
+
+  object.b = 'b2';
+  test.identical( object.a, 'a3' );
+  test.identical( object._.a, 'a3' );
+  test.identical( object.b, 'b2' );
+  test.identical( object._.b, 'b2' );
+  test.identical( object.c, 'c1' );
+  test.identical( object._.c, undefined );
+
+  object._.b = 'b3';
+  test.identical( object.a, 'a3' );
+  test.identical( object._.a, 'a3' );
+  test.identical( object.b, 'b3' );
+  test.identical( object._.b, 'b3' );
+  test.identical( object.c, 'c1' );
+  test.identical( object._.c, undefined );
+
+  object.c = 'c2';
+  test.identical( object.a, 'a3' );
+  test.identical( object._.a, 'a3' );
+  test.identical( object.b, 'b3' );
+  test.identical( object._.b, 'b3' );
+  test.identical( object.c, 'c2' );
+  test.identical( object._.c, undefined );
+
+  object._.c = 'c3';
+  test.identical( object.a, 'a3' );
+  test.identical( object._.a, 'a3' );
+  test.identical( object.b, 'b3' );
+  test.identical( object._.b, 'b3' );
+  test.identical( object.c, 'c2' );
+  test.identical( object._.c, 'c3' );
+
+  /* */
+
+  test.case = 'had no value, addingMethods : 1';
+  var object =
+  {
+  };
+  var names =
+  {
+    _ : { suite : _.accessor.suite.toValue },
+    a : {},
+    b : {},
+  }
+  _.accessor.declare
+  ({
+    object,
+    names,
+    prime : 0,
+    strict : 0,
+    addingMethods : 1,
+  });
+  var exp =
+  {
+    'get' : object._Get,
+    'set' : object._Set,
+    'enumerable' : true,
+    'configurable' : true
+  }
+  test.identical( _.mapBut( _.propertyDescriptorGet( object, '_' ).descriptor, [ 'value' ] ), exp );
+  var exp =
+  {
+    'a' : undefined,
+    'b' : undefined,
+    '_Get' : object._Get,
+    '_Put' : object._Put,
+    '_Set' : object._Set,
+    'aSet' : object.aSet,
+    'aGet' : object.aGet,
+    'aPut' : object.aPut,
+    'bSet' : object.bSet,
+    'bGet' : object.bGet,
+    'bPut' : object.bPut,
+    '_' :
+    {
+      'a' : undefined,
       'b' : undefined,
       '_Get' : undefined,
       '_Put' : undefined,
@@ -2439,24 +2671,177 @@ function getterToValueAccess( test )
       'aSet' : undefined,
       'aGet' : undefined,
       'aPut' : undefined,
-      '_' : undefined,
+      'bSet' : undefined,
+      'bGet' : undefined,
+      'bPut' : undefined,
     }
   }
   test.identical( object, exp );
-  test.identical( object.a, exp.a );
-  test.identical( object.b, exp.b );
   var exp =
   {
-    'get' : object._Get,
-    'set' : object._Set,
-    'enumerable' : true,
-    'configurable' : false
+    'enumerable' : false,
+    'configurable' : false,
+    'writable' : false,
   }
   test.identical( _.mapBut( _.propertyDescriptorGet( object, '_' ).descriptor, [ 'value' ] ), exp );
+  test.identical( object.a, undefined );
+  test.identical( object._.a, undefined );
+  test.identical( object.b, undefined );
+  test.identical( object._.b, undefined );
+  test.identical( object.c, undefined );
+  test.identical( object._.c, undefined );
+
+  object._.a = 'a2';
+  test.identical( object.a, 'a2' );
+  test.identical( object._.a, 'a2' );
+  test.identical( object.b, undefined );
+  test.identical( object._.b, undefined );
+  test.identical( object.c, undefined );
+  test.identical( object._.c, undefined );
+
+  object.a = 'a3';
+  test.identical( object.a, 'a3' );
+  test.identical( object._.a, 'a3' );
+  test.identical( object.b, undefined );
+  test.identical( object._.b, undefined );
+  test.identical( object.c, undefined );
+  test.identical( object._.c, undefined );
+
+  object.b = 'b2';
+  test.identical( object.a, 'a3' );
+  test.identical( object._.a, 'a3' );
+  test.identical( object.b, 'b2' );
+  test.identical( object._.b, 'b2' );
+  test.identical( object.c, undefined );
+  test.identical( object._.c, undefined );
+
+  object._.b = 'b3';
+  test.identical( object.a, 'a3' );
+  test.identical( object._.a, 'a3' );
+  test.identical( object.b, 'b3' );
+  test.identical( object._.b, 'b3' );
+  test.identical( object.c, undefined );
+  test.identical( object._.c, undefined );
+
+  object.c = 'c2';
+  test.identical( object.a, 'a3' );
+  test.identical( object._.a, 'a3' );
+  test.identical( object.b, 'b3' );
+  test.identical( object._.b, 'b3' );
+  test.identical( object.c, 'c2' );
+  test.identical( object._.c, undefined );
+
+  object._.c = 'c3';
+  test.identical( object.a, 'a3' );
+  test.identical( object._.a, 'a3' );
+  test.identical( object.b, 'b3' );
+  test.identical( object._.b, 'b3' );
+  test.identical( object.c, 'c2' );
+  test.identical( object._.c, 'c3' );
 
   /**/
 
-  xxx
+  test.case = 'had no value, addingMethods : 0';
+  var object =
+  {
+  };
+  var names =
+  {
+    _ : { suite : _.accessor.suite.toValue },
+    a : {},
+    b : {},
+  }
+  _.accessor.declare
+  ({
+    object,
+    names,
+    prime : 0,
+    strict : 0,
+    addingMethods : 0,
+  });
+  var exp =
+  {
+    // 'get' : object._Get,
+    // 'set' : object._Set,
+    'enumerable' : true,
+    'configurable' : true
+  }
+  test.identical( _.mapBut( _.propertyDescriptorGet( object, '_' ).descriptor, [ 'value', 'get', 'set' ] ), exp );
+  var exp =
+  {
+    'a' : undefined,
+    'b' : undefined,
+    '_' :
+    {
+      'a' : undefined,
+      'b' : undefined,
+    }
+  }
+  test.identical( object, exp );
+  var exp =
+  {
+    'enumerable' : false,
+    'configurable' : false,
+    'writable' : false,
+  }
+  test.identical( _.mapBut( _.propertyDescriptorGet( object, '_' ).descriptor, [ 'value' ] ), exp );
+  test.identical( object.a, undefined );
+  test.identical( object._.a, undefined );
+  test.identical( object.b, undefined );
+  test.identical( object._.b, undefined );
+  test.identical( object.c, undefined );
+  test.identical( object._.c, undefined );
+
+  object._.a = 'a2';
+  test.identical( object.a, 'a2' );
+  test.identical( object._.a, 'a2' );
+  test.identical( object.b, undefined );
+  test.identical( object._.b, undefined );
+  test.identical( object.c, undefined );
+  test.identical( object._.c, undefined );
+
+  object.a = 'a3';
+  test.identical( object.a, 'a3' );
+  test.identical( object._.a, 'a3' );
+  test.identical( object.b, undefined );
+  test.identical( object._.b, undefined );
+  test.identical( object.c, undefined );
+  test.identical( object._.c, undefined );
+
+  object.b = 'b2';
+  test.identical( object.a, 'a3' );
+  test.identical( object._.a, 'a3' );
+  test.identical( object.b, 'b2' );
+  test.identical( object._.b, 'b2' );
+  test.identical( object.c, undefined );
+  test.identical( object._.c, undefined );
+
+  object._.b = 'b3';
+  test.identical( object.a, 'a3' );
+  test.identical( object._.a, 'a3' );
+  test.identical( object.b, 'b3' );
+  test.identical( object._.b, 'b3' );
+  test.identical( object.c, undefined );
+  test.identical( object._.c, undefined );
+
+  object.c = 'c2';
+  test.identical( object.a, 'a3' );
+  test.identical( object._.a, 'a3' );
+  test.identical( object.b, 'b3' );
+  test.identical( object._.b, 'b3' );
+  test.identical( object.c, 'c2' );
+  test.identical( object._.c, undefined );
+
+  object._.c = 'c3';
+  test.identical( object.a, 'a3' );
+  test.identical( object._.a, 'a3' );
+  test.identical( object.b, 'b3' );
+  test.identical( object._.b, 'b3' );
+  test.identical( object.c, 'c2' );
+  test.identical( object._.c, 'c3' );
+
+  /* */
+
 }
 
 //

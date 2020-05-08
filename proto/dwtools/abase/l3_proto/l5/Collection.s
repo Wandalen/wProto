@@ -880,6 +880,7 @@ function toValueGet_functor( o )
           return end();
         }
 
+        let symbol = _.symbolIs( fieldName ) ? fieldName : Symbol.for( fieldName );
         method = setter[ fieldName ] = function put( value )
         {
           this[ symbol ] = value;
