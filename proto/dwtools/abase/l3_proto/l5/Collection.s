@@ -547,7 +547,6 @@ function withSymbolGet_functor( o ) /* xxx : deprecate in favor of toValueGet_fu
           return end();
         }
 
-        // debugger;
         let symbol = _.symbolIs( fieldName ) ? fieldName : Symbol.for( fieldName );
         method = getter[ fieldName ] = function get( value )
         {
@@ -735,9 +734,10 @@ toStructureGet_functor.rubrics = [ 'accessor', 'getter', 'functor' ];
 function toValueGet_functor( o )
 {
 
-  _.assert( arguments.length === 1, 'Expects single argument' );
   _.routineOptions( toValueGet_functor, o );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.strDefined( o.fieldName ) );
+  _.assert( _.longHas( [ 'get', 'suite' ], o.accessorKind ) );
 
   let spaceName = o.fieldName;
   let setter = Object.create( null );

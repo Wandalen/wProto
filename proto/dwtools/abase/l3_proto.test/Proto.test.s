@@ -2030,7 +2030,7 @@ function getterWithSymbol( test )
 
 //
 
-function getterToValue( test )
+function getterToValueDefine( test )
 {
 
   /* */
@@ -2383,6 +2383,80 @@ function getterToValue( test )
 
   /* */
 
+}
+
+//
+
+function getterToValueAccess( test )
+{
+
+  /* */
+
+  test.case = 'basic';
+  var object =
+  {
+    'a' : 'a1',
+    'b' : 'b1',
+  };
+  var names =
+  {
+    _ : { suite : _.accessor.suite.toValue },
+    a : {},
+  }
+  _.accessor.declare
+  ({
+    object,
+    names,
+    prime : 0,
+    strict : 0,
+    addingMethods : 1,
+  });
+  var exp =
+  {
+    'get' : object._Get,
+    'set' : object._Set,
+    'enumerable' : true,
+    'configurable' : false
+  }
+  test.identical( _.mapBut( _.propertyDescriptorGet( object, '_' ).descriptor, [ 'value' ] ), exp );
+  var exp =
+  {
+    'a' : 'a1',
+    'b' : 'b1',
+    'aSet' : object.aSet,
+    'aGet' : object.aGet,
+    'aPut' : object.aPut,
+    '_Get' : object._Get,
+    '_Put' : object._Put,
+    '_Set' : object._Set,
+    '_' :
+    {
+      'a' : 'a1',
+      'b' : undefined,
+      '_Get' : undefined,
+      '_Put' : undefined,
+      '_Set' : undefined,
+      'aSet' : undefined,
+      'aGet' : undefined,
+      'aPut' : undefined,
+      '_' : undefined,
+    }
+  }
+  test.identical( object, exp );
+  test.identical( object.a, exp.a );
+  test.identical( object.b, exp.b );
+  var exp =
+  {
+    'get' : object._Get,
+    'set' : object._Set,
+    'enumerable' : true,
+    'configurable' : false
+  }
+  test.identical( _.mapBut( _.propertyDescriptorGet( object, '_' ).descriptor, [ 'value' ] ), exp );
+
+  /**/
+
+  xxx
 }
 
 //
@@ -3302,7 +3376,8 @@ var Self =
     forbidWithoutConstructor,
 
     getterWithSymbol,
-    getterToValue,
+    getterToValueDefine,
+    getterToValueAccess,
     putterSymbol,
 
     propertyConstant,
