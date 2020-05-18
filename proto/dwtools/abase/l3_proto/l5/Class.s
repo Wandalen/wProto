@@ -649,7 +649,8 @@ function classExtend( o )
 
   _.routineOptions( classExtend, o );
 
-  _.assert( _.objectIs( o.prototype ) );
+  // _.assert( _.objectIs( o.prototype ) );
+  _.assert( !_.primitiveIs( o.prototype ) && !_.routineIs( o.prototype ) );
 
   /* fields groups */
 
@@ -781,12 +782,18 @@ to prioritize ordinary facets adjustment order should be
   function fieldsDeclare( extend, src )
   {
     let map = _.mapBut( src, fieldsGroups );
-
     for( let s in staticsAll )
     if( map[ s ] === staticsAll[ s ] )
     delete map[ s ];
-
     extend( o.prototype, map );
+
+    // if( _global_.debugger )
+    // debugger;
+    // let symbols = Object.getOwnPropertySymbols( src ); debugger;
+    // for( let s in staticsAll )
+    // if( symbols[ s ] === staticsAll[ s ] )
+    // delete symbols[ s ];
+    // extend( o.prototype, symbols );
 
     if( Config.debug )
     if( !o.allowingExtendStatics )

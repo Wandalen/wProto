@@ -809,8 +809,8 @@ function _declareAct( o )
     o2.value = o.amethods.get;
   }
 
-  if( _global_.debugger )
-  debugger;
+  // if( _global_.debugger )
+  // debugger;
   Object.defineProperty( o.object, o.name, o2 );
 
   /* validate */

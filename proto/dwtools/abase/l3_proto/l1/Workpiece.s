@@ -27,7 +27,8 @@ _.assert( _.objectIs( _.field ), 'wProto needs Tools/dwtools/abase/l1/FieldMappe
 
 function fieldsGroupsGet( src )
 {
-  _.assert( _.objectIs( src ), () => 'Expects map {-src-}, but got ' + _.strType( src ) );
+  // _.assert( _.objectIs( src ), () => 'Expects map {-src-}, but got ' + _.strType( src ) );
+  _.assert( !_.primitiveIs( src ), () => 'Expects map {-src-}, but got ' + _.strType( src ) );
   _.assert( src.Groups === undefined || _.objectIs( src.Groups ) );
 
   if( src.Groups )
@@ -395,7 +396,8 @@ function fieldsOfRelationsGroupsFromPrototype( src )
   let prototype = src;
   let result = Object.create( null );
 
-  _.assert( _.objectIs( prototype ) );
+  // _.assert( !_.primitiveIs( prototype ) );
+  _.assert( !_.primitiveIs( prototype ) );
   _.assert( arguments.length === 1, 'Expects single argument' );
 
   for( let g in _.DefaultFieldsGroupsRelations )
@@ -414,7 +416,7 @@ function fieldsOfCopyableGroupsFromPrototype( src )
   let prototype = src;
   let result = Object.create( null );
 
-  _.assert( _.objectIs( prototype ) );
+  _.assert( !_.primitiveIs( prototype ) );
   _.assert( arguments.length === 1, 'Expects single argument' );
 
   for( let g in _.DefaultFieldsGroupsCopyable )
@@ -433,7 +435,7 @@ function fieldsOfTightGroupsFromPrototype( src )
   let prototype = src;
   let result = Object.create( null );
 
-  _.assert( _.objectIs( prototype ) );
+  _.assert( !_.primitiveIs( prototype ) );
   _.assert( arguments.length === 1, 'Expects single argument' );
 
   for( let g in _.DefaultFieldsGroupsTight )
@@ -452,7 +454,7 @@ function fieldsOfInputGroupsFromPrototype( src )
   let prototype = src;
   let result = Object.create( null );
 
-  _.assert( _.objectIs( prototype ) );
+  _.assert( !_.primitiveIs( prototype ) );
   _.assert( arguments.length === 1, 'Expects single argument' );
 
   for( let g in _.DefaultFieldsGroupsInput )
