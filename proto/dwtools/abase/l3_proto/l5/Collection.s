@@ -1118,7 +1118,7 @@ _.assert( _.routineIs( _.accessor.define.getter.alias ) );
 // export
 // --
 
-if( typeof module !== 'undefined' && module !== null )
+if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
 
 })();
