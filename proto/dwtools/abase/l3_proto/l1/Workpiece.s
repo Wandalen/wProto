@@ -1155,9 +1155,9 @@ exportStructure.defaults =
 
 //
 
-function exportInfo( self, ... args )
+function exportString( self, ... args )
 {
-  let o = _.routineOptions( exportInfo, args );
+  let o = _.routineOptions( exportString, args );
 
   _.assert( _.instanceIs( self ) );
   _.assert( o.style === 'nice' );
@@ -1173,7 +1173,7 @@ function exportInfo( self, ... args )
   return o.dst;
 }
 
-exportInfo.defaults =
+exportString.defaults =
 {
   ... exportStructure.defaults,
   dst : '',
@@ -1354,7 +1354,7 @@ let Routines =
   //
 
   exportStructure,
-  exportInfo,
+  exportString,
 
 }
 
