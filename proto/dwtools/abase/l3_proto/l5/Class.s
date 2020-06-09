@@ -256,7 +256,8 @@ function mixinHas( proto, mixin )
  *    self.c = 5;
  *  };
  *
- *  let Self = function Betta( o )
+ *  let Self = Betta;
+function Betta( o )
  *  {
  *    return Self.prototype.init.apply( this, arguments );
  *  }
@@ -571,7 +572,8 @@ classDeclare.defaults =
  * @returns {object} Returns constructor's prototype complemented by fields, static and non-static methods.
  *
  * @example
- * let Self = function Betta( o ) { };
+ * let Self = Betta;
+function Betta( o ) { };
  * let Statics = { staticFunction : function staticFunction(){ } };
  * let Composes = { a : 1, b : 2 };
  * let Proto = { Composes, Statics };

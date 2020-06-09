@@ -907,7 +907,8 @@ var defaults = _declareAct.defaults =
  * // names: { a: 'a', b: 'b' },
  * // message: [ 'set/get call' ] }
  *
- * let Self = function ClassName( o ) { };
+ * let Self = ClassName;
+function ClassName( o ) { };
  * _.accessor._declare_pre( Self, { a : 'a', b : 'b' }, 'set/get call' );
  *
  * @private
@@ -990,7 +991,8 @@ function _declare_pre( routine, args )
  * @param {Object} o - options {@link module:Tools/base/Proto.wTools.accessor~AccessorOptions}.
  *
  * @example
- * let Self = function ClassName( o ) { };
+ * let Self = ClassName;
+function ClassName( o ) { };
  * _.accessor.declare( Self, { a : 'a' }, 'set/get call' )
  * Self.a = 1; // set/get call
  * Self.a;
@@ -1117,7 +1119,8 @@ let declare = _.routineFromPreAndBody( _declare_pre, declare_body );
  * @param {Object} o - options {@link module:Tools/base/Proto.wTools.accessor~AccessorOptions}.
  *
  * @example
- * let Self = function ClassName( o ) { };
+ * let Self = ClassName;
+function ClassName( o ) { };
  * _.accessor.forbid( Self, { a : 'a' } )
  * Self.a; // throw an Error
  *
@@ -1349,7 +1352,8 @@ defaults.protoName = null;
  * @param {String} name - name of the property
  *
  * @example
- * let Self = function ClassName( o ) { };
+ * let Self = ClassName;
+function ClassName( o ) { };
  * _.accessor.forbid( Self, { a : 'a' } );
  * _.accessor.ownForbid( Self, 'a' ) // returns true
  * _.accessor.ownForbid( Self, 'b' ) // returns false
@@ -1407,7 +1411,7 @@ function readOnly_body( o )
   return _.accessor.declare.body( o );
 }
 
-var defaults = readOnly_body.defaults = Object.create( declare.body.defaults );
+var defaults = readOnly_body.defaults = _.mapExtend( null, declare.body.defaults );
 defaults.readOnly = true;
 
 let readOnly = _.routineFromPreAndBody( _declare_pre, readOnly_body );

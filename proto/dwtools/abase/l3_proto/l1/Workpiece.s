@@ -82,7 +82,8 @@ function fieldsGroupFor( dst, fieldsGroupName )
  * @private
  *
  * @example
- * let Self = function ClassName( o ) { };
+ * let Self = ClassName;
+function ClassName( o ) { };
  * _.workpiece.fieldsGroupDeclare
  * ({
  *   fieldsGroupName : { Composes : 'Composes' },
@@ -132,7 +133,8 @@ fieldsGroupDeclare.defaults =
  * @param {array-like} arguments - for arguments details see {@link wTools~protoAddDefaults}.
  *
  * @example
- * let Self = function ClassName( o ) { };
+ * let Self = ClassName;
+function ClassName( o ) { };
  * let Composes = { tree : null };
  * _.workpiece.fieldsGroupComposesExtend( Self.prototype, Composes );
  * console.log( Self.prototype ); // returns { Composes: { tree: null } }
@@ -165,7 +167,8 @@ function fieldsGroupComposesExtend( dstPrototype, srcMap )
  * @param {array-like} arguments - for arguments details see {@link wTools~protoAddDefaults}.
  *
  * @example
- * let Self = function ClassName( o ) { };
+ * let Self = ClassName;
+function ClassName( o ) { };
  * let Aggregates = { tree : null };
  * _.workpiece.fieldsGroupAggregatesExtend( Self.prototype, Aggregates );
  * console.log( Self.prototype ); // returns { Aggregates: { tree: null } }
@@ -198,7 +201,8 @@ function fieldsGroupAggregatesExtend( dstPrototype, srcMap )
  * @param {array-like} arguments - for arguments details see {@link wTools~protoAddDefaults}.
  *
  * @example
- * let Self = function ClassName( o ) { };
+ * let Self = ClassName;
+function ClassName( o ) { };
  * let Associates = { tree : null };
  * _.workpiece.fieldsGroupAssociatesExtend( Self.prototype, Associates );
  * console.log( Self.prototype ); // returns { Associates: { tree: null } }
@@ -231,7 +235,8 @@ function fieldsGroupAssociatesExtend( dstPrototype, srcMap )
  * @param {array-like} arguments - for arguments details see {@link wTools~protoAddDefaults}.
  *
  * @example
- * let Self = function ClassName( o ) { };
+ * let Self = ClassName;
+function ClassName( o ) { };
  * let Restricts = { tree : null };
  * _.workpiece.fieldsGroupRestrictsExtend( Self.prototype, Restricts );
  * console.log( Self.prototype ); // returns { Restricts: { tree: null } }
@@ -264,7 +269,8 @@ function fieldsGroupRestrictsExtend( dstPrototype, srcMap )
  * @param {array-like} arguments - for arguments details see {@link wTools~protoAddDefaults}.
  *
  * @example
- * let Self = function ClassName( o ) { };
+ * let Self = ClassName;
+function ClassName( o ) { };
  * let Composes = { tree : null };
  * _.workpiece.fieldsGroupComposesSupplement( Self.prototype, Composes );
  * console.log( Self.prototype ); // returns { Composes: { tree: null } }
@@ -297,7 +303,8 @@ function fieldsGroupComposesSupplement( dstPrototype, srcMap )
  * @param {array-like} arguments - for arguments details see {@link wTools~protoAddDefaults}.
  *
  * @example
- * let Self = function ClassName( o ) { };
+ * let Self = ClassName;
+function ClassName( o ) { };
  * let Aggregates = { tree : null };
  * _.workpiece.fieldsGroupAggregatesSupplement( Self.prototype, Aggregates );
  * console.log( Self.prototype ); // returns { Aggregates: { tree: null } }
@@ -330,7 +337,8 @@ function fieldsGroupAggregatesSupplement( dstPrototype, srcMap )
  * @param {array-like} arguments - for arguments details see {@link wTools~protoAddDefaults}.
  *
  * @example
- * let Self = function ClassName( o ) { };
+ * let Self = ClassName;
+function ClassName( o ) { };
  * let Associates = { tree : null };
  * _.workpiece.fieldsGroupAssociatesSupplement( Self.prototype, Associates );
  * console.log( Self.prototype ); // returns { Associates: { tree: null } }
@@ -363,7 +371,8 @@ function fieldsGroupAssociatesSupplement( dstPrototype, srcMap )
  * @param {array-like} arguments - for arguments details see {@link wTools~protoAddDefaults}.
  *
  * @example
- * let Self = function ClassName( o ) { };
+ * let Self = ClassName;
+function ClassName( o ) { };
  * let Restricts = { tree : null };
  * _.workpiece.fieldsGroupRestrictsSupplement( Self.prototype, Restricts );
  * console.log( Self.prototype ); // returns { Restricts: { tree: null } }
@@ -780,7 +789,8 @@ function finit( src )
  * @param {object} instance - instance to complement.
  *
  * @example
- * let Self = function Alpha( o ) { };
+ * let Self = Alpha;
+function Alpha( o ) { };
  *
  * let Proto = { constructor: Self, Composes : { a : 1, b : 2 } };
  *
