@@ -158,7 +158,7 @@ function mixinApply( mixinDescriptor, dstPrototype )
 {
 
   _.assert( arguments.length === 2, 'Expects exactly two arguments' );
-  _.assert( _.objectIs( dstPrototype ), () => 'Second argument {-dstPrototype-} does not look like prototype, got ' + _.strType( dstPrototype ) );
+  _.assert( !_.primitiveIs( dstPrototype ), () => 'Second argument {-dstPrototype-} does not look like prototype, got ' + _.strType( dstPrototype ) );
   _.assert( _.routineIs( mixinDescriptor.mixin ), 'First argument does not look like mixin descriptor' );
   _.assert( _.objectIs( mixinDescriptor ) );
   _.assert( Object.isFrozen( mixinDescriptor ), 'First argument does not look like mixin descriptor' );
