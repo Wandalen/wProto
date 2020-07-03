@@ -19,6 +19,26 @@ if( typeof module !== 'undefined' )
 var _global = _global_;
 var _ = _global_.wTools;
 
+/* xxx :
+
+allow for _.blueprint.define to have in blueprint other bluprints
+
+let Action = _.blueprint.define
+({
+  name : null,
+  status : null, // xxx : use ActionStatus immediately
+});
+
+
+let ActionStatus = _.blueprint.define
+({
+  current : null,
+  error : null,
+  outdated : null,
+});
+
+*/
+
 // --
 // test
 // --
