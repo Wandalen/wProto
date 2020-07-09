@@ -19,7 +19,7 @@ let _ = _global_.wTools;
 let _ObjectHasOwnProperty = Object.hasOwnProperty;
 let _ObjectPropertyIsEumerable = Object.propertyIsEnumerable;
 
-_.assert( _.objectIs( _.field ), 'wProto needs Tools/dwtools/abase/l1/FieldMapper.s' );
+_.assert( _.objectIs( _.field ), 'wProto needs Tools/wtools/abase/l1/FieldMapper.s' );
 
 // --
 // fields group

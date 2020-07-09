@@ -123,7 +123,7 @@ module:
       entry.proto.no.tests:
         criterion:
           tests: no.tests
-        path: ../proto/dwtools/abase/l3_proto/Include.s
+        path: ../proto/wtools/abase/l3_proto/Include.s
       entry.proto.only.tests:
         criterion:
           tests: only.tests
@@ -133,13 +133,13 @@ module:
           debug: debug
           raw: raw
           content: prime
-        path: '{path::out.*=1}/proto/dwtools/abase/l3_proto/Include.s'
+        path: '{path::out.*=1}/proto/wtools/abase/l3_proto/Include.s'
       entry.out.raw.debug.release:
         criterion:
           debug: release
           raw: raw
           content: prime
-        path: '{path::out.*=1}/proto/dwtools/abase/l3_proto/Include.s'
+        path: '{path::out.*=1}/proto/wtools/abase/l3_proto/Include.s'
       entry.out.compiled.debug.debug:
         criterion:
           debug: debug
@@ -166,28 +166,28 @@ module:
         path:
           - ../proto
           - ../proto/Integration.test.s
-          - ../proto/dwtools
-          - ../proto/dwtools/Tools.s
-          - ../proto/dwtools/abase
-          - ../proto/dwtools/abase/l3_proto
-          - ../proto/dwtools/abase/l3_proto/Include.s
-          - ../proto/dwtools/abase/l3_proto/l1
-          - ../proto/dwtools/abase/l3_proto/l1/Define.s
-          - ../proto/dwtools/abase/l3_proto/l1/Proto.s
-          - ../proto/dwtools/abase/l3_proto/l1/Workpiece.s
-          - ../proto/dwtools/abase/l3_proto/l3
-          - ../proto/dwtools/abase/l3_proto/l3/Accessor.s
-          - ../proto/dwtools/abase/l3_proto/l5
-          - ../proto/dwtools/abase/l3_proto/l5/Class.s
-          - ../proto/dwtools/abase/l3_proto/l5/Collection.s
-          - ../proto/dwtools/abase/l3_proto/l5/Like.s
-          - ../proto/dwtools/abase/l3_proto.test
-          - ../proto/dwtools/abase/l3_proto.test/Blueprint.test.s
-          - ../proto/dwtools/abase/l3_proto.test/Class.test.s
-          - ../proto/dwtools/abase/l3_proto.test/Like.test.s
-          - ../proto/dwtools/abase/l3_proto.test/Proto.test.s
-          - ../proto/dwtools/amid
-          - ../proto/dwtools/atop
+          - ../proto/wtools
+          - ../proto/wtools/Tools.s
+          - ../proto/wtools/abase
+          - ../proto/wtools/abase/l3_proto
+          - ../proto/wtools/abase/l3_proto/Include.s
+          - ../proto/wtools/abase/l3_proto/l1
+          - ../proto/wtools/abase/l3_proto/l1/Define.s
+          - ../proto/wtools/abase/l3_proto/l1/Proto.s
+          - ../proto/wtools/abase/l3_proto/l1/Workpiece.s
+          - ../proto/wtools/abase/l3_proto/l3
+          - ../proto/wtools/abase/l3_proto/l3/Accessor.s
+          - ../proto/wtools/abase/l3_proto/l5
+          - ../proto/wtools/abase/l3_proto/l5/Class.s
+          - ../proto/wtools/abase/l3_proto/l5/Collection.s
+          - ../proto/wtools/abase/l3_proto/l5/Like.s
+          - ../proto/wtools/abase/l3_proto.test
+          - ../proto/wtools/abase/l3_proto.test/Blueprint.test.s
+          - ../proto/wtools/abase/l3_proto.test/Class.test.s
+          - ../proto/wtools/abase/l3_proto.test/Like.test.s
+          - ../proto/wtools/abase/l3_proto.test/Proto.test.s
+          - ../proto/wtools/amid
+          - ../proto/wtools/atop
     submodule:
       wTools:
         path: 'npm:///wTools'
@@ -942,7 +942,7 @@ module:
       entry.proto.no.tests:
         criterion:
           tests: no.tests
-        path: proto/dwtools/abase/l3_proto/Include.s
+        path: proto/wtools/abase/l3_proto/Include.s
       entry.proto.only.tests:
         criterion:
           tests: only.tests
@@ -952,13 +952,13 @@ module:
           debug: debug
           raw: raw
           content: prime
-        path: '{path::out.*=1}/proto/dwtools/abase/l3_proto/Include.s'
+        path: '{path::out.*=1}/proto/wtools/abase/l3_proto/Include.s'
       entry.out.raw.debug.release:
         criterion:
           debug: release
           raw: raw
           content: prime
-        path: '{path::out.*=1}/proto/dwtools/abase/l3_proto/Include.s'
+        path: '{path::out.*=1}/proto/wtools/abase/l3_proto/Include.s'
       entry.out.compiled.debug.debug:
         criterion:
           debug: debug

@@ -53,8 +53,8 @@ let _ObjectHasOwnProperty = Object.hasOwnProperty;
 let _ObjectPropertyIsEumerable = Object.propertyIsEnumerable;
 let _nameFielded = _.nameFielded;
 
-_.assert( _.objectIs( _.field ), 'wProto needs Tools/dwtools/abase/l1/FieldMapper.s' );
-_.assert( _.routineIs( _nameFielded ), 'wProto needs Tools/dwtools/l3/NameTools.s' );
+_.assert( _.objectIs( _.field ), 'wProto needs Tools/wtools/abase/l1/FieldMapper.s' );
+_.assert( _.routineIs( _nameFielded ), 'wProto needs Tools/wtools/l3/NameTools.s' );
 
 //
 

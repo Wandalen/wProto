@@ -10,8 +10,8 @@ let _ObjectHasOwnProperty = Object.hasOwnProperty;
 let _ObjectPropertyIsEumerable = Object.propertyIsEnumerable;
 let _nameFielded = _.nameFielded;
 
-_.assert( _.objectIs( _.field ), 'wProto needs wTools/staging/dwtools/abase/l1/FieldMapper.s' );
-_.assert( _.routineIs( _nameFielded ), 'wProto needs wTools/staging/dwtools/l3/NameTools.s' );
+_.assert( _.objectIs( _.field ), 'wProto needs wTools/staging/wtools/abase/l1/FieldMapper.s' );
+_.assert( _.routineIs( _nameFielded ), 'wProto needs wTools/staging/wtools/l3/NameTools.s' );
 
 /**
  * @summary Collection of routines for declaring accessors
