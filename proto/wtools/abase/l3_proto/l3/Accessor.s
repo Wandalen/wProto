@@ -64,13 +64,30 @@ _.assert( _.routineIs( _nameFielded ), 'wProto needs wTools/staging/wtools/l3/Na
  * @property {Boolean} [ enumerable=1 ]
  * @property {Boolean} [ configurable=0 ]
  * @property {Function} [ getter=null ]
+ * @property {Function} [ taker=null ]
  * @property {Function} [ setter=null ]
  * @property {Function} [ suite=null ]
  * @namespace Tools.accessor
  **/
 
+
+let AccessorType = [ 'take', 'get', 'put', 'set', 'copy' ];
+let AccessorTypeMap =
+{
+  take : null,
+  get : null,
+  put : null,
+  set : null,
+  copy : null,
+  suite : null,
+}
+let Combining = [ 'rewrite', 'supplement', 'apppend', 'prepend' ];
+
 let AccessorDefaults =
 {
+
+  ... AccessorTypeMap,
+  suite : null,
 
   strict : 1,
   preservingValue : null,
@@ -83,16 +100,13 @@ let AccessorDefaults =
   readOnly : 0,
   readOnlyProduct : 0,
 
-  get : null,
-  set : null,
-  put : null,
-  copy : null,
-  suite : null, /* xxx : rename? */
-
 }
 
 let AccessorPreferences =
 {
+
+  ... AccessorTypeMap,
+  suite : null,
 
   strict : 1,
   preservingValue : 1,
@@ -104,12 +118,6 @@ let AccessorPreferences =
 
   readOnly : 0,
   readOnlyProduct : 0,
-
-  get : null,
-  set : null,
-  put : null,
-  copy : null,
-  suite : null, /* xxx : rename? */
 
 }
 
@@ -124,14 +132,48 @@ function _propertyGetterSetterNames( propertyName )
   _.assert( arguments.length === 1 );
   _.assert( _.strIs( propertyName ) );
 
-  result.set = '_' + propertyName + 'Set';
+  result.take = '_' + propertyName + 'Take';
   result.get = '_' + propertyName + 'Get';
   result.put = '_' + propertyName + 'Put';
+  result.set = '_' + propertyName + 'Set';
   result.copy = '_' + propertyName + 'Copy';
 
   /* xxx : use it more extensively */
 
   return result;
+}
+
+//
+
+function _optionsNormalize( o )
+{
+
+  _.assert( arguments.length === 1 );
+
+  optionNormalize( 'take', 'get' );
+  optionNormalize( 'get', 'take' );
+  optionNormalize( 'put' );
+  optionNormalize( 'set', 'put' );
+
+  // debugger;
+  // _.assert( _.boolIs( o.take ) || _.routineIs( o.take ) );
+  // _.assert( _.boolIs( o.get ) || _.routineIs( o.get ) );
+  // _.assert( _.boolIs( o.put ) || _.routineIs( o.put ) );
+  // _.assert( _.boolIs( o.set ) || _.routineIs( o.set ) );
+
+  function optionNormalize( n1, n2 )
+  {
+    if( o[ n1 ] === null )
+    {
+      if( o.suite && o.suite[ n1 ] !== undefined && o.suite[ n1 ] !== null )
+      o[ n1 ] = o.suite[ n1 ];
+      else if( n2 && o[ n2 ] !== null )
+      o[ n1 ] = !!o[ n2 ];
+    }
+    if( _.boolLike( o[ n1 ] ) )
+    o[ n1 ] = !!o[ n1 ];
+  }
+
 }
 
 //
@@ -142,122 +184,140 @@ function _methodsMake( o )
 
   _.assert( arguments.length === 1 );
   _.assert( _.objectLikeOrRoutine( o.methods ) );
-  _.assert( _.strIs( o.name ) );
+  _.assert( _.strIs( o.name ) || _.symbolIs( o.name ) );
   _.assert( !!o.object );
   _.assertRoutineOptions( _methodsMake, o );
 
   if( o.suite )
   {
-    // _.assertMapHasOnly( o.suite, { get : null, set : null, put : null, copy : null } );
-    // debugger;
     _.assertMapHasOnly( o.suite, _.accessor.AccessorType );
   }
 
-  if( o.suite && o.set === null && o.suite.set )
-  o.set = o.suite.set;
-  if( _.boolLike( o.set ) )
-  o.set = !!o.set;
-
-  if( o.suite && o.get === null && o.suite.get )
-  o.get = o.suite.get;
-  if( _.boolLike( o.get ) )
-  o.get = !!o.get;
-
-  if( o.get !== false && o.get !== 0 )
+  let fieldName;
+  let fieldSymbol;
+  if( _.symbolIs( o.name ) )
   {
-    if( o.get )
-    result.get = o.get;
-    else if( o.suite && o.suite.get )
-    result.get = o.suite.get;
-    else if( o.methods[ '' + o.name + 'Get' ] )
-    result.get = o.methods[ o.name + 'Get' ];
-    else if( o.methods[ '_' + o.name + 'Get' ] )
-    result.get = o.methods[ '_' + o.name + 'Get' ];
+    fieldName = Symbol.keyFor( o.name );
+    fieldSymbol = o.name;
+  }
+  else
+  {
+    fieldName = o.name;
+    fieldSymbol = Symbol.for( o.name );
   }
 
-  if( o.set !== false && o.set !== 0 )
-  {
-    if( o.set )
-    result.set = o.set;
-    else if( o.suite && o.suite.set )
-    result.set = o.suite.set;
-    else if( o.methods[ '' + o.name + 'Set' ] )
-    result.set = o.methods[ o.name + 'Set' ];
-    else if( o.methods[ '_' + o.name + 'Set' ] )
-    result.set = o.methods[ '_' + o.name + 'Set' ];
-  }
+  methodsNormalize( 'take' );
+  methodsNormalize( 'get' );
+  methodsNormalize( 'put' );
+  methodsNormalize( 'set' );
+  methodsNormalize( 'copy' );
 
-  if( o.put !== false && o.put !== 0 )
-  {
-    if( o.put )
-    result.put = o.put;
-    else if( o.suite && o.suite.put )
-    result.put = o.suite.put;
-    else if( o.methods[ '' + o.name + 'Put' ] )
-    result.put = o.methods[ o.name + 'Put' ];
-    else if( o.methods[ '_' + o.name + 'Put' ] )
-    result.put = o.methods[ '_' + o.name + 'Put' ];
-  }
-
-  if( o.copy )
+  if( _global_.debugger )
   debugger;
-  if( o.copy !== false && o.copy !== 0 )
-  {
-    if( o.copy )
-    result.copy = o.copy;
-    else if( o.suite && o.suite.copy )
-    result.copy = o.suite.copy;
-    else if( o.methods[ '' + o.name + 'Copy' ] )
-    result.copy = o.methods[ o.name + 'Copy' ];
-    else if( o.methods[ '_' + o.name + 'Copy' ] )
-    result.copy = o.methods[ '_' + o.name + 'Copy' ];
-  }
 
-  let fieldName = '_' + o.name;
-  let fieldSymbol = Symbol.for( o.name );
+  /* take */
 
-  /* copy */
-
-  if( result.copy )
+  if( !result.take || result.take === true )
+  if( o.take === null || o.take === true || o.take === 1 )
   {
     let copy = result.copy;
-    let name = o.name;
-
-    if( !result.set && o.set === null )
-    result.set = function set( src )
+    if( copy )
+    result.take = function take()
     {
       let it = _.accessor.copyIterationMake
       ({
-        dstInstance : this,
-        instanceKey : name,
-        value : src,
+        srcInstance : this,
+        instanceKey : fieldName,
+        accessorKind : 'take',
       });
       copy.call( this, it );
       return it.value;
     }
+    else if( _.routineIs( result.get ) )
+    result.take = result.get;
+    else
+    result.take = function take()
+    {
+      return this[ fieldSymbol ];
+    }
+  }
 
-    if( !result.get && o.get === null )
+  /* get */
+
+  if( !result.get || result.get === true )
+  if( o.get === null || o.get === true || o.get === 1 )
+  {
+    let copy = result.copy;
+    if( copy )
     result.get = function get()
     {
       let it = _.accessor.copyIterationMake
       ({
         srcInstance : this,
-        instanceKey : name,
+        instanceKey : fieldName,
+        accessorKind : 'get',
       });
       copy.call( this, it );
       return it.value;
     }
+    else if( result.take )
+    result.get = result.take;
+    else
+    result.get = function get()
+    {
+      return this[ fieldSymbol ];
+    }
+  }
 
+  /* put */
+
+  if( !result.put || result.put === true )
+  if( o.put === null || o.put === true || o.put === 1 )
+  {
+    let copy = result.copy;
+    if( copy )
+    result.put = function put( src )
+    {
+      let it = _.accessor.copyIterationMake
+      ({
+        dstInstance : this,
+        instanceKey : fieldName,
+        value : src,
+        accessorKind : 'put',
+      });
+      copy.call( this, it );
+      return it.value;
+    }
+    else if( result.set )
+    result.put = result.set;
+    else
+    result.put = function put( src )
+    {
+      this[ fieldSymbol ] = src;
+      return src;
+    }
   }
 
   /* set */
 
-  // if( !result.set && o.set === null )
-  // if( !result.set && o.set === null || o.set === true || o.set === 1 )
-  if( !result.set )
+  if( !result.set || result.set === true )
   if( o.set === null || o.set === true || o.set === 1 )
   {
-    if( result.put )
+    let copy = result.copy;
+    if( copy )
+    result.set = function set( src )
+    {
+      let it = _.accessor.copyIterationMake
+      ({
+        dstInstance : this,
+        instanceKey : fieldName,
+        value : src,
+        accessorKind : 'set',
+      });
+      copy.call( this, it );
+      return it.value;
+    }
+    else if( result.put )
     result.set = result.put;
     else
     result.set = function set( src )
@@ -267,62 +327,12 @@ function _methodsMake( o )
     }
   }
 
-  // if( result.set && !result.setName )
-  // {
-  //   if( o.object[ o.name + 'Set' ] )
-  //   result.setName = o.name + 'Set';
-  //   else if( o.object[ '_' + o.name + 'Set' ] )
-  //   result.setName = '_' + o.name + 'Set';
-  //   else
-  //   result.setName = o.name + 'Set';
-  // }
+  /* copy */
 
-  /* get */
-
-  if( !result.get )
-  if( o.get === null || o.get === true || o.get === 1 )
-  {
-    result.get = function get()
-    {
-      return this[ fieldSymbol ];
-    }
-  }
-
-  // if( result.get && !result.getName )
-  // {
-  //   if( o.object[ o.name + 'Get' ] )
-  //   result.getName = o.name + 'Get';
-  //   else if( o.object[ '_' + o.name + 'Get' ] )
-  //   result.getName = '_' + o.name + 'Get';
-  //   else
-  //   result.setName = o.name + 'Get';
-  // }
-
-  /* put */
-
-  // if( !result.put && o.put === null )
-  if( !result.put )
-  if( o.put === null || o.put === true || o.put === 1 )
-  // if( o.put === true || o.put === 1 )
-  {
-    if( result.set )
-    result.put = result.set;
-    else
-    result.put = function put( src )
-    {
-      this[ fieldSymbol ] = src;
-    }
-  }
-
-  // if( result.put && !result.putName )
-  // {
-  //   if( o.object[ o.name + 'Put' ] )
-  //   result.putName = o.name + 'Put';
-  //   else if( o.object[ '_' + o.name + 'Put' ] )
-  //   result.putName = '_' + o.name + 'Put';
-  //   else
-  //   result.setName = o.name + 'Put';
-  // }
+  // if( result.copy )
+  // debugger;
+  // if( result.copy )
+  // copyNormalize();
 
   /* readOnlyProduct */
 
@@ -341,30 +351,142 @@ function _methodsMake( o )
 
   /* validation */
 
-  _.assert( !result.set || o.set !== false, () => 'Field ' + _.strQuote( o.name ) + ' is read only, but setter found in' + _.toStrShort( o.methods ) );
-  _.assert( !!result.set || o.set === false, () => 'Field ' + _.strQuote( o.name ) + ' is not read only, but setter not found in' + _.toStrShort( o.methods ) );
-  _.assert( !!result.get || o.get === false, () => 'Field ' + _.strQuote( o.name ) + ' is not read only, but getter not found in' + _.toStrShort( o.methods ) );
-  _.assert( !!result.put || !o.put, () => 'Field ' + _.strQuote( o.name ) + ' putter not found in' + _.toStrShort( o.methods ) );
+  _.assert
+  (
+    !result.set || o.set !== false,
+    () => `Field "${fieldName}" is read only, but setter found in ${_.toStrShort( o.methods )}`
+  );
+  _.assert
+  (
+    !!result.set || o.set === false,
+    () => `Field "${fieldName}" is not read only, but setter not found in ${_.toStrShort( o.methods )}`
+  );
+  _.assert
+  (
+    !!result.get || o.get === false,
+    () => `Field "${fieldName}" is not read only, but getter not found in ${_.toStrShort( o.methods )}`
+  );
+  _.assert
+  (
+    !!result.take || o.take === false,
+    () => `Field "${fieldName}" is not read only, but taker not found in ${_.toStrShort( o.methods )}`
+  );
+  _.assert
+  (
+    !!result.put || !o.put,
+    () => `Field "${fieldName}" putter not found in ${_.toStrShort( o.methods )}`
+  );
+
+  _.assert
+  (
+    result.take === undefined || _.routineIs( result.take ),
+    () =>  `Expects routine, but take-accessor of field "${fieldName}" is ${_.toStrShort( o.take )}`
+  );
+  _.assert
+  (
+    result.get === undefined || _.routineIs( result.get ) || _.definitionIs( result.get ),
+    () =>  `Expects routine, but get-accessor of field "${fieldName}" is ${_.toStrShort( o.get )}`
+  );
+  _.assert
+  (
+    result.put === undefined || _.routineIs( result.put ),
+    () =>  `Expects routine, but put-accessor of field "${fieldName}" is ${_.toStrShort( o.put )}`
+  );
+  _.assert
+  (
+    result.set === undefined || _.routineIs( result.set ),
+    () =>  `Expects routine, but set-accessor of field "${fieldName}" is ${_.toStrShort( o.set )}`
+  );
+
+  // _.assert( _.boolLike( result.take ) || _.routineIs( result.take ) );
+  // _.assert( _.boolLike( result.get ) || _.routineIs( result.get ) );
+  // _.assert( _.boolLike( result.put ) || _.routineIs( result.put ) );
+  // _.assert( _.boolLike( result.set ) || _.routineIs( result.set ) );
 
   return result;
+
+  /* */
+
+  // function copyNormalize()
+  // {
+  //   let copy = result.copy;
+  //
+  //   if( !result.set && o.set === null )
+  //   result.set = function set( src )
+  //   {
+  //     let it = _.accessor.copyIterationMake
+  //     ({
+  //       dstInstance : this,
+  //       instanceKey : fieldName,
+  //       value : src,
+  //     });
+  //     copy.call( this, it );
+  //     return it.value;
+  //   }
+  //
+  //   if( !result.get && o.get === null )
+  //   result.get = function get()
+  //   {
+  //     let it = _.accessor.copyIterationMake
+  //     ({
+  //       srcInstance : this,
+  //       instanceKey : fieldName,
+  //     });
+  //     copy.call( this, it );
+  //     return it.value;
+  //   }
+  // }
+
+  /* */
+
+  function methodsNormalize( name )
+  {
+    let capitalName = _.strCapitalize( name );
+    if( o[ name ] !== false && o[ name ] !== 0 )
+    {
+      if( o[ name ] )
+      result[ name ] = o[ name ];
+      else if( o.suite && o.suite[ name ] )
+      result[ name ] = o.suite[ name ];
+      else if( o.methods[ '' + fieldName + capitalName ] )
+      result[ name ] = o.methods[ fieldName + capitalName ];
+      else if( o.methods[ '_' + fieldName + capitalName ] )
+      result[ name ] = o.methods[ '_' + fieldName + capitalName ];
+    }
+  }
+
+  /* */
+
+  // function optionNormalize( n1, n2 )
+  // {
+  //   if( o[ n1 ] === null )
+  //   {
+  //     if( o.suite && o.suite[ n1 ] !== undefined && o.suite[ n1 ] !== null )
+  //     o[ n1 ] = o.suite[ n1 ];
+  //     else if( o[ n2 ] !== null )
+  //     o[ n1 ] = !!o[ n2 ];
+  //   }
+  //   if( _.boolLike( o[ n1 ] ) )
+  //   o[ n1 ] = !!o[ n1 ];
+  // }
+
+  /* */
+
 }
 
 _methodsMake.defaults =
 {
+  ... AccessorTypeMap,
+  suite : null,
+
   name : null,
   object : null,
   methods : null,
   readOnlyProduct : 0, /* xxx */
-  copy : null,
-  set : null,
-  get : null,
-  put : null,
-  suite : null,
 }
 
 //
 
-// function _methodsUnfunct( amethods, accessor )
 function _methodsUnfunct( o )
 {
 
@@ -372,9 +494,10 @@ function _methodsUnfunct( o )
   _.assert( _.mapIs( o.amethods ) );
   _.assertRoutineOptions( _methodsUnfunct, arguments );
 
+  resultUnfunct( 'take' );
   resultUnfunct( 'get' );
-  resultUnfunct( 'set' );
   resultUnfunct( 'put' );
+  resultUnfunct( 'set' );
   resultUnfunct( 'copy' );
 
   return o.amethods;
@@ -413,7 +536,7 @@ function _methodUnfunct( o )
   if( !_.routineIs( o.amethod ) )
   return o.amethod;
 
-  if( o.amethod && o.amethod.rubrics && _.longHas( o.amethod.rubrics, 'functor' ) )
+  if( o.amethod && o.amethod.identity && _.longHas( o.amethod.identity, 'functor' ) )
   {
     let o2 = Object.create( null );
     if( o.amethod.defaults )
@@ -453,9 +576,7 @@ function _methodsNames( o )
   _.assert( _.strIs( o.name ) );
   _.assert( !!o.object );
 
-  /* get */
-
-  for( let t = 0 ; t < _.accessor.AccessorType.length ; t++ )
+  for( let t = 0 ; t < _.accessor.AccessorType.length ; t++ ) /* xxx */
   {
     let type = _.accessor.AccessorType[ t ];
     if( o.amethods[ type ] && !o.anames[ type ] )
@@ -491,13 +612,15 @@ function _methodsRetrieve( object, propertyName )
   _.assert( _.objectIs( object ) );
   _.assert( _.strIs( propertyName ) );
 
-  result.setName = object[ propertyName + 'Set' ] ? propertyName + 'Set' : '_' + propertyName + 'Set';
+  result.takeName = object[ propertyName + 'Take' ] ? propertyName + 'Take' : '_' + propertyName + 'Take';
   result.getName = object[ propertyName + 'Get' ] ? propertyName + 'Get' : '_' + propertyName + 'Get';
-  result.copyName = object[ propertyName + 'Copy' ] ? propertyName + 'Copy' : '_' + propertyName + 'Copy';
   result.putName = object[ propertyName + 'Put' ] ? propertyName + 'Put' : '_' + propertyName + 'Put';
+  result.setName = object[ propertyName + 'Set' ] ? propertyName + 'Set' : '_' + propertyName + 'Set';
+  result.copyName = object[ propertyName + 'Copy' ] ? propertyName + 'Copy' : '_' + propertyName + 'Copy';
 
-  result.set = object[ result.setName ];
+  result.take = object[ result.takeName ];
   result.get = object[ result.getName ];
+  result.set = object[ result.setName ];
   result.copy = object[ result.copyName ];
   result.put = object[ result.putName ];
 
@@ -509,11 +632,16 @@ function _methodsRetrieve( object, propertyName )
 function _methodsValidate( o )
 {
 
-  _.assert( _.strIs( o.name ) );
+  _.assert( _.strIs( o.name ) || _.symbolIs( o.name ) );
   _.assert( !!o.object );
   _.routineOptions( _methodsValidate, o );
 
-  // let AccessorType = _.accessor.AccessorType;
+  if( _.symbolIs( o.name ) )
+  debugger;
+
+  let name = _.symbolIs( o.name ) ? Symbol.keyFor( o.name ) : o.name;
+
+  // let AccessorType = _.accessor.AccessorType; /* xxx */
   let AccessorType = [ 'get', 'set' ];
 
   for( let t = 0 ; t < AccessorType.length ; t++ )
@@ -521,8 +649,8 @@ function _methodsValidate( o )
     let type = AccessorType[ t ];
     if( !o.amethods[ type ] )
     {
-      let name1 = o.name + _.strCapitalize( type );
-      let name2 = '_' + o.name + _.strCapitalize( type );
+      let name1 = name + _.strCapitalize( type );
+      let name2 = '_' + name + _.strCapitalize( type );
 
       if( name1 in o.object )
       throw _.err( `Object should not have method ${name1}, if accessor has it disabled` );
@@ -574,6 +702,7 @@ copyIterationMake.defaults =
   srcContainer : null,
   dstContainer : null,
   containerKey : null,
+  accessorKind : null,
   value : null,
 }
 
@@ -675,8 +804,23 @@ function _declareAct( o )
 
   _.assertRoutineOptions( _declareAct, arguments );
   _.assert( arguments.length === 1 );
-  _.assert( _.strIs( o.name ) );
+  _.assert( _.strIs( o.name ) || _.symbolIs( o.name ) );
   _.assert( _.longHas( [ null, 0, false, 'rewrite', 'supplement' ], o.combining ), 'not tested' );
+
+  _.accessor._optionsNormalize( o );
+
+  let fieldName;
+  let fieldSymbol;
+  if( _.symbolIs( o.name ) )
+  {
+    fieldName = Symbol.keyFor( o.name );
+    fieldSymbol = o.name;
+  }
+  else
+  {
+    fieldName = o.name;
+    fieldSymbol = Symbol.for( o.name );
+  }
 
   /* */
 
@@ -698,9 +842,12 @@ function _declareAct( o )
     return;
 
     _.assert( o.combining === 'rewrite', 'not implemented' );
-    _.assert( propertyDescriptor.object !== o.object, () => 'Attempt to redefine own accessor ' + _.strQuote( o.name ) + ' of ' + _.toStrShort( o.object ) );
+    _.assert( propertyDescriptor.object !== o.object, () => `Attempt to redefine own accessor "${o.name}" of ${_.toStrShort( o.object )}` );
 
   }
+
+  // if( _global_.debugger )
+  // debugger;
 
   /* */
 
@@ -717,10 +864,11 @@ function _declareAct( o )
     methods : o.methods,
     object : o.object,
     readOnlyProduct : o.readOnlyProduct,
-    put : o.put,
-    copy : o.copy,
+    take : o.take,
     get : o.get,
+    put : o.put,
     set : o.readOnly ? false : o.set,
+    copy : o.copy,
     suite : o.suite,
   });
 
@@ -763,11 +911,11 @@ function _declareAct( o )
 
   }
 
-  let fieldSymbol = Symbol.for( o.name );
+  // let fieldSymbol = _.symbolIs( o.name ) ? o.name : Symbol.for( o.name );
 
   /* preservingValue */
 
-  if( o.preservingValue ) /* xxx : use put */
+  if( o.preservingValue )
   if( _ObjectHasOwnProperty.call( o.object, o.name ) )
   {
     if( o.amethods.put )
@@ -788,30 +936,43 @@ function _declareAct( o )
 
   /* define accessor */
 
-  _.assert( o.amethods.get !== undefined );
+  // _.assert( o.amethods.get !== undefined );
+  _.assert( o.amethods.get === undefined || _.routineIs( o.amethods.get ) || _.definitionIs( o.amethods.get ) );
+  _.assert( o.amethods.set === undefined || _.routineIs( o.amethods.set ) );
 
   let o2 =
   {
     enumerable : !!o.enumerable,
     configurable : !!o.configurable,
   }
-  if( _.routineIs( o.amethods.get ) )
+  if( o.amethods.get === undefined )
   {
     if( o.amethods.set )
-    {
-      o2.set = o.amethods.set;
-    }
+    o2.set = o.amethods.set;
+  }
+  else if( _.routineIs( o.amethods.get ) )
+  {
+    if( o.amethods.set )
+    o2.set = o.amethods.set;
+    // else
+    // o2.writable = false;
     o2.get = o.amethods.get;
   }
   else
   {
     _.assert( o.amethods.set === undefined );
+    if( _.definitionIs( o.amethods.get ) )
+    o2.value = o.amethods.get.ini;
+    else
     o2.value = o.amethods.get;
   }
 
-  // if( _global_.debugger )
+  // if( o.name === 'fieldsOfRelationsGroups' )
   // debugger;
+
   Object.defineProperty( o.object, o.name, o2 );
+
+  // console.log( o.object.fieldsOfRelationsGroups );
 
   /* validate */
 
@@ -827,11 +988,11 @@ function _declareAct( o )
 
   function forbid()
   {
-    let forbiddenName = '_' + o.name;
+    let forbiddenName = '_' + fieldName;
     let m =
     [
-      'use Symbol.for( \'' + o.name + '\' ) ',
-      'to get direct access to property\'s field, ',
+      'Use Symbol.for( \'' + fieldName + '\' ) ',
+      'to get direct access to property value, ',
       'not ' + forbiddenName,
     ].join( '' );
 
@@ -860,15 +1021,6 @@ function _declareAct( o )
       if( o[ k ] === null && _.boolLike( _.accessor.AccessorPreferences[ k ] ) )
       o[ k ] = _.accessor.AccessorPreferences[ k ];
     }
-
-    // if( o.configurable === null )
-    // o.configurable = 0;
-    // if( o.enumerable === null )
-    // o.enumerable = 1;
-    // if( o.addingMethods === null )
-    // o.addingMethods = 0;
-    // if( o.preservingValue === null )
-    // o.preservingValue = 1;
 
     _.assert( _.boolLike( o.prime ) );
     _.assert( _.boolLike( o.configurable ) );
@@ -1034,72 +1186,66 @@ function declare_body( o )
 
   _.assert( !_.primitiveIs( o.object ) );
   _.assert( !_.primitiveIs( o.methods ) );
-
-  // if( o.strict )
-  // {
-  //
-  //   let has =
-  //   {
-  //     constructor : 'constructor',
-  //   }
-  //
-  //   _.assertMapOwnAll( o.object, has );
-  //   _.accessor.forbid
-  //   ({
-  //     object : o.object,
-  //     names : _.DefaultForbiddenNames,
-  //     prime : 0,
-  //     strict : 0,
-  //   });
-  //
-  // }
-
   _.assert( _.objectLikeOrRoutine( o.object ), () => 'Expects object {-object-}, but got ' + _.toStrShort( o.object ) );
   _.assert( _.objectIs( o.names ), () => 'Expects object {-names-}, but got ' + _.toStrShort( o.names ) );
 
   /* */
 
-  for( let n in o.names )
+  // let names1 = Object.getOwnPropertyNames( o.names );
+  // for( let n = 0 ; n < names1.length ; n++ )
+  // declare( names1[ n ], o.names[ names1[ n ] ] );
+
+  for( let name in o.names )
+  declare( name, o.names[ name ] );
+
+  let names2 = Object.getOwnPropertySymbols( o.names );
+  for( let n = 0 ; n < names2.length ; n++ )
+  declare( names2[ n ], o.names[ names2[ n ] ],  );
+
+  /* */
+
+  function declare( name, extension )
   {
+    let o2 = Object.assign( Object.create( null ), o );
 
-    let o2 = o.names[ n ];
-
-    // if( _.routineIs( o2 ) && o2.rubrics && _.longHas( o2.rubrics, 'functor' ) )
-    // {
-    //   if( o2.defaults && o2.defaults.fieldName !== undefined )
-    //   o2 = o2({ fieldName : n });
-    //   else
-    //   o2 = o2();
-    // }
-
-    // o2 = _.accessor._methodUnfunct({ amethod : o2, accessor : o, kind : 'suite' });
-
-    if( _.routineIs( o2 ) && o2.rubrics && _.longHas( o2.rubrics, 'functor' ) )
-    o2 = { suite : o2 }
-
-    _.assert
-    (
-        _.strIs( o2 ) || _.objectIs( o2 )
-      , () => `Expects accessor definition, but got ${ _.strType( o2 ) } for accessor ${ n }`
-    );
-
-    if( _.strIs( o2 ) )
+    if( _.mapIs( extension ) )
     {
-      _.assert( o2 === n, 'map for forbid should have same key and value' );
-      o2 = _.mapExtend( null, o );
-    }
-    else
-    {
-      _.assertMapHasOnly( o2, _.accessor.AccessorDefaults );
-      o2 = _.mapExtend( null, o, o2 );
+      _.assertMapHasOnly( extension, _.accessor.AccessorDefaults );
+      _.mapExtend( o2, extension );
       _.assert( !!o2.object );
     }
+    else if( _.definitionIs( extension ) && extension.subKind === 'constant' )
+    {
+      _.mapExtend( o2, { get : extension, set : false, put : false } );
+    }
+    else if( _.routineIs( extension ) && extension.identity && _.longHas( extension.identity, 'functor' ) )
+    {
+      _.mapExtend( o2, { suite : extension } );
+    }
+    else _.assert( name === extension, `Unexpected type ${_.strType( extension )}` );
 
-    o2.name = n;
+    // _.assert
+    // (
+    //     _.strIs( o2 ) || _.mapIs( o2 )
+    //   , () => `Expects accessor definition, but got ${ _.strType( o2 ) } for accessor ${ name }`
+    // );
+
+    // if( _.strIs( o2 ) )
+    // {
+    //   _.assert( o2 === name, 'map for forbid should have same key and value' );
+    //   o2 = _.mapExtend( null, o );
+    // }
+    // else
+    // {
+    //   _.assertMapHasOnly( o2, _.accessor.AccessorDefaults );
+    //   o2 = _.mapExtend( null, o, o2 );
+    //   _.assert( !!o2.object );
+    // }
+
+    o2.name = name;
     delete o2.names;
 
     _.accessor._declareAct( o2 );
-
   }
 
 }
@@ -1632,9 +1778,6 @@ function _DefineGenerate( original, kind )
 // relations
 // --
 
-let AccessorType = [ 'get', 'set', 'put', 'copy' ];
-let Combining = [ 'rewrite', 'supplement', 'apppend', 'prepend' ];
-
 let DefaultAccessorsMap = Object.create( null );
 DefaultAccessorsMap.Accessors = declare;
 DefaultAccessorsMap.Forbids = forbid;
@@ -1659,6 +1802,7 @@ let AccessorExtension =
   // getter / setter generator
 
   _propertyGetterSetterNames,
+  _optionsNormalize,
   _methodsMake,
   _methodsUnfunct,
   _methodUnfunct,
@@ -1723,6 +1867,7 @@ _.accessor.forbid( _, Forbids );
 _.accessor.forbid( _.accessor, Forbids );
 
 _.accessor.getter = _.accessor.getter || Object.create( null );
+_.accessor.taker = _.accessor.taker || Object.create( null );
 _.accessor.setter = _.accessor.setter || Object.create( null );
 _.accessor.putter = _.accessor.putter || Object.create( null );
 _.accessor.suite = _.accessor.suite || Object.create( null );

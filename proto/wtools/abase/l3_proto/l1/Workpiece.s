@@ -1133,7 +1133,7 @@ function exportStructure( self, ... args )
     {
       if( it.src === self )
       {
-        it.srcToIterate = _.mapOnly( it.src, it.src.Export || it.src.Import );
+        it.srcEffective = _.mapOnly( it.src, it.src.Export || it.src.Import );
         it.iterable = _.looker.containerNameToIdMap.map;
       }
     }

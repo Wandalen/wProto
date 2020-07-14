@@ -918,7 +918,7 @@ function staticDeclare( o )
 
   // debugger;
   if( _.definitionIs( o.value ) )
-  _.mapExtend( o, o.value.initialValueGet() );
+  _.mapExtend( o, o.value.valueGenerate() );
 
   _.routineOptions( staticDeclare, arguments );
   _.assert( _.strIs( o.name ) );

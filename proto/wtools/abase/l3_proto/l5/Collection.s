@@ -465,7 +465,7 @@ symbolPut_functor.defaults =
   fieldName : null,
 }
 
-symbolPut_functor.rubrics = [ 'accessor', 'put', 'functor' ];
+symbolPut_functor.identity = [ 'accessor', 'put', 'functor' ];
 
 //
 
@@ -593,7 +593,7 @@ withSymbolGet_functor.defaults =
   fieldName : null,
 }
 
-withSymbolGet_functor.rubrics = [ 'accessor', 'getter', 'functor' ];
+withSymbolGet_functor.identity = [ 'accessor', 'getter', 'functor' ];
 
 //
 
@@ -727,7 +727,7 @@ toStructureGet_functor.defaults =
   fieldName : null,
 }
 
-toStructureGet_functor.rubrics = [ 'accessor', 'getter', 'functor' ];
+toStructureGet_functor.identity = [ 'accessor', 'getter', 'functor' ];
 
 //
 
@@ -737,7 +737,7 @@ function toValueGet_functor( o )
   _.routineOptions( toValueGet_functor, o );
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.strDefined( o.fieldName ) );
-  _.assert( _.longHas( [ 'get', 'suite' ], o.accessorKind ) );
+  _.assert( _.longHas( [ 'take', 'get', 'suite' ], o.accessorKind ) );
 
   let spaceName = o.fieldName;
   let setter = Object.create( null );
@@ -910,7 +910,7 @@ toValueGet_functor.defaults =
   accessorKind : null,
 }
 
-toValueGet_functor.rubrics = [ 'accessor', 'suite', 'getter', 'functor' ];
+toValueGet_functor.identity = [ 'accessor', 'suite', 'getter', 'functor' ];
 
 //
 

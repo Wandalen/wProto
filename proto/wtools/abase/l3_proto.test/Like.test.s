@@ -4,15 +4,14 @@
 
 if( typeof module !== 'undefined' )
 {
-
-  let _ = require( '../../../../wtools/Tools.s' );
+  let _ = require( '../../../wtools/Tools.s' );
 
   _.include( 'wTesting' );
 
-  if( !_.module.isIncluded( 'wProto' ) )
-  {
+  // if( !_.module.isIncluded( 'wProto' ) )
+  // {
     require( '../../abase/l3_proto/Include.s' );
-  }
+  // }
 
 }
 var _global = _global_;

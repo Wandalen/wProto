@@ -415,26 +415,6 @@ function accessorOptionReadOnly( test )
 
   /* */
 
-  test.case = 'read only explicitly, value in descriptor';
-
-  var dst =
-  {
-  };
-
-  var exp = { 'a' : 'a1' }
-  _global_.debugger = 1; debugger;
-  _.accessor.declare
-  ({
-    object : dst,
-    names : { a : { readOnly : 1, get : 'a1' } },
-    prime : 0,
-  });
-  debugger;
-  test.identical( dst, exp );
-  test.shouldThrowErrorSync( () => dst.a = 'a1' );
-
-  /* */
-
   test.case = 'read only explicitly, value in object';
 
   var dst =
@@ -450,7 +430,7 @@ function accessorOptionReadOnly( test )
     prime : 0,
   });
   test.identical( dst, exp );
-  test.shouldThrowErrorSync( () => dst.a = 'a1' );
+  test.shouldThrowErrorSync( () => dst.a = 'a2' );
 
   /* */
 
@@ -469,7 +449,34 @@ function accessorOptionReadOnly( test )
     prime : 0,
   });
   test.identical( dst, exp );
-  test.shouldThrowErrorSync( () => dst.a = 'a1' );
+  test.shouldThrowErrorSync( () => dst.a = 'a2' );
+
+  /* */
+
+}
+
+//
+
+function declareConstant( test )
+{
+
+  /* */
+
+  test.case = 'read only explicitly, get is definitition';
+
+  var dst =
+  {
+  };
+
+  var exp = { 'a' : 'a1' };
+  _.accessor.declare
+  ({
+    object : dst,
+    names : { a : { readOnly : 1, get : _.define.constant( 'a1' ) } },
+    prime : 0,
+  });
+  test.identical( dst, exp );
+  test.shouldThrowErrorSync( () => dst.a = 'a2' );
 
   /* */
 
@@ -483,11 +490,84 @@ function accessorOptionReadOnly( test )
   _.accessor.declare
   ({
     object : dst,
-    names : { a : { set : false, get : 'a1' } },
+    names : { a : { set : false, get : _.define.constant( 'a1' ) } },
     prime : 0,
   });
   test.identical( dst, exp );
-  test.shouldThrowErrorSync( () => dst.a = 'a1' );
+  test.shouldThrowErrorSync( () => dst.a = 'a2' );
+
+  /* */
+
+  test.case = 'read only implicitly, value instead of descriptor';
+
+  var dst =
+  {
+  };
+
+  var exp = { 'a' : 'a1' }
+  _.accessor.declare
+  ({
+    object : dst,
+    names : { a : _.define.constant( 'a1' ) },
+    prime : 0,
+  });
+  test.identical( dst, exp );
+  test.shouldThrowErrorSync( () => dst.a = 'a2' );
+
+  /* */
+
+}
+
+//
+
+function declareConstantSymbol( test )
+{
+
+  /* */
+
+  test.case = 'read only implicitly, value in descriptor';
+
+  var dst =
+  {
+  };
+
+  var exp = {}
+  _.accessor.declare
+  ({
+    object : dst,
+    names : { [ Symbol.for( 'a' ) ] : { set : false, get : _.define.constant( 'a1' ) } },
+    prime : 0,
+  });
+  test.identical( dst, exp );
+  test.identical( dst[ Symbol.for( 'a' ) ], 'a1' );
+  test.shouldThrowErrorSync( () => dst[ Symbol.for( 'a' ) ] = 'a2' );
+  var exp = { a : 'a3' };
+  dst.a = 'a3';
+  test.identical( dst, exp );
+  test.identical( dst[ Symbol.for( 'a' ) ], 'a1' );
+
+  /* */
+
+  test.case = 'read only implicitly, value instead of descriptor';
+
+  var dst =
+  {
+  };
+
+  var exp = {}
+  _.accessor.declare
+  ({
+    object : dst,
+    names : { [ Symbol.for( 'a' ) ] : _.define.constant( 'a1' ) },
+    prime : 0,
+  });
+  test.identical( dst, exp );
+  test.identical( dst[ Symbol.for( 'a' ) ], 'a1' );
+  test.shouldThrowErrorSync( () => dst[ Symbol.for( 'a' ) ] = 'a2' );
+  var exp = { a : 'a3' };
+  dst.a = 'a3';
+  test.identical( dst, exp );
+  test.identical( dst[ Symbol.for( 'a' ) ], 'a1' );
 
   /* */
 
@@ -556,21 +636,22 @@ function accessorOptionAddingMethods( test )
 
   /* */
 
-  test.case = 'deduce setter from put, object has methods, addingMethods:1';
+  test.case = 'deduce setter from put, deduce get from take, object has methods, addingMethods:1';
   var dst =
   {
     'a' : 'a1',
     'b' : 'b1',
-    aGet : function() { return this.b },
+    aTake : function() { return this.b },
     aPut : function( src ) { this.b = src },
   };
   var exp =
   {
     'a' : 'a1',
     'b' : 'a1',
-    aGet : dst.aGet,
-    aSet : dst.aPut,
+    aTake : dst.aTake,
+    aGet : dst.aTake,
     aPut : dst.aPut,
+    aSet : dst.aPut,
   }
   _.accessor.declare
   ({
@@ -584,21 +665,22 @@ function accessorOptionAddingMethods( test )
 
   /* */
 
-  test.case = 'deduce setter from put, object has methods, with _, addingMethods:1';
+  test.case = 'deduce setter from put and get from take, object has methods, with _, addingMethods:1';
   var dst =
   {
     'a' : 'a1',
     'b' : 'b1',
-    _aGet : function() { return this.b },
+    _aTake : function() { return this.b },
     _aPut : function( src ) { this.b = src },
   };
   var exp =
   {
     'a' : 'a1',
     'b' : 'a1',
-    _aGet : dst._aGet,
-    aSet : dst._aPut,
+    _aTake : dst._aTake,
+    aGet : dst._aTake,
     _aPut : dst._aPut,
+    aSet : dst._aPut,
   }
   _.accessor.declare
   ({
@@ -612,10 +694,10 @@ function accessorOptionAddingMethods( test )
 
   /* */
 
-  test.case = 'deduce setter from put, object does not have methods, with _, addingMethods:1';
+  test.case = 'deduce setter from put and get from take, object does not have methods, with _, addingMethods:1';
   var methods =
   {
-    _aGet : function() { return this.b },
+    _aTake : function() { return this.b },
     _aPut : function( src ) { this.b = src },
   }
   var dst =
@@ -627,7 +709,8 @@ function accessorOptionAddingMethods( test )
   {
     'a' : 'a1',
     'b' : 'a1',
-    aGet : methods._aGet,
+    aTake : methods._aTake,
+    aGet : methods._aTake,
     aSet : methods._aPut,
     aPut : methods._aPut,
   }
@@ -842,7 +925,7 @@ function accessorDeducingMethods( test )
     fieldName : null,
   }
 
-  symbolPut_functor.rubrics = [ 'accessor', 'put', 'functor' ];
+  symbolPut_functor.identity = [ 'accessor', 'put', 'functor' ];
 
   /* */
 
@@ -869,8 +952,9 @@ function accessorDeducingMethods( test )
   {
     'a' : 'a1',
     'b' : 'b1',
-    aPut : object.aPut,
+    aTake : object.aTake,
     aGet : object.aGet,
+    aPut : object.aPut,
   }
   test.identical( object, exp );
 
@@ -882,6 +966,7 @@ function accessorDeducingMethods( test )
     'a' : 'd',
     'b' : 'b1',
     aPut : object.aPut,
+    aTake : object.aTake,
     aGet : object.aGet,
   }
   object.aPut( 'd' );
@@ -912,8 +997,9 @@ function accessorDeducingMethods( test )
   {
     'a' : 'a1',
     'b' : 'b1',
-    aPut : object.aPut,
+    aTake : object.aTake,
     aGet : object.aGet,
+    aPut : object.aPut,
   }
   test.identical( object, exp );
 
@@ -924,10 +1010,65 @@ function accessorDeducingMethods( test )
   {
     'a' : 'd',
     'b' : 'b1',
-    aPut : object.aPut,
+    aTake : object.aTake,
     aGet : object.aGet,
+    aPut : object.aPut,
   }
   object.aPut( 'd' );
+  test.identical( object, exp );
+
+  /* */
+
+  test.case = 'put : false, set : true';
+  var object =
+  {
+    'a' : 'a1',
+    'b' : 'b1',
+  };
+  var names =
+  {
+    a : { put : false, set : true },
+  }
+  _.accessor.declare
+  ({
+    object,
+    names,
+    prime : 0,
+    strict : 0,
+    addingMethods : 1,
+    preservingValue : 1,
+  });
+
+  var exp =
+  {
+    'a' : 'a1',
+    'b' : 'b1',
+    aTake : object.aTake,
+    aGet : object.aGet,
+    aSet : object.aSet,
+  }
+  test.identical( object, exp );
+
+  var exp =
+  {
+    'a' : 'd',
+    'b' : 'b1',
+    aTake : object.aTake,
+    aGet : object.aGet,
+    aSet : object.aSet,
+  }
+  object.aSet( 'd' );
+  test.identical( object, exp );
+
+  var exp =
+  {
+    'a' : 'e',
+    'b' : 'b1',
+    aTake : object.aTake,
+    aGet : object.aGet,
+    aSet : object.aSet,
+  }
+  object.a = 'e';
   test.identical( object, exp );
 
   /* */
@@ -951,34 +1092,17 @@ function accessorDeducingMethods( test )
     addingMethods : 1,
     preservingValue : 1,
   });
+
   var exp =
   {
     'a' : 'a1',
     'b' : 'b1',
-    aSet : object.aSet,
+    aTake : object.aTake,
     aGet : object.aGet,
   }
   test.identical( object, exp );
 
-  var exp =
-  {
-    'a' : 'd',
-    'b' : 'b1',
-    aPut : object.aPut,
-    aGet : object.aGet,
-  }
-  object.aSet( 'd' );
-  test.identical( object, exp );
-
-  var exp =
-  {
-    'a' : 'e',
-    'b' : 'b1',
-    aPut : object.aPut,
-    aGet : object.aGet,
-  }
-  object.a = 'e';
-  test.identical( object, exp );
+  test.shouldThrowErrorSync( () => object.aSet( 'd' ) );
 
   /* */
 
@@ -1030,13 +1154,14 @@ function accessorIsClean( test )
 
   var exp =
   {
+    f2Take : methods.f2Take,
     f2Get : methods.f2Get,
     f2Put : methods.f2Put,
   }
   test.identical( methods, exp );
   test.is( _.routineIs( methods.f2Get ) );
   test.is( _.routineIs( methods.f2Put ) );
-  test.identical( _.mapKeys( methods ).length, 2 );
+  test.identical( _.mapKeys( methods ).length, 3 );
 
   test.case = 'inline no method';
 
@@ -1169,7 +1294,7 @@ function accessorUnfunct( test )
       return this.b;
     }
   }
-  getter_functor.rubrics = [ 'accessor', 'getter', 'functor' ];
+  getter_functor.identity = [ 'accessor', 'getter', 'functor' ];
   getter_functor.defaults =
   {
     fieldName : null,
@@ -1194,7 +1319,7 @@ function accessorUnfunct( test )
     strict : 0,
   });
   test.identical( object, exp );
-  test.identical( counter, 2 );
+  test.identical( counter, 3 );
 
   /* */
 
@@ -1211,7 +1336,7 @@ function accessorUnfunct( test )
       return this.b = src;
     }
   }
-  setter_functor.rubrics = [ 'accessor', 'setter', 'functor' ];
+  setter_functor.identity = [ 'accessor', 'setter', 'functor' ];
   setter_functor.defaults =
   {
     fieldName : null,
@@ -1266,7 +1391,7 @@ function accessorUnfunct( test )
       return this.b = src;
     }
   }
-  putter_functor.rubrics = [ 'accessor', 'put', 'functor' ];
+  putter_functor.identity = [ 'accessor', 'put', 'functor' ];
   putter_functor.defaults =
   {
     fieldName : null,
@@ -1324,7 +1449,7 @@ function accessorUnfunct( test )
       }
     }
   }
-  accessor_functor.rubrics = [ 'accessor', 'functor' ];
+  accessor_functor.identity = [ 'accessor', 'functor' ];
   accessor_functor.defaults =
   {
     fieldName : null,
@@ -1420,7 +1545,7 @@ function accessorUnfunctGetSuite( test )
     accessorKind : null,
   }
 
-  get_functor.rubrics = [ 'accessor', 'suite', 'getter', 'functor' ];
+  get_functor.identity = [ 'accessor', 'suite', 'getter', 'functor' ];
 
   /* - */
 
@@ -1455,11 +1580,13 @@ function accessorUnfunctGetSuite( test )
   {
     'a' : 'a1',
     'b' : 'b1',
-    'aSet' : object.aSet,
+    '_' : 'abc2',
+    'aTake' : object.aTake,
     'aGet' : object.aGet,
     'aPut' : object.aPut,
+    'aSet' : object.aSet,
+    '_Take' : object._Take,
     '_Get' : object._Get,
-    '_' : 'abc2',
   }
   test.identical( object, exp );
   test.identical( object.a, exp.a );
@@ -1500,11 +1627,13 @@ function accessorUnfunctGetSuite( test )
   {
     'a' : 'a1',
     'b' : 'b1',
-    'aSet' : object.aSet,
+    '_' : 'abc1',
+    'aTake' : object.aTake,
     'aGet' : object.aGet,
     'aPut' : object.aPut,
+    'aSet' : object.aSet,
+    '_Take' : object._Take,
     '_Get' : object._Get,
-    '_' : 'abc1',
   }
   test.identical( object, exp );
   test.identical( object.a, exp.a );
@@ -1551,9 +1680,11 @@ function accessorUnfunctGetSuite( test )
   {
     'a' : 'a1',
     'b' : 'b1',
-    'aSet' : object.aSet,
+    'aTake' : object.aTake,
     'aGet' : object.aGet,
     'aPut' : object.aPut,
+    'aSet' : object.aSet,
+    '_Take' : object._Take,
     '_Get' : object._Get,
     '_Put' : object._Put,
     '_Set' : object._Set,
@@ -1598,13 +1729,15 @@ function accessorUnfunctGetSuite( test )
   {
     'a' : 'a1',
     'b' : 'b1',
-    'aSet' : object.aSet,
+    '_' : 'abc2',
+    'aTake' : object.aTake,
     'aGet' : object.aGet,
     'aPut' : object.aPut,
+    'aSet' : object.aSet,
+    '_Take' : object._Take,
     '_Get' : object._Get,
     '_Put' : object._Put,
     '_Set' : object._Set,
-    '_' : 'abc2',
   }
   test.identical( object, exp );
   test.identical( object.a, exp.a );
@@ -1646,13 +1779,15 @@ function accessorUnfunctGetSuite( test )
   {
     'a' : 'a1',
     'b' : 'b1',
-    'aSet' : object.aSet,
+    '_' : 'abc2',
+    'aTake' : object.aTake,
     'aGet' : object.aGet,
     'aPut' : object.aPut,
+    'aSet' : object.aSet,
+    '_Take' : object._Take,
     '_Get' : object._Get,
     '_Put' : object._Put,
     '_Set' : object._Set,
-    '_' : 'abc2',
   }
   test.identical( object, exp );
   test.identical( object.a, exp.a );
@@ -1693,13 +1828,15 @@ function accessorUnfunctGetSuite( test )
   {
     'a' : 'a1',
     'b' : 'b1',
-    'aSet' : object.aSet,
+    '_' : 'abc1',
+    'aTake' : object.aTake,
     'aGet' : object.aGet,
     'aPut' : object.aPut,
+    'aSet' : object.aSet,
+    '_Take' : object._Take,
     '_Get' : object._Get,
     '_Put' : object._Put,
     '_Set' : object._Set,
-    '_' : 'abc1',
   }
   test.identical( object, exp );
   test.identical( object.a, exp.a );
@@ -2007,19 +2144,23 @@ function getterWithSymbol( test )
   {
     'a' : 'a1',
     'b' : 'b1',
-    'aSet' : object.aSet,
+    'aTake' : object.aTake,
     'aGet' : object.aGet,
     'aPut' : object.aPut,
+    'aSet' : object.aSet,
+    '_Take' : object._Take,
     '_Get' : object._Get,
     '_' :
     {
       'a' : 'a1',
       'b' : undefined,
+      '_Take' : undefined,
       '_Get' : undefined,
       '_' : undefined,
-      'aSet' : undefined,
+      'aTake' : undefined,
       'aGet' : undefined,
-      'aPut' : undefined
+      'aSet' : undefined,
+      'aPut' : undefined,
     }
   }
   test.identical( object, exp );
@@ -2066,18 +2207,22 @@ function getterToValueDefine( test )
   {
     'a' : 'a1',
     'b' : 'b1',
-    'aSet' : object.aSet,
+    'aTake' : object.aTake,
     'aGet' : object.aGet,
     'aPut' : object.aPut,
+    'aSet' : object.aSet,
+    '_Take' : object._Take,
     '_Get' : object._Get,
     '_' :
     {
       'a' : 'a1',
       'b' : undefined,
+      '_Take' : undefined,
       '_Get' : undefined,
-      'aSet' : undefined,
+      'aTake' : undefined,
       'aGet' : undefined,
-      'aPut' : undefined
+      'aPut' : undefined,
+      'aSet' : undefined,
     }
   }
   test.identical( object, exp );
@@ -2119,18 +2264,22 @@ function getterToValueDefine( test )
   {
     'a' : 'a1',
     'b' : 'b1',
-    'aSet' : object.aSet,
+    '_Take' : object._Take,
+    '_Get' : object._Get,
+    'aTake' : object.aTake,
     'aGet' : object.aGet,
     'aPut' : object.aPut,
-    '_Get' : object._Get,
+    'aSet' : object.aSet,
     '_' :
     {
       'a' : 'a1',
       'b' : undefined,
+      '_Take' : undefined,
       '_Get' : undefined,
-      'aSet' : undefined,
+      'aTake' : undefined,
       'aGet' : undefined,
       'aPut' : undefined,
+      'aSet' : undefined,
       '_' : undefined,
     }
   }
@@ -2179,9 +2328,11 @@ function getterToValueDefine( test )
   {
     'a' : 'a1',
     'b' : 'b1',
-    'aSet' : object.aSet,
+    'aTake' : object.aTake,
     'aGet' : object.aGet,
     'aPut' : object.aPut,
+    'aSet' : object.aSet,
+    '_Take' : object._Take,
     '_Get' : object._Get,
     '_Put' : object._Put,
     '_Set' : object._Set,
@@ -2189,12 +2340,14 @@ function getterToValueDefine( test )
     {
       'a' : 'a1',
       'b' : undefined,
+      '_Take' : undefined,
       '_Get' : undefined,
       '_Put' : undefined,
       '_Set' : undefined,
-      'aSet' : undefined,
+      'aTake' : undefined,
       'aGet' : undefined,
       'aPut' : undefined,
+      'aSet' : undefined,
     }
   }
   test.identical( object, exp );
@@ -2236,9 +2389,11 @@ function getterToValueDefine( test )
   {
     'a' : 'a1',
     'b' : 'b1',
-    'aSet' : object.aSet,
+    'aTake' : object.aTake,
     'aGet' : object.aGet,
     'aPut' : object.aPut,
+    'aSet' : object.aSet,
+    '_Take' : object._Take,
     '_Get' : object._Get,
     '_Put' : object._Put,
     '_Set' : object._Set,
@@ -2246,12 +2401,14 @@ function getterToValueDefine( test )
     {
       'a' : 'a1',
       'b' : undefined,
+      '_Take' : undefined,
       '_Get' : undefined,
       '_Put' : undefined,
       '_Set' : undefined,
-      'aSet' : undefined,
+      'aTake' : undefined,
       'aGet' : undefined,
       'aPut' : undefined,
+      'aSet' : undefined,
     }
   }
   test.identical( object, exp );
@@ -2293,9 +2450,11 @@ function getterToValueDefine( test )
   {
     'a' : 'a1',
     'b' : 'b1',
-    'aSet' : object.aSet,
+    'aTake' : object.aTake,
     'aGet' : object.aGet,
     'aPut' : object.aPut,
+    'aSet' : object.aSet,
+    '_Take' : object._Take,
     '_Get' : object._Get,
     '_Put' : object._Put,
     '_Set' : object._Set,
@@ -2303,12 +2462,14 @@ function getterToValueDefine( test )
     {
       'a' : 'a1',
       'b' : undefined,
+      '_Take' : undefined,
       '_Get' : undefined,
       '_Put' : undefined,
       '_Set' : undefined,
-      'aSet' : undefined,
+      'aTake' : undefined,
       'aGet' : undefined,
       'aPut' : undefined,
+      'aSet' : undefined,
     }
   }
   test.identical( object, exp );
@@ -2350,9 +2511,11 @@ function getterToValueDefine( test )
   {
     'a' : 'a1',
     'b' : 'b1',
-    'aSet' : object.aSet,
+    'aTake' : object.aTake,
     'aGet' : object.aGet,
     'aPut' : object.aPut,
+    'aSet' : object.aSet,
+    '_Take' : object._Take,
     '_Get' : object._Get,
     '_Put' : object._Put,
     '_Set' : object._Set,
@@ -2360,13 +2523,15 @@ function getterToValueDefine( test )
     {
       'a' : 'a1',
       'b' : undefined,
+      '_' : undefined,
+      '_Take' : undefined,
       '_Get' : undefined,
       '_Put' : undefined,
       '_Set' : undefined,
-      'aSet' : undefined,
+      'aTake' : undefined,
       'aGet' : undefined,
       'aPut' : undefined,
-      '_' : undefined,
+      'aSet' : undefined,
     }
   }
   test.identical( object, exp );
@@ -2421,17 +2586,21 @@ function getterToValueAccess( test )
     'configurable' : true
   }
   test.identical( _.mapBut( _.propertyDescriptorGet( object, '_' ).descriptor, [ 'value' ] ), exp );
+
   var exp =
   {
     'a' : 'a1',
     'b' : 'b1',
     'c' : 'c1',
+    '_Take' : object._Take,
     '_Get' : object._Get,
     '_Put' : object._Put,
     '_Set' : object._Set,
+    'aTake' : object.aTake,
     'aSet' : object.aSet,
     'aGet' : object.aGet,
     'aPut' : object.aPut,
+    'bTake' : object.bTake,
     'bSet' : object.bSet,
     'bGet' : object.bGet,
     'bPut' : object.bPut,
@@ -2440,19 +2609,22 @@ function getterToValueAccess( test )
       'a' : 'a1',
       'b' : 'b1',
       'c' : undefined,
+      '_Take' : undefined,
       '_Get' : undefined,
       '_Put' : undefined,
       '_Set' : undefined,
+      'aTake' : undefined,
       'aSet' : undefined,
       'aGet' : undefined,
       'aPut' : undefined,
+      'bTake' : undefined,
       'bSet' : undefined,
       'bGet' : undefined,
       'bPut' : undefined,
     }
   }
-
   test.identical( object, exp );
+
   var exp =
   {
     'enumerable' : false,
@@ -2648,16 +2820,20 @@ function getterToValueAccess( test )
     'configurable' : true
   }
   test.identical( _.mapBut( _.propertyDescriptorGet( object, '_' ).descriptor, [ 'value' ] ), exp );
+
   var exp =
   {
     'a' : undefined,
     'b' : undefined,
+    '_Take' : object._Take,
     '_Get' : object._Get,
     '_Put' : object._Put,
     '_Set' : object._Set,
+    'aTake' : object.aTake,
     'aSet' : object.aSet,
     'aGet' : object.aGet,
     'aPut' : object.aPut,
+    'bTake' : object.bTake,
     'bSet' : object.bSet,
     'bGet' : object.bGet,
     'bPut' : object.bPut,
@@ -2665,12 +2841,15 @@ function getterToValueAccess( test )
     {
       'a' : undefined,
       'b' : undefined,
+      '_Take' : undefined,
       '_Get' : undefined,
       '_Put' : undefined,
       '_Set' : undefined,
+      'aTake' : undefined,
       'aSet' : undefined,
       'aGet' : undefined,
       'aPut' : undefined,
+      'bTake' : undefined,
       'bSet' : undefined,
       'bGet' : undefined,
       'bPut' : undefined,
@@ -2761,8 +2940,6 @@ function getterToValueAccess( test )
   });
   var exp =
   {
-    // 'get' : object._Get,
-    // 'set' : object._Set,
     'enumerable' : true,
     'configurable' : true
   }
@@ -2872,9 +3049,10 @@ function putterSymbol( test )
   {
     'a' : 'a1',
     'b' : 'b1',
+    aTake : object.aTake,
+    aGet : object.aGet,
     aPut : object.aPut,
     aSet : object.aSet,
-    aGet : object.aGet,
   }
   test.identical( object, exp );
   test.is( object.aPut !== _.accessor.putter.symbol );
@@ -2884,9 +3062,10 @@ function putterSymbol( test )
   {
     'a' : 'c',
     'b' : 'b1',
+    aTake : object.aTake,
+    aGet : object.aGet,
     aPut : object.aPut,
     aSet : object.aSet,
-    aGet : object.aGet,
   }
   test.identical( object, exp );
 
@@ -2895,9 +3074,10 @@ function putterSymbol( test )
   {
     'a' : 'd',
     'b' : 'd',
+    aTake : object.aTake,
+    aGet : object.aGet,
     aPut : object.aPut,
     aSet : object.aSet,
-    aGet : object.aGet,
   }
   test.identical( object, exp );
 
@@ -2906,66 +3086,12 @@ function putterSymbol( test )
   {
     'a' : 'e',
     'b' : 'e',
+    aTake : object.aTake,
+    aGet : object.aGet,
     aPut : object.aPut,
     aSet : object.aSet,
-    aGet : object.aGet,
   }
   test.identical( object, exp );
-
-  /* */
-
-  // test.case = 'addingMethods : 0';
-  // var methods =
-  // {
-  //   aPut : _.accessor.putter.symbol,
-  //   aSet : function( src ) { this[ Symbol.for( 'a' ) ] = src; this.b = src },
-  //   aGet : function() { return this[ Symbol.for( 'a' ) ] },
-  // }
-  // var object =
-  // {
-  //   'a' : 'a1',
-  //   'b' : 'b1',
-  // };
-  // _.accessor.declare
-  // ({
-  //   object,
-  //   methods,
-  //   names : { a : {} },
-  //   prime : 0,
-  //   strict : 0,
-  //   addingMethods : 0,
-  // });
-  // var exp =
-  // {
-  //   'a' : 'a1',
-  //   'b' : 'b1',
-  // }
-  // test.identical( object, exp );
-  // test.is( object.aPut !== _.accessor.putter.symbol );
-  //
-  // _.put( object, 'a', 'c' );
-  // var exp =
-  // {
-  //   'a' : 'c',
-  //   'b' : 'b1',
-  // }
-  // test.identical( object, exp );
-  //
-  // _.set( object, 'a', 'd' );
-  // var exp =
-  // {
-  //   'a' : 'd',
-  //   'b' : 'd',
-  // }
-  // test.identical( object, exp );
-  //
-  // object.a = 'e';
-  // var exp =
-  // {
-  //   'a' : 'e',
-  //   'b' : 'e',
-  // }
-  // test.identical( object, exp );
 
   /* */
 
@@ -3331,10 +3457,7 @@ function classDeclare( test )
     test.case = 'setting static field with constructor';
 
     o.Class.instances = o.Class.instances.slice();
-    // test.is( o.Class === C1 || o.Class.instances !== C1.instances );
-    debugger;
     test.is( o.Class.instances === C1.instances || _.mapOwnKey( o.Class.prototype.Statics, 'instances' ) );
-    debugger;
     test.is( o.Class.instances === o.Class.prototype.instances );
     test.is( o.Class.instances === c1a.instances );
     test.is( o.Class.instances === c1b.instances );
@@ -3344,8 +3467,6 @@ function classDeclare( test )
     test.case = 'setting static field with prototype';
 
     o.Class.prototype.instances = o.Class.prototype.instances.slice();
-    // if( o.Class !== C1 && !o.ownStatics )
-    // test.is( o.Class === C1 || o.Class.instances !== C1.instances );
     test.is( o.Class.instances === C1.instances || _.mapOwnKey( o.Class.prototype.Statics, 'instances' ) );
     test.is( o.Class.instances === o.Class.prototype.instances );
     test.is( o.Class.instances === c1a.instances );
@@ -3356,8 +3477,6 @@ function classDeclare( test )
     test.case = 'setting static field with instance';
 
     c1a.instances = o.Class.instances.slice();
-    // if( o.Class !== C1 && !o.ownStatics )
-    // test.is( o.Class === C1 || o.Class.instances !== C1.instances );
     test.is( o.Class.instances === C1.instances || _.mapOwnKey( o.Class.prototype.Statics, 'instances' ) );
     test.is( o.Class.instances === o.Class.prototype.instances );
     test.is( o.Class.instances === c1a.instances );
@@ -3633,7 +3752,7 @@ function accessorSupplement( test )
   test.identical( x.a, 2 );
   test.identical( x.b, 4 );
 
-  //
+  /* */
 
   test.case = 'supplement Beta with accessors of Alpha, both have same accessor'
   var Alpha = function _Alpha(){}
@@ -3670,7 +3789,7 @@ function accessorSupplement( test )
   x.a = 2;
   test.identical( x.a, 4 );
 
-  //
+  /* */
 
   test.case = 'Alpha: a, b - getter, c - setter, Beta: a - getter'
   var Alpha = function _Alpha(){}
@@ -3726,6 +3845,59 @@ function accessorSupplement( test )
 
 }
 
+//
+
+function accessorCopyBasic( test )
+{
+
+  /* */
+
+  test.case = 'basic';
+
+  var events = [];
+  var ins1 =
+  {
+    aCopy : function( it )
+    {
+      console.log( 'accessorKind', it.accessorKind );
+      events.push( it.accessorKind );
+      if( it.accessorKind === 'set' || it.accessorKind === 'put' )
+      {
+        it.value += 1;
+        it.dstInstance[ Symbol.for( 'a' ) ] = it.value;
+      }
+      else
+      {
+        it.value = it.srcInstance[ Symbol.for( 'a' ) ];
+      }
+    },
+    a : 10,
+    b : 20,
+  };
+
+  _.accessor.declare
+  ({
+    object : ins1,
+    names : { a : 'a' },
+    prime : 0,
+  });
+
+  test.identical( events, [ 'put' ] );
+  var exp = { 'a' : 11, 'b' : 20, 'aCopy' : ins1.aCopy }
+  test.identical( ins1, exp );
+  test.identical( events, [ 'put', 'get' ] );
+
+  ins1.a = 30;
+
+  test.identical( events, [ 'put', 'get', 'set' ] );
+  var exp = { 'a' : 31, 'b' : 20, 'aCopy' : ins1.aCopy }
+  test.identical( ins1, exp );
+  test.identical( events, [ 'put', 'get', 'set', 'get' ] );
+
+  /* */
+
+}
+
 // --
 // declare
 // --
@@ -3739,15 +3911,21 @@ var Self =
   tests :
   {
 
+    // checker
+
     instanceIs,
     instanceIsStandard,
     prototypeIs,
     constructorIs,
     prototypeIsStandard,
 
+    //
+
     accessor,
     accessorOptionReadOnly,
     accessorOptionAddingMethods,
+    declareConstant,
+    declareConstantSymbol,
     accessorOptionPreserveValues,
     accessorDeducingMethods,
     accessorIsClean,
@@ -3765,11 +3943,12 @@ var Self =
     getterToValueAccess,
     putterSymbol,
 
+    // etc
+
     propertyConstant,
-
     callable,
-
-    accessorSupplement
+    accessorSupplement,
+    accessorCopyBasic,
 
   },
 

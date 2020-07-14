@@ -58,7 +58,7 @@ let _ = _global_.wTools;
 //   _.assert( o.insToDat === 'val', 'not implemented' );
 //   _.assert( o.datToDat === 'val', 'not implemented' );
 //
-//   o.definitionGroup = 'definition.named';
+//   o.definitionKind = 'definition.named';
 //   o.blueprintForm2 = blueprintForm2;
 //   o.name = null;
 //
@@ -68,27 +68,27 @@ let _ = _global_.wTools;
 //
 //   if( o.iniToIns === 'val' )
 //   {
-//     definition.initialValueGet = function get() { return this.ini }
+//     definition.valueGenerate = function get() { return this.ini }
 //   }
 //   else if( o.iniToIns === 'shallow' )
 //   {
 //     debugger;
-//     definition.initialValueGet = function get() { return _.entityMake( this.ini ) }
+//     definition.valueGenerate = function get() { return _.entityMake( this.ini ) }
 //   }
 //   else if( o.iniToIns === 'deep' )
 //   {
 //     debugger;
-//     definition.initialValueGet = function get() { return _.cloneJust( this.ini ) }
+//     definition.valueGenerate = function get() { return _.cloneJust( this.ini ) }
 //   }
 //   else if( o.iniToIns === 'make' )
 //   {
 //     debugger;
-//     definition.initialValueGet = function get() { return this.ini() }
+//     definition.valueGenerate = function get() { return this.ini() }
 //   }
 //   else if( o.iniToIns === 'construct' )
 //   {
 //     debugger;
-//     definition.initialValueGet = function get() { return new this.ini() }
+//     definition.valueGenerate = function get() { return new this.ini() }
 //   }
 //   else _.assert( 0 );
 //
@@ -128,8 +128,8 @@ let _ = _global_.wTools;
 //
 //   /* */
 //
-//   // definition.initialValueGet = function get() { return _.entityMake( this.ini ) }
-//   // definition.initialValueGet = function get() { return _.cloneJust( this.ini ) }
+//   // definition.valueGenerate = function get() { return _.entityMake( this.ini ) }
+//   // definition.valueGenerate = function get() { return _.cloneJust( this.ini ) }
 //
 // /*
 //   common,
@@ -197,7 +197,7 @@ let _ = _global_.wTools;
 // enumerable      : [ 0 , 1 ]                                                                                 @default : 1
 // configurable    : [ 0 , 1 ]                                                                                 @default : 1
 // writable        : [ 0 , 1 ]                                                                                 @default : 1
-// initialValueGet : routine                                                                                   @default : null
+// valueGenerate : routine                                                                                   @default : null
 // collection      : [ scalar , array , map ]                                                                  @default : scalar
 // insToIns        : [ val , shallow , deep ]                                                                  @default : val
 // datToIns        : [ val , shallow , deep ]                                                                  @default : val
@@ -221,16 +221,16 @@ let _ = _global_.wTools;
 function common( src )
 {
   let o2 = { ini : src }
-  o2.definitionGroup = 'definition.named';
+  o2.definitionKind = 'definition.named';
   let definition = new _.Definition( o2 );
 
   _.assert( src !== undefined, () => 'Expects object-like or long, but got ' + _.strType( src ) );
   _.assert( arguments.length === 1 );
   _.assert( definition.ini !== undefined );
 
-  definition.initialValueGet = function get() { return this.ini }
+  definition.valueGenerate = function get() { return this.ini }
 
-  _.propertyHide( definition, 'initialValueGet' );
+  _.propertyHide( definition, 'valueGenerate' );
 
   Object.freeze( definition );
   return definition;
@@ -249,17 +249,17 @@ function common( src )
 function own( src )
 {
   let o2 = { ini : src }
-  o2.definitionGroup = 'definition.named';
+  o2.definitionKind = 'definition.named';
   let definition = new _.Definition( o2 );
 
   _.assert( src !== undefined, () => 'Expects object-like or long, but got ' + _.strType( src ) );
   _.assert( arguments.length === 1 );
   _.assert( definition.ini !== undefined );
 
-  // definition.initialValueGet = function get() { return _.entityMake( this.ini ) }
-  definition.initialValueGet = function get() { return _.cloneJust( this.ini ) }
+  // definition.valueGenerate = function get() { return _.entityMake( this.ini ) }
+  definition.valueGenerate = function get() { return _.cloneJust( this.ini ) }
 
-  _.propertyHide( definition, 'initialValueGet' );
+  _.propertyHide( definition, 'valueGenerate' );
 
   Object.freeze( definition );
   return definition;
@@ -278,16 +278,16 @@ function own( src )
 function instanceOf( src )
 {
   let o2 = { ini : src }
-  o2.definitionGroup = 'definition.named';
+  o2.definitionKind = 'definition.named';
   let definition = new _.Definition( o2 );
 
   _.assert( _.routineIs( src ), 'Expects constructor' );
   _.assert( arguments.length === 1 );
   _.assert( definition.ini !== undefined );
 
-  definition.initialValueGet = function get() { return new this.ini() }
+  definition.valueGenerate = function get() { return new this.ini() }
 
-  _.propertyHide( definition, 'initialValueGet' );
+  _.propertyHide( definition, 'valueGenerate' );
 
   Object.freeze( definition );
   return definition;
@@ -306,16 +306,16 @@ function instanceOf( src )
 function makeWith( src )
 {
   let o2 = { ini : src }
-  o2.definitionGroup = 'definition.named';
+  o2.definitionKind = 'definition.named';
   let definition = new _.Definition( o2 );
 
   _.assert( _.routineIs( src ), 'Expects constructor' );
   _.assert( arguments.length === 1 );
   _.assert( definition.ini !== undefined );
 
-  definition.initialValueGet = function get() { return this.ini() }
+  definition.valueGenerate = function get() { return this.ini() }
 
-  _.propertyHide( definition, 'initialValueGet' );
+  _.propertyHide( definition, 'valueGenerate' );
 
   Object.freeze( definition );
   return definition;
@@ -345,25 +345,25 @@ function contained( src )
   let o = _.mapOnly( src, contained.defaults );
   o.container = container;
   o.ini = src.ini;
-  o.definitionGroup = 'definition.named';
+  o.definitionKind = 'definition.named';
   let definition = new _.Definition( o );
 
   if( o.shallowCloning )
-  definition.initialValueGet = function get()
+  definition.valueGenerate = function get()
   {
     let result = this.container;
     result.value = _.entityMake( definition.ini );
     return result;
   }
   else
-  definition.initialValueGet = function get()
+  definition.valueGenerate = function get()
   {
     let result = this.container;
     result.value = definition.ini;
     return result;
   }
 
-  _.propertyHide( definition, 'initialValueGet' );
+  _.propertyHide( definition, 'valueGenerate' );
   Object.freeze( definition );
   _.assert( definition.ini !== undefined );
   return definition;
@@ -384,7 +384,7 @@ contained.defaults =
 //   _.assert( _.routineIs( o.callback ) || _.strIs( o.callback ) );
 //   o.isMeta = true;
 //   o.ini = null;
-//   o.kind = 'ownerCallback';
+//   o.subKind = 'ownerCallback';
 //
 //   if( _.strIs( o.callback ) )
 //   {
@@ -414,8 +414,8 @@ function accessor( o )
 
   _.routineOptions( accessor, o );
 
-  o.definitionGroup = 'definition.named';
-  o.kind = 'accessor';
+  o.definitionKind = 'definition.named';
+  o.subKind = 'accessor';
   o.constructionAmend = constructionAmend;
 
   _.assert( _.routineIs( o.routine ) );
@@ -508,9 +508,10 @@ function accessor( o )
     ({
       object : dst,
       names : key,
+      take : o.take,
       get : o.get,
-      set : o.set,
       put : o.put,
+      set : o.set,
       prime : instanceIsStandard,
       strict : instanceIsStandard,
     });
@@ -525,9 +526,10 @@ accessor.defaults =
 {
   ini : null,
   routine : null,
+  take : null,
   get : null,
-  set : null,
   put : null,
+  set : null,
 }
 
 //
@@ -599,6 +601,42 @@ putter.defaults =
   routine : null,
 }
 
+//
+
+function _constant( ini )
+{
+
+  let o = { ini }
+
+  _.routineOptions( _constant, o );
+
+  o.definitionKind = 'definition.named';
+  o.subKind = 'constant';
+  o.constructionAmend = constructionAmend;
+
+  _.assert( arguments.length === 1 );
+
+  let definition = new _.Definition( o );
+  _.propertyHide( definition, 'constructionAmend' );
+  _.assert( definition.ini !== undefined );
+  return definition;
+
+  /* */
+
+  function constructionAmend( dst, key, amend ) /* xxx : implement, use inheriting instead? */
+  {
+    let instanceIsStandard = _.instanceIsStandard( dst );
+    _.assert( arguments.length === 3 );
+    _.assert( 0, 'not implemented' );
+  }
+
+}
+
+_constant.defaults =
+{
+  ini : null,
+}
+
 // --
 // define
 // --
@@ -625,6 +663,7 @@ let DefineExtension =
   getter,
   setter,
   putter,
+  constant : _constant,
 
 }
 
