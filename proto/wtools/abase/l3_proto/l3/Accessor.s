@@ -482,7 +482,7 @@ _methodsMake.defaults =
   name : null,
   object : null,
   methods : null,
-  readOnlyProduct : 0, /* xxx */
+  readOnlyProduct : 0, /* xxx : remove? */
 }
 
 //
@@ -641,7 +641,7 @@ function _methodsValidate( o )
 
   let name = _.symbolIs( o.name ) ? Symbol.keyFor( o.name ) : o.name;
 
-  // let AccessorType = _.accessor.AccessorType; /* xxx */
+  // let AccessorType = _.accessor.AccessorType; /* xxx : ? */
   let AccessorType = [ 'get', 'set' ];
 
   for( let t = 0 ; t < AccessorType.length ; t++ )
