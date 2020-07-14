@@ -412,7 +412,6 @@ function accessorMethodsDeducing( test )
     object : ins1,
     names : { a : 'a' },
     prime : 0,
-    addingMethods : 0,
   });
 
   test.identical( events, [ '_aPut' ] );
@@ -458,7 +457,6 @@ function accessorMethodsDeducing( test )
     object : ins1,
     names : { a : 'a' },
     prime : 0,
-    addingMethods : 0,
   });
 
   test.identical( events, [ 'aPut' ] );
