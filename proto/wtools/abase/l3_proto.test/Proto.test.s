@@ -469,6 +469,466 @@ function accessorMethodsDeducing( test )
 
   /* */
 
+  test.case = 'underscored and not-underscored';
+  var symbol = Symbol.for( 'a' );
+  var events = [];
+  var ins1 =
+  {
+    _aTake : function()
+    {
+      events.push( '_aTake' );
+      return this[ symbol ]
+    },
+    _aGet : function()
+    {
+      events.push( '_aGet' );
+      return this[ symbol ]
+    },
+    _aPut : function( src )
+    {
+      events.push( '_aPut' );
+      this[ symbol ] = src;
+    },
+    _aSet : function( src )
+    {
+      events.push( '_aSet' );
+      this[ symbol ] = src;
+    },
+    aTake : function()
+    {
+      events.push( 'aTake' );
+      return this[ symbol ]
+    },
+    aGet : function()
+    {
+      events.push( 'aGet' );
+      return this[ symbol ]
+    },
+    aPut : function( src )
+    {
+      events.push( 'aPut' );
+      this[ symbol ] = src;
+    },
+    aSet : function( src )
+    {
+      events.push( 'aSet' );
+      this[ symbol ] = src;
+    },
+    a : 10,
+  };
+
+  _.accessor.declare
+  ({
+    object : ins1,
+    names : { a : 'a' },
+    prime : 0,
+  });
+
+  test.identical( events, [ 'aPut' ] );
+  test.identical( ins1.a, 10 );
+  test.identical( events, [ 'aPut', 'aGet' ] );
+  ins1.a = 20;
+  test.identical( events, [ 'aPut', 'aGet', 'aSet' ] );
+  test.identical( ins1.a, 20 );
+  test.identical( events, [ 'aPut', 'aGet', 'aSet', 'aGet' ] );
+
+  /* */
+
+  test.case = 'only underscored and explicit true';
+  var symbol = Symbol.for( 'a' );
+  var events = [];
+  var ins1 =
+  {
+    _aTake : function()
+    {
+      events.push( '_aTake' );
+      return this[ symbol ]
+    },
+    _aGet : function()
+    {
+      events.push( '_aGet' );
+      return this[ symbol ]
+    },
+    _aPut : function( src )
+    {
+      events.push( '_aPut' );
+      this[ symbol ] = src;
+    },
+    _aSet : function( src )
+    {
+      events.push( '_aSet' );
+      this[ symbol ] = src;
+    },
+    a : 10,
+  };
+
+  _.accessor.declare
+  ({
+    object : ins1,
+    names : { a : { take : true, get : true, put : true, set : true } },
+    prime : 0,
+  });
+
+  test.identical( events, [ '_aPut' ] );
+  test.identical( ins1.a, 10 );
+  test.identical( events, [ '_aPut', '_aGet' ] );
+  ins1.a = 20;
+  test.identical( events, [ '_aPut', '_aGet', '_aSet' ] );
+  test.identical( ins1.a, 20 );
+  test.identical( events, [ '_aPut', '_aGet', '_aSet', '_aGet' ] );
+
+  /* */
+
+  test.case = 'only not underscored and explicit true';
+  var symbol = Symbol.for( 'a' );
+  var events = [];
+  var ins1 =
+  {
+    _aTake : function()
+    {
+      events.push( '_aTake' );
+      return this[ symbol ]
+    },
+    _aGet : function()
+    {
+      events.push( '_aGet' );
+      return this[ symbol ]
+    },
+    _aPut : function( src )
+    {
+      events.push( '_aPut' );
+      this[ symbol ] = src;
+    },
+    _aSet : function( src )
+    {
+      events.push( '_aSet' );
+      this[ symbol ] = src;
+    },
+    aTake : function()
+    {
+      events.push( 'aTake' );
+      return this[ symbol ]
+    },
+    aGet : function()
+    {
+      events.push( 'aGet' );
+      return this[ symbol ]
+    },
+    aPut : function( src )
+    {
+      events.push( 'aPut' );
+      this[ symbol ] = src;
+    },
+    aSet : function( src )
+    {
+      events.push( 'aSet' );
+      this[ symbol ] = src;
+    },
+    a : 10,
+  };
+
+  _.accessor.declare
+  ({
+    object : ins1,
+    names : { a : { take : true, get : true, put : true, set : true } },
+    prime : 0,
+  });
+
+  test.identical( events, [ 'aPut' ] );
+  test.identical( ins1.a, 10 );
+  test.identical( events, [ 'aPut', 'aGet' ] );
+  ins1.a = 20;
+  test.identical( events, [ 'aPut', 'aGet', 'aSet' ] );
+  test.identical( ins1.a, 20 );
+  test.identical( events, [ 'aPut', 'aGet', 'aSet', 'aGet' ] );
+
+  /* */
+
+  test.case = 'only not underscored and explicit true';
+  var symbol = Symbol.for( 'a' );
+  var events = [];
+  var ins1 =
+  {
+    aTake : function()
+    {
+      events.push( 'aTake' );
+      return this[ symbol ]
+    },
+    aGet : function()
+    {
+      events.push( 'aGet' );
+      return this[ symbol ]
+    },
+    aPut : function( src )
+    {
+      events.push( 'aPut' );
+      this[ symbol ] = src;
+    },
+    aSet : function( src )
+    {
+      events.push( 'aSet' );
+      this[ symbol ] = src;
+    },
+    a : 10,
+  };
+
+  _.accessor.declare
+  ({
+    object : ins1,
+    names : { a : { take : true, get : true, put : true, set : true } },
+    prime : 0,
+  });
+
+  test.identical( events, [ 'aPut' ] );
+  test.identical( ins1.a, 10 );
+  test.identical( events, [ 'aPut', 'aGet' ] );
+  ins1.a = 20;
+  test.identical( events, [ 'aPut', 'aGet', 'aSet' ] );
+  test.identical( ins1.a, 20 );
+  test.identical( events, [ 'aPut', 'aGet', 'aSet', 'aGet' ] );
+
+  /* */
+
+  test.case = '_aTake only';
+  var symbol = Symbol.for( 'a' );
+  var events = [];
+  var ins1 =
+  {
+    _aTake : function()
+    {
+      events.push( '_aTake' );
+      return this[ symbol ]
+    },
+    a : 10,
+  };
+
+  _.accessor.declare
+  ({
+    object : ins1,
+    names : { a : 'a' },
+    prime : 0,
+  });
+
+  test.identical( events, [] );
+  test.identical( ins1.a, 10 );
+  test.identical( events, [ '_aTake' ] );
+  ins1.a = 20;
+  test.identical( events, [ '_aTake' ] );
+  test.identical( ins1.a, 20 );
+  test.identical( events, [ '_aTake', '_aTake' ] );
+
+  /* */
+
+  test.case = 'aTake only';
+  var symbol = Symbol.for( 'a' );
+  var events = [];
+  var ins1 =
+  {
+    aTake : function()
+    {
+      events.push( 'aTake' );
+      return this[ symbol ]
+    },
+    a : 10,
+  };
+
+  _.accessor.declare
+  ({
+    object : ins1,
+    names : { a : 'a' },
+    prime : 0,
+  });
+
+  test.identical( events, [] );
+  test.identical( ins1.a, 10 );
+  test.identical( events, [ 'aTake' ] );
+  ins1.a = 20;
+  test.identical( events, [ 'aTake' ] );
+  test.identical( ins1.a, 20 );
+  test.identical( events, [ 'aTake', 'aTake' ] );
+
+  /* */
+
+  test.case = '_aGet only';
+  var symbol = Symbol.for( 'a' );
+  var events = [];
+  var ins1 =
+  {
+    _aGet : function()
+    {
+      events.push( '_aGet' );
+      return this[ symbol ]
+    },
+    a : 10,
+  };
+
+  _.accessor.declare
+  ({
+    object : ins1,
+    names : { a : 'a' },
+    prime : 0,
+  });
+
+  test.identical( events, [] );
+  test.identical( ins1.a, 10 );
+  test.identical( events, [ '_aGet' ] );
+  ins1.a = 20;
+  test.identical( events, [ '_aGet' ] );
+  test.identical( ins1.a, 20 );
+  test.identical( events, [ '_aGet', '_aGet' ] );
+
+  /* */
+
+  test.case = 'aGet only';
+  var symbol = Symbol.for( 'a' );
+  var events = [];
+  var ins1 =
+  {
+    aGet : function()
+    {
+      events.push( 'aGet' );
+      return this[ symbol ]
+    },
+    a : 10,
+  };
+
+  _.accessor.declare
+  ({
+    object : ins1,
+    names : { a : 'a' },
+    prime : 0,
+  });
+
+  test.identical( events, [] );
+  test.identical( ins1.a, 10 );
+  test.identical( events, [ 'aGet' ] );
+  ins1.a = 20;
+  test.identical( events, [ 'aGet' ] );
+  test.identical( ins1.a, 20 );
+  test.identical( events, [ 'aGet', 'aGet' ] );
+
+  /* */
+
+  test.case = '_aSet only';
+  var symbol = Symbol.for( 'a' );
+  var events = [];
+  var ins1 =
+  {
+    _aSet : function( src )
+    {
+      events.push( '_aSet' );
+      this[ symbol ] = src;
+    },
+    a : 10,
+  };
+
+  _.accessor.declare
+  ({
+    object : ins1,
+    names : { a : 'a' },
+    prime : 0,
+  });
+
+  test.identical( events, [ '_aSet' ] );
+  test.identical( ins1.a, 10 );
+  test.identical( events, [ '_aSet' ] );
+  ins1.a = 20;
+  test.identical( events, [ '_aSet', '_aSet' ] );
+  test.identical( ins1.a, 20 );
+  test.identical( events, [ '_aSet', '_aSet' ] );
+
+  /* */
+
+  test.case = '_aPut only';
+  var symbol = Symbol.for( 'a' );
+  var events = [];
+  var ins1 =
+  {
+    _aPut : function( src )
+    {
+      events.push( '_aPut' );
+      this[ symbol ] = src;
+    },
+    a : 10,
+  };
+
+  _.accessor.declare
+  ({
+    object : ins1,
+    names : { a : 'a' },
+    prime : 0,
+  });
+
+  test.identical( events, [ '_aPut' ] );
+  test.identical( ins1.a, 10 );
+  test.identical( events, [ '_aPut' ] );
+  ins1.a = 20;
+  test.identical( events, [ '_aPut', '_aPut' ] );
+  test.identical( ins1.a, 20 );
+  test.identical( events, [ '_aPut', '_aPut' ] );
+
+  /* */
+
+  test.case = 'aPut only';
+  var symbol = Symbol.for( 'a' );
+  var events = [];
+  var ins1 =
+  {
+    aPut : function( src )
+    {
+      events.push( 'aPut' );
+      this[ symbol ] = src;
+    },
+    a : 10,
+  };
+
+  _.accessor.declare
+  ({
+    object : ins1,
+    names : { a : 'a' },
+    prime : 0,
+  });
+
+  test.identical( events, [ 'aPut' ] );
+  test.identical( ins1.a, 10 );
+  test.identical( events, [ 'aPut' ] );
+  ins1.a = 20;
+  test.identical( events, [ 'aPut', 'aPut' ] );
+  test.identical( ins1.a, 20 );
+  test.identical( events, [ 'aPut', 'aPut' ] );
+
+  /* */
+
+  test.case = 'aSet only';
+  var symbol = Symbol.for( 'a' );
+  var events = [];
+  var ins1 =
+  {
+    aSet : function( src )
+    {
+      events.push( 'aSet' );
+      this[ symbol ] = src;
+    },
+    a : 10,
+  };
+
+  _.accessor.declare
+  ({
+    object : ins1,
+    names : { a : 'a' },
+    prime : 0,
+  });
+
+  test.identical( events, [ 'aSet' ] );
+  test.identical( ins1.a, 10 );
+  test.identical( events, [ 'aSet' ] );
+  ins1.a = 20;
+  test.identical( events, [ 'aSet', 'aSet' ] );
+  test.identical( ins1.a, 20 );
+  test.identical( events, [ 'aSet', 'aSet' ] );
+
+  /* */
+
 }
 
 //
@@ -568,12 +1028,14 @@ function declareConstant( test )
   };
 
   var exp = { 'a' : 'a1' };
+  debugger;
   _.accessor.declare
   ({
     object : dst,
     names : { a : { readOnly : 1, get : _.define.constant( 'a1' ) } },
     prime : 0,
   });
+  debugger;
   test.identical( dst, exp );
   test.shouldThrowErrorSync( () => dst.a = 'a2' );
 

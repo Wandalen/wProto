@@ -260,7 +260,7 @@ function _methodsMake( o )
       copy.call( this, it );
       return it.value;
     }
-    else if( result.take )
+    else if( _.routineIs( result.take ) )
     result.get = result.take;
     else
     result.get = function get()
@@ -288,7 +288,7 @@ function _methodsMake( o )
       copy.call( this, it );
       return it.value;
     }
-    else if( result.set )
+    else if( _.routineIs( result.set ) )
     result.put = result.set;
     else
     result.put = function put( src )
@@ -317,7 +317,7 @@ function _methodsMake( o )
       copy.call( this, it );
       return it.value;
     }
-    else if( result.put )
+    else if( _.routineIs( result.put ) )
     result.set = result.put;
     else
     result.set = function set( src )
@@ -326,13 +326,6 @@ function _methodsMake( o )
       return src;
     }
   }
-
-  /* copy */
-
-  // if( result.copy )
-  // debugger;
-  // if( result.copy )
-  // copyNormalize();
 
   /* readOnlyProduct */
 
@@ -398,55 +391,19 @@ function _methodsMake( o )
     () =>  `Expects routine, but set-accessor of field "${fieldName}" is ${_.toStrShort( o.set )}`
   );
 
-  // _.assert( _.boolLike( result.take ) || _.routineIs( result.take ) );
-  // _.assert( _.boolLike( result.get ) || _.routineIs( result.get ) );
-  // _.assert( _.boolLike( result.put ) || _.routineIs( result.put ) );
-  // _.assert( _.boolLike( result.set ) || _.routineIs( result.set ) );
-
   return result;
-
-  /* */
-
-  // function copyNormalize()
-  // {
-  //   let copy = result.copy;
-  //
-  //   if( !result.set && o.set === null )
-  //   result.set = function set( src )
-  //   {
-  //     let it = _.accessor.copyIterationMake
-  //     ({
-  //       dstInstance : this,
-  //       instanceKey : fieldName,
-  //       value : src,
-  //     });
-  //     copy.call( this, it );
-  //     return it.value;
-  //   }
-  //
-  //   if( !result.get && o.get === null )
-  //   result.get = function get()
-  //   {
-  //     let it = _.accessor.copyIterationMake
-  //     ({
-  //       srcInstance : this,
-  //       instanceKey : fieldName,
-  //     });
-  //     copy.call( this, it );
-  //     return it.value;
-  //   }
-  // }
 
   /* */
 
   function methodsNormalize( name )
   {
     let capitalName = _.strCapitalize( name );
+    _.assert( o[ name ] === null || _.boolLike( o[ name ] ) || _.routineIs( o[ name ] ) || _.definitionIs( o[ name ] ) );
     if( o[ name ] !== false && o[ name ] !== 0 )
     {
-      if( o[ name ] )
+      if( _.routineIs( o[ name ] ) || _.definitionIs( o[ name ] ) )
       result[ name ] = o[ name ];
-      else if( o.suite && o.suite[ name ] )
+      else if( o.suite && ( _.routineIs( o.suite[ name ] ) || _.definitionIs( o.suite[ name ] ) ) )
       result[ name ] = o.suite[ name ];
       else if( o.methods[ '' + fieldName + capitalName ] )
       result[ name ] = o.methods[ fieldName + capitalName ];
@@ -454,21 +411,6 @@ function _methodsMake( o )
       result[ name ] = o.methods[ '_' + fieldName + capitalName ];
     }
   }
-
-  /* */
-
-  // function optionNormalize( n1, n2 )
-  // {
-  //   if( o[ n1 ] === null )
-  //   {
-  //     if( o.suite && o.suite[ n1 ] !== undefined && o.suite[ n1 ] !== null )
-  //     o[ n1 ] = o.suite[ n1 ];
-  //     else if( o[ n2 ] !== null )
-  //     o[ n1 ] = !!o[ n2 ];
-  //   }
-  //   if( _.boolLike( o[ n1 ] ) )
-  //   o[ n1 ] = !!o[ n1 ];
-  // }
 
   /* */
 
