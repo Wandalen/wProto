@@ -858,6 +858,9 @@ function _declareAct( o )
     kind : 'suite',
   });
 
+  if( o.name === 'dims' )
+  debugger;
+
   o.amethods = _.accessor._methodsMake /* xxx : rename amethods -> suite */
   ({
     name : o.name,

@@ -374,6 +374,107 @@ function accessor( test )
 
 //
 
+function accessorMethodsDeducing( test )
+{
+
+  /* */
+
+  test.case = 'only underscored';
+  var symbol = Symbol.for( 'a' );
+  var events = [];
+  var ins1 =
+  {
+    _aTake : function()
+    {
+      events.push( '_aTake' );
+      return this[ symbol ]
+    },
+    _aGet : function()
+    {
+      events.push( '_aGet' );
+      return this[ symbol ]
+    },
+    _aPut : function( src )
+    {
+      events.push( '_aPut' );
+      this[ symbol ] = src;
+    },
+    _aSet : function( src )
+    {
+      events.push( '_aSet' );
+      this[ symbol ] = src;
+    },
+    a : 10,
+  };
+
+  _.accessor.declare
+  ({
+    object : ins1,
+    names : { a : 'a' },
+    prime : 0,
+    addingMethods : 0,
+  });
+
+  test.identical( events, [ '_aPut' ] );
+  test.identical( ins1.a, 10 );
+  test.identical( events, [ '_aPut', '_aGet' ] );
+  ins1.a = 20;
+  test.identical( events, [ '_aPut', '_aGet', '_aSet' ] );
+  test.identical( ins1.a, 20 );
+  test.identical( events, [ '_aPut', '_aGet', '_aSet', '_aGet' ] );
+
+  /* */
+
+  test.case = 'only not-underscored';
+  var symbol = Symbol.for( 'a' );
+  var events = [];
+  var ins1 =
+  {
+    aTake : function()
+    {
+      events.push( 'aTake' );
+      return this[ symbol ]
+    },
+    aGet : function()
+    {
+      events.push( 'aGet' );
+      return this[ symbol ]
+    },
+    aPut : function( src )
+    {
+      events.push( 'aPut' );
+      this[ symbol ] = src;
+    },
+    aSet : function( src )
+    {
+      events.push( 'aSet' );
+      this[ symbol ] = src;
+    },
+    a : 10,
+  };
+
+  _.accessor.declare
+  ({
+    object : ins1,
+    names : { a : 'a' },
+    prime : 0,
+    addingMethods : 0,
+  });
+
+  test.identical( events, [ 'aPut' ] );
+  test.identical( ins1.a, 10 );
+  test.identical( events, [ 'aPut', 'aGet' ] );
+  ins1.a = 20;
+  test.identical( events, [ 'aPut', 'aGet', 'aSet' ] );
+  test.identical( ins1.a, 20 );
+  test.identical( events, [ 'aPut', 'aGet', 'aSet', 'aGet' ] );
+
+  /* */
+
+}
+
+//
+
 function accessorOptionReadOnly( test )
 {
 
@@ -3922,6 +4023,7 @@ var Self =
     //
 
     accessor,
+    accessorMethodsDeducing,
     accessorOptionReadOnly,
     accessorOptionAddingMethods,
     declareConstant,
