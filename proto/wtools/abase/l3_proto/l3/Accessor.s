@@ -319,8 +319,8 @@ function _methodsMake( o )
     }
     else if( _.routineIs( result.put ) )
     result.set = result.put;
-    else if( o.put !== false || o.set ) /* yyy */
     // else
+    else if( o.put !== false || o.set ) /* yyy xxx : similar logic for other accessors? */
     result.set = function set( src )
     {
       this[ fieldSymbol ] = src;
@@ -1242,7 +1242,6 @@ function ClassName( o ) { };
 function forbid_body( o )
 {
 
-  // o = _declare_pre( forbid, arguments );
   _.assertRoutineOptions( forbid_body, arguments );
 
   if( !o.methods )
@@ -1264,9 +1263,6 @@ function forbid_body( o )
   if( _.objectIs( o.names ) )
   o.names = _.mapExtend( null, o.names );
 
-  // if( o.combining === 'rewrite' && o.strict === undefined )
-  // o.strict = 0;
-
   if( o.prime === null )
   o.prime = _.prototypeIsStandard( o.object );
 
@@ -1277,9 +1273,6 @@ function forbid_body( o )
 
   /* message */
 
-  // if( o.names && o.names.abc )
-  // debugger;
-  // let _constructor = o.object.constructor || Object.getPrototypeOf( o.object ); // yyy
   let _constructor = o.object.constructor || null;
   _.assert( _.routineIs( _constructor ) || _constructor === null );
   _.assert( _constructor === null || _.strIs( _constructor.name ) || _.strIs( _constructor._name ), 'object should have name' );
