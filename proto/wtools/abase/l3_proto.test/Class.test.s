@@ -35,7 +35,7 @@ function classDeclare( test )
   }
   var Statics1 =
   {
-    instances : [],
+    Instances : [],
     f1 : [],
     f2 : [],
     f3 : [],
@@ -93,7 +93,7 @@ function classDeclare( test )
   }
   var Statics2 =
   {
-    instances : [],
+    Instances : [],
   }
   var classMade = _.classDeclare
   ({
@@ -120,7 +120,7 @@ function classDeclare( test )
   }
   var Statics2 =
   {
-    instances : [],
+    Instances : [],
     f1 : [],
     f4 : [],
   }
@@ -148,7 +148,7 @@ function classDeclare( test )
     Class0 : C1,
     Statics : Statics2,
     Extend : Extend2,
-    keys : [ 'instances', 'f1', 'f4', 'f2', 'f3' ],
+    keys : [ 'Instances', 'f1', 'f4', 'f2', 'f3' ],
     vals : [ C3.Instances, C3.f1, C3.f4, C1.f2, C1.f3 ],
   });
 
@@ -172,7 +172,7 @@ function classDeclare( test )
     }
     var Statics2 =
     {
-      instances : [],
+      Instances : [],
       f1 : [],
       f4 : [],
     }
@@ -234,7 +234,7 @@ function classDeclare( test )
 
     test.case = 'getting property descriptor of static field from constructor';
 
-    var cd = Object.getOwnPropertyDescriptor( o.Class, 'instances' );
+    var cd = Object.getOwnPropertyDescriptor( o.Class, 'Instances' );
     if( !o.ownStatics )
     {
       test.identical( cd, undefined );
@@ -247,7 +247,7 @@ function classDeclare( test )
       test.is( !!cd.set );
     }
 
-    var pd = Object.getOwnPropertyDescriptor( o.Class.prototype, 'instances' );
+    var pd = Object.getOwnPropertyDescriptor( o.Class.prototype, 'Instances' );
 
     if( !o.ownStatics )
     {
@@ -317,7 +317,7 @@ function classDeclare( test )
     o.Class.Instances = o.Class.Instances.slice();
     // test.is( o.Class === C1 || o.Class.Instances !== C1.Instances );
     debugger;
-    test.is( o.Class.Instances === C1.Instances || _.mapOwnKey( o.Class.prototype.Statics, 'instances' ) );
+    test.is( o.Class.Instances === C1.Instances || _.mapOwnKey( o.Class.prototype.Statics, 'Instances' ) );
     debugger;
     test.is( o.Class.Instances === o.Class.prototype.Instances );
     test.is( o.Class.Instances === c1a.Instances );
@@ -330,7 +330,7 @@ function classDeclare( test )
     o.Class.prototype.Instances = o.Class.prototype.Instances.slice();
     // if( o.Class !== C1 && !o.ownStatics )
     // test.is( o.Class === C1 || o.Class.Instances !== C1.Instances );
-    test.is( o.Class.Instances === C1.Instances || _.mapOwnKey( o.Class.prototype.Statics, 'instances' ) );
+    test.is( o.Class.Instances === C1.Instances || _.mapOwnKey( o.Class.prototype.Statics, 'Instances' ) );
     test.is( o.Class.Instances === o.Class.prototype.Instances );
     test.is( o.Class.Instances === c1a.Instances );
     test.is( o.Class.Instances === c1b.Instances );
@@ -342,7 +342,7 @@ function classDeclare( test )
     c1a.Instances = o.Class.Instances.slice();
     // if( o.Class !== C1 && !o.ownStatics )
     // test.is( o.Class === C1 || o.Class.Instances !== C1.Instances );
-    test.is( o.Class.Instances === C1.Instances || _.mapOwnKey( o.Class.prototype.Statics, 'instances' ) );
+    test.is( o.Class.Instances === C1.Instances || _.mapOwnKey( o.Class.prototype.Statics, 'Instances' ) );
     test.is( o.Class.Instances === o.Class.prototype.Instances );
     test.is( o.Class.Instances === c1a.Instances );
     test.is( o.Class.Instances === c1b.Instances );
@@ -659,7 +659,7 @@ function staticsOverwrite( test )
 
   var Statics =
   {
-    instances : [],
+    Instances : [],
   }
 
   var Extend =
@@ -685,7 +685,7 @@ function staticsOverwrite( test )
 
   var Statics =
   {
-    instances : [],
+    Instances : [],
   }
 
   var Extend =
@@ -1299,17 +1299,17 @@ function workpieceConstruct( test )
   test.case = 'array';
 
   counter = 0;
-  var instances = BasicConstructor([ 1,null,3 ]);
-  test.identical( instances.length, 2 );
-  test.is( instances[ 0 ] instanceof BasicConstructor );
-  test.is( instances[ 0 ].constructor === BasicConstructor );
-  test.is( instances[ 0 ].init === init );
-  test.is( instances[ 1 ] instanceof BasicConstructor );
-  test.is( instances[ 1 ].constructor === BasicConstructor );
-  test.is( instances[ 1 ].init === init );
+  var Instances = BasicConstructor([ 1,null,3 ]);
+  test.identical( Instances.length, 2 );
+  test.is( Instances[ 0 ] instanceof BasicConstructor );
+  test.is( Instances[ 0 ].constructor === BasicConstructor );
+  test.is( Instances[ 0 ].init === init );
+  test.is( Instances[ 1 ] instanceof BasicConstructor );
+  test.is( Instances[ 1 ].constructor === BasicConstructor );
+  test.is( Instances[ 1 ].init === init );
   test.identical( counter, 2 );
 
-  var instances2 = BasicConstructor( instances );
+  var instances2 = BasicConstructor( Instances );
   test.identical( instances2.length, 2 );
   test.is( instances2[ 0 ] instanceof BasicConstructor );
   test.is( instances2[ 0 ].constructor === BasicConstructor );
@@ -1317,8 +1317,8 @@ function workpieceConstruct( test )
   test.is( instances2[ 1 ] instanceof BasicConstructor );
   test.is( instances2[ 1 ].constructor === BasicConstructor );
   test.is( instances2[ 1 ].init === init );
-  test.is( instances2[ 0 ] === instances[ 0 ] );
-  test.is( instances2[ 1 ] === instances[ 1 ] );
+  test.is( instances2[ 0 ] === Instances[ 0 ] );
+  test.is( instances2[ 1 ] === Instances[ 1 ] );
   test.identical( counter, 2 );
 
 }

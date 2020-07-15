@@ -3885,7 +3885,7 @@ function classDeclare( test )
   }
   var Statics1 =
   {
-    instances : [],
+    Instances : [],
     f1 : [],
     f2 : [],
     f3 : [],
@@ -3943,7 +3943,7 @@ function classDeclare( test )
   }
   var Statics2 =
   {
-    instances : [],
+    Instances : [],
   }
   var classMade = _.classDeclare
   ({
@@ -3970,7 +3970,7 @@ function classDeclare( test )
   }
   var Statics2 =
   {
-    instances : [],
+    Instances : [],
     f1 : [],
     f4 : [],
   }
@@ -3998,7 +3998,7 @@ function classDeclare( test )
     Class0 : C1,
     Statics : Statics2,
     Extend : Extend2,
-    keys : [ 'instances', 'f1', 'f4', 'f2', 'f3' ],
+    keys : [ 'Instances', 'f1', 'f4', 'f2', 'f3' ],
     vals : [ C3.Instances, C3.f1, C3.f4, C1.f2, C1.f3 ],
   });
 
@@ -4022,7 +4022,7 @@ function classDeclare( test )
     }
     var Statics2 =
     {
-      instances : [],
+      Instances : [],
       f1 : [],
       f4 : [],
     }
@@ -4084,7 +4084,7 @@ function classDeclare( test )
 
     test.case = 'getting property descriptor of static field from constructor';
 
-    var cd = Object.getOwnPropertyDescriptor( o.Class, 'instances' );
+    var cd = Object.getOwnPropertyDescriptor( o.Class, 'Instances' );
     if( !o.ownStatics )
     {
       test.identical( cd, undefined );
@@ -4097,7 +4097,7 @@ function classDeclare( test )
       test.is( !!cd.set );
     }
 
-    var pd = Object.getOwnPropertyDescriptor( o.Class.prototype, 'instances' );
+    var pd = Object.getOwnPropertyDescriptor( o.Class.prototype, 'Instances' );
 
     if( !o.ownStatics )
     {
@@ -4165,7 +4165,7 @@ function classDeclare( test )
     test.case = 'setting static field with constructor';
 
     o.Class.Instances = o.Class.Instances.slice();
-    test.is( o.Class.Instances === C1.Instances || _.mapOwnKey( o.Class.prototype.Statics, 'instances' ) );
+    test.is( o.Class.Instances === C1.Instances || _.mapOwnKey( o.Class.prototype.Statics, 'Instances' ) );
     test.is( o.Class.Instances === o.Class.prototype.Instances );
     test.is( o.Class.Instances === c1a.Instances );
     test.is( o.Class.Instances === c1b.Instances );
@@ -4175,7 +4175,7 @@ function classDeclare( test )
     test.case = 'setting static field with prototype';
 
     o.Class.prototype.Instances = o.Class.prototype.Instances.slice();
-    test.is( o.Class.Instances === C1.Instances || _.mapOwnKey( o.Class.prototype.Statics, 'instances' ) );
+    test.is( o.Class.Instances === C1.Instances || _.mapOwnKey( o.Class.prototype.Statics, 'Instances' ) );
     test.is( o.Class.Instances === o.Class.prototype.Instances );
     test.is( o.Class.Instances === c1a.Instances );
     test.is( o.Class.Instances === c1b.Instances );
@@ -4185,7 +4185,7 @@ function classDeclare( test )
     test.case = 'setting static field with instance';
 
     c1a.Instances = o.Class.Instances.slice();
-    test.is( o.Class.Instances === C1.Instances || _.mapOwnKey( o.Class.prototype.Statics, 'instances' ) );
+    test.is( o.Class.Instances === C1.Instances || _.mapOwnKey( o.Class.prototype.Statics, 'Instances' ) );
     test.is( o.Class.Instances === o.Class.prototype.Instances );
     test.is( o.Class.Instances === c1a.Instances );
     test.is( o.Class.Instances === c1b.Instances );
