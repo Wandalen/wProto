@@ -155,21 +155,21 @@ function _optionsNormalize( o )
   optionNormalize( 'put' );
   optionNormalize( 'set', 'put' );
 
-  // debugger;
-  // _.assert( _.boolIs( o.take ) || _.routineIs( o.take ) );
-  // _.assert( _.boolIs( o.get ) || _.routineIs( o.get ) );
-  // _.assert( _.boolIs( o.put ) || _.routineIs( o.put ) );
-  // _.assert( _.boolIs( o.set ) || _.routineIs( o.set ) );
+  // // debugger;
+  // // _.assert( _.boolIs( o.take ) || _.routineIs( o.take ) );
+  // // _.assert( _.boolIs( o.get ) || _.routineIs( o.get ) );
+  // // _.assert( _.boolIs( o.put ) || _.routineIs( o.put ) );
+  // // _.assert( _.boolIs( o.set ) || _.routineIs( o.set ) );
 
   function optionNormalize( n1, n2 )
   {
-    if( o[ n1 ] === null )
-    {
-      if( o.suite && o.suite[ n1 ] !== undefined && o.suite[ n1 ] !== null )
-      o[ n1 ] = o.suite[ n1 ];
-      else if( n2 && o[ n2 ] !== null )
-      o[ n1 ] = !!o[ n2 ];
-    }
+    // if( o[ n1 ] === null )
+    // {
+    //   if( o.suite && o.suite[ n1 ] !== undefined && o.suite[ n1 ] !== null )
+    //   o[ n1 ] = o.suite[ n1 ];
+    //   else if( n2 && o[ n2 ] !== null )
+    //   o[ n1 ] = !!o[ n2 ];
+    // }
     if( _.boolLike( o[ n1 ] ) )
     o[ n1 ] = !!o[ n1 ];
   }
@@ -206,14 +206,14 @@ function _methodsMake( o )
     fieldSymbol = Symbol.for( o.name );
   }
 
+  if( _global_.debugger )
+  debugger;
+
   methodsNormalize( 'take' );
   methodsNormalize( 'get' );
   methodsNormalize( 'put' );
   methodsNormalize( 'set' );
   methodsNormalize( 'copy' );
-
-  if( _global_.debugger )
-  debugger;
 
   /* take */
 
@@ -319,12 +319,15 @@ function _methodsMake( o )
     }
     else if( _.routineIs( result.put ) )
     result.set = result.put;
-    else
+    else if( o.put !== false || o.set ) /* yyy */
+    // else
     result.set = function set( src )
     {
       this[ fieldSymbol ] = src;
       return src;
     }
+    else
+    o.set = false;
   }
 
   /* readOnlyProduct */
@@ -346,9 +349,25 @@ function _methodsMake( o )
 
   _.assert
   (
+    !result.take || o.take !== false,
+    () => `Field "${fieldName}" is read only, but taker found in ${_.toStrShort( o.methods )}`
+  );
+  _.assert
+  (
+    !result.get || o.get !== false,
+    () => `Field "${fieldName}" is read only, but getter found in ${_.toStrShort( o.methods )}`
+  );
+  _.assert
+  (
+    !result.put || o.put !== false,
+    () => `Field "${fieldName}" is read only, but putter found in ${_.toStrShort( o.methods )}`
+  );
+  _.assert
+  (
     !result.set || o.set !== false,
     () => `Field "${fieldName}" is read only, but setter found in ${_.toStrShort( o.methods )}`
   );
+
   _.assert
   (
     !!result.set || o.set === false,
@@ -593,12 +612,10 @@ function _methodsValidate( o )
     {
       let name1 = name + _.strCapitalize( type );
       let name2 = '_' + name + _.strCapitalize( type );
-
       if( name1 in o.object )
       throw _.err( `Object should not have method ${name1}, if accessor has it disabled` );
       if( name2 in o.object )
-      throw _.err( `Object should not have method ${name1}, if accessor has it disabled` );
-
+      throw _.err( `Object should not have method ${name2}, if accessor has it disabled` );
     }
   }
 
@@ -749,6 +766,9 @@ function _declareAct( o )
   _.assert( _.strIs( o.name ) || _.symbolIs( o.name ) );
   _.assert( _.longHas( [ null, 0, false, 'rewrite', 'supplement' ], o.combining ), 'not tested' );
 
+  if( _global_.debugger )
+  debugger;
+
   _.accessor._optionsNormalize( o );
 
   let fieldName;
@@ -800,8 +820,8 @@ function _declareAct( o )
     kind : 'suite',
   });
 
-  if( o.name === 'dims' )
-  debugger;
+  // if( o.name === 'dims' )
+  // debugger;
 
   o.amethods = _.accessor._methodsMake /* xxx : rename amethods -> suite */
   ({

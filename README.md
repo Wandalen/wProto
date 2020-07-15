@@ -5,5 +5,5 @@ Relations module. Collection of routines to define classes and relations between
 ### Try out
 ```
 npm install
-node sample/Sample.js
+node sample/Sample.s
 ```

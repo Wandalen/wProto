@@ -257,9 +257,9 @@ function mixinHas( proto, mixin )
  *  };
  *
  *  let Self = Betta;
-function Betta( o )
+ *  function Betta( o )
  *  {
- *    return Self.prototype.init.apply( this, arguments );
+ *    return _.workpiece.construct( Self, this, arguments );
  *  }
  *
  *  function init()
