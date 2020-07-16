@@ -7,8 +7,8 @@ if( typeof module !== 'undefined' )
 
 }
 
-var _global = _global_;
-var _ = _global_.wTools;
+let _global = _global_;
+let _ = _global_.wTools;
 var _ObjectHasOwnProperty = Object.hasOwnProperty;
 var _nameFielded = _.nameFielded;
 
@@ -16,8 +16,8 @@ _.assert( !_.lconstruction )
 
 //
 
-var Parent = null;
-var Self = function wLike( o )
+let Parent = null;
+let Self = function wLike( o )
 {
 }
 
