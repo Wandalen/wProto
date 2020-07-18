@@ -205,7 +205,7 @@ constructionAmendBlueprintAccessorAlias.description =
 let Self =
 {
 
-  name : 'Tools.base.l3.Proto.blueprint',
+  name : 'Tools.l3.Proto.blueprint',
   silencing : 1,
 
   tests :

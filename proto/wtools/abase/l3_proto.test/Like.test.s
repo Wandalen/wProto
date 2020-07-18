@@ -75,7 +75,7 @@ function isLike( test )
 let Self =
 {
 
-  name : 'Tools.base.l3.ProtoLike',
+  name : 'Tools.l3.ProtoLike',
   silencing : 1,
 
   tests :

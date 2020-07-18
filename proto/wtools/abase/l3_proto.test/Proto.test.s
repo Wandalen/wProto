@@ -1837,7 +1837,7 @@ function accessorIsClean( test )
     f1 : { readOnly : 1 },
   }
 
-  var Extend =
+  var Extension =
   {
     Accessors,
   }
@@ -1845,7 +1845,7 @@ function accessorIsClean( test )
   _.classDeclare
   ({
     cls : BasicConstructor,
-    extend : Extend,
+    extend : Extension,
   });
 
   var methods = Object.create( null );
@@ -2756,17 +2756,17 @@ function forbids( test )
     f1 : 'f1',
   }
 
-  var Extend =
+  var Extension =
   {
     Forbids,
   }
 
-  // Extend.constructor = BasicConstructor;
+  // Extension.constructor = BasicConstructor;
 
   _.classDeclare
   ({
     cls : BasicConstructor,
-    extend : Extend,
+    extend : Extension,
   });
 
   var instance = new BasicConstructor();
@@ -3997,7 +3997,7 @@ function classDeclare( test )
     Class : C3,
     Class0 : C1,
     Statics : Statics2,
-    Extend : Extend2,
+    Extension : Extend2,
     keys : [ 'Instances', 'f1', 'f4', 'f2', 'f3' ],
     vals : [ C3.Instances, C3.f1, C3.f4, C1.f2, C1.f3 ],
   });
@@ -4053,8 +4053,8 @@ function classDeclare( test )
     if( !o.Statics )
     o.Statics = Statics1;
 
-    if( !o.Extend )
-    o.Extend = Extend1;
+    if( !o.Extension )
+    o.Extension = Extend1;
 
     if( !o.keys )
     o.keys = _.mapKeys( o.Statics );
@@ -4613,7 +4613,7 @@ function accessorCopyBasic( test )
 let Self =
 {
 
-  name : 'Tools.base.l3.proto',
+  name : 'Tools.l3.proto',
   silencing : 1,
 
   tests :
