@@ -1,1 +1,24 @@
-{"name":"wProto","version":"0.4.275","engine":"node >= 10.0.0","description":"Relations module. Collection of routines to define classes and relations between them. Proto leverages multiple inheritances, mixins, accessors, fields groups defining, introspection and more. Use it as a skeleton of the application.","author":"Kostiantyn Wandalen <wanalen@01.school>","license":"MIT","contributors":[{"name":"Kostiantyn Wandalen","email":"wanalen@01.school"},{"name":"Volodymyr M.","email":"volodymyr.migdal@gmail.com"}],"main":"proto/wtools/abase/l3_proto/Include.s","files":["proto/wtools/abase/l3_proto","proto/wtools/Tools.s","out"],"scripts":{"test":"wtest .run 'proto/**' rapidity:-1","docgen":"wdocgen proto"},"repository":{"type":"git","url":"https://github.com/Wandalen/wProto.git"},"bugs":{"url":"https://github.com/Wandalen/wProto/issues"},"dependencies":{"wTools":"alpha","wblueprint":"alpha"},"devDependencies":{"wProto":"file:.","wequaler":"alpha","wTesting":"alpha"},"keywords":["wTools","wProto","mixin","Class","Object","Prototype","Incapsulation"]}
+{
+  "name" : "wProto",
+  "version" : "0.4.276",
+  "engine" : "node >= 10.0.0",
+  "description" : "Relations module. Collection of routines to define classes and relations between them. Proto leverages multiple inheritances, mixins, accessors, fields groups defining, introspection and more. Use it as a skeleton of the application.",
+  "author" : "Kostiantyn Wandalen <wanalen@01.school>",
+  "license" : "MIT",
+  "contributors" :
+  [
+    { "name" : "Kostiantyn Wandalen", "email" : "wanalen@01.school" },
+    { "name" : "Volodymyr M.", "email" : "volodymyr.migdal@gmail.com" }
+  ],
+  "main" : "proto/wtools/abase/l3_proto/Include.s",
+  "files" : [ "proto/wtools/abase/l3_proto", "proto/wtools/Tools.s", "out" ],
+  "scripts" : { "test" : "wtest .run 'proto/**' rapidity:-1", "docgen" : "wdocgen proto" },
+  "repository" : { "type" : "git", "url" : "https://github.com/Wandalen/wProto.git" },
+  "bugs" :
+  {
+    "url" : "https://github.com/Wandalen/wProto/issues"
+  },
+  "dependencies" : { "wTools" : "alpha", "wblueprint" : "alpha" },
+  "devDependencies" : { "wProto" : "file:.", "wequaler" : "alpha", "wTesting" : "alpha" },
+  "keywords" : [ "wTools", "wProto", "mixin", "Class", "Object", "Prototype", "Incapsulation" ]
+}
