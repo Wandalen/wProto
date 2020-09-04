@@ -9,9 +9,9 @@ Routine `_.workpiece.construct` is used for instances construction.
 
 ### Details:
 * Returns an instance that was passed as an argument if it's an instance of the same class.
-* Calls `init` method of the class.
+* Calls `init` method of the class - optional method to initialize instance with options.
 * Call with `new` changes the behaviour: always a new instance is returned.
-* Advanced: An array can be processed.
+* Advanced: An array can be processed: returns an array with passed arguments ( if they are instances of the same class ) and newly created instances.
 
 ### Example
 
@@ -21,5 +21,33 @@ var Constructor = function Constructor()
     return _.workpiece.construct( Constructor, this, arguments );
 }
 
+function init()
+{
+  counter += 1;
+}
+
+var counter = 0;
+var Extension =
+{
+  init,
+}
+
+_.classDeclare
+({
+  cls : BasicConstructor,
+  parent : null,
+  extend : Extension,
+});
+
 var instance = Constructor();
+
+console.log( instance instanceof BasicConstructor );
+// log : true
+console.log( instance.constructor === BasicConstructor );
+// log : true
+console.log( instance.init === init );
+// log : true
+console.log( counter === 1 );
+// log : true
+
 ```
