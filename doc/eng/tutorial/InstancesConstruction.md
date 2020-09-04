@@ -18,7 +18,7 @@ Routine `_.workpiece.construct` is used for instances construction.
 ```javascript
 var Constructor = function Constructor()
 {
-    return _.workpiece.construct( Constructor, this, arguments );
+  return _.workpiece.construct( Constructor, this, arguments );
 }
 
 function init()
