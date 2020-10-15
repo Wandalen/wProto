@@ -3,7 +3,7 @@
 'use strict';
 
 /**
- * Collection of routines to define classes and relations between them.
+ * Collection of cross-platform routines to define classes and relations between them.
  */
 
 /**

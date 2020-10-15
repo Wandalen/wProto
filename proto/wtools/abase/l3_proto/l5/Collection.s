@@ -928,7 +928,7 @@ let toElementSuite = _.accessor.suiteMakerFrom_functor( toElementGet_functor, to
  * @namespace Tools.accessor.setter
  */
 
-function alias_pre( routine, args )
+function alias_head( routine, args )
 {
 
   let o = args[ 0 ];
@@ -984,7 +984,7 @@ aliasSetter_functor_body.defaults =
   // fieldName : null,
 }
 
-let aliasSet_functor = _.routineFromPreAndBody( alias_pre, aliasSetter_functor_body );
+let aliasSet_functor = _.routineUnite( alias_head, aliasSetter_functor_body );
 
 //
 
@@ -1031,7 +1031,7 @@ function aliasGet_functor_body( o )
 
 aliasGet_functor_body.defaults = Object.create( aliasSet_functor.defaults );
 
-let aliasGetter_functor = _.routineFromPreAndBody( alias_pre, aliasGet_functor_body );
+let aliasGetter_functor = _.routineUnite( alias_head, aliasGet_functor_body );
 
 //
 

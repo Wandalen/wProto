@@ -14,7 +14,7 @@ _.assert( _.objectIs( _.field ), 'wProto needs wTools/staging/wtools/abase/l1/Fi
 _.assert( _.routineIs( _nameFielded ), 'wProto needs wTools/staging/wtools/l3/NameTools.s' );
 
 /**
- * @summary Collection of routines for declaring accessors
+ * @summary Collection of cross-platform routines for declaring accessors
  * @namespace wTools.accessor
  * @extends Tools
  * @module Tools/base/Proto
@@ -1026,14 +1026,14 @@ var defaults = _declareAct.defaults =
  *
  * let Self = ClassName;
 function ClassName( o ) { };
- * _.accessor._declare_pre( Self, { a : 'a', b : 'b' }, 'set/get call' );
+ * _.accessor._declare_head( Self, { a : 'a', b : 'b' }, 'set/get call' );
  *
  * @private
- * @function _declare_pre
+ * @function _declare_head
  * @namespace Tools.accessor
  */
 
-function _declare_pre( routine, args )
+function _declare_head( routine, args )
 {
   let o;
 
@@ -1219,7 +1219,7 @@ var defaults = declare_body.defaults = _.mapExtend( null, _declareAct.defaults )
 defaults.names = null;
 delete defaults.name;
 
-let declare = _.routineFromPreAndBody( _declare_pre, declare_body );
+let declare = _.routineUnite( _declare_head, declare_body );
 
 //
 
@@ -1344,7 +1344,7 @@ var defaults = forbid_body.defaults =
 // delete defaults.strict;
 // delete defaults.prime;
 
-let forbid = _.routineFromPreAndBody( _declare_pre, forbid_body );
+let forbid = _.routineUnite( _declare_head, forbid_body );
 
 //
 
@@ -1518,7 +1518,7 @@ function readOnly_body( o )
 var defaults = readOnly_body.defaults = _.mapExtend( null, declare.body.defaults );
 defaults.readOnly = true;
 
-let readOnly = _.routineFromPreAndBody( _declare_pre, readOnly_body );
+let readOnly = _.routineUnite( _declare_head, readOnly_body );
 
 //
 
@@ -1635,9 +1635,9 @@ function suiteMakerFrom_functor( fop )
   if( fop.setterFunctor && _.entityIdentical )
   _.assert( _.entityIdentical( defaults, _.mapExtend( null, fop.setterFunctor.defaults ) ) );
 
-  let _pre = fop.getterFunctor.pre || fop.setterFunctor.pre;
-  if( _pre )
-  accessorMaker.pre = pre;
+  let _head = fop.getterFunctor.head || fop.setterFunctor.head;
+  if( _head )
+  accessorMaker.head = head;
 
   accessorMaker.defaults = defaults;
 
@@ -1645,9 +1645,9 @@ function suiteMakerFrom_functor( fop )
 
   /* */
 
-  function pre( routine, args )
+  function head( routine, args )
   {
-    let o2 = _pre( routine, args );
+    let o2 = _head( routine, args );
     return o2;
   }
 
@@ -1657,8 +1657,8 @@ function suiteMakerFrom_functor( fop )
   {
     let r = Object.create( null );
 
-    if( _pre )
-    o = pre( accessorMaker, arguments );
+    if( _head )
+    o = head( accessorMaker, arguments );
     else
     o = _.routineOptions( accessorMaker, arguments );
 
@@ -1774,7 +1774,7 @@ let AccessorExtension =
   // declare
 
   _register,
-  _declare_pre,
+  _declare_head,
   _declareAct,
   declare,
 

@@ -1,6 +1,6 @@
 # module::Proto [![status](https://github.com/Wandalen/wProto/workflows/publish/badge.svg)](https://github.com/Wandalen/wProto/actions?query=workflow%3Apublish) [![experimental](https://img.shields.io/badge/stability-experimental-orange.svg)](https://github.com/emersion/stability-badges#experimental)
 
-Relations module. Collection of routines to define classes and relations between them. Proto leverages multiple inheritances, mixins, accessors, fields groups defining, introspection and more. Use it as a skeleton of the application.
+Relations module. Collection of cross-platform routines to define classes and relations between them. Proto leverages multiple inheritances, mixins, accessors, fields groups defining, introspection and more. Use it as a skeleton of the application.
 
 ### Try out from the repository
 ```
