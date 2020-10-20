@@ -2,10 +2,13 @@ format: outwillfile-2.0
 root:
   - wProto.out
 consistency:
-  ../.ex.will.yml: &ref_0
+  wProto.out.will.yml: &ref_0
+    hash: f8e34e398b70f1a44db4f369f45ce064
+    size: 39524
+  ../.ex.will.yml: &ref_1
     hash: 4021a626a502a47b9eed2f05f12ef78d
     size: 2007
-  ../.im.will.yml: &ref_1
+  ../.im.will.yml: &ref_2
     hash: fd010b98a60a9eac22d8f858ab250a5c
     size: 5050
 module:
@@ -20,11 +23,11 @@ module:
         and more. Use it as a skeleton of the application.
       enabled: 1
       version: 0.4.169
-      interpreters: &ref_2
+      interpreters:
         - njs >= 10.0.0
         - chrome >= 60.0.0
         - firefox >= 60.0.0
-      keywords: &ref_3
+      keywords:
         - wTools
         - wProto
         - mixin
@@ -34,11 +37,11 @@ module:
         - Incapsulation
       license: MIT
       author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors: &ref_4
+      contributors:
         - Kostiantyn Wandalen <wanalen@01.school>
         - Volodymyr M. <volodymyr.migdal@gmail.com>
       npm.name: wProto
-      npm.scripts: &ref_5
+      npm.scripts:
         test: wtest .run proto/**
         docgen: wdocgen .build proto
     path:
@@ -719,6 +722,24 @@ module:
           content: prime
         inherit:
           - files.transpile
+      exported.proto.export:
+        opts:
+          filePath: 'reflector::exported.proto.export'
+        criterion:
+          generated: 1
+          content: proto
+          export: 1
+        inherit:
+          - files.reflect
+      exported.files.proto.export:
+        opts:
+          filePath: 'reflector::exported.files.proto.export'
+        criterion:
+          generated: 1
+          content: proto
+          export: 1
+        inherit:
+          - files.reflect
     build:
       proto.export:
         steps:
@@ -807,8 +828,9 @@ module:
           content: proto
           export: 1
     consistency:
-      ../.ex.will.yml: *ref_0
-      ../.im.will.yml: *ref_1
+      wProto.out.will.yml: *ref_0
+      ../.ex.will.yml: *ref_1
+      ../.im.will.yml: *ref_2
   ../:
     about:
       name: wProto
@@ -820,13 +842,27 @@ module:
         and more. Use it as a skeleton of the application.
       enabled: 1
       version: 0.4.169
-      interpreters: *ref_2
-      keywords: *ref_3
+      interpreters:
+        - njs >= 10.0.0
+        - chrome >= 60.0.0
+        - firefox >= 60.0.0
+      keywords:
+        - wTools
+        - wProto
+        - mixin
+        - Class
+        - Object
+        - Prototype
+        - Incapsulation
       license: MIT
       author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors: *ref_4
+      contributors:
+        - Kostiantyn Wandalen <wanalen@01.school>
+        - Volodymyr M. <volodymyr.migdal@gmail.com>
       npm.name: wProto
-      npm.scripts: *ref_5
+      npm.scripts:
+        test: wtest .run proto/**
+        docgen: wdocgen .build proto
     path:
       module.willfiles:
         criterion:
@@ -1499,3 +1535,6 @@ module:
       ../.im.will.yml:
         hash: fd010b98a60a9eac22d8f858ab250a5c
         size: 5050
+      wProto.out.will.yml:
+        hash: f8e34e398b70f1a44db4f369f45ce064
+        size: 39524
