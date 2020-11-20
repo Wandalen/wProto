@@ -46,7 +46,7 @@ let ActionStatus = _.blueprint.define
 function constructionAmendBlueprintGetterAlias( test )
 {
 
-  test.is( _.routineIs( _.accessor.define.getter.alias ) );
+  test.true( _.routineIs( _.accessor.define.getter.alias ) );
 
   var f1 = function f1(){};
   var _container =
@@ -69,12 +69,12 @@ function constructionAmendBlueprintGetterAlias( test )
 
   var map = _.construction.extend( null, blueprint );
 
-  test.is( _.mapIs( map ) );
-  test.is( _.mapIsPure( map ) );
+  test.true( _.mapIs( map ) );
+  test.true( _.mapIsPure( map ) );
   test.identical( _.mapKeys( map ), [ 'begin', 'end', 'str', 'container1', 'f1' ] );
   test.identical( map.begin, container.Begin );
   test.identical( map.str, container.Str );
-  test.is( _.routineIs( map.begin ) );
+  test.true( _.routineIs( map.begin ) );
   test.identical( map.str, 'Str' );
   test.identical( container.Str, 'Str' );
 
@@ -100,7 +100,7 @@ constructionAmendBlueprintGetterAlias.description =
 function constructionAmendBlueprintSetterAlias( test )
 {
 
-  test.is( _.routineIs( _.accessor.define.setter.alias ) );
+  test.true( _.routineIs( _.accessor.define.setter.alias ) );
 
   var f1 = function f1(){};
   var _container =
@@ -123,8 +123,8 @@ function constructionAmendBlueprintSetterAlias( test )
 
   var map = _.construction.extend( null, blueprint );
 
-  test.is( _.mapIs( map ) );
-  test.is( _.mapIsPure( map ) );
+  test.true( _.mapIs( map ) );
+  test.true( _.mapIsPure( map ) );
   test.identical( _.mapKeys( map ), [ 'begin', 'end', 'str', 'container1', 'f1' ] );
   test.identical( map.begin, undefined );
   test.identical( map.str, undefined );
@@ -150,7 +150,7 @@ constructionAmendBlueprintSetterAlias.description =
 function constructionAmendBlueprintAccessorAlias( test )
 {
 
-  test.is( _.routineIs( _.accessor.define.suite.alias ) );
+  test.true( _.routineIs( _.accessor.define.suite.alias ) );
 
   var f1 = function f1(){};
   var _container =
@@ -173,12 +173,12 @@ function constructionAmendBlueprintAccessorAlias( test )
 
   var map = _.construction.extend( null, blueprint );
 
-  test.is( _.mapIs( map ) );
-  test.is( _.mapIsPure( map ) );
+  test.true( _.mapIs( map ) );
+  test.true( _.mapIsPure( map ) );
   test.identical( _.mapKeys( map ), [ 'begin', 'end', 'str', 'container1', 'f1' ] );
   test.identical( map.begin, container.Begin );
   test.identical( map.str, container.Str );
-  test.is( _.routineIs( map.begin ) );
+  test.true( _.routineIs( map.begin ) );
   test.identical( map.str, 'Str' );
   test.identical( container.Str, 'Str' );
 
