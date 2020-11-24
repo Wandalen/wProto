@@ -757,7 +757,7 @@ function isFinited( src )
 function finit( src )
 {
 
-  _.assert( !Object.isFrozen( src ), `Seems instance ${_.workpiece.qualifiedNameTry( src )} is already finited` );
+  _.assert( !Object.isFrozen( src ), () => `Seems instance ${_.workpiece.qualifiedNameTry( src )} is already finited` );
   _.assert( _.objectLikeOrRoutine( src ) );
   _.assert( arguments.length === 1, 'Expects single argument' );
 

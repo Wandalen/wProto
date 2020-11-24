@@ -30,41 +30,41 @@ function instanceIs( t )
   var self = this;
 
   t.will = 'pure map';
-  t.is( !_.instanceIs( Object.create( null ) ) );
+  t.true( !_.instanceIs( Object.create( null ) ) );
 
   t.will = 'map';
-  t.is( !_.instanceIs( {} ) );
+  t.true( !_.instanceIs( {} ) );
 
   t.will = 'primitive';
-  t.is( !_.instanceIs( 0 ) );
-  t.is( !_.instanceIs( 1 ) );
-  t.is( !_.instanceIs( '1' ) );
-  t.is( !_.instanceIs( null ) );
-  t.is( !_.instanceIs( undefined ) );
+  t.true( !_.instanceIs( 0 ) );
+  t.true( !_.instanceIs( 1 ) );
+  t.true( !_.instanceIs( '1' ) );
+  t.true( !_.instanceIs( null ) );
+  t.true( !_.instanceIs( undefined ) );
 
   t.will = 'routine';
-  t.is( !_.instanceIs( Date ) );
-  t.is( !_.instanceIs( F32x ) );
-  t.is( !_.instanceIs( function(){} ) );
-  t.is( !_.instanceIs( Self.constructor ) );
+  t.true( !_.instanceIs( Date ) );
+  t.true( !_.instanceIs( F32x ) );
+  t.true( !_.instanceIs( function(){} ) );
+  t.true( !_.instanceIs( Self.constructor ) );
 
   t.will = 'long';
-  t.is( _.instanceIs( [] ) );
-  t.is( _.instanceIs( new F32x() ) );
+  t.true( _.instanceIs( [] ) );
+  t.true( _.instanceIs( new F32x() ) );
 
   t.will = 'object-like';
-  t.is( _.instanceIs( /x/ ) );
-  t.is( _.instanceIs( new Date() ) );
-  t.is( _.instanceIs( new (function(){})() ) );
-  t.is( _.instanceIs( Self ) );
+  t.true( _.instanceIs( /x/ ) );
+  t.true( _.instanceIs( new Date() ) );
+  t.true( _.instanceIs( new (function(){})() ) );
+  t.true( _.instanceIs( Self ) );
 
   t.will = 'object-like prototype';
-  t.is( !_.instanceIs( Object.getPrototypeOf( [] ) ) );
-  t.is( !_.instanceIs( Object.getPrototypeOf( /x/ ) ) );
-  t.is( !_.instanceIs( Object.getPrototypeOf( new Date() ) ) );
-  t.is( !_.instanceIs( Object.getPrototypeOf( new F32x() ) ) );
-  t.is( !_.instanceIs( Object.getPrototypeOf( new (function(){})() ) ) );
-  t.is( !_.instanceIs( Object.getPrototypeOf( Self ) ) );
+  t.true( !_.instanceIs( Object.getPrototypeOf( [] ) ) );
+  t.true( !_.instanceIs( Object.getPrototypeOf( /x/ ) ) );
+  t.true( !_.instanceIs( Object.getPrototypeOf( new Date() ) ) );
+  t.true( !_.instanceIs( Object.getPrototypeOf( new F32x() ) ) );
+  t.true( !_.instanceIs( Object.getPrototypeOf( new (function(){})() ) ) );
+  t.true( !_.instanceIs( Object.getPrototypeOf( Self ) ) );
 
 }
 
@@ -75,41 +75,41 @@ function instanceIsStandard( t )
   var self = this;
 
   t.will = 'pure map';
-  t.is( !_.instanceIsStandard( Object.create( null ) ) );
+  t.true( !_.instanceIsStandard( Object.create( null ) ) );
 
   t.will = 'map';
-  t.is( !_.instanceIsStandard( {} ) );
+  t.true( !_.instanceIsStandard( {} ) );
 
   t.will = 'primitive';
-  t.is( !_.instanceIsStandard( 0 ) );
-  t.is( !_.instanceIsStandard( 1 ) );
-  t.is( !_.instanceIsStandard( '1' ) );
-  t.is( !_.instanceIsStandard( null ) );
-  t.is( !_.instanceIsStandard( undefined ) );
+  t.true( !_.instanceIsStandard( 0 ) );
+  t.true( !_.instanceIsStandard( 1 ) );
+  t.true( !_.instanceIsStandard( '1' ) );
+  t.true( !_.instanceIsStandard( null ) );
+  t.true( !_.instanceIsStandard( undefined ) );
 
   t.will = 'routine';
-  t.is( !_.instanceIsStandard( Date ) );
-  t.is( !_.instanceIsStandard( F32x ) );
-  t.is( !_.instanceIsStandard( function(){} ) );
-  t.is( !_.instanceIsStandard( Self.constructor ) );
+  t.true( !_.instanceIsStandard( Date ) );
+  t.true( !_.instanceIsStandard( F32x ) );
+  t.true( !_.instanceIsStandard( function(){} ) );
+  t.true( !_.instanceIsStandard( Self.constructor ) );
 
   t.will = 'long';
-  t.is( !_.instanceIsStandard( [] ) );
-  t.is( !_.instanceIsStandard( new F32x() ) );
+  t.true( !_.instanceIsStandard( [] ) );
+  t.true( !_.instanceIsStandard( new F32x() ) );
 
   t.will = 'object-like';
-  t.is( !_.instanceIsStandard( /x/ ) );
-  t.is( !_.instanceIsStandard( new Date() ) );
-  t.is( !_.instanceIsStandard( new (function(){})() ) );
-  t.is( _.instanceIsStandard( Self ) );
+  t.true( !_.instanceIsStandard( /x/ ) );
+  t.true( !_.instanceIsStandard( new Date() ) );
+  t.true( !_.instanceIsStandard( new (function(){})() ) );
+  t.true( _.instanceIsStandard( Self ) );
 
   t.will = 'object-like prototype';
-  t.is( !_.instanceIsStandard( Object.getPrototypeOf( [] ) ) );
-  t.is( !_.instanceIsStandard( Object.getPrototypeOf( /x/ ) ) );
-  t.is( !_.instanceIsStandard( Object.getPrototypeOf( new Date() ) ) );
-  t.is( !_.instanceIsStandard( Object.getPrototypeOf( new F32x() ) ) );
-  t.is( !_.instanceIsStandard( Object.getPrototypeOf( new (function(){})() ) ) );
-  t.is( !_.instanceIsStandard( Object.getPrototypeOf( Self ) ) );
+  t.true( !_.instanceIsStandard( Object.getPrototypeOf( [] ) ) );
+  t.true( !_.instanceIsStandard( Object.getPrototypeOf( /x/ ) ) );
+  t.true( !_.instanceIsStandard( Object.getPrototypeOf( new Date() ) ) );
+  t.true( !_.instanceIsStandard( Object.getPrototypeOf( new F32x() ) ) );
+  t.true( !_.instanceIsStandard( Object.getPrototypeOf( new (function(){})() ) ) );
+  t.true( !_.instanceIsStandard( Object.getPrototypeOf( Self ) ) );
 
 }
 
@@ -120,39 +120,39 @@ function prototypeIs( t )
   var self = this;
 
   t.will = 'pure map';
-  t.is( !_.prototypeIs( Object.create( null ) ) );
+  t.true( !_.prototypeIs( Object.create( null ) ) );
 
   t.will = 'map';
-  t.is( !_.prototypeIs( {} ) );
+  t.true( !_.prototypeIs( {} ) );
 
   t.will = 'primitive';
-  t.is( !_.prototypeIs( 0 ) );
-  t.is( !_.prototypeIs( 1 ) );
-  t.is( !_.prototypeIs( '1' ) );
-  t.is( !_.prototypeIs( null ) );
-  t.is( !_.prototypeIs( undefined ) );
+  t.true( !_.prototypeIs( 0 ) );
+  t.true( !_.prototypeIs( 1 ) );
+  t.true( !_.prototypeIs( '1' ) );
+  t.true( !_.prototypeIs( null ) );
+  t.true( !_.prototypeIs( undefined ) );
 
   t.will = 'routine';
-  t.is( !_.prototypeIs( Date ) );
-  t.is( !_.prototypeIs( F32x ) );
-  t.is( !_.prototypeIs( function(){} ) );
-  t.is( !_.prototypeIs( Self.constructor ) );
+  t.true( !_.prototypeIs( Date ) );
+  t.true( !_.prototypeIs( F32x ) );
+  t.true( !_.prototypeIs( function(){} ) );
+  t.true( !_.prototypeIs( Self.constructor ) );
 
   t.will = 'object-like';
-  t.is( !_.prototypeIs( [] ) );
-  t.is( !_.prototypeIs( /x/ ) );
-  t.is( !_.prototypeIs( new Date() ) );
-  t.is( !_.prototypeIs( new F32x() ) );
-  t.is( !_.prototypeIs( new (function(){})() ) );
-  t.is( !_.prototypeIs( Self ) );
+  t.true( !_.prototypeIs( [] ) );
+  t.true( !_.prototypeIs( /x/ ) );
+  t.true( !_.prototypeIs( new Date() ) );
+  t.true( !_.prototypeIs( new F32x() ) );
+  t.true( !_.prototypeIs( new (function(){})() ) );
+  t.true( !_.prototypeIs( Self ) );
 
   t.will = 'object-like prototype';
-  t.is( _.prototypeIs( Object.getPrototypeOf( [] ) ) );
-  t.is( _.prototypeIs( Object.getPrototypeOf( /x/ ) ) );
-  t.is( _.prototypeIs( Object.getPrototypeOf( new Date() ) ) );
-  t.is( _.prototypeIs( Object.getPrototypeOf( new F32x() ) ) );
-  t.is( _.prototypeIs( Object.getPrototypeOf( new (function(){})() ) ) );
-  t.is( _.prototypeIs( Object.getPrototypeOf( Self ) ) );
+  t.true( _.prototypeIs( Object.getPrototypeOf( [] ) ) );
+  t.true( _.prototypeIs( Object.getPrototypeOf( /x/ ) ) );
+  t.true( _.prototypeIs( Object.getPrototypeOf( new Date() ) ) );
+  t.true( _.prototypeIs( Object.getPrototypeOf( new F32x() ) ) );
+  t.true( _.prototypeIs( Object.getPrototypeOf( new (function(){})() ) ) );
+  t.true( _.prototypeIs( Object.getPrototypeOf( Self ) ) );
 
 }
 
@@ -163,39 +163,39 @@ function constructorIs( t )
   var self = this;
 
   t.will = 'pure map';
-  t.is( !_.constructorIs( Object.create( null ) ) );
+  t.true( !_.constructorIs( Object.create( null ) ) );
 
   t.will = 'map';
-  t.is( !_.constructorIs( {} ) );
+  t.true( !_.constructorIs( {} ) );
 
   t.will = 'primitive';
-  t.is( !_.constructorIs( 0 ) );
-  t.is( !_.constructorIs( 1 ) );
-  t.is( !_.constructorIs( '1' ) );
-  t.is( !_.constructorIs( null ) );
-  t.is( !_.constructorIs( undefined ) );
+  t.true( !_.constructorIs( 0 ) );
+  t.true( !_.constructorIs( 1 ) );
+  t.true( !_.constructorIs( '1' ) );
+  t.true( !_.constructorIs( null ) );
+  t.true( !_.constructorIs( undefined ) );
 
   t.will = 'routine';
-  t.is( _.constructorIs( Date ) );
-  t.is( _.constructorIs( F32x ) );
-  t.is( _.constructorIs( function(){} ) );
-  t.is( _.constructorIs( Self.constructor ) );
+  t.true( _.constructorIs( Date ) );
+  t.true( _.constructorIs( F32x ) );
+  t.true( _.constructorIs( function(){} ) );
+  t.true( _.constructorIs( Self.constructor ) );
 
   t.will = 'object-like';
-  t.is( !_.constructorIs( [] ) );
-  t.is( !_.constructorIs( /x/ ) );
-  t.is( !_.constructorIs( new Date() ) );
-  t.is( !_.constructorIs( new F32x() ) );
-  t.is( !_.constructorIs( new (function(){})() ) );
-  t.is( !_.constructorIs( Self ) );
+  t.true( !_.constructorIs( [] ) );
+  t.true( !_.constructorIs( /x/ ) );
+  t.true( !_.constructorIs( new Date() ) );
+  t.true( !_.constructorIs( new F32x() ) );
+  t.true( !_.constructorIs( new (function(){})() ) );
+  t.true( !_.constructorIs( Self ) );
 
   t.will = 'object-like prototype';
-  t.is( !_.constructorIs( Object.getPrototypeOf( [] ) ) );
-  t.is( !_.constructorIs( Object.getPrototypeOf( /x/ ) ) );
-  t.is( !_.constructorIs( Object.getPrototypeOf( new Date() ) ) );
-  t.is( !_.constructorIs( Object.getPrototypeOf( new F32x() ) ) );
-  t.is( !_.constructorIs( Object.getPrototypeOf( new (function(){})() ) ) );
-  t.is( !_.constructorIs( Object.getPrototypeOf( Self ) ) );
+  t.true( !_.constructorIs( Object.getPrototypeOf( [] ) ) );
+  t.true( !_.constructorIs( Object.getPrototypeOf( /x/ ) ) );
+  t.true( !_.constructorIs( Object.getPrototypeOf( new Date() ) ) );
+  t.true( !_.constructorIs( Object.getPrototypeOf( new F32x() ) ) );
+  t.true( !_.constructorIs( Object.getPrototypeOf( new (function(){})() ) ) );
+  t.true( !_.constructorIs( Object.getPrototypeOf( Self ) ) );
 
 }
 
@@ -206,39 +206,39 @@ function prototypeIsStandard( t )
   var self = this;
 
   t.will = 'pure map';
-  t.is( !_.prototypeIsStandard( Object.create( null ) ) );
+  t.true( !_.prototypeIsStandard( Object.create( null ) ) );
 
   t.will = 'map';
-  t.is( !_.prototypeIsStandard( {} ) );
+  t.true( !_.prototypeIsStandard( {} ) );
 
   t.will = 'primitive';
-  t.is( !_.prototypeIsStandard( 0 ) );
-  t.is( !_.prototypeIsStandard( 1 ) );
-  t.is( !_.prototypeIsStandard( '1' ) );
-  t.is( !_.prototypeIsStandard( null ) );
-  t.is( !_.prototypeIsStandard( undefined ) );
+  t.true( !_.prototypeIsStandard( 0 ) );
+  t.true( !_.prototypeIsStandard( 1 ) );
+  t.true( !_.prototypeIsStandard( '1' ) );
+  t.true( !_.prototypeIsStandard( null ) );
+  t.true( !_.prototypeIsStandard( undefined ) );
 
   t.will = 'routine';
-  t.is( !_.prototypeIsStandard( Date ) );
-  t.is( !_.prototypeIsStandard( F32x ) );
-  t.is( !_.prototypeIsStandard( function(){} ) );
-  t.is( !_.prototypeIsStandard( Self.constructor ) );
+  t.true( !_.prototypeIsStandard( Date ) );
+  t.true( !_.prototypeIsStandard( F32x ) );
+  t.true( !_.prototypeIsStandard( function(){} ) );
+  t.true( !_.prototypeIsStandard( Self.constructor ) );
 
   t.will = 'object-like';
-  t.is( !_.prototypeIsStandard( [] ) );
-  t.is( !_.prototypeIsStandard( /x/ ) );
-  t.is( !_.prototypeIsStandard( new Date() ) );
-  t.is( !_.prototypeIsStandard( new F32x() ) );
-  t.is( !_.prototypeIsStandard( new (function(){})() ) );
-  t.is( !_.prototypeIsStandard( Self ) );
+  t.true( !_.prototypeIsStandard( [] ) );
+  t.true( !_.prototypeIsStandard( /x/ ) );
+  t.true( !_.prototypeIsStandard( new Date() ) );
+  t.true( !_.prototypeIsStandard( new F32x() ) );
+  t.true( !_.prototypeIsStandard( new (function(){})() ) );
+  t.true( !_.prototypeIsStandard( Self ) );
 
   t.will = 'object-like prototype';
-  t.is( !_.prototypeIsStandard( Object.getPrototypeOf( [] ) ) );
-  t.is( !_.prototypeIsStandard( Object.getPrototypeOf( /x/ ) ) );
-  t.is( !_.prototypeIsStandard( Object.getPrototypeOf( new Date() ) ) );
-  t.is( !_.prototypeIsStandard( Object.getPrototypeOf( new F32x() ) ) );
-  t.is( !_.prototypeIsStandard( Object.getPrototypeOf( new (function(){})() ) ) );
-  t.is( _.prototypeIsStandard( Object.getPrototypeOf( Self ) ) );
+  t.true( !_.prototypeIsStandard( Object.getPrototypeOf( [] ) ) );
+  t.true( !_.prototypeIsStandard( Object.getPrototypeOf( /x/ ) ) );
+  t.true( !_.prototypeIsStandard( Object.getPrototypeOf( new Date() ) ) );
+  t.true( !_.prototypeIsStandard( Object.getPrototypeOf( new F32x() ) ) );
+  t.true( !_.prototypeIsStandard( Object.getPrototypeOf( new (function(){})() ) ) );
+  t.true( _.prototypeIsStandard( Object.getPrototypeOf( Self ) ) );
 
 }
 
@@ -1867,8 +1867,8 @@ function accessorIsClean( test )
     f2Put : methods.f2Put,
   }
   test.identical( methods, exp );
-  test.is( _.routineIs( methods.f2Get ) );
-  test.is( _.routineIs( methods.f2Put ) );
+  test.true( _.routineIs( methods.f2Get ) );
+  test.true( _.routineIs( methods.f2Put ) );
   test.identical( _.mapKeys( methods ).length, 3 );
 
   test.case = 'inline no method';
@@ -3763,7 +3763,7 @@ function putterSymbol( test )
     aSet : object.aSet,
   }
   test.identical( object, exp );
-  test.is( object.aPut !== _.accessor.putter.symbol );
+  test.true( object.aPut !== _.accessor.putter.symbol );
 
   object.aPut( 'c' );
   var exp =
@@ -3837,7 +3837,7 @@ function propertyConstant( test )
   var descriptor = Object.getOwnPropertyDescriptor( dstMap, 'a' );
   test.identical( descriptor.writable, false );
   test.identical( dstMap.a, undefined );
-  test.is( 'a' in dstMap );
+  test.true( 'a' in dstMap );
 
   test.case = 'second argument is array';
   var dstMap = {};
@@ -3905,7 +3905,7 @@ function classDeclare( test )
   });
 
   test.identical( C1, classMade );
-  test.is( C1.Instances === Statics1.Instances );
+  test.true( C1.Instances === Statics1.Instances );
 
   test1({ Class : C1 });
   testFields( Statics1.f3 );
@@ -3928,8 +3928,8 @@ function classDeclare( test )
 
   test1({ Class : C1, Statics : Statics1 });
 
-  test.is( C1.Instances === Statics1.Instances );
-  test.is( C2.Instances === C1.Instances );
+  test.true( C1.Instances === Statics1.Instances );
+  test.true( C2.Instances === C1.Instances );
 
   test1({ Class : C2, Class0 : C1, Statics : Statics1, ownStatics : 0 });
 
@@ -4093,8 +4093,8 @@ function classDeclare( test )
     {
       test.identical( cd.configurable, true );
       test.identical( cd.enumerable, true );
-      test.is( !!cd.get );
-      test.is( !!cd.set );
+      test.true( !!cd.get );
+      test.true( !!cd.set );
     }
 
     var pd = Object.getOwnPropertyDescriptor( o.Class.prototype, 'Instances' );
@@ -4107,8 +4107,8 @@ function classDeclare( test )
     {
       test.identical( pd.configurable, true );
       test.identical( pd.enumerable, false );
-      test.is( !!pd.get );
-      test.is( !!pd.set );
+      test.true( !!pd.get );
+      test.true( !!pd.set );
     }
 
     test.case = 'making the first instance';
@@ -4118,10 +4118,10 @@ function classDeclare( test )
     test.case = 'presence of valid static field on all';
 
     if( o.Class !== C1 && !o.ownStatics )
-    test.is( o.Class.Instances === C1.Instances );
-    test.is( o.Class.Instances === o.Class.prototype.Instances );
-    test.is( o.Class.Instances === c1a.Instances );
-    test.is( o.Class.Instances === o.Statics.Instances );
+    test.true( o.Class.Instances === C1.Instances );
+    test.true( o.Class.Instances === o.Class.prototype.Instances );
+    test.true( o.Class.Instances === c1a.Instances );
+    test.true( o.Class.Instances === o.Statics.Instances );
     test.identical( o.Class.Instances.length, o.Statics.Instances.length );
     test.identical( o.Class.Instances[ o.Statics.Instances.length-1 ], c1a );
 
@@ -4132,8 +4132,8 @@ function classDeclare( test )
 
     test.case = 'presence of valid Statics descriptor';
 
-    test.is( o.Statics !== o.Class.prototype.Statics );
-    test.is( o.Statics !== c1a.Statics );
+    test.true( o.Statics !== o.Class.prototype.Statics );
+    test.true( o.Statics !== c1a.Statics );
 
     test.identical( _.mapKeys( c1a.Statics ), o.keys );
     test.identical( _.mapVals( c1a.Statics ), o.vals );
@@ -4148,10 +4148,10 @@ function classDeclare( test )
 
     test.case = 'presence of conflicting fields';
 
-    test.is( o.Class.prototype.f1 === c1a.f1 );
-    test.is( o.Class.prototype.f2 === c1a.f2 );
-    test.is( o.Class.prototype.f3 === c1a.f3 );
-    test.is( o.Class.prototype.f4 === c1a.f4 );
+    test.true( o.Class.prototype.f1 === c1a.f1 );
+    test.true( o.Class.prototype.f2 === c1a.f2 );
+    test.true( o.Class.prototype.f3 === c1a.f3 );
+    test.true( o.Class.prototype.f4 === c1a.f4 );
 
     test.case = 'making the second instance';
 
@@ -4165,31 +4165,31 @@ function classDeclare( test )
     test.case = 'setting static field with constructor';
 
     o.Class.Instances = o.Class.Instances.slice();
-    test.is( o.Class.Instances === C1.Instances || _.mapOwnKey( o.Class.prototype.Statics, 'Instances' ) );
-    test.is( o.Class.Instances === o.Class.prototype.Instances );
-    test.is( o.Class.Instances === c1a.Instances );
-    test.is( o.Class.Instances === c1b.Instances );
-    test.is( o.Class.Instances !== o.Statics.Instances );
+    test.true( o.Class.Instances === C1.Instances || _.mapOwnKey( o.Class.prototype.Statics, 'Instances' ) );
+    test.true( o.Class.Instances === o.Class.prototype.Instances );
+    test.true( o.Class.Instances === c1a.Instances );
+    test.true( o.Class.Instances === c1b.Instances );
+    test.true( o.Class.Instances !== o.Statics.Instances );
     o.Class.Instances = Statics1.Instances;
 
     test.case = 'setting static field with prototype';
 
     o.Class.prototype.Instances = o.Class.prototype.Instances.slice();
-    test.is( o.Class.Instances === C1.Instances || _.mapOwnKey( o.Class.prototype.Statics, 'Instances' ) );
-    test.is( o.Class.Instances === o.Class.prototype.Instances );
-    test.is( o.Class.Instances === c1a.Instances );
-    test.is( o.Class.Instances === c1b.Instances );
-    test.is( o.Class.Instances !== o.Statics.Instances );
+    test.true( o.Class.Instances === C1.Instances || _.mapOwnKey( o.Class.prototype.Statics, 'Instances' ) );
+    test.true( o.Class.Instances === o.Class.prototype.Instances );
+    test.true( o.Class.Instances === c1a.Instances );
+    test.true( o.Class.Instances === c1b.Instances );
+    test.true( o.Class.Instances !== o.Statics.Instances );
     o.Class.Instances = Statics1.Instances;
 
     test.case = 'setting static field with instance';
 
     c1a.Instances = o.Class.Instances.slice();
-    test.is( o.Class.Instances === C1.Instances || _.mapOwnKey( o.Class.prototype.Statics, 'Instances' ) );
-    test.is( o.Class.Instances === o.Class.prototype.Instances );
-    test.is( o.Class.Instances === c1a.Instances );
-    test.is( o.Class.Instances === c1b.Instances );
-    test.is( o.Class.Instances !== o.Statics.Instances );
+    test.true( o.Class.Instances === C1.Instances || _.mapOwnKey( o.Class.prototype.Statics, 'Instances' ) );
+    test.true( o.Class.Instances === o.Class.prototype.Instances );
+    test.true( o.Class.Instances === c1a.Instances );
+    test.true( o.Class.Instances === c1b.Instances );
+    test.true( o.Class.Instances !== o.Statics.Instances );
     o.Class.Instances = Statics1.Instances;
 
   }
@@ -4201,63 +4201,63 @@ function classDeclare( test )
 
     test.case = 'presence of conflicting fields in the first class';
 
-    test.is( Statics1.f1 === C1.f1 );
-    test.is( Extend1.f1 === C1.prototype.f1 );
+    test.true( Statics1.f1 === C1.f1 );
+    test.true( Extend1.f1 === C1.prototype.f1 );
 
-    test.is( Statics1.f2 === C1.f2 );
-    test.is( Extend1.f2 === C1.prototype.f2 );
+    test.true( Statics1.f2 === C1.f2 );
+    test.true( Extend1.f2 === C1.prototype.f2 );
 
-    test.is( f3 === C1.f3 );
-    test.is( f3 === C1.prototype.f3 );
+    test.true( f3 === C1.f3 );
+    test.true( f3 === C1.prototype.f3 );
 
-    test.is( Statics1.f4 === undefined );
-    test.is( Statics1.f4 === C1.f4 );
-    test.is( Extend1.f4 === C1.prototype.f4 );
+    test.true( Statics1.f4 === undefined );
+    test.true( Statics1.f4 === C1.f4 );
+    test.true( Extend1.f4 === C1.prototype.f4 );
 
     var d = Object.getOwnPropertyDescriptor( C1,'f1' );
-    test.is( d.enumerable === true );
-    test.is( d.configurable === true );
-    test.is( d.writable === true );
-    test.is( !!d.value );
+    test.true( d.enumerable === true );
+    test.true( d.configurable === true );
+    test.true( d.writable === true );
+    test.true( !!d.value );
 
     var d = Object.getOwnPropertyDescriptor( C1.prototype,'f1' );
-    test.is( d.enumerable === true );
-    test.is( d.configurable === true );
-    test.is( d.writable === true );
-    test.is( !!d.value );
+    test.true( d.enumerable === true );
+    test.true( d.configurable === true );
+    test.true( d.writable === true );
+    test.true( !!d.value );
 
     var d = Object.getOwnPropertyDescriptor( C1,'f2' );
-    test.is( d.enumerable === true );
-    test.is( d.configurable === true );
-    test.is( d.writable === true );
-    test.is( !!d.value );
+    test.true( d.enumerable === true );
+    test.true( d.configurable === true );
+    test.true( d.writable === true );
+    test.true( !!d.value );
 
     var d = Object.getOwnPropertyDescriptor( C1.prototype,'f2' );
-    test.is( d.enumerable === true );
-    test.is( d.configurable === true );
-    test.is( d.writable === true );
-    test.is( !!d.value );
+    test.true( d.enumerable === true );
+    test.true( d.configurable === true );
+    test.true( d.writable === true );
+    test.true( !!d.value );
 
     var d = Object.getOwnPropertyDescriptor( C1,'f3' );
-    test.is( d.enumerable === true );
-    test.is( d.configurable === true );
-    test.is( !!d.get );
-    test.is( !!d.set );
+    test.true( d.enumerable === true );
+    test.true( d.configurable === true );
+    test.true( !!d.get );
+    test.true( !!d.set );
 
     var d = Object.getOwnPropertyDescriptor( C1.prototype,'f3' );
-    test.is( d.enumerable === false );
-    test.is( d.configurable === true );
-    test.is( !!d.get );
-    test.is( !!d.set );
+    test.true( d.enumerable === false );
+    test.true( d.configurable === true );
+    test.true( !!d.get );
+    test.true( !!d.set );
 
     var d = Object.getOwnPropertyDescriptor( C1,'f4' );
-    test.is( !d );
+    test.true( !d );
 
     var d = Object.getOwnPropertyDescriptor( C1.prototype,'f4' );
-    test.is( d.enumerable === true );
-    test.is( d.configurable === true );
-    test.is( d.writable === true );
-    test.is( !!d.value );
+    test.true( d.enumerable === true );
+    test.true( d.configurable === true );
+    test.true( d.writable === true );
+    test.true( !!d.value );
 
   }
 
@@ -4268,56 +4268,56 @@ function classDeclare( test )
 
     test.case = 'presence of conflicting fields in the second class';
 
-    test.is( Statics2.f1 === C3.f1 );
-    test.is( Statics2.f1 === C3.prototype.f1 );
+    test.true( Statics2.f1 === C3.f1 );
+    test.true( Statics2.f1 === C3.prototype.f1 );
 
-    test.is( Statics1.f2 === C3.f2 );
-    test.is( Extend2.f2 === C3.prototype.f2 );
+    test.true( Statics1.f2 === C3.f2 );
+    test.true( Extend2.f2 === C3.prototype.f2 );
 
-    test.is( Extend2.f3 === C3.f3 );
-    test.is( Extend2.f3 === C3.prototype.f3 );
+    test.true( Extend2.f3 === C3.f3 );
+    test.true( Extend2.f3 === C3.prototype.f3 );
 
-    test.is( Statics2.f4 === C3.f4 );
-    test.is( Statics2.f4 === C3.prototype.f4 );
+    test.true( Statics2.f4 === C3.f4 );
+    test.true( Statics2.f4 === C3.prototype.f4 );
 
     var d = Object.getOwnPropertyDescriptor( C3,'f1' );
-    test.is( d.enumerable === true );
-    test.is( d.configurable === true );
-    test.is( !!d.get );
-    test.is( !!d.set );
+    test.true( d.enumerable === true );
+    test.true( d.configurable === true );
+    test.true( !!d.get );
+    test.true( !!d.set );
 
     var d = Object.getOwnPropertyDescriptor( C3.prototype,'f1' );
-    test.is( d.enumerable === false );
-    test.is( d.configurable === true );
-    test.is( !!d.get );
-    test.is( !!d.set );
+    test.true( d.enumerable === false );
+    test.true( d.configurable === true );
+    test.true( !!d.get );
+    test.true( !!d.set );
 
     var d = Object.getOwnPropertyDescriptor( C3,'f2' );
-    test.is( !d );
+    test.true( !d );
 
     var d = Object.getOwnPropertyDescriptor( C3.prototype,'f2' );
-    test.is( d.enumerable === true );
-    test.is( d.configurable === true );
-    test.is( d.writable === true );
-    test.is( !!d.value );
+    test.true( d.enumerable === true );
+    test.true( d.configurable === true );
+    test.true( d.writable === true );
+    test.true( !!d.value );
 
     var d = Object.getOwnPropertyDescriptor( C3,'f3' );
-    test.is( !d );
+    test.true( !d );
 
     var d = Object.getOwnPropertyDescriptor( C3.prototype,'f3' );
-    test.is( !d );
+    test.true( !d );
 
     var d = Object.getOwnPropertyDescriptor( C3,'f4' );
-    test.is( d.enumerable === true );
-    test.is( d.configurable === true );
-    test.is( !!d.get );
-    test.is( !!d.set );
+    test.true( d.enumerable === true );
+    test.true( d.configurable === true );
+    test.true( !!d.get );
+    test.true( !!d.set );
 
     var d = Object.getOwnPropertyDescriptor( C3.prototype,'f4' );
-    test.is( d.enumerable === false );
-    test.is( d.configurable === true );
-    test.is( !!d.get );
-    test.is( !!d.set );
+    test.true( d.enumerable === false );
+    test.true( d.configurable === true );
+    test.true( !!d.get );
+    test.true( !!d.set );
 
     test.case = 'assigning static fields';
 

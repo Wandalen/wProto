@@ -3,11 +3,11 @@ root:
   - wProto.out
 consistency:
   wProto.out.will.yml: &ref_0
-    hash: 3108dc4fc56cf8e669024e2c467ff694
-    size: 39493
+    hash: f8e34e398b70f1a44db4f369f45ce064
+    size: 39524
   ../.ex.will.yml: &ref_1
-    hash: 3d07e59034464298d17adb3efd1276ae
-    size: 1992
+    hash: 4021a626a502a47b9eed2f05f12ef78d
+    size: 2007
   ../.im.will.yml: &ref_2
     hash: fd010b98a60a9eac22d8f858ab250a5c
     size: 5050
@@ -17,10 +17,10 @@ module:
       name: wProto
       org: noorg
       description: >-
-        Relations module. Collection of routines to define classes and relations
-        between them. Proto leverages multiple inheritances, mixins, accessors,
-        fields groups defining, introspection and more. Use it as a skeleton of
-        the application.
+        Relations module. Collection of cross-platform routines to define
+        classes and relations between them. Proto leverages multiple
+        inheritances, mixins, accessors, fields groups defining, introspection
+        and more. Use it as a skeleton of the application.
       enabled: 1
       version: 0.4.169
       interpreters:
@@ -836,10 +836,10 @@ module:
       name: wProto
       org: noorg
       description: >-
-        Relations module. Collection of routines to define classes and relations
-        between them. Proto leverages multiple inheritances, mixins, accessors,
-        fields groups defining, introspection and more. Use it as a skeleton of
-        the application.
+        Relations module. Collection of cross-platform routines to define
+        classes and relations between them. Proto leverages multiple
+        inheritances, mixins, accessors, fields groups defining, introspection
+        and more. Use it as a skeleton of the application.
       enabled: 1
       version: 0.4.169
       interpreters:
@@ -1530,8 +1530,8 @@ module:
           - 'build::npm'
     consistency:
       ../.ex.will.yml:
-        hash: 3d07e59034464298d17adb3efd1276ae
-        size: 1992
+        hash: 4021a626a502a47b9eed2f05f12ef78d
+        size: 2007
       ../.im.will.yml:
         hash: fd010b98a60a9eac22d8f858ab250a5c
         size: 5050

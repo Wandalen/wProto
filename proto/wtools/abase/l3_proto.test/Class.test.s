@@ -55,7 +55,7 @@ function classDeclare( test )
   });
 
   test.identical( C1, classMade );
-  test.is( C1.Instances === Statics1.Instances );
+  test.true( C1.Instances === Statics1.Instances );
 
   test1({ Class : C1 });
   testFields( Statics1.f3 );
@@ -78,8 +78,8 @@ function classDeclare( test )
 
   test1({ Class : C1, Statics : Statics1 });
 
-  test.is( C1.Instances === Statics1.Instances );
-  test.is( C2.Instances === C1.Instances );
+  test.true( C1.Instances === Statics1.Instances );
+  test.true( C2.Instances === C1.Instances );
 
   test1({ Class : C2, Class0 : C1, Statics : Statics1, ownStatics : 0 });
 
@@ -243,8 +243,8 @@ function classDeclare( test )
     {
       test.identical( cd.configurable, true );
       test.identical( cd.enumerable, true );
-      test.is( !!cd.get );
-      test.is( !!cd.set );
+      test.true( !!cd.get );
+      test.true( !!cd.set );
     }
 
     var pd = Object.getOwnPropertyDescriptor( o.Class.prototype, 'Instances' );
@@ -257,8 +257,8 @@ function classDeclare( test )
     {
       test.identical( pd.configurable, true );
       test.identical( pd.enumerable, false );
-      test.is( !!pd.get );
-      test.is( !!pd.set );
+      test.true( !!pd.get );
+      test.true( !!pd.set );
     }
 
     test.case = 'making the first instance';
@@ -268,10 +268,10 @@ function classDeclare( test )
     test.case = 'presence of valid static field on all';
 
     if( o.Class !== C1 && !o.ownStatics )
-    test.is( o.Class.Instances === C1.Instances );
-    test.is( o.Class.Instances === o.Class.prototype.Instances );
-    test.is( o.Class.Instances === c1a.Instances );
-    test.is( o.Class.Instances === o.Statics.Instances );
+    test.true( o.Class.Instances === C1.Instances );
+    test.true( o.Class.Instances === o.Class.prototype.Instances );
+    test.true( o.Class.Instances === c1a.Instances );
+    test.true( o.Class.Instances === o.Statics.Instances );
     test.identical( o.Class.Instances.length, o.Statics.Instances.length );
     test.identical( o.Class.Instances[ o.Statics.Instances.length-1 ], c1a );
 
@@ -282,8 +282,8 @@ function classDeclare( test )
 
     test.case = 'presence of valid Statics descriptor';
 
-    test.is( o.Statics !== o.Class.prototype.Statics );
-    test.is( o.Statics !== c1a.Statics );
+    test.true( o.Statics !== o.Class.prototype.Statics );
+    test.true( o.Statics !== c1a.Statics );
 
     test.identical( _.mapKeys( c1a.Statics ), o.keys );
     test.identical( _.mapVals( c1a.Statics ), o.vals );
@@ -298,10 +298,10 @@ function classDeclare( test )
 
     test.case = 'presence of conflicting fields';
 
-    test.is( o.Class.prototype.f1 === c1a.f1 );
-    test.is( o.Class.prototype.f2 === c1a.f2 );
-    test.is( o.Class.prototype.f3 === c1a.f3 );
-    test.is( o.Class.prototype.f4 === c1a.f4 );
+    test.true( o.Class.prototype.f1 === c1a.f1 );
+    test.true( o.Class.prototype.f2 === c1a.f2 );
+    test.true( o.Class.prototype.f3 === c1a.f3 );
+    test.true( o.Class.prototype.f4 === c1a.f4 );
 
     test.case = 'making the second instance';
 
@@ -315,38 +315,38 @@ function classDeclare( test )
     test.case = 'setting static field with constructor';
 
     o.Class.Instances = o.Class.Instances.slice();
-    // test.is( o.Class === C1 || o.Class.Instances !== C1.Instances );
+    // test.true( o.Class === C1 || o.Class.Instances !== C1.Instances );
     debugger;
-    test.is( o.Class.Instances === C1.Instances || _.mapOwnKey( o.Class.prototype.Statics, 'Instances' ) );
+    test.true( o.Class.Instances === C1.Instances || _.mapOwnKey( o.Class.prototype.Statics, 'Instances' ) );
     debugger;
-    test.is( o.Class.Instances === o.Class.prototype.Instances );
-    test.is( o.Class.Instances === c1a.Instances );
-    test.is( o.Class.Instances === c1b.Instances );
-    test.is( o.Class.Instances !== o.Statics.Instances );
+    test.true( o.Class.Instances === o.Class.prototype.Instances );
+    test.true( o.Class.Instances === c1a.Instances );
+    test.true( o.Class.Instances === c1b.Instances );
+    test.true( o.Class.Instances !== o.Statics.Instances );
     o.Class.Instances = Statics1.Instances;
 
     test.case = 'setting static field with prototype';
 
     o.Class.prototype.Instances = o.Class.prototype.Instances.slice();
     // if( o.Class !== C1 && !o.ownStatics )
-    // test.is( o.Class === C1 || o.Class.Instances !== C1.Instances );
-    test.is( o.Class.Instances === C1.Instances || _.mapOwnKey( o.Class.prototype.Statics, 'Instances' ) );
-    test.is( o.Class.Instances === o.Class.prototype.Instances );
-    test.is( o.Class.Instances === c1a.Instances );
-    test.is( o.Class.Instances === c1b.Instances );
-    test.is( o.Class.Instances !== o.Statics.Instances );
+    // test.true( o.Class === C1 || o.Class.Instances !== C1.Instances );
+    test.true( o.Class.Instances === C1.Instances || _.mapOwnKey( o.Class.prototype.Statics, 'Instances' ) );
+    test.true( o.Class.Instances === o.Class.prototype.Instances );
+    test.true( o.Class.Instances === c1a.Instances );
+    test.true( o.Class.Instances === c1b.Instances );
+    test.true( o.Class.Instances !== o.Statics.Instances );
     o.Class.Instances = Statics1.Instances;
 
     test.case = 'setting static field with instance';
 
     c1a.Instances = o.Class.Instances.slice();
     // if( o.Class !== C1 && !o.ownStatics )
-    // test.is( o.Class === C1 || o.Class.Instances !== C1.Instances );
-    test.is( o.Class.Instances === C1.Instances || _.mapOwnKey( o.Class.prototype.Statics, 'Instances' ) );
-    test.is( o.Class.Instances === o.Class.prototype.Instances );
-    test.is( o.Class.Instances === c1a.Instances );
-    test.is( o.Class.Instances === c1b.Instances );
-    test.is( o.Class.Instances !== o.Statics.Instances );
+    // test.true( o.Class === C1 || o.Class.Instances !== C1.Instances );
+    test.true( o.Class.Instances === C1.Instances || _.mapOwnKey( o.Class.prototype.Statics, 'Instances' ) );
+    test.true( o.Class.Instances === o.Class.prototype.Instances );
+    test.true( o.Class.Instances === c1a.Instances );
+    test.true( o.Class.Instances === c1b.Instances );
+    test.true( o.Class.Instances !== o.Statics.Instances );
     o.Class.Instances = Statics1.Instances;
 
   }
@@ -358,63 +358,63 @@ function classDeclare( test )
 
     test.case = 'presence of conflicting fields in the first class';
 
-    test.is( Statics1.f1 === C1.f1 );
-    test.is( Extend1.f1 === C1.prototype.f1 );
+    test.true( Statics1.f1 === C1.f1 );
+    test.true( Extend1.f1 === C1.prototype.f1 );
 
-    test.is( Statics1.f2 === C1.f2 );
-    test.is( Extend1.f2 === C1.prototype.f2 );
+    test.true( Statics1.f2 === C1.f2 );
+    test.true( Extend1.f2 === C1.prototype.f2 );
 
-    test.is( f3 === C1.f3 );
-    test.is( f3 === C1.prototype.f3 );
+    test.true( f3 === C1.f3 );
+    test.true( f3 === C1.prototype.f3 );
 
-    test.is( Statics1.f4 === undefined );
-    test.is( Statics1.f4 === C1.f4 );
-    test.is( Extend1.f4 === C1.prototype.f4 );
+    test.true( Statics1.f4 === undefined );
+    test.true( Statics1.f4 === C1.f4 );
+    test.true( Extend1.f4 === C1.prototype.f4 );
 
     var d = Object.getOwnPropertyDescriptor( C1,'f1' );
-    test.is( d.enumerable === true );
-    test.is( d.configurable === true );
-    test.is( d.writable === true );
-    test.is( !!d.value );
+    test.true( d.enumerable === true );
+    test.true( d.configurable === true );
+    test.true( d.writable === true );
+    test.true( !!d.value );
 
     var d = Object.getOwnPropertyDescriptor( C1.prototype,'f1' );
-    test.is( d.enumerable === true );
-    test.is( d.configurable === true );
-    test.is( d.writable === true );
-    test.is( !!d.value );
+    test.true( d.enumerable === true );
+    test.true( d.configurable === true );
+    test.true( d.writable === true );
+    test.true( !!d.value );
 
     var d = Object.getOwnPropertyDescriptor( C1,'f2' );
-    test.is( d.enumerable === true );
-    test.is( d.configurable === true );
-    test.is( d.writable === true );
-    test.is( !!d.value );
+    test.true( d.enumerable === true );
+    test.true( d.configurable === true );
+    test.true( d.writable === true );
+    test.true( !!d.value );
 
     var d = Object.getOwnPropertyDescriptor( C1.prototype,'f2' );
-    test.is( d.enumerable === true );
-    test.is( d.configurable === true );
-    test.is( d.writable === true );
-    test.is( !!d.value );
+    test.true( d.enumerable === true );
+    test.true( d.configurable === true );
+    test.true( d.writable === true );
+    test.true( !!d.value );
 
     var d = Object.getOwnPropertyDescriptor( C1,'f3' );
-    test.is( d.enumerable === true );
-    test.is( d.configurable === true );
-    test.is( !!d.get );
-    test.is( !!d.set );
+    test.true( d.enumerable === true );
+    test.true( d.configurable === true );
+    test.true( !!d.get );
+    test.true( !!d.set );
 
     var d = Object.getOwnPropertyDescriptor( C1.prototype,'f3' );
-    test.is( d.enumerable === false );
-    test.is( d.configurable === true );
-    test.is( !!d.get );
-    test.is( !!d.set );
+    test.true( d.enumerable === false );
+    test.true( d.configurable === true );
+    test.true( !!d.get );
+    test.true( !!d.set );
 
     var d = Object.getOwnPropertyDescriptor( C1,'f4' );
-    test.is( !d );
+    test.true( !d );
 
     var d = Object.getOwnPropertyDescriptor( C1.prototype,'f4' );
-    test.is( d.enumerable === true );
-    test.is( d.configurable === true );
-    test.is( d.writable === true );
-    test.is( !!d.value );
+    test.true( d.enumerable === true );
+    test.true( d.configurable === true );
+    test.true( d.writable === true );
+    test.true( !!d.value );
 
   }
 
@@ -425,56 +425,56 @@ function classDeclare( test )
 
     test.case = 'presence of conflicting fields in the second class';
 
-    test.is( Statics2.f1 === C3.f1 );
-    test.is( Statics2.f1 === C3.prototype.f1 );
+    test.true( Statics2.f1 === C3.f1 );
+    test.true( Statics2.f1 === C3.prototype.f1 );
 
-    test.is( Statics1.f2 === C3.f2 );
-    test.is( Extend2.f2 === C3.prototype.f2 );
+    test.true( Statics1.f2 === C3.f2 );
+    test.true( Extend2.f2 === C3.prototype.f2 );
 
-    test.is( Extend2.f3 === C3.f3 );
-    test.is( Extend2.f3 === C3.prototype.f3 );
+    test.true( Extend2.f3 === C3.f3 );
+    test.true( Extend2.f3 === C3.prototype.f3 );
 
-    test.is( Statics2.f4 === C3.f4 );
-    test.is( Statics2.f4 === C3.prototype.f4 );
+    test.true( Statics2.f4 === C3.f4 );
+    test.true( Statics2.f4 === C3.prototype.f4 );
 
     var d = Object.getOwnPropertyDescriptor( C3,'f1' );
-    test.is( d.enumerable === true );
-    test.is( d.configurable === true );
-    test.is( !!d.get );
-    test.is( !!d.set );
+    test.true( d.enumerable === true );
+    test.true( d.configurable === true );
+    test.true( !!d.get );
+    test.true( !!d.set );
 
     var d = Object.getOwnPropertyDescriptor( C3.prototype,'f1' );
-    test.is( d.enumerable === false );
-    test.is( d.configurable === true );
-    test.is( !!d.get );
-    test.is( !!d.set );
+    test.true( d.enumerable === false );
+    test.true( d.configurable === true );
+    test.true( !!d.get );
+    test.true( !!d.set );
 
     var d = Object.getOwnPropertyDescriptor( C3,'f2' );
-    test.is( !d );
+    test.true( !d );
 
     var d = Object.getOwnPropertyDescriptor( C3.prototype,'f2' );
-    test.is( d.enumerable === true );
-    test.is( d.configurable === true );
-    test.is( d.writable === true );
-    test.is( !!d.value );
+    test.true( d.enumerable === true );
+    test.true( d.configurable === true );
+    test.true( d.writable === true );
+    test.true( !!d.value );
 
     var d = Object.getOwnPropertyDescriptor( C3,'f3' );
-    test.is( !d );
+    test.true( !d );
 
     var d = Object.getOwnPropertyDescriptor( C3.prototype,'f3' );
-    test.is( !d );
+    test.true( !d );
 
     var d = Object.getOwnPropertyDescriptor( C3,'f4' );
-    test.is( d.enumerable === true );
-    test.is( d.configurable === true );
-    test.is( !!d.get );
-    test.is( !!d.set );
+    test.true( d.enumerable === true );
+    test.true( d.configurable === true );
+    test.true( !!d.get );
+    test.true( !!d.set );
 
     var d = Object.getOwnPropertyDescriptor( C3.prototype,'f4' );
-    test.is( d.enumerable === false );
-    test.is( d.configurable === true );
-    test.is( !!d.get );
-    test.is( !!d.set );
+    test.true( d.enumerable === false );
+    test.true( d.configurable === true );
+    test.true( !!d.get );
+    test.true( !!d.set );
 
     test.case = 'assigning static fields';
 
@@ -572,11 +572,11 @@ function staticsDeclare( test )
 
   test.case = 'f1';
 
-  test.is( BasicConstructor.f1 === BasicConstructor.prototype.f1 );
-  test.is( BasicConstructor.prototype.f1 === Statics.f1 );
-  test.is( BasicConstructor.f1 === Statics.f1 );
-  test.is( BasicConstructor.prototype.Statics.f1 === Statics.f1 );
-  test.is( instance.f1 === Statics.f1 );
+  test.true( BasicConstructor.f1 === BasicConstructor.prototype.f1 );
+  test.true( BasicConstructor.prototype.f1 === Statics.f1 );
+  test.true( BasicConstructor.f1 === Statics.f1 );
+  test.true( BasicConstructor.prototype.Statics.f1 === Statics.f1 );
+  test.true( instance.f1 === Statics.f1 );
 
   test.case = 'set prototype.f1';
 
@@ -584,11 +584,11 @@ function staticsDeclare( test )
   BasicConstructor.prototype.f1 = newF1;
   var instance2 = new BasicConstructor();
 
-  test.is( BasicConstructor.f1 === BasicConstructor.prototype.f1 );
-  test.is( BasicConstructor.prototype.f1 === newF1 );
-  test.is( BasicConstructor.f1 === newF1 );
-  test.is( instance.f1 === newF1 );
-  test.is( instance2.f1 === newF1 );
+  test.true( BasicConstructor.f1 === BasicConstructor.prototype.f1 );
+  test.true( BasicConstructor.prototype.f1 === newF1 );
+  test.true( BasicConstructor.f1 === newF1 );
+  test.true( instance.f1 === newF1 );
+  test.true( instance2.f1 === newF1 );
 
   test.case = 'set class.f1';
 
@@ -596,19 +596,19 @@ function staticsDeclare( test )
   BasicConstructor.f1 = newF1;
   var instance2 = new BasicConstructor();
 
-  test.is( BasicConstructor.f1 === BasicConstructor.prototype.f1 );
-  test.is( BasicConstructor.prototype.f1 === newF1 );
-  test.is( BasicConstructor.f1 === newF1 );
-  test.is( instance.f1 === newF1 );
-  test.is( instance2.f1 === newF1 );
+  test.true( BasicConstructor.f1 === BasicConstructor.prototype.f1 );
+  test.true( BasicConstructor.prototype.f1 === newF1 );
+  test.true( BasicConstructor.f1 === newF1 );
+  test.true( instance.f1 === newF1 );
+  test.true( instance2.f1 === newF1 );
 
   test.case = 'f2';
 
-  test.is( BasicConstructor.prototype.f2 === undefined );
-  test.is( BasicConstructor.f2 === Statics.f2 );
-  test.is( BasicConstructor.prototype.Statics.f2 === Statics.f2 );
-  test.is( BasicConstructor.prototype.Associates.f2 === Associates.f2 );
-  test.is( instance.f2 === Associates.f2.ini );
+  test.true( BasicConstructor.prototype.f2 === undefined );
+  test.true( BasicConstructor.f2 === Statics.f2 );
+  test.true( BasicConstructor.prototype.Statics.f2 === Statics.f2 );
+  test.true( BasicConstructor.prototype.Associates.f2 === Associates.f2 );
+  test.true( instance.f2 === Associates.f2.ini );
 
   test.case = 'set prototype.f2';
 
@@ -616,11 +616,11 @@ function staticsDeclare( test )
   BasicConstructor.prototype.f2 = newF2;
   var instance2 = new BasicConstructor();
 
-  test.is( BasicConstructor.f2 !== BasicConstructor.prototype.f2 );
-  test.is( BasicConstructor.prototype.f2 === newF2 );
-  test.is( BasicConstructor.f2 === Statics.f2 );
-  test.is( instance.f2 === Associates.f2.ini );
-  test.is( instance2.f2 === Associates.f2.ini );
+  test.true( BasicConstructor.f2 !== BasicConstructor.prototype.f2 );
+  test.true( BasicConstructor.prototype.f2 === newF2 );
+  test.true( BasicConstructor.f2 === Statics.f2 );
+  test.true( instance.f2 === Associates.f2.ini );
+  test.true( instance2.f2 === Associates.f2.ini );
 
   test.case = 'set constructor.f2';
 
@@ -628,10 +628,10 @@ function staticsDeclare( test )
   BasicConstructor.f2 = newF2;
   var instance2 = new BasicConstructor();
 
-  test.is( BasicConstructor.f2 !== BasicConstructor.prototype.f2 );
-  test.is( BasicConstructor.f2 === newF2 );
-  test.is( instance.f2 === Associates.f2.ini );
-  test.is( instance2.f2 === Associates.f2.ini );
+  test.true( BasicConstructor.f2 !== BasicConstructor.prototype.f2 );
+  test.true( BasicConstructor.f2 === newF2 );
+  test.true( instance.f2 === Associates.f2.ini );
+  test.true( instance2.f2 === Associates.f2.ini );
 
   test.close( 'basic' );
 
@@ -734,17 +734,17 @@ function staticsOverwrite( test )
 
   test.case = 'f1';
 
-  test.is( BasicConstructor.Instances === BasicConstructor.prototype.Instances );
-  test.is( BasicConstructor.Instances === DerivedConstructor2.Instances );
-  test.is( BasicConstructor.Instances === DerivedConstructor2.prototype.Instances );
-  test.is( BasicConstructor.Instances === instance0.Instances );
-  test.is( BasicConstructor.Instances === instance2.Instances );
+  test.true( BasicConstructor.Instances === BasicConstructor.prototype.Instances );
+  test.true( BasicConstructor.Instances === DerivedConstructor2.Instances );
+  test.true( BasicConstructor.Instances === DerivedConstructor2.prototype.Instances );
+  test.true( BasicConstructor.Instances === instance0.Instances );
+  test.true( BasicConstructor.Instances === instance2.Instances );
 
-  test.is( BasicConstructor.Instances !== DerivedConstructor1.Instances );
-  test.is( BasicConstructor.Instances !== instance1.Instances );
+  test.true( BasicConstructor.Instances !== DerivedConstructor1.Instances );
+  test.true( BasicConstructor.Instances !== instance1.Instances );
 
-  test.is( DerivedConstructor1.Instances === DerivedConstructor1.prototype.Instances );
-  test.is( DerivedConstructor1.Instances === instance1.Instances );
+  test.true( DerivedConstructor1.Instances === DerivedConstructor1.prototype.Instances );
+  test.true( DerivedConstructor1.Instances === instance1.Instances );
 
   test.identical( instance0.Instances.length, 2 );
   test.identical( instance1.Instances.length, 1 );
@@ -794,7 +794,7 @@ function mixinStaticsWithDefinition( test )
     withMixin : 1,
   });
 
-  test.is( _.routineIs( Mixin.mixin ) );
+  test.true( _.routineIs( Mixin.mixin ) );
   test.identical( Mixin.__mixin__.mixin, Mixin.mixin );
   test.identical( Mixin.__mixin__.name, 'Mixin' );
   test.identical( Mixin.__mixin__.shortName, 'Mix' );
@@ -815,7 +815,7 @@ function mixinStaticsWithDefinition( test )
     cls : Class1,
   });
 
-  test.is( Class1.prototype.constructor === Class1 );
+  test.true( Class1.prototype.constructor === Class1 );
 
   Mixin.mixin( Class1 );
 
@@ -843,137 +843,137 @@ function mixinStaticsWithDefinition( test )
 
   test.case = 'clean';
 
-  test.is( Mixin.wrapGet === undefined );
-  test.is( Mixin._wrapGet === undefined );
-  test.is( Mixin.prototype.wrapGet === undefined );
-  test.is( Mixin.prototype._wrapGet === undefined );
+  test.true( Mixin.wrapGet === undefined );
+  test.true( Mixin._wrapGet === undefined );
+  test.true( Mixin.prototype.wrapGet === undefined );
+  test.true( Mixin.prototype._wrapGet === undefined );
 
-  test.is( Class1.wrapGet === undefined );
-  test.is( Class1._wrapGet === undefined );
-  test.is( Class1.prototype.wrapGet === undefined );
-  test.is( Class1.prototype._wrapGet === undefined );
+  test.true( Class1.wrapGet === undefined );
+  test.true( Class1._wrapGet === undefined );
+  test.true( Class1.prototype.wrapGet === undefined );
+  test.true( Class1.prototype._wrapGet === undefined );
 
-  test.is( Class2.wrapGet === undefined );
-  test.is( Class2._wrapGet === undefined );
-  test.is( Class2.prototype.wrapGet === undefined );
-  test.is( Class2.prototype._wrapGet === undefined );
+  test.true( Class2.wrapGet === undefined );
+  test.true( Class2._wrapGet === undefined );
+  test.true( Class2.prototype.wrapGet === undefined );
+  test.true( Class2.prototype._wrapGet === undefined );
 
   /* */
 
   test.case = 'wrap';
 
-  test.is( wrap === Mixin.wrap );
-  test.is( wrap === Mixin.prototype.Statics.wrap.ini );
-  test.is( wrap === Mixin.prototype.wrap );
-  test.is( wrap === Class1.prototype.Statics.wrap.ini );
-  test.is( wrap === Class1.prototype.wrap );
-  test.is( wrap === Class1.wrap );
-  test.is( wrap === instance1.wrap );
+  test.true( wrap === Mixin.wrap );
+  test.true( wrap === Mixin.prototype.Statics.wrap.ini );
+  test.true( wrap === Mixin.prototype.wrap );
+  test.true( wrap === Class1.prototype.Statics.wrap.ini );
+  test.true( wrap === Class1.prototype.wrap );
+  test.true( wrap === Class1.wrap );
+  test.true( wrap === instance1.wrap );
 
-  test.is( wrap === Class2.prototype.Statics.wrap.ini );
-  test.is( wrap === Class2.prototype.wrap );
-  test.is( wrap === Class2.wrap );
-  test.is( wrap === instance2.wrap );
+  test.true( wrap === Class2.prototype.Statics.wrap.ini );
+  test.true( wrap === Class2.prototype.wrap );
+  test.true( wrap === Class2.wrap );
+  test.true( wrap === instance2.wrap );
 
   test.case = 'set Mixin.wrap';
 
   var wrap2 = Mixin.wrap = [ 'wrap2' ];
 
-  test.is( wrap2 === Mixin.wrap );
-  test.is( wrap == Mixin.prototype.Statics.wrap.ini );
-  test.is( wrap2 === Mixin.prototype.wrap );
-  test.is( wrap === Class1.prototype.Statics.wrap.ini );
-  test.is( wrap === Class1.prototype.wrap );
-  test.is( wrap === Class1.wrap );
-  test.is( wrap === instance1.wrap );
-  test.is( wrap == Class2.prototype.Statics.wrap.ini );
-  test.is( wrap == Class2.prototype.wrap );
-  test.is( wrap == Class2.wrap );
-  test.is( wrap == instance2.wrap );
+  test.true( wrap2 === Mixin.wrap );
+  test.true( wrap == Mixin.prototype.Statics.wrap.ini );
+  test.true( wrap2 === Mixin.prototype.wrap );
+  test.true( wrap === Class1.prototype.Statics.wrap.ini );
+  test.true( wrap === Class1.prototype.wrap );
+  test.true( wrap === Class1.wrap );
+  test.true( wrap === instance1.wrap );
+  test.true( wrap == Class2.prototype.Statics.wrap.ini );
+  test.true( wrap == Class2.prototype.wrap );
+  test.true( wrap == Class2.wrap );
+  test.true( wrap == instance2.wrap );
 
   test.case = 'set Class1.wrap';
 
   var wrap3 = Class1.wrap = [ 'wrap3' ];
 
-  test.is( wrap2 === Mixin.wrap );
-  test.is( wrap === Mixin.prototype.Statics.wrap.ini );
-  test.is( wrap2 === Mixin.prototype.wrap );
-  test.is( wrap === Class1.prototype.Statics.wrap.ini );
-  test.is( wrap3 === Class1.prototype.wrap );
-  test.is( wrap3 === Class1.wrap );
-  test.is( wrap3 === instance1.wrap );
-  test.is( wrap === Class2.prototype.Statics.wrap.ini );
-  test.is( wrap === Class2.prototype.wrap );
-  test.is( wrap === Class2.wrap );
-  test.is( wrap === instance2.wrap );
+  test.true( wrap2 === Mixin.wrap );
+  test.true( wrap === Mixin.prototype.Statics.wrap.ini );
+  test.true( wrap2 === Mixin.prototype.wrap );
+  test.true( wrap === Class1.prototype.Statics.wrap.ini );
+  test.true( wrap3 === Class1.prototype.wrap );
+  test.true( wrap3 === Class1.wrap );
+  test.true( wrap3 === instance1.wrap );
+  test.true( wrap === Class2.prototype.Statics.wrap.ini );
+  test.true( wrap === Class2.prototype.wrap );
+  test.true( wrap === Class2.wrap );
+  test.true( wrap === instance2.wrap );
 
   /* */
 
   test.case = 'array';
 
-  test.is( array !== Mixin.array );
-  test.is( array === Mixin.prototype.Statics.array.ini );
-  test.is( Mixin.array === Mixin.prototype.array );
+  test.true( array !== Mixin.array );
+  test.true( array === Mixin.prototype.Statics.array.ini );
+  test.true( Mixin.array === Mixin.prototype.array );
 
-  test.is( array === Class1.prototype.Statics.array.ini );
-  test.is( Class1.array === Class1.prototype.array );
-  test.is( array !== Class1.array );
-  test.is( Mixin.array !== Class1.array );
-  test.is( Class1.array === instance1.array );
+  test.true( array === Class1.prototype.Statics.array.ini );
+  test.true( Class1.array === Class1.prototype.array );
+  test.true( array !== Class1.array );
+  test.true( Mixin.array !== Class1.array );
+  test.true( Class1.array === instance1.array );
 
-  test.is( array === Class2.prototype.Statics.array.ini );
-  test.is( Class2.array === Class2.prototype.array );
-  test.is( array !== Class2.array );
-  test.is( Mixin.array !== Class2.array );
-  test.is( Class2.array === instance2.array );
+  test.true( array === Class2.prototype.Statics.array.ini );
+  test.true( Class2.array === Class2.prototype.array );
+  test.true( array !== Class2.array );
+  test.true( Mixin.array !== Class2.array );
+  test.true( Class2.array === instance2.array );
 
   test.case = 'wrap in array';
 
-  test.is( array[ 0 ] === Mixin.array[ 0 ] );
-  test.is( array[ 0 ] === Mixin.prototype.Statics.array.ini[ 0 ] );
-  test.is( array[ 0 ] === Mixin.prototype.array[ 0 ] );
-  test.is( array[ 0 ] === Class1.prototype.Statics.array.ini[ 0 ] );
-  test.is( array[ 0 ] === Class1.prototype.array[ 0 ] );
-  test.is( array[ 0 ] === Class1.array[ 0 ] );
-  test.is( array[ 0 ] === instance1.array[ 0 ] );
-  test.is( array[ 0 ] === Class2.prototype.Statics.array.ini[ 0 ] );
-  test.is( array[ 0 ] === Class2.prototype.array[ 0 ] );
-  test.is( array[ 0 ] === Class2.array[ 0 ] );
-  test.is( array[ 0 ] === instance2.array[ 0 ] );
+  test.true( array[ 0 ] === Mixin.array[ 0 ] );
+  test.true( array[ 0 ] === Mixin.prototype.Statics.array.ini[ 0 ] );
+  test.true( array[ 0 ] === Mixin.prototype.array[ 0 ] );
+  test.true( array[ 0 ] === Class1.prototype.Statics.array.ini[ 0 ] );
+  test.true( array[ 0 ] === Class1.prototype.array[ 0 ] );
+  test.true( array[ 0 ] === Class1.array[ 0 ] );
+  test.true( array[ 0 ] === instance1.array[ 0 ] );
+  test.true( array[ 0 ] === Class2.prototype.Statics.array.ini[ 0 ] );
+  test.true( array[ 0 ] === Class2.prototype.array[ 0 ] );
+  test.true( array[ 0 ] === Class2.array[ 0 ] );
+  test.true( array[ 0 ] === instance2.array[ 0 ] );
 
   /* */
 
   test.case = 'map';
 
-  test.is( map !== Mixin.map );
-  test.is( map === Mixin.prototype.Statics.map.ini );
-  test.is( Mixin.map === Mixin.prototype.map );
+  test.true( map !== Mixin.map );
+  test.true( map === Mixin.prototype.Statics.map.ini );
+  test.true( Mixin.map === Mixin.prototype.map );
 
-  test.is( map === Class1.prototype.Statics.map.ini );
-  test.is( Class1.map === Class1.prototype.map );
-  test.is( map !== Class1.map );
-  test.is( Mixin.map !== Class1.map );
-  test.is( Class1.map === instance1.map );
+  test.true( map === Class1.prototype.Statics.map.ini );
+  test.true( Class1.map === Class1.prototype.map );
+  test.true( map !== Class1.map );
+  test.true( Mixin.map !== Class1.map );
+  test.true( Class1.map === instance1.map );
 
-  test.is( map === Class2.prototype.Statics.map.ini );
-  test.is( Class2.map === Class2.prototype.map );
-  test.is( map !== Class2.map );
-  test.is( Mixin.map !== Class2.map );
-  test.is( Class2.map === instance2.map );
+  test.true( map === Class2.prototype.Statics.map.ini );
+  test.true( Class2.map === Class2.prototype.map );
+  test.true( map !== Class2.map );
+  test.true( Mixin.map !== Class2.map );
+  test.true( Class2.map === instance2.map );
 
   test.case = 'wrap in map';
 
-  test.is( map[ 0 ] === Mixin.map[ 0 ] );
-  test.is( map[ 0 ] === Mixin.prototype.Statics.map.ini[ 0 ] );
-  test.is( map[ 0 ] === Mixin.prototype.map[ 0 ] );
-  test.is( map[ 0 ] === Class1.prototype.Statics.map.ini[ 0 ] );
-  test.is( map[ 0 ] === Class1.prototype.map[ 0 ] );
-  test.is( map[ 0 ] === Class1.map[ 0 ] );
-  test.is( map[ 0 ] === instance1.map[ 0 ] );
-  test.is( map[ 0 ] === Class2.prototype.Statics.map.ini[ 0 ] );
-  test.is( map[ 0 ] === Class2.prototype.map[ 0 ] );
-  test.is( map[ 0 ] === Class2.map[ 0 ] );
-  test.is( map[ 0 ] === instance2.map[ 0 ] );
+  test.true( map[ 0 ] === Mixin.map[ 0 ] );
+  test.true( map[ 0 ] === Mixin.prototype.Statics.map.ini[ 0 ] );
+  test.true( map[ 0 ] === Mixin.prototype.map[ 0 ] );
+  test.true( map[ 0 ] === Class1.prototype.Statics.map.ini[ 0 ] );
+  test.true( map[ 0 ] === Class1.prototype.map[ 0 ] );
+  test.true( map[ 0 ] === Class1.map[ 0 ] );
+  test.true( map[ 0 ] === instance1.map[ 0 ] );
+  test.true( map[ 0 ] === Class2.prototype.Statics.map.ini[ 0 ] );
+  test.true( map[ 0 ] === Class2.prototype.map[ 0 ] );
+  test.true( map[ 0 ] === Class2.map[ 0 ] );
+  test.true( map[ 0 ] === instance2.map[ 0 ] );
 
   /* - */
 
@@ -1096,59 +1096,59 @@ function customFieldsGroups( test )
 
   test.will = 'check base class';
 
-  test.is( !!instance0.Groups );
-  // test.is( !!BasicConstructor.Groups ); /* xxx */
-  test.is( !!BasicConstructor.prototype.Groups );
-  // test.is( instance0.Groups === BasicConstructor.Groups );
-  test.is( instance0.Groups === BasicConstructor.prototype.Groups );
+  test.true( !!instance0.Groups );
+  // test.true( !!BasicConstructor.Groups ); /* xxx */
+  test.true( !!BasicConstructor.prototype.Groups );
+  // test.true( instance0.Groups === BasicConstructor.Groups );
+  test.true( instance0.Groups === BasicConstructor.prototype.Groups );
 
   test.will = 'check dervied class1';
 
-  test.is( !!instance1.Groups );
-  // test.is( !!DerivedConstructor1.Groups );
-  test.is( !!DerivedConstructor1.prototype.Groups );
-  // test.is( instance1.Groups === DerivedConstructor1.Groups );
-  test.is( instance1.Groups === DerivedConstructor1.prototype.Groups );
-  test.is( instance1.Groups !== instance0.Groups );
-  // test.is( DerivedConstructor1.Groups !== instance0.Groups );
-  test.is( DerivedConstructor1.prototype.Groups !== instance0.Groups );
-  test.is( instance1.Names.a === Names1.a );
-  test.is( instance1.Names.b === Names1.b );
-  test.is( instance1.Names.c === Names1.c );
+  test.true( !!instance1.Groups );
+  // test.true( !!DerivedConstructor1.Groups );
+  test.true( !!DerivedConstructor1.prototype.Groups );
+  // test.true( instance1.Groups === DerivedConstructor1.Groups );
+  test.true( instance1.Groups === DerivedConstructor1.prototype.Groups );
+  test.true( instance1.Groups !== instance0.Groups );
+  // test.true( DerivedConstructor1.Groups !== instance0.Groups );
+  test.true( DerivedConstructor1.prototype.Groups !== instance0.Groups );
+  test.true( instance1.Names.a === Names1.a );
+  test.true( instance1.Names.b === Names1.b );
+  test.true( instance1.Names.c === Names1.c );
 
   test.will = 'check dervied class2';
 
-  test.is( !!instance2.Groups );
-  // test.is( !!DerivedConstructor2.Groups );
-  test.is( !!DerivedConstructor2.prototype.Groups );
-  // test.is( instance2.Groups === DerivedConstructor2.Groups );
-  test.is( instance2.Groups === DerivedConstructor2.prototype.Groups );
-  test.is( instance2.Groups !== instance0.Groups );
-  // test.is( DerivedConstructor2.Groups !== instance0.Groups );
-  test.is( DerivedConstructor2.prototype.Groups !== instance0.Groups );
-  test.is( instance2.Groups !== instance1.Groups );
-  // test.is( DerivedConstructor2.Groups !== instance1.Groups );
-  test.is( DerivedConstructor2.prototype.Groups !== instance1.Groups );
-  test.is( instance2.Names.a === Names1.a );
-  test.is( instance2.Names.b === Names2.b );
-  test.is( instance2.Names.c === Names2.c );
+  test.true( !!instance2.Groups );
+  // test.true( !!DerivedConstructor2.Groups );
+  test.true( !!DerivedConstructor2.prototype.Groups );
+  // test.true( instance2.Groups === DerivedConstructor2.Groups );
+  test.true( instance2.Groups === DerivedConstructor2.prototype.Groups );
+  test.true( instance2.Groups !== instance0.Groups );
+  // test.true( DerivedConstructor2.Groups !== instance0.Groups );
+  test.true( DerivedConstructor2.prototype.Groups !== instance0.Groups );
+  test.true( instance2.Groups !== instance1.Groups );
+  // test.true( DerivedConstructor2.Groups !== instance1.Groups );
+  test.true( DerivedConstructor2.prototype.Groups !== instance1.Groups );
+  test.true( instance2.Names.a === Names1.a );
+  test.true( instance2.Names.b === Names2.b );
+  test.true( instance2.Names.c === Names2.c );
 
   test.will = 'check dervied class3';
 
-  test.is( !!instance3.Groups );
-  // test.is( !!DerivedConstructor3.Groups );
-  test.is( !!DerivedConstructor3.prototype.Groups );
-  // test.is( instance3.Groups === DerivedConstructor3.Groups );
-  test.is( instance3.Groups === DerivedConstructor3.prototype.Groups );
-  test.is( instance3.Groups !== instance0.Groups );
-  // test.is( DerivedConstructor3.Groups !== instance0.Groups );
-  test.is( DerivedConstructor3.prototype.Groups !== instance0.Groups );
-  test.is( instance3.Groups !== instance1.Groups );
-  // test.is( DerivedConstructor3.Groups !== instance1.Groups );
-  test.is( DerivedConstructor3.prototype.Groups !== instance1.Groups );
-  test.is( instance3.Names.a === Names1.a );
-  test.is( instance3.Names.b === Names2.b );
-  test.is( instance3.Names.c === Names2.c );
+  test.true( !!instance3.Groups );
+  // test.true( !!DerivedConstructor3.Groups );
+  test.true( !!DerivedConstructor3.prototype.Groups );
+  // test.true( instance3.Groups === DerivedConstructor3.Groups );
+  test.true( instance3.Groups === DerivedConstructor3.prototype.Groups );
+  test.true( instance3.Groups !== instance0.Groups );
+  // test.true( DerivedConstructor3.Groups !== instance0.Groups );
+  test.true( DerivedConstructor3.prototype.Groups !== instance0.Groups );
+  test.true( instance3.Groups !== instance1.Groups );
+  // test.true( DerivedConstructor3.Groups !== instance1.Groups );
+  test.true( DerivedConstructor3.prototype.Groups !== instance1.Groups );
+  test.true( instance3.Names.a === Names1.a );
+  test.true( instance3.Names.b === Names2.b );
+  test.true( instance3.Names.c === Names2.c );
 
 }
 
@@ -1264,16 +1264,16 @@ function workpieceConstruct( test )
 
   counter = 0;
   var instance = BasicConstructor();
-  test.is( instance instanceof BasicConstructor );
-  test.is( instance.constructor === BasicConstructor );
-  test.is( instance.init === init );
+  test.true( instance instanceof BasicConstructor );
+  test.true( instance.constructor === BasicConstructor );
+  test.true( instance.init === init );
   test.identical( counter, 1 );
 
   var instance2 = BasicConstructor( instance );
-  test.is( instance2 instanceof BasicConstructor );
-  test.is( instance2.constructor === BasicConstructor );
-  test.is( instance2.init === init );
-  test.is( instance === instance2 );
+  test.true( instance2 instanceof BasicConstructor );
+  test.true( instance2.constructor === BasicConstructor );
+  test.true( instance2.init === init );
+  test.true( instance === instance2 );
   test.identical( counter, 1 );
 
   /* */
@@ -1282,16 +1282,16 @@ function workpieceConstruct( test )
 
   counter = 0;
   var instance = new BasicConstructor();
-  test.is( instance instanceof BasicConstructor );
-  test.is( instance.constructor === BasicConstructor );
-  test.is( instance.init === init );
+  test.true( instance instanceof BasicConstructor );
+  test.true( instance.constructor === BasicConstructor );
+  test.true( instance.init === init );
   test.identical( counter, 1 );
 
   var instance2 = new BasicConstructor( instance );
-  test.is( instance2 instanceof BasicConstructor );
-  test.is( instance2.constructor === BasicConstructor );
-  test.is( instance2.init === init );
-  test.is( instance !== instance2 );
+  test.true( instance2 instanceof BasicConstructor );
+  test.true( instance2.constructor === BasicConstructor );
+  test.true( instance2.init === init );
+  test.true( instance !== instance2 );
   test.identical( counter, 2 );
 
   /* */
@@ -1301,24 +1301,24 @@ function workpieceConstruct( test )
   counter = 0;
   var Instances = BasicConstructor([ 1,null,3 ]);
   test.identical( Instances.length, 2 );
-  test.is( Instances[ 0 ] instanceof BasicConstructor );
-  test.is( Instances[ 0 ].constructor === BasicConstructor );
-  test.is( Instances[ 0 ].init === init );
-  test.is( Instances[ 1 ] instanceof BasicConstructor );
-  test.is( Instances[ 1 ].constructor === BasicConstructor );
-  test.is( Instances[ 1 ].init === init );
+  test.true( Instances[ 0 ] instanceof BasicConstructor );
+  test.true( Instances[ 0 ].constructor === BasicConstructor );
+  test.true( Instances[ 0 ].init === init );
+  test.true( Instances[ 1 ] instanceof BasicConstructor );
+  test.true( Instances[ 1 ].constructor === BasicConstructor );
+  test.true( Instances[ 1 ].init === init );
   test.identical( counter, 2 );
 
   var instances2 = BasicConstructor( Instances );
   test.identical( instances2.length, 2 );
-  test.is( instances2[ 0 ] instanceof BasicConstructor );
-  test.is( instances2[ 0 ].constructor === BasicConstructor );
-  test.is( instances2[ 0 ].init === init );
-  test.is( instances2[ 1 ] instanceof BasicConstructor );
-  test.is( instances2[ 1 ].constructor === BasicConstructor );
-  test.is( instances2[ 1 ].init === init );
-  test.is( instances2[ 0 ] === Instances[ 0 ] );
-  test.is( instances2[ 1 ] === Instances[ 1 ] );
+  test.true( instances2[ 0 ] instanceof BasicConstructor );
+  test.true( instances2[ 0 ].constructor === BasicConstructor );
+  test.true( instances2[ 0 ].init === init );
+  test.true( instances2[ 1 ] instanceof BasicConstructor );
+  test.true( instances2[ 1 ].constructor === BasicConstructor );
+  test.true( instances2[ 1 ].init === init );
+  test.true( instances2[ 0 ] === Instances[ 0 ] );
+  test.true( instances2[ 1 ] === Instances[ 1 ] );
   test.identical( counter, 2 );
 
 }
@@ -1363,7 +1363,7 @@ function workpieceConstruct( test )
 //   debugger;
 //   test.identical( instance.size, [ 2, 2, 2 ] );
 //   test.identical( instance.usingExploding, 0 );
-//   test.is( instance.size !== Settings.size );
+//   test.true( instance.size !== Settings.size );
 //
 // }
 

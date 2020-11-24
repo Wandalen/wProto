@@ -437,9 +437,9 @@ function accessor( o )
     for( let i = 0 ; i < o.ini.length ; i++ )
     args[ i ] = _.make( o.ini[ i ] );
     let o2;
-    if( o.routine.pre )
+    if( o.routine.head )
     {
-      o2 = o.routine.pre( o.routine, args );
+      o2 = o.routine.head( o.routine, args );
     }
     else
     {
