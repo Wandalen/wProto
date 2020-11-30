@@ -10,206 +10,6 @@ let _ = _global_.wTools;
 // implementation
 // --
 
-// /**
-// * @classdesc Class container for creating property-like entity from non-primitive value.
-//   Is used by routines:
-//   @see {@link module:Tools/base/Proto.wTools.define.own}
-//   @see {@link module:Tools/base/Proto.wTools.define.common}
-//   @see {@link module:Tools/base/Proto.wTools.define.instanceOf}
-//   @see {@link module:Tools/base/Proto.wTools.define.makeWith}
-//   @see {@link module:Tools/base/Proto.wTools.define.contained}
-// * @class Definition
-// * @namespace Tools.define
-// */
-//
-// function Definition( o )
-// {
-//   _.assert( arguments.length === 1 );
-//   if( !( this instanceof Definition ) )
-//   if( o instanceof Definition )
-//   return o;
-//   else
-//   return new( _.constructorJoin( Definition, arguments ) );
-//   _.mapExtend( this, o );
-//
-//   return this;
-// }
-//
-// Definition.prototype = Object.create( null );
-//
-// //
-//
-// function field( o )
-// {
-//
-//   _.assert( _.mapIs( o ) );
-//   _.assert( o.ini !== undefined );
-//   o = _.routineOptions( field, arguments );
-//   _.assert( arguments.length === 1 );
-//   _.assert( _.strIs( o.iniToIns ) );
-//   _.assert( _.longHas( [ 'scalar' , 'array' , 'map' ], o.collection ) );
-//   _.assert( 'scalar' === o.collection, 'not implemented' ); /* zzz : implement */
-//   _.assert( _.longHas( [ 'val' , 'shallow' , 'clone' , 'call' , 'construct' ], o.iniToIns ) );
-//   _.assert( o.ini !== undefined );
-//
-//   _.assert( o.collection === 'scalar', 'not implemented' );
-//   _.assert( o.insToIns === 'val', 'not implemented' );
-//   _.assert( o.datToIns === 'val', 'not implemented' );
-//   _.assert( o.insToDat === 'val', 'not implemented' );
-//   _.assert( o.datToDat === 'val', 'not implemented' );
-//
-//   o.definitionKind = 'definition.named';
-//   o.blueprintForm2 = blueprintForm2;
-//   o.name = null;
-//
-//   let definition = new _.Definition( o );
-//
-//   /* */
-//
-//   if( o.iniToIns === 'val' )
-//   {
-//     definition.valueGenerate = function get() { return this.ini }
-//   }
-//   else if( o.iniToIns === 'shallow' )
-//   {
-//     debugger;
-//     definition.valueGenerate = function get() { return _.entityMake( this.ini ) }
-//   }
-//   else if( o.iniToIns === 'deep' )
-//   {
-//     debugger;
-//     definition.valueGenerate = function get() { return _.cloneJust( this.ini ) }
-//   }
-//   else if( o.iniToIns === 'make' )
-//   {
-//     debugger;
-//     definition.valueGenerate = function get() { return this.ini() }
-//   }
-//   else if( o.iniToIns === 'construct' )
-//   {
-//     debugger;
-//     definition.valueGenerate = function get() { return new this.ini() }
-//   }
-//   else _.assert( 0 );
-//
-//   /* */
-//
-//   function blueprintForm2( blueprint, key )
-//   {
-//     let handlers = blueprint.constructionHandlers.constructionInit = blueprint.constructionHandlers.constructionInit || [];
-//
-//     if( o.iniToIns === 'val' )
-//     {
-//       handlers.push( constructionInitVal );
-//     }
-//     else if( o.iniToIns === 'shallow' )
-//     {
-//       debugger;
-//       handlers.push( constructionInitShallow );
-//     }
-//     else if( o.iniToIns === 'clone' )
-//     {
-//       debugger;
-//       handlers.push( constructionInitClone );
-//     }
-//     else if( o.iniToIns === 'make' )
-//     {
-//       debugger;
-//       handlers.push( constructionInitCall )
-//     }
-//     else if( o.iniToIns === 'construct' )
-//     {
-//       debugger;
-//       handlers.push( constructionInitNew )
-//     }
-//     else _.assert( 0 );
-//
-//   }
-//
-//   /* */
-//
-//   // definition.valueGenerate = function get() { return _.entityMake( this.ini ) }
-//   // definition.valueGenerate = function get() { return _.cloneJust( this.ini ) }
-//
-// /*
-//   common,
-//   own,
-//   instanceOf,
-//   makeWith,
-// */
-//
-//   Object.preventExtension( definition );
-//   return definition;
-//
-//   function constructionInitVal( construction, name )
-//   {
-//     construction[ name ] = this.ini;
-//   }
-//   function constructionInitShallow( construction, name )
-//   {
-//     construction[ name ] = _.entityMake( this.ini );
-//   }
-//   function constructionInitClone( construction, name )
-//   {
-//     construction[ name ] = _.cloneJust( this.ini );
-//   }
-//   function constructionInitCall( construction, name )
-//   {
-//     construction[ name ] = this.ini()
-//   }
-//   function constructionInitNew( construction, name )
-//   {
-//     construction[ name ] = new this.ini()
-//   }
-//
-// }
-//
-// field.defaults =
-// {
-//   order           : 0,
-//   // static          : 0,
-//   // enumerable      : 1,
-//   // configurable    : 1,
-//   // writable :      : 1,
-//   collection      : 'scalar',
-//   insToIns        : 'val',
-//   datToIns        : 'val',
-//   insToDat        : 'val',
-//   datToDat        : 'val',
-//   iniToIns        : 'val',
-//   ini             : null,
-//   // relation        : null,
-// }
-//
-// /*
-// |                | Composes | Aggregates | Associates  |  Restricts  |  Medials  |   Statics   |
-// | -------------- |:--------:|:----------:|:-----------:|:-----------:|:---------:|:-----------:|
-// | Static         |          |            |             |             |           |      +      |
-// | Ins to Ins     |   deep   |    val     |    val      |      -      |     -     |             |
-// | Dat to Ins     |   deep   |    deep    |    val      |      -      |   val     |             |
-// | Ins to Dat     |   deep   |    deep    |    val      |      -      |     -     |             |
-// | Dat to Dat     |   deep   |    deep    |    val      |      -      |   val     |             |
-// */
-//
-// /*
-// order           : [ -10 .. +10 ]                                                                            @default : 0
-// static          : [ 0 , 1 ]                                                                                 @default : 0
-// enumerable      : [ 0 , 1 ]                                                                                 @default : 1
-// configurable    : [ 0 , 1 ]                                                                                 @default : 1
-// writable        : [ 0 , 1 ]                                                                                 @default : 1
-// valueGenerate : routine                                                                                   @default : null
-// collection      : [ scalar , array , map ]                                                                  @default : scalar
-// insToIns        : [ val , shallow , deep ]                                                                  @default : val
-// datToIns        : [ val , shallow , deep ]                                                                  @default : val
-// insToDat        : [ val , shallow , deep ]                                                                  @default : val
-// datToDat        : [ val , shallow , deep ]                                                                  @default : val
-// iniToIns        : [ val , shallow , deep , make , construct ]                                               @default : val
-// relation        : [ null , composes , aggregates , associates , restricts , medials , statics , copiers ]   @default : null
-// ini             : *                                                                                         @default : null
-// */
-
-//
-
 /**
 * Creates property-like entity with getter that returns reference to source object.
 * @param {Object-like|Long} src - source value
@@ -221,7 +21,7 @@ let _ = _global_.wTools;
 function common( src )
 {
   let o2 = { ini : src }
-  o2.definitionKind = 'definition.named';
+  o2.definitionGroup = 'definition.named';
   let definition = new _.Definition( o2 );
 
   _.assert( src !== undefined, () => 'Expects object-like or long, but got ' + _.strType( src ) );
@@ -249,7 +49,7 @@ function common( src )
 function own( src )
 {
   let o2 = { ini : src }
-  o2.definitionKind = 'definition.named';
+  o2.definitionGroup = 'definition.named';
   let definition = new _.Definition( o2 );
 
   _.assert( src !== undefined, () => 'Expects object-like or long, but got ' + _.strType( src ) );
@@ -278,7 +78,7 @@ function own( src )
 function instanceOf( src )
 {
   let o2 = { ini : src }
-  o2.definitionKind = 'definition.named';
+  o2.definitionGroup = 'definition.named';
   let definition = new _.Definition( o2 );
 
   _.assert( _.routineIs( src ), 'Expects constructor' );
@@ -306,7 +106,7 @@ function instanceOf( src )
 function makeWith( src )
 {
   let o2 = { ini : src }
-  o2.definitionKind = 'definition.named';
+  o2.definitionGroup = 'definition.named';
   let definition = new _.Definition( o2 );
 
   _.assert( _.routineIs( src ), 'Expects constructor' );
@@ -345,7 +145,7 @@ function contained( src )
   let o = _.mapOnly( src, contained.defaults );
   o.container = container;
   o.ini = src.ini;
-  o.definitionKind = 'definition.named';
+  o.definitionGroup = 'definition.named';
   let definition = new _.Definition( o );
 
   if( o.shallowCloning )
@@ -414,7 +214,7 @@ function accessor( o )
 
   _.routineOptions( accessor, o );
 
-  o.definitionKind = 'definition.named';
+  o.definitionGroup = 'definition.named';
   o.subKind = 'accessor';
   o.constructionAmend = constructionAmend;
 
@@ -610,7 +410,7 @@ function _constant( ini )
 
   _.routineOptions( _constant, o );
 
-  o.definitionKind = 'definition.named';
+  o.definitionGroup = 'definition.named';
   o.subKind = 'constant';
   o.constructionAmend = constructionAmend;
 
