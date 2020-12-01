@@ -628,7 +628,7 @@ function fieldsGroupsDeclareForEachFilter( o )
     if( o.supplementMap && o.supplementMap.Groups )
     _.mapSupplement( newFieldsGroups, o.supplementMap.Groups );
     if( o.supplementOwnMap && o.supplementOwnMap.Groups )
-    _.mapSupplementOwn( newFieldsGroups, o.supplementOwnMap.Groups );
+    _.mapExtendDstNotOwn( newFieldsGroups, o.supplementOwnMap.Groups );
     if( o.extendMap && o.extendMap.Groups )
     _.mapExtend( newFieldsGroups, o.extendMap.Groups );
   }
@@ -652,7 +652,7 @@ function fieldsGroupsDeclareForEachFilter( o )
     dstPrototype : o.dstPrototype,
     srcMap : o.supplementOwnMap,
     fieldsGroups : newFieldsGroups,
-    filter : _.field.mapper.dstNotOwn,
+    filter : _.field.mapper.dstOwn,
   });
 
   _.workpiece.fieldsGroupsDeclare

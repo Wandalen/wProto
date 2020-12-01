@@ -703,7 +703,7 @@ to prioritize ordinary facets adjustment order should be
   /* ordinary supplementOwn */
 
   if( o.supplementOwn )
-  fieldsDeclare( _.mapSupplementOwn, o.supplementOwn );
+  fieldsDeclare( _.mapExtendDstNotOwn, o.supplementOwn );
 
   /* ordinary supplement */
 
@@ -713,7 +713,7 @@ to prioritize ordinary facets adjustment order should be
   /* static supplementOwn */
 
   if( o.supplementOwn && o.supplementOwn.Statics )
-  declareStaticsForMixin( o.supplementOwn.Statics, _.mapSupplementOwn );
+  declareStaticsForMixin( o.supplementOwn.Statics, _.mapExtendDstNotOwn );
 
   /* static supplement */
 
@@ -842,7 +842,7 @@ to prioritize ordinary facets adjustment order should be
     if( o.supplement && o.supplement.Statics )
     _.mapSupplement( staticsAll, o.supplement.Statics );
     if( o.supplementOwn && o.supplementOwn.Statics )
-    _.mapSupplementOwn( staticsAll, o.supplementOwn.Statics );
+    _.mapExtendDstNotOwn( staticsAll, o.supplementOwn.Statics );
     if( o.extend && o.extend.Statics )
     _.mapExtend( staticsAll, o.extend.Statics );
     return staticsAll;
