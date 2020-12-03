@@ -20,15 +20,15 @@ let _ = _global_.wTools;
 
 function common( src )
 {
-  let o2 = { ini : src }
+  let o2 = { val : src }
   o2.definitionGroup = 'definition.named';
   let definition = new _.Definition( o2 );
 
   _.assert( src !== undefined, () => 'Expects object-like or long, but got ' + _.strType( src ) );
   _.assert( arguments.length === 1 );
-  _.assert( definition.ini !== undefined );
+  _.assert( definition.val !== undefined );
 
-  definition.valueGenerate = function get() { return this.ini }
+  definition.valueGenerate = function get() { return this.val }
 
   _.propertyHide( definition, 'valueGenerate' );
 
@@ -48,16 +48,16 @@ function common( src )
 
 function own( src )
 {
-  let o2 = { ini : src }
+  let o2 = { val : src }
   o2.definitionGroup = 'definition.named';
   let definition = new _.Definition( o2 );
 
   _.assert( src !== undefined, () => 'Expects object-like or long, but got ' + _.strType( src ) );
   _.assert( arguments.length === 1 );
-  _.assert( definition.ini !== undefined );
+  _.assert( definition.val !== undefined );
 
-  // definition.valueGenerate = function get() { return _.entityMake( this.ini ) }
-  definition.valueGenerate = function get() { return _.cloneJust( this.ini ) }
+  // definition.valueGenerate = function get() { return _.entityMake( this.val ) }
+  definition.valueGenerate = function get() { return _.cloneJust( this.val ) }
 
   _.propertyHide( definition, 'valueGenerate' );
 
@@ -77,15 +77,15 @@ function own( src )
 
 function instanceOf( src )
 {
-  let o2 = { ini : src }
+  let o2 = { val : src }
   o2.definitionGroup = 'definition.named';
   let definition = new _.Definition( o2 );
 
   _.assert( _.routineIs( src ), 'Expects constructor' );
   _.assert( arguments.length === 1 );
-  _.assert( definition.ini !== undefined );
+  _.assert( definition.val !== undefined );
 
-  definition.valueGenerate = function get() { return new this.ini() }
+  definition.valueGenerate = function get() { return new this.val() }
 
   _.propertyHide( definition, 'valueGenerate' );
 
@@ -105,15 +105,15 @@ function instanceOf( src )
 
 function makeWith( src )
 {
-  let o2 = { ini : src }
+  let o2 = { val : src }
   o2.definitionGroup = 'definition.named';
   let definition = new _.Definition( o2 );
 
   _.assert( _.routineIs( src ), 'Expects constructor' );
   _.assert( arguments.length === 1 );
-  _.assert( definition.ini !== undefined );
+  _.assert( definition.val !== undefined );
 
-  definition.valueGenerate = function get() { return this.ini() }
+  definition.valueGenerate = function get() { return this.val() }
 
   _.propertyHide( definition, 'valueGenerate' );
 
@@ -139,12 +139,12 @@ function contained( src )
 
   _.assert( _.mapIs( src ) );
   _.assert( arguments.length === 1 );
-  _.assert( src.ini !== undefined );
+  _.assert( src.val !== undefined );
 
   let container = _.mapBut( src, contained.defaults );
   let o = _.mapOnly( src, contained.defaults );
   o.container = container;
-  o.ini = src.ini;
+  o.val = src.val;
   o.definitionGroup = 'definition.named';
   let definition = new _.Definition( o );
 
@@ -152,26 +152,26 @@ function contained( src )
   definition.valueGenerate = function get()
   {
     let result = this.container;
-    result.value = _.entityMake( definition.ini );
+    result.value = _.entityMake( definition.val );
     return result;
   }
   else
   definition.valueGenerate = function get()
   {
     let result = this.container;
-    result.value = definition.ini;
+    result.value = definition.val;
     return result;
   }
 
   _.propertyHide( definition, 'valueGenerate' );
   Object.freeze( definition );
-  _.assert( definition.ini !== undefined );
+  _.assert( definition.val !== undefined );
   return definition;
 }
 
 contained.defaults =
 {
-  ini : null,
+  val : null,
   shallowCloning : 0,
 }
 
@@ -183,7 +183,7 @@ contained.defaults =
 //   o = { callback : arguments[ 0 ] };
 //   _.assert( _.routineIs( o.callback ) || _.strIs( o.callback ) );
 //   o.isMeta = true;
-//   o.ini = null;
+//   o.val = null;
 //   o.subKind = 'ownerCallback';
 //
 //   if( _.strIs( o.callback ) )
@@ -223,7 +223,7 @@ function accessor( o )
 
   let definition = new _.Definition( o );
   _.propertyHide( definition, 'constructionAmend' );
-  _.assert( definition.ini !== undefined );
+  _.assert( definition.val !== undefined );
   return definition;
 
   /* */
@@ -234,8 +234,8 @@ function accessor( o )
     _.assert( arguments.length === 3 );
 
     let args = []
-    for( let i = 0 ; i < o.ini.length ; i++ )
-    args[ i ] = _.make( o.ini[ i ] );
+    for( let i = 0 ; i < o.val.length ; i++ )
+    args[ i ] = _.make( o.val[ i ] );
     let o2;
     if( o.routine.head )
     {
@@ -324,7 +324,7 @@ function accessor( o )
 
 accessor.defaults =
 {
-  ini : null,
+  val : null,
   routine : null,
   take : null,
   get : null,
@@ -351,7 +351,7 @@ function getter( o )
 
 getter.defaults =
 {
-  ini : null,
+  val : null,
   routine : null,
 }
 
@@ -374,7 +374,7 @@ function setter( o )
 
 setter.defaults =
 {
-  ini : null,
+  val : null,
   routine : null,
 }
 
@@ -397,16 +397,16 @@ function putter( o )
 
 putter.defaults =
 {
-  ini : null,
+  val : null,
   routine : null,
 }
 
 //
 
-function _constant( ini )
+function _constant( val )
 {
 
-  let o = { ini }
+  let o = { val }
 
   _.routineOptions( _constant, o );
 
@@ -418,7 +418,7 @@ function _constant( ini )
 
   let definition = new _.Definition( o );
   _.propertyHide( definition, 'constructionAmend' );
-  _.assert( definition.ini !== undefined );
+  _.assert( definition.val !== undefined );
   return definition;
 
   /* */
@@ -434,7 +434,7 @@ function _constant( ini )
 
 _constant.defaults =
 {
-  ini : null,
+  val : null,
 }
 
 // --

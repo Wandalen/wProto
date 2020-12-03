@@ -940,7 +940,7 @@ function from( srcs, cls )
   if( _.arrayLike( srcs ) )
   {
     debugger;
-    var result = _.map( srcs, ( src ) =>
+    var result = _.map_( null, srcs, ( src ) =>
     {
       return _.workpiece.singleFrom( src );
     });

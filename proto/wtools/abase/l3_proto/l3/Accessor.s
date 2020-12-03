@@ -927,7 +927,7 @@ function _declareAct( o )
   {
     _.assert( o.amethods.set === undefined );
     if( _.definitionIs( o.amethods.get ) )
-    o2.value = o.amethods.get.ini;
+    o2.value = o.amethods.get.val;
     else
     o2.value = o.amethods.get;
   }
@@ -1714,7 +1714,7 @@ function _DefineGenerate( original, kind )
   {
     [ original.name ] : function()
     {
-      let definition = _.define[ kind ]({ ini : arguments, routine : original });
+      let definition = _.define[ kind ]({ val : arguments, routine : original });
       _.assert( _.definitionIs( definition ) );
       return definition;
     }

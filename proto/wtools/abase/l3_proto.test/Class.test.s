@@ -608,7 +608,7 @@ function staticsDeclare( test )
   test.true( BasicConstructor.f2 === Statics.f2 );
   test.true( BasicConstructor.prototype.Statics.f2 === Statics.f2 );
   test.true( BasicConstructor.prototype.Associates.f2 === Associates.f2 );
-  test.true( instance.f2 === Associates.f2.ini );
+  test.true( instance.f2 === Associates.f2.val );
 
   test.case = 'set prototype.f2';
 
@@ -619,8 +619,8 @@ function staticsDeclare( test )
   test.true( BasicConstructor.f2 !== BasicConstructor.prototype.f2 );
   test.true( BasicConstructor.prototype.f2 === newF2 );
   test.true( BasicConstructor.f2 === Statics.f2 );
-  test.true( instance.f2 === Associates.f2.ini );
-  test.true( instance2.f2 === Associates.f2.ini );
+  test.true( instance.f2 === Associates.f2.val );
+  test.true( instance2.f2 === Associates.f2.val );
 
   test.case = 'set constructor.f2';
 
@@ -630,8 +630,8 @@ function staticsDeclare( test )
 
   test.true( BasicConstructor.f2 !== BasicConstructor.prototype.f2 );
   test.true( BasicConstructor.f2 === newF2 );
-  test.true( instance.f2 === Associates.f2.ini );
-  test.true( instance2.f2 === Associates.f2.ini );
+  test.true( instance.f2 === Associates.f2.val );
+  test.true( instance2.f2 === Associates.f2.val );
 
   test.close( 'basic' );
 
@@ -776,10 +776,10 @@ function mixinStaticsWithDefinition( test )
   var map = { 0 : wrap };
   var Statics =
   {
-    array : _.define.contained({ ini : array, readOnly : 1, shallowCloning : 1 }),
-    map : _.define.contained({ ini : map, readOnly : 1, shallowCloning : 1 }),
-    bool : _.define.contained({ ini : 0 }),
-    wrap : _.define.contained({ ini : wrap }),
+    array : _.define.contained({ val : array, readOnly : 1, shallowCloning : 1 }),
+    map : _.define.contained({ val : map, readOnly : 1, shallowCloning : 1 }),
+    bool : _.define.contained({ val : 0 }),
+    wrap : _.define.contained({ val : wrap }),
   }
 
   var Extension =
@@ -863,14 +863,14 @@ function mixinStaticsWithDefinition( test )
   test.case = 'wrap';
 
   test.true( wrap === Mixin.wrap );
-  test.true( wrap === Mixin.prototype.Statics.wrap.ini );
+  test.true( wrap === Mixin.prototype.Statics.wrap.val );
   test.true( wrap === Mixin.prototype.wrap );
-  test.true( wrap === Class1.prototype.Statics.wrap.ini );
+  test.true( wrap === Class1.prototype.Statics.wrap.val );
   test.true( wrap === Class1.prototype.wrap );
   test.true( wrap === Class1.wrap );
   test.true( wrap === instance1.wrap );
 
-  test.true( wrap === Class2.prototype.Statics.wrap.ini );
+  test.true( wrap === Class2.prototype.Statics.wrap.val );
   test.true( wrap === Class2.prototype.wrap );
   test.true( wrap === Class2.wrap );
   test.true( wrap === instance2.wrap );
@@ -880,13 +880,13 @@ function mixinStaticsWithDefinition( test )
   var wrap2 = Mixin.wrap = [ 'wrap2' ];
 
   test.true( wrap2 === Mixin.wrap );
-  test.true( wrap == Mixin.prototype.Statics.wrap.ini );
+  test.true( wrap == Mixin.prototype.Statics.wrap.val );
   test.true( wrap2 === Mixin.prototype.wrap );
-  test.true( wrap === Class1.prototype.Statics.wrap.ini );
+  test.true( wrap === Class1.prototype.Statics.wrap.val );
   test.true( wrap === Class1.prototype.wrap );
   test.true( wrap === Class1.wrap );
   test.true( wrap === instance1.wrap );
-  test.true( wrap == Class2.prototype.Statics.wrap.ini );
+  test.true( wrap == Class2.prototype.Statics.wrap.val );
   test.true( wrap == Class2.prototype.wrap );
   test.true( wrap == Class2.wrap );
   test.true( wrap == instance2.wrap );
@@ -896,13 +896,13 @@ function mixinStaticsWithDefinition( test )
   var wrap3 = Class1.wrap = [ 'wrap3' ];
 
   test.true( wrap2 === Mixin.wrap );
-  test.true( wrap === Mixin.prototype.Statics.wrap.ini );
+  test.true( wrap === Mixin.prototype.Statics.wrap.val );
   test.true( wrap2 === Mixin.prototype.wrap );
-  test.true( wrap === Class1.prototype.Statics.wrap.ini );
+  test.true( wrap === Class1.prototype.Statics.wrap.val );
   test.true( wrap3 === Class1.prototype.wrap );
   test.true( wrap3 === Class1.wrap );
   test.true( wrap3 === instance1.wrap );
-  test.true( wrap === Class2.prototype.Statics.wrap.ini );
+  test.true( wrap === Class2.prototype.Statics.wrap.val );
   test.true( wrap === Class2.prototype.wrap );
   test.true( wrap === Class2.wrap );
   test.true( wrap === instance2.wrap );
@@ -912,16 +912,16 @@ function mixinStaticsWithDefinition( test )
   test.case = 'array';
 
   test.true( array !== Mixin.array );
-  test.true( array === Mixin.prototype.Statics.array.ini );
+  test.true( array === Mixin.prototype.Statics.array.val );
   test.true( Mixin.array === Mixin.prototype.array );
 
-  test.true( array === Class1.prototype.Statics.array.ini );
+  test.true( array === Class1.prototype.Statics.array.val );
   test.true( Class1.array === Class1.prototype.array );
   test.true( array !== Class1.array );
   test.true( Mixin.array !== Class1.array );
   test.true( Class1.array === instance1.array );
 
-  test.true( array === Class2.prototype.Statics.array.ini );
+  test.true( array === Class2.prototype.Statics.array.val );
   test.true( Class2.array === Class2.prototype.array );
   test.true( array !== Class2.array );
   test.true( Mixin.array !== Class2.array );
@@ -930,13 +930,13 @@ function mixinStaticsWithDefinition( test )
   test.case = 'wrap in array';
 
   test.true( array[ 0 ] === Mixin.array[ 0 ] );
-  test.true( array[ 0 ] === Mixin.prototype.Statics.array.ini[ 0 ] );
+  test.true( array[ 0 ] === Mixin.prototype.Statics.array.val[ 0 ] );
   test.true( array[ 0 ] === Mixin.prototype.array[ 0 ] );
-  test.true( array[ 0 ] === Class1.prototype.Statics.array.ini[ 0 ] );
+  test.true( array[ 0 ] === Class1.prototype.Statics.array.val[ 0 ] );
   test.true( array[ 0 ] === Class1.prototype.array[ 0 ] );
   test.true( array[ 0 ] === Class1.array[ 0 ] );
   test.true( array[ 0 ] === instance1.array[ 0 ] );
-  test.true( array[ 0 ] === Class2.prototype.Statics.array.ini[ 0 ] );
+  test.true( array[ 0 ] === Class2.prototype.Statics.array.val[ 0 ] );
   test.true( array[ 0 ] === Class2.prototype.array[ 0 ] );
   test.true( array[ 0 ] === Class2.array[ 0 ] );
   test.true( array[ 0 ] === instance2.array[ 0 ] );
@@ -946,16 +946,16 @@ function mixinStaticsWithDefinition( test )
   test.case = 'map';
 
   test.true( map !== Mixin.map );
-  test.true( map === Mixin.prototype.Statics.map.ini );
+  test.true( map === Mixin.prototype.Statics.map.val );
   test.true( Mixin.map === Mixin.prototype.map );
 
-  test.true( map === Class1.prototype.Statics.map.ini );
+  test.true( map === Class1.prototype.Statics.map.val );
   test.true( Class1.map === Class1.prototype.map );
   test.true( map !== Class1.map );
   test.true( Mixin.map !== Class1.map );
   test.true( Class1.map === instance1.map );
 
-  test.true( map === Class2.prototype.Statics.map.ini );
+  test.true( map === Class2.prototype.Statics.map.val );
   test.true( Class2.map === Class2.prototype.map );
   test.true( map !== Class2.map );
   test.true( Mixin.map !== Class2.map );
@@ -964,13 +964,13 @@ function mixinStaticsWithDefinition( test )
   test.case = 'wrap in map';
 
   test.true( map[ 0 ] === Mixin.map[ 0 ] );
-  test.true( map[ 0 ] === Mixin.prototype.Statics.map.ini[ 0 ] );
+  test.true( map[ 0 ] === Mixin.prototype.Statics.map.val[ 0 ] );
   test.true( map[ 0 ] === Mixin.prototype.map[ 0 ] );
-  test.true( map[ 0 ] === Class1.prototype.Statics.map.ini[ 0 ] );
+  test.true( map[ 0 ] === Class1.prototype.Statics.map.val[ 0 ] );
   test.true( map[ 0 ] === Class1.prototype.map[ 0 ] );
   test.true( map[ 0 ] === Class1.map[ 0 ] );
   test.true( map[ 0 ] === instance1.map[ 0 ] );
-  test.true( map[ 0 ] === Class2.prototype.Statics.map.ini[ 0 ] );
+  test.true( map[ 0 ] === Class2.prototype.Statics.map.val[ 0 ] );
   test.true( map[ 0 ] === Class2.prototype.map[ 0 ] );
   test.true( map[ 0 ] === Class2.map[ 0 ] );
   test.true( map[ 0 ] === instance2.map[ 0 ] );
