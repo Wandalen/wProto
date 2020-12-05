@@ -308,7 +308,7 @@ function accessor( o )
     ({
       object : dst,
       names : key,
-      take : o.take,
+      grab : o.grab,
       get : o.get,
       put : o.put,
       set : o.set,
@@ -326,7 +326,7 @@ accessor.defaults =
 {
   val : null,
   routine : null,
-  take : null,
+  grab : null,
   get : null,
   put : null,
   set : null,
@@ -492,7 +492,6 @@ _.assert( _.definition.is === _.definitionIs );
 
 let ToolsExtension =
 {
-  // Definition,
 }
 
 _.mapExtend( _, ToolsExtension );

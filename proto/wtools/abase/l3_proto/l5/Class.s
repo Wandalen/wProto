@@ -916,9 +916,8 @@ function staticDeclare( o )
   if( !( 'value' in o ) )
   o.value = o.prototype.Statics[ o.name ];
 
-  // debugger;
   if( _.definitionIs( o.value ) )
-  _.mapExtend( o, o.value.valueGenerate() );
+  _.mapExtend( o, o.value.valueGenerate( o.value.val ) );
 
   _.routineOptions( staticDeclare, arguments );
   _.assert( _.strIs( o.name ) );

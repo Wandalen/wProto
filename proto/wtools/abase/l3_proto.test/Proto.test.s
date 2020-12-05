@@ -379,14 +379,14 @@ function accessorMethodsDeducing( test )
 
   /* */
 
-  test.case = 'not, only take';
+  test.case = 'not, only grab';
   var symbol = Symbol.for( 'a' );
   var events = [];
   var ins1 =
   {
-    aTake : function()
+    aGrab : function()
     {
-      events.push( 'aTake' );
+      events.push( 'aGrab' );
       return this[ symbol ];
     },
     a : 10,
@@ -402,8 +402,8 @@ function accessorMethodsDeducing( test )
   test.identical( events, [] );
   test.identical( ins1.a, 10 );
   test.identical( events, [] );
-  test.identical( ins1.aTake(), 10 );
-  test.identical( events, [ 'aTake' ] );
+  test.identical( ins1.aGrab(), 10 );
+  test.identical( events, [ 'aGrab' ] );
   test.shouldThrowErrorSync( () => dst.a = 30 );
 
   /* */
@@ -424,7 +424,7 @@ function accessorMethodsDeducing( test )
   _.accessor.declare
   ({
     object : ins1,
-    names : { a : { take : 0, put : 0, set : 0 } },
+    names : { a : { grab : 0, put : 0, set : 0 } },
     prime : 0,
   });
 
@@ -451,7 +451,7 @@ function accessorMethodsDeducing( test )
   _.accessor.declare
   ({
     object : ins1,
-    names : { a : { take : 0, get : 0, set : 0 } },
+    names : { a : { grab : 0, get : 0, set : 0 } },
     prime : 0,
   });
 
@@ -481,7 +481,7 @@ function accessorMethodsDeducing( test )
   _.accessor.declare
   ({
     object : ins1,
-    names : { a : { take : 0, get : 0, put : 0 } },
+    names : { a : { grab : 0, get : 0, put : 0 } },
     prime : 0,
   });
 
@@ -498,14 +498,14 @@ function accessorMethodsDeducing( test )
 
   /* xxx : consider such case */
 
-  // test.case = 'aTake defined, despite options';
+  // test.case = 'aGrab defined, despite options';
   // var symbol = Symbol.for( 'a' );
   // var events = [];
   // var ins1 =
   // {
-  //   aTake : function()
+  //   aGrab : function()
   //   {
-  //     events.push( 'aTake' );
+  //     events.push( 'aGrab' );
   //     return this[ symbol ];
   //   },
   //   a : 10,
@@ -518,7 +518,7 @@ function accessorMethodsDeducing( test )
   //   _.accessor.declare
   //   ({
   //     object : ins1,
-  //     names : { a : { take : 0 } },
+  //     names : { a : { grab : 0 } },
   //     prime : 0,
   //   });
   //   debugger;
@@ -531,9 +531,9 @@ function accessorMethodsDeducing( test )
   var events = [];
   var ins1 =
   {
-    _aTake : function()
+    _aGrab : function()
     {
-      events.push( '_aTake' );
+      events.push( '_aGrab' );
       return this[ symbol ]
     },
     _aGet : function()
@@ -576,9 +576,9 @@ function accessorMethodsDeducing( test )
   var events = [];
   var ins1 =
   {
-    aTake : function()
+    aGrab : function()
     {
-      events.push( 'aTake' );
+      events.push( 'aGrab' );
       return this[ symbol ]
     },
     aGet : function()
@@ -621,9 +621,9 @@ function accessorMethodsDeducing( test )
   var events = [];
   var ins1 =
   {
-    _aTake : function()
+    _aGrab : function()
     {
-      events.push( '_aTake' );
+      events.push( '_aGrab' );
       return this[ symbol ]
     },
     _aGet : function()
@@ -641,9 +641,9 @@ function accessorMethodsDeducing( test )
       events.push( '_aSet' );
       this[ symbol ] = src;
     },
-    aTake : function()
+    aGrab : function()
     {
-      events.push( 'aTake' );
+      events.push( 'aGrab' );
       return this[ symbol ]
     },
     aGet : function()
@@ -686,9 +686,9 @@ function accessorMethodsDeducing( test )
   var events = [];
   var ins1 =
   {
-    _aTake : function()
+    _aGrab : function()
     {
-      events.push( '_aTake' );
+      events.push( '_aGrab' );
       return this[ symbol ]
     },
     _aGet : function()
@@ -712,7 +712,7 @@ function accessorMethodsDeducing( test )
   _.accessor.declare
   ({
     object : ins1,
-    names : { a : { take : true, get : true, put : true, set : true } },
+    names : { a : { grab : true, get : true, put : true, set : true } },
     prime : 0,
   });
 
@@ -731,9 +731,9 @@ function accessorMethodsDeducing( test )
   var events = [];
   var ins1 =
   {
-    _aTake : function()
+    _aGrab : function()
     {
-      events.push( '_aTake' );
+      events.push( '_aGrab' );
       return this[ symbol ]
     },
     _aGet : function()
@@ -751,9 +751,9 @@ function accessorMethodsDeducing( test )
       events.push( '_aSet' );
       this[ symbol ] = src;
     },
-    aTake : function()
+    aGrab : function()
     {
-      events.push( 'aTake' );
+      events.push( 'aGrab' );
       return this[ symbol ]
     },
     aGet : function()
@@ -777,7 +777,7 @@ function accessorMethodsDeducing( test )
   _.accessor.declare
   ({
     object : ins1,
-    names : { a : { take : true, get : true, put : true, set : true } },
+    names : { a : { grab : true, get : true, put : true, set : true } },
     prime : 0,
   });
 
@@ -796,9 +796,9 @@ function accessorMethodsDeducing( test )
   var events = [];
   var ins1 =
   {
-    aTake : function()
+    aGrab : function()
     {
-      events.push( 'aTake' );
+      events.push( 'aGrab' );
       return this[ symbol ]
     },
     aGet : function()
@@ -822,7 +822,7 @@ function accessorMethodsDeducing( test )
   _.accessor.declare
   ({
     object : ins1,
-    names : { a : { take : true, get : true, put : true, set : true } },
+    names : { a : { grab : true, get : true, put : true, set : true } },
     prime : 0,
   });
 
@@ -836,14 +836,14 @@ function accessorMethodsDeducing( test )
 
   /* */
 
-  test.case = '_aTake only';
+  test.case = '_aGrab only';
   var symbol = Symbol.for( 'a' );
   var events = [];
   var ins1 =
   {
-    _aTake : function()
+    _aGrab : function()
     {
-      events.push( '_aTake' );
+      events.push( '_aGrab' );
       return this[ symbol ]
     },
     a : 10,
@@ -858,22 +858,22 @@ function accessorMethodsDeducing( test )
 
   test.identical( events, [] );
   test.identical( ins1.a, 10 );
-  test.identical( events, [ '_aTake' ] );
+  test.identical( events, [ '_aGrab' ] );
   ins1.a = 20;
-  test.identical( events, [ '_aTake' ] );
+  test.identical( events, [ '_aGrab' ] );
   test.identical( ins1.a, 20 );
-  test.identical( events, [ '_aTake', '_aTake' ] );
+  test.identical( events, [ '_aGrab', '_aGrab' ] );
 
   /* */
 
-  test.case = 'aTake only';
+  test.case = 'aGrab only';
   var symbol = Symbol.for( 'a' );
   var events = [];
   var ins1 =
   {
-    aTake : function()
+    aGrab : function()
     {
-      events.push( 'aTake' );
+      events.push( 'aGrab' );
       return this[ symbol ]
     },
     a : 10,
@@ -888,11 +888,11 @@ function accessorMethodsDeducing( test )
 
   test.identical( events, [] );
   test.identical( ins1.a, 10 );
-  test.identical( events, [ 'aTake' ] );
+  test.identical( events, [ 'aGrab' ] );
   ins1.a = 20;
-  test.identical( events, [ 'aTake' ] );
+  test.identical( events, [ 'aGrab' ] );
   test.identical( ins1.a, 20 );
-  test.identical( events, [ 'aTake', 'aTake' ] );
+  test.identical( events, [ 'aGrab', 'aGrab' ] );
 
   /* */
 
@@ -1344,20 +1344,20 @@ function accessorOptionAddingMethods( test )
 
   /* */
 
-  test.case = 'deduce setter from put, deduce get from take, object has methods, addingMethods:1';
+  test.case = 'deduce setter from put, deduce get from grab, object has methods, addingMethods:1';
   var dst =
   {
     'a' : 'a1',
     'b' : 'b1',
-    aTake : function() { return this.b },
+    aGrab : function() { return this.b },
     aPut : function( src ) { this.b = src },
   };
   var exp =
   {
     'a' : 'a1',
     'b' : 'a1',
-    aTake : dst.aTake,
-    aGet : dst.aTake,
+    aGrab : dst.aGrab,
+    aGet : dst.aGrab,
     aPut : dst.aPut,
     aSet : dst.aPut,
   }
@@ -1373,20 +1373,20 @@ function accessorOptionAddingMethods( test )
 
   /* */
 
-  test.case = 'deduce setter from put and get from take, object has methods, with _, addingMethods:1';
+  test.case = 'deduce setter from put and get from grab, object has methods, with _, addingMethods:1';
   var dst =
   {
     'a' : 'a1',
     'b' : 'b1',
-    _aTake : function() { return this.b },
+    _aGrab : function() { return this.b },
     _aPut : function( src ) { this.b = src },
   };
   var exp =
   {
     'a' : 'a1',
     'b' : 'a1',
-    _aTake : dst._aTake,
-    aGet : dst._aTake,
+    _aGrab : dst._aGrab,
+    aGet : dst._aGrab,
     _aPut : dst._aPut,
     aSet : dst._aPut,
   }
@@ -1402,10 +1402,10 @@ function accessorOptionAddingMethods( test )
 
   /* */
 
-  test.case = 'deduce setter from put and get from take, object does not have methods, with _, addingMethods:1';
+  test.case = 'deduce setter from put and get from grab, object does not have methods, with _, addingMethods:1';
   var methods =
   {
-    _aTake : function() { return this.b },
+    _aGrab : function() { return this.b },
     _aPut : function( src ) { this.b = src },
   }
   var dst =
@@ -1417,8 +1417,8 @@ function accessorOptionAddingMethods( test )
   {
     'a' : 'a1',
     'b' : 'a1',
-    aTake : methods._aTake,
-    aGet : methods._aTake,
+    aGrab : methods._aGrab,
+    aGet : methods._aGrab,
     aSet : methods._aPut,
     aPut : methods._aPut,
   }
@@ -1660,7 +1660,7 @@ function accessorDeducingMethods( test )
   {
     'a' : 'a1',
     'b' : 'b1',
-    aTake : object.aTake,
+    aGrab : object.aGrab,
     aGet : object.aGet,
     aPut : object.aPut,
   }
@@ -1674,7 +1674,7 @@ function accessorDeducingMethods( test )
     'a' : 'd',
     'b' : 'b1',
     aPut : object.aPut,
-    aTake : object.aTake,
+    aGrab : object.aGrab,
     aGet : object.aGet,
   }
   object.aPut( 'd' );
@@ -1705,7 +1705,7 @@ function accessorDeducingMethods( test )
   {
     'a' : 'a1',
     'b' : 'b1',
-    aTake : object.aTake,
+    aGrab : object.aGrab,
     aGet : object.aGet,
     aPut : object.aPut,
   }
@@ -1718,7 +1718,7 @@ function accessorDeducingMethods( test )
   {
     'a' : 'd',
     'b' : 'b1',
-    aTake : object.aTake,
+    aGrab : object.aGrab,
     aGet : object.aGet,
     aPut : object.aPut,
   }
@@ -1751,7 +1751,7 @@ function accessorDeducingMethods( test )
   {
     'a' : 'a1',
     'b' : 'b1',
-    aTake : object.aTake,
+    aGrab : object.aGrab,
     aGet : object.aGet,
     aSet : object.aSet,
   }
@@ -1761,7 +1761,7 @@ function accessorDeducingMethods( test )
   {
     'a' : 'd',
     'b' : 'b1',
-    aTake : object.aTake,
+    aGrab : object.aGrab,
     aGet : object.aGet,
     aSet : object.aSet,
   }
@@ -1772,7 +1772,7 @@ function accessorDeducingMethods( test )
   {
     'a' : 'e',
     'b' : 'b1',
-    aTake : object.aTake,
+    aGrab : object.aGrab,
     aGet : object.aGet,
     aSet : object.aSet,
   }
@@ -1805,7 +1805,7 @@ function accessorDeducingMethods( test )
   {
     'a' : 'a1',
     'b' : 'b1',
-    aTake : object.aTake,
+    aGrab : object.aGrab,
     aGet : object.aGet,
   }
   test.identical( object, exp );
@@ -1862,7 +1862,7 @@ function accessorIsClean( test )
 
   var exp =
   {
-    f2Take : methods.f2Take,
+    f2Grab : methods.f2Grab,
     f2Get : methods.f2Get,
     f2Put : methods.f2Put,
   }
@@ -2289,11 +2289,11 @@ function accessorUnfunctGetSuite( test )
     'a' : 'a1',
     'b' : 'b1',
     '_' : 'abc2',
-    'aTake' : object.aTake,
+    'aGrab' : object.aGrab,
     'aGet' : object.aGet,
     'aPut' : object.aPut,
     'aSet' : object.aSet,
-    '_Take' : object._Take,
+    '_Grab' : object._Grab,
     '_Get' : object._Get,
   }
   test.identical( object, exp );
@@ -2336,11 +2336,11 @@ function accessorUnfunctGetSuite( test )
     'a' : 'a1',
     'b' : 'b1',
     '_' : 'abc1',
-    'aTake' : object.aTake,
+    'aGrab' : object.aGrab,
     'aGet' : object.aGet,
     'aPut' : object.aPut,
     'aSet' : object.aSet,
-    '_Take' : object._Take,
+    '_Grab' : object._Grab,
     '_Get' : object._Get,
   }
   test.identical( object, exp );
@@ -2388,11 +2388,11 @@ function accessorUnfunctGetSuite( test )
   {
     'a' : 'a1',
     'b' : 'b1',
-    'aTake' : object.aTake,
+    'aGrab' : object.aGrab,
     'aGet' : object.aGet,
     'aPut' : object.aPut,
     'aSet' : object.aSet,
-    '_Take' : object._Take,
+    '_Grab' : object._Grab,
     '_Get' : object._Get,
     '_Put' : object._Put,
     '_Set' : object._Set,
@@ -2438,11 +2438,11 @@ function accessorUnfunctGetSuite( test )
     'a' : 'a1',
     'b' : 'b1',
     '_' : 'abc2',
-    'aTake' : object.aTake,
+    'aGrab' : object.aGrab,
     'aGet' : object.aGet,
     'aPut' : object.aPut,
     'aSet' : object.aSet,
-    '_Take' : object._Take,
+    '_Grab' : object._Grab,
     '_Get' : object._Get,
     '_Put' : object._Put,
     '_Set' : object._Set,
@@ -2488,11 +2488,11 @@ function accessorUnfunctGetSuite( test )
     'a' : 'a1',
     'b' : 'b1',
     '_' : 'abc2',
-    'aTake' : object.aTake,
+    'aGrab' : object.aGrab,
     'aGet' : object.aGet,
     'aPut' : object.aPut,
     'aSet' : object.aSet,
-    '_Take' : object._Take,
+    '_Grab' : object._Grab,
     '_Get' : object._Get,
     '_Put' : object._Put,
     '_Set' : object._Set,
@@ -2537,11 +2537,11 @@ function accessorUnfunctGetSuite( test )
     'a' : 'a1',
     'b' : 'b1',
     '_' : 'abc1',
-    'aTake' : object.aTake,
+    'aGrab' : object.aGrab,
     'aGet' : object.aGet,
     'aPut' : object.aPut,
     'aSet' : object.aSet,
-    '_Take' : object._Take,
+    '_Grab' : object._Grab,
     '_Get' : object._Get,
     '_Put' : object._Put,
     '_Set' : object._Set,
@@ -2852,20 +2852,20 @@ function getterWithSymbol( test )
   {
     'a' : 'a1',
     'b' : 'b1',
-    'aTake' : object.aTake,
+    'aGrab' : object.aGrab,
     'aGet' : object.aGet,
     'aPut' : object.aPut,
     'aSet' : object.aSet,
-    '_Take' : object._Take,
+    '_Grab' : object._Grab,
     '_Get' : object._Get,
     '_' :
     {
       'a' : 'a1',
       'b' : undefined,
-      '_Take' : undefined,
+      '_Grab' : undefined,
       '_Get' : undefined,
       '_' : undefined,
-      'aTake' : undefined,
+      'aGrab' : undefined,
       'aGet' : undefined,
       'aSet' : undefined,
       'aPut' : undefined,
@@ -2915,19 +2915,19 @@ function getterToValueDefine( test )
   {
     'a' : 'a1',
     'b' : 'b1',
-    'aTake' : object.aTake,
+    'aGrab' : object.aGrab,
     'aGet' : object.aGet,
     'aPut' : object.aPut,
     'aSet' : object.aSet,
-    '_Take' : object._Take,
+    '_Grab' : object._Grab,
     '_Get' : object._Get,
     '_' :
     {
       'a' : 'a1',
       'b' : undefined,
-      '_Take' : undefined,
+      '_Grab' : undefined,
       '_Get' : undefined,
-      'aTake' : undefined,
+      'aGrab' : undefined,
       'aGet' : undefined,
       'aPut' : undefined,
       'aSet' : undefined,
@@ -2972,9 +2972,9 @@ function getterToValueDefine( test )
   {
     'a' : 'a1',
     'b' : 'b1',
-    '_Take' : object._Take,
+    '_Grab' : object._Grab,
     '_Get' : object._Get,
-    'aTake' : object.aTake,
+    'aGrab' : object.aGrab,
     'aGet' : object.aGet,
     'aPut' : object.aPut,
     'aSet' : object.aSet,
@@ -2982,9 +2982,9 @@ function getterToValueDefine( test )
     {
       'a' : 'a1',
       'b' : undefined,
-      '_Take' : undefined,
+      '_Grab' : undefined,
       '_Get' : undefined,
-      'aTake' : undefined,
+      'aGrab' : undefined,
       'aGet' : undefined,
       'aPut' : undefined,
       'aSet' : undefined,
@@ -3036,11 +3036,11 @@ function getterToValueDefine( test )
   {
     'a' : 'a1',
     'b' : 'b1',
-    'aTake' : object.aTake,
+    'aGrab' : object.aGrab,
     'aGet' : object.aGet,
     'aPut' : object.aPut,
     'aSet' : object.aSet,
-    '_Take' : object._Take,
+    '_Grab' : object._Grab,
     '_Get' : object._Get,
     '_Put' : object._Put,
     '_Set' : object._Set,
@@ -3048,11 +3048,11 @@ function getterToValueDefine( test )
     {
       'a' : 'a1',
       'b' : undefined,
-      '_Take' : undefined,
+      '_Grab' : undefined,
       '_Get' : undefined,
       '_Put' : undefined,
       '_Set' : undefined,
-      'aTake' : undefined,
+      'aGrab' : undefined,
       'aGet' : undefined,
       'aPut' : undefined,
       'aSet' : undefined,
@@ -3097,11 +3097,11 @@ function getterToValueDefine( test )
   {
     'a' : 'a1',
     'b' : 'b1',
-    'aTake' : object.aTake,
+    'aGrab' : object.aGrab,
     'aGet' : object.aGet,
     'aPut' : object.aPut,
     'aSet' : object.aSet,
-    '_Take' : object._Take,
+    '_Grab' : object._Grab,
     '_Get' : object._Get,
     '_Put' : object._Put,
     '_Set' : object._Set,
@@ -3109,11 +3109,11 @@ function getterToValueDefine( test )
     {
       'a' : 'a1',
       'b' : undefined,
-      '_Take' : undefined,
+      '_Grab' : undefined,
       '_Get' : undefined,
       '_Put' : undefined,
       '_Set' : undefined,
-      'aTake' : undefined,
+      'aGrab' : undefined,
       'aGet' : undefined,
       'aPut' : undefined,
       'aSet' : undefined,
@@ -3158,11 +3158,11 @@ function getterToValueDefine( test )
   {
     'a' : 'a1',
     'b' : 'b1',
-    'aTake' : object.aTake,
+    'aGrab' : object.aGrab,
     'aGet' : object.aGet,
     'aPut' : object.aPut,
     'aSet' : object.aSet,
-    '_Take' : object._Take,
+    '_Grab' : object._Grab,
     '_Get' : object._Get,
     '_Put' : object._Put,
     '_Set' : object._Set,
@@ -3170,11 +3170,11 @@ function getterToValueDefine( test )
     {
       'a' : 'a1',
       'b' : undefined,
-      '_Take' : undefined,
+      '_Grab' : undefined,
       '_Get' : undefined,
       '_Put' : undefined,
       '_Set' : undefined,
-      'aTake' : undefined,
+      'aGrab' : undefined,
       'aGet' : undefined,
       'aPut' : undefined,
       'aSet' : undefined,
@@ -3219,11 +3219,11 @@ function getterToValueDefine( test )
   {
     'a' : 'a1',
     'b' : 'b1',
-    'aTake' : object.aTake,
+    'aGrab' : object.aGrab,
     'aGet' : object.aGet,
     'aPut' : object.aPut,
     'aSet' : object.aSet,
-    '_Take' : object._Take,
+    '_Grab' : object._Grab,
     '_Get' : object._Get,
     '_Put' : object._Put,
     '_Set' : object._Set,
@@ -3232,11 +3232,11 @@ function getterToValueDefine( test )
       'a' : 'a1',
       'b' : undefined,
       '_' : undefined,
-      '_Take' : undefined,
+      '_Grab' : undefined,
       '_Get' : undefined,
       '_Put' : undefined,
       '_Set' : undefined,
-      'aTake' : undefined,
+      'aGrab' : undefined,
       'aGet' : undefined,
       'aPut' : undefined,
       'aSet' : undefined,
@@ -3300,15 +3300,15 @@ function getterToValueAccess( test )
     'a' : 'a1',
     'b' : 'b1',
     'c' : 'c1',
-    '_Take' : object._Take,
+    '_Grab' : object._Grab,
     '_Get' : object._Get,
     '_Put' : object._Put,
     '_Set' : object._Set,
-    'aTake' : object.aTake,
+    'aGrab' : object.aGrab,
     'aSet' : object.aSet,
     'aGet' : object.aGet,
     'aPut' : object.aPut,
-    'bTake' : object.bTake,
+    'bGrab' : object.bGrab,
     'bSet' : object.bSet,
     'bGet' : object.bGet,
     'bPut' : object.bPut,
@@ -3317,15 +3317,15 @@ function getterToValueAccess( test )
       'a' : 'a1',
       'b' : 'b1',
       'c' : undefined,
-      '_Take' : undefined,
+      '_Grab' : undefined,
       '_Get' : undefined,
       '_Put' : undefined,
       '_Set' : undefined,
-      'aTake' : undefined,
+      'aGrab' : undefined,
       'aSet' : undefined,
       'aGet' : undefined,
       'aPut' : undefined,
-      'bTake' : undefined,
+      'bGrab' : undefined,
       'bSet' : undefined,
       'bGet' : undefined,
       'bPut' : undefined,
@@ -3533,15 +3533,15 @@ function getterToValueAccess( test )
   {
     'a' : undefined,
     'b' : undefined,
-    '_Take' : object._Take,
+    '_Grab' : object._Grab,
     '_Get' : object._Get,
     '_Put' : object._Put,
     '_Set' : object._Set,
-    'aTake' : object.aTake,
+    'aGrab' : object.aGrab,
     'aSet' : object.aSet,
     'aGet' : object.aGet,
     'aPut' : object.aPut,
-    'bTake' : object.bTake,
+    'bGrab' : object.bGrab,
     'bSet' : object.bSet,
     'bGet' : object.bGet,
     'bPut' : object.bPut,
@@ -3549,15 +3549,15 @@ function getterToValueAccess( test )
     {
       'a' : undefined,
       'b' : undefined,
-      '_Take' : undefined,
+      '_Grab' : undefined,
       '_Get' : undefined,
       '_Put' : undefined,
       '_Set' : undefined,
-      'aTake' : undefined,
+      'aGrab' : undefined,
       'aSet' : undefined,
       'aGet' : undefined,
       'aPut' : undefined,
-      'bTake' : undefined,
+      'bGrab' : undefined,
       'bSet' : undefined,
       'bGet' : undefined,
       'bPut' : undefined,
@@ -3757,7 +3757,7 @@ function putterSymbol( test )
   {
     'a' : 'a1',
     'b' : 'b1',
-    aTake : object.aTake,
+    aGrab : object.aGrab,
     aGet : object.aGet,
     aPut : object.aPut,
     aSet : object.aSet,
@@ -3770,7 +3770,7 @@ function putterSymbol( test )
   {
     'a' : 'c',
     'b' : 'b1',
-    aTake : object.aTake,
+    aGrab : object.aGrab,
     aGet : object.aGet,
     aPut : object.aPut,
     aSet : object.aSet,
@@ -3782,7 +3782,7 @@ function putterSymbol( test )
   {
     'a' : 'd',
     'b' : 'd',
-    aTake : object.aTake,
+    aGrab : object.aGrab,
     aGet : object.aGet,
     aPut : object.aPut,
     aSet : object.aSet,
@@ -3794,7 +3794,7 @@ function putterSymbol( test )
   {
     'a' : 'e',
     'b' : 'e',
-    aTake : object.aTake,
+    aGrab : object.aGrab,
     aGet : object.aGet,
     aPut : object.aPut,
     aSet : object.aSet,

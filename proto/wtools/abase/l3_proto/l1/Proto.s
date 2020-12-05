@@ -434,67 +434,6 @@ prototypeCrossRefer.defaults =
   name : null,
 }
 
-// //
-//
-// /**
-//  * Iterate through prototypes.
-//  * @param {object} proto - prototype
-//  * @function prototypeEach
-//  * @namespace Tools
-// * @module Tools/base/Proto
-//  */
-//
-// function prototypeEach( proto, onEach )
-// {
-//   let result = [];
-//
-//   _.assert( _.routineIs( onEach ) || !onEach );
-//   _.assert( !_.primitiveIs( proto ) );
-//   _.assert( arguments.length === 1 || arguments.length === 2 );
-//
-//   do
-//   {
-//     if( onEach )
-//     onEach.call( this, proto );
-//     result.push( proto );
-//     proto = Object.getPrototypeOf( proto );
-//   }
-//   while( proto );
-//
-//   return result;
-// }
-//
-// //
-//
-// function prototypeEach_deprecated( proto, onEach )
-// {
-//   let result = [];
-//
-//   _.assert( _.routineIs( onEach ) || !onEach );
-//   _.assert( _.objectIs( proto ) );
-//   _.assert( arguments.length === 1 || arguments.length === 2 );
-//
-//   do
-//   {
-//
-//     if( onEach )
-//     onEach.call( this, proto );
-//
-//     result.push( proto );
-//
-//     let parent = _.parentOf( proto );
-//
-//     proto = parent ? parent.prototype : null;
-//
-//     if( proto && proto.constructor === Object )
-//     proto = null;
-//
-//   }
-//   while( proto );
-//
-//   return result;
-// }
-
 // --
 // instance
 // --
@@ -1068,14 +1007,10 @@ let ToolsExtension =
   prototypeUnitedInterface, /* experimental */
 
   prototypeAppend, /* experimental */
-  // prototypeHasPrototype, /* moved */
-  // prototypeHasProperty, /* moved */
   prototypeArchyGet, /* experimental */
   prototypeHasField,
 
   prototypeCrossRefer, /* experimental */
-  // prototypeEach, /* moved */
-  // prototypeEach_deprecated,
 
   // instance
 

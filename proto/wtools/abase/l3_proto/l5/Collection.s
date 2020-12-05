@@ -737,7 +737,7 @@ function toValueGet_functor( o )
   _.routineOptions( toValueGet_functor, o );
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.strDefined( o.fieldName ) );
-  _.assert( _.longHas( [ 'take', 'get', 'suite' ], o.accessorKind ) );
+  _.assert( _.longHas( [ 'grab', 'get', 'suite' ], o.accessorKind ) );
 
   let spaceName = o.fieldName;
   let setter = Object.create( null );
