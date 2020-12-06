@@ -56,160 +56,9 @@ let _nameFielded = _.nameFielded;
 _.assert( _.objectIs( _.field ), 'wProto needs Tools/wtools/abase/l1/FieldMapper.s' );
 _.assert( _.routineIs( _nameFielded ), 'wProto needs Tools/wtools/l3/NameTools.s' );
 
-//
-
-function constructorIsStandard( cls )
-{
-
-  _.assert( _.constructorIs( cls ) );
-
-  let prototype = _.prototypeOf( cls );
-
-  return _.prototypeIsStandard( prototype );
-}
-
-//
-
-function constructorOf( src )
-{
-  let proto;
-
-  _.assert( arguments.length === 1, 'Expects single argument' );
-
-  if( _ObjectHasOwnProperty.call( src, 'constructor' ) )
-  {
-    proto = src; /* proto */
-  }
-  else if( _ObjectHasOwnProperty.call( src, 'prototype' )  )
-  {
-    if( src.prototype )
-    proto = src.prototype; /* constructor */
-    else
-    proto = Object.getPrototypeOf( Object.getPrototypeOf( src ) ); /* instance behind ruotine */
-  }
-  else
-  {
-    proto = Object.getPrototypeOf( src ); /* instance */
-  }
-
-  if( proto === null )
-  return null;
-  else
-  return proto.constructor;
-}
-
-//
-
-function isSubClassOf( subCls, cls )
-{
-
-  _.assert( _.routineIs( cls ) );
-  _.assert( _.routineIs( subCls ) );
-  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
-
-  if( cls === subCls )
-  return true;
-
-  return Object.isPrototypeOf.call( cls.prototype, subCls.prototype );
-}
-
-//
-
-function isSubPrototypeOf( sub, parent )
-{
-
-  _.assert( !!parent );
-  _.assert( !!sub );
-  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
-
-  if( parent === sub )
-  return true;
-
-  return Object.isPrototypeOf.call( parent, sub );
-
-}
-
-//
-
-/**
- * Get parent's constructor.
- * @function parentOf
- * @namespace Tools
- * @module Tools/base/Proto
- */
-
-function parentOf( src )
-{
-  let c = _.constructorOf( src );
-
-  _.assert( arguments.length === 1, 'Expects single argument' );
-
-  let proto = Object.getPrototypeOf( c.prototype );
-  let result = proto ? proto.constructor : null;
-
-  return result;
-}
-
-//
-
-function _classConstructorAndPrototypeGet( o )
-{
-  let result = Object.create( null );
-
-  if( !result.cls )
-  if( o.prototype )
-  result.cls = o.prototype.constructor;
-
-  if( !result.cls )
-  if( o.extend )
-  if( o.extend.constructor !== Object.prototype.constructor )
-  result.cls = o.extend.constructor;
-
-  if( !result.cls )
-  if( o.usingStatics && o.extend && o.extend.Statics )
-  if( o.extend.Statics.constructor !== Object.prototype.constructor )
-  result.cls = o.extend.Statics.constructor;
-
-  if( !result.cls )
-  if( o.supplement )
-  if( o.supplement.constructor !== Object.prototype.constructor )
-  result.cls = o.supplement.constructor;
-
-  if( !result.cls )
-  if( o.usingStatics && o.supplement && o.supplement.Statics )
-  if( o.supplement.Statics.constructor !== Object.prototype.constructor )
-  result.cls = o.supplement.Statics.constructor;
-
-  if( o.prototype )
-  result.prototype = o.prototype;
-  else if( result.cls )
-  result.prototype = result.cls.prototype;
-
-  if( o.prototype )
-  _.assert( result.cls === o.prototype.constructor );
-
-  return result;
-}
-
 // --
 // prototype
 // --
-
-function prototypeOf( src )
-{
-  _.assert( arguments.length === 1, 'Expects single argument, probably you want routine isPrototypeOf' );
-
-  if( !( 'constructor' in src ) )
-  return null;
-
-  let c = _.constructorOf( src );
-
-  _.assert( arguments.length === 1, 'Expects single argument' );
-
-  return c.prototype;
-}
-
-//
 
 /**
  * Make united interface for several maps. Access to single map cause read and write to original maps.
@@ -230,24 +79,7 @@ function prototypeUnitedInterface( protos )
   _.assert( arguments.length === 1 );
   _.assert( _.arrayIs( protos ) );
 
-  //
-
-  function get( fieldName )
-  {
-    return function unitedGet()
-    {
-      return this[ unitedMapSymbol ][ fieldName ][ fieldName ];
-    }
-  }
-  function set( fieldName )
-  {
-    return function unitedSet( value )
-    {
-      this[ unitedMapSymbol ][ fieldName ][ fieldName ] = value;
-    }
-  }
-
-  //
+  /* */
 
   for( let p = 0 ; p < protos.length ; p++ )
   {
@@ -279,6 +111,23 @@ function prototypeUnitedInterface( protos )
   result[ unitedMapSymbol ] = protoMap;
 
   return result;
+
+  /* */
+
+  function get( fieldName )
+  {
+    return function unitedGet()
+    {
+      return this[ unitedMapSymbol ][ fieldName ][ fieldName ];
+    }
+  }
+  function set( fieldName )
+  {
+    return function unitedSet( value )
+    {
+      this[ unitedMapSymbol ][ fieldName ][ fieldName ] = value;
+    }
+  }
 }
 
 //
@@ -329,23 +178,6 @@ function prototypeArchyGet( srcPrototype )
   srcPrototype = Object.getPrototypeOf( srcPrototype );
 
   return srcPrototype;
-}
-
-//
-
-function prototypeHasField( src, fieldName )
-{
-  let prototype = _.prototypeOf( src );
-
-  _.assert( _.prototypeIsStandard( prototype ), 'Expects standard prototype' );
-  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
-  _.assert( _.strIs( fieldName ) );
-
-  for( let f in _.DefaultFieldsGroupsRelations )
-  if( prototype[ f ][ fieldName ] !== undefined )
-  return true;
-
-  return false;
 }
 
 //
@@ -432,200 +264,6 @@ prototypeCrossRefer.defaults =
 {
   entities : null,
   name : null,
-}
-
-// --
-// instance
-// --
-
-function instanceIsStandard( src )
-{
-  _.assert( arguments.length === 1, 'Expects single argument' );
-
-  if( !_.instanceIs( src ) )
-  return false;
-
-  let proto = _.prototypeOf( src );
-
-  if( !proto )
-  return false;
-
-  return _.prototypeIsStandard( proto );
-}
-
-// --
-// property
-// --
-
-function propertyDescriptorActiveGet( object, name )
-{
-  let result = Object.create( null );
-  result.object = null;
-  result.descriptor = null;
-
-  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
-
-  do
-  {
-    let descriptor = Object.getOwnPropertyDescriptor( object, name );
-    if( descriptor && !( 'value' in descriptor ) )
-    {
-      result.descriptor = descriptor;
-      result.object = object;
-      return result;
-    }
-    object = Object.getPrototypeOf( object );
-  }
-  while( object );
-
-  return result;
-}
-
-//
-
-function propertyDescriptorGet( object, name )
-{
-  let result = Object.create( null );
-  result.object = null;
-  result.descriptor = null;
-
-  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
-
-  do
-  {
-    let descriptor = Object.getOwnPropertyDescriptor( object, name );
-    if( descriptor )
-    {
-      result.descriptor = descriptor;
-      result.object = object;
-      return result;
-    }
-    object = Object.getPrototypeOf( object );
-  }
-  while( object );
-
-  return result;
-}
-
-// --
-// field
-// --
-
-/**
- * @summary Defines hidden property with name( name ) and value( value ) on target object( dstPrototype ).
- *
- * @description
- * Property is defined as not enumarable.
- * Also accepts second argument as map of properties.
- * If second argument( name ) is a map and third argument( value ) is also defined, then all properties will have value of last arg.
- *
- * @param {Object} dstPrototype - target object
- * @param {String|Object} name - name of property or map of names
- * @param {*} value - destination object
- *
- * @throws {Exception} If number of arguments is not supported.
- * @throws {Exception} If dstPrototype is not an Object
- * @function propertyHide
- *
- * @namespace Tools
- * @module Tools/base/Proto
- */
-
-function propertyHide( dstPrototype, name, value )
-{
-
-  _.assert( arguments.length === 2 || arguments.length === 3 );
-  _.assert( !_.primitiveIs( dstPrototype ), () => 'dstPrototype is needed, but got ' + _.toStrShort( dstPrototype ) );
-
-  if( _.containerIs( name ) )
-  {
-    if( !_.objectIs( name ) )
-    debugger;
-    if( !_.objectIs( name ) )
-    name = _.indexExtending( name, ( e ) => { return { [ e ] : undefined } } );
-    _.each( name, ( v, n ) =>
-    {
-      if( value !== undefined )
-      _.propertyHide( dstPrototype, n, value );
-      else
-      _.propertyHide( dstPrototype, n, v );
-    });
-    return;
-  }
-
-  if( value === undefined )
-  value = dstPrototype[ name ];
-
-  _.assert( _.strIs( name ), 'name is needed, but got', name );
-
-  Object.defineProperty( dstPrototype, name,
-  {
-    value,
-    enumerable : false,
-    writable : true,
-    configurable : true,
-  });
-
-}
-
-//
-
-/**
- * Makes constants properties on object by creating new or replacing existing properties.
- * @param {object} dstPrototype - prototype of class which will get new constant property.
- * @param {object} namesObject - name/value map of constants.
- *
- * @example
- * let Self = ClassName;
-function ClassName( o ) { };
- * let Constants = { num : 100  };
- * _.propertyConstant( Self.prototype, Constants );
- * console.log( Self.prototype ); // returns { num: 100 }
- * Self.prototype.num = 1;// error assign to read only property
- *
- * @function propertyConstant
- * @throws {exception} If no argument provided.
- * @throws {exception} If( dstPrototype ) is not a Object.
- * @throws {exception} If( name ) is not a Map.
- * @namespace Tools
- * @module Tools/base/Proto
- */
-
-function propertyConstant( dstPrototype, name, value )
-{
-
-  _.assert( arguments.length === 2 || arguments.length === 3 );
-  _.assert( !_.primitiveIs( dstPrototype ), () => 'dstPrototype is needed, but got ' + _.toStrShort( dstPrototype ) );
-
-  if( _.containerIs( name ) )
-  {
-    if( !_.objectIs( name ) )
-    debugger;
-    if( !_.objectIs( name ) )
-    name = _.indexExtending( name, ( e ) => { return { [ e ] : undefined } } );
-    _.each( name, ( v, n ) =>
-    {
-      if( value !== undefined )
-      _.propertyConstant( dstPrototype, n, value );
-      else
-      _.propertyConstant( dstPrototype, n, v );
-    });
-    return;
-  }
-
-  if( value === undefined )
-  value = dstPrototype[ name ];
-
-  _.assert( _.strIs( name ), 'name is needed, but got', name );
-
-  Object.defineProperty( dstPrototype, name,
-  {
-    value,
-    enumerable : true,
-    writable : false,
-    configurable : false,
-  });
-
 }
 
 // --
@@ -910,7 +548,7 @@ _.assert( wCallableObject.shortName === 'CallableObject' );
 // fields
 // --
 
-let Combining = [ 'rewrite', 'supplement', 'apppend', 'prepend' ];
+// let Combining = [ 'rewrite', 'supplement', 'apppend', 'prepend' ];
 
 /**
  * @typedef {Object} DefaultFieldsGroups - contains predefined class fields groups.
@@ -990,38 +628,21 @@ Object.freeze( DefaultForbiddenNames );
 let ToolsExtension =
 {
 
-  constructorIsStandard,
-  constructorOf,
-  classGet : constructorOf,
+  // constructorIsStandard,
+  // constructorOf,
+  // classGet : constructorOf,
 
-  isSubClassOf,
-  isSubPrototypeOf,
-
-  parentOf,
-  _classConstructorAndPrototypeGet,
+  // isSubClassOf,
+  // isSubPrototypeOf,
 
   // prototype
-
-  prototypeOf,
 
   prototypeUnitedInterface, /* experimental */
 
   prototypeAppend, /* experimental */
   prototypeArchyGet, /* experimental */
-  prototypeHasField,
 
   prototypeCrossRefer, /* experimental */
-
-  // instance
-
-  instanceIsStandard,
-
-  // property
-
-  propertyDescriptorActiveGet,
-  propertyDescriptorGet,
-  propertyHide,
-  propertyConstant,
 
   // proxy
 
@@ -1039,7 +660,7 @@ let ToolsExtension =
 
   // fields
 
-  Combining,
+  // Combining,
 
   DefaultFieldsGroups,
   DefaultFieldsGroupsRelations,

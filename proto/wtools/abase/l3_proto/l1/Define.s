@@ -30,7 +30,7 @@ function common( src )
 
   definition.valueGenerate = function get() { return this.val }
 
-  _.propertyHide( definition, 'valueGenerate' );
+  _.property.hide( definition, 'valueGenerate' );
 
   Object.freeze( definition );
   return definition;
@@ -59,7 +59,7 @@ function own( src )
   // definition.valueGenerate = function get() { return _.entityMake( this.val ) }
   definition.valueGenerate = function get() { return _.cloneJust( this.val ) }
 
-  _.propertyHide( definition, 'valueGenerate' );
+  _.property.hide( definition, 'valueGenerate' );
 
   Object.freeze( definition );
   return definition;
@@ -87,7 +87,7 @@ function instanceOf( src )
 
   definition.valueGenerate = function get() { return new this.val() }
 
-  _.propertyHide( definition, 'valueGenerate' );
+  _.property.hide( definition, 'valueGenerate' );
 
   Object.freeze( definition );
   return definition;
@@ -115,7 +115,7 @@ function makeWith( src )
 
   definition.valueGenerate = function get() { return this.val() }
 
-  _.propertyHide( definition, 'valueGenerate' );
+  _.property.hide( definition, 'valueGenerate' );
 
   Object.freeze( definition );
   return definition;
@@ -163,7 +163,7 @@ function contained( src )
     return result;
   }
 
-  _.propertyHide( definition, 'valueGenerate' );
+  _.property.hide( definition, 'valueGenerate' );
   Object.freeze( definition );
   _.assert( definition.val !== undefined );
   return definition;
@@ -222,7 +222,7 @@ function accessor( o )
   _.assert( arguments.length === 1 );
 
   let definition = new _.Definition( o );
-  _.propertyHide( definition, 'constructionAmend' );
+  _.property.hide( definition, 'constructionAmend' );
   _.assert( definition.val !== undefined );
   return definition;
 
@@ -230,7 +230,7 @@ function accessor( o )
 
   function constructionAmend( dst, key, amend )
   {
-    let instanceIsStandard = _.instanceIsStandard( dst );
+    let instanceIsStandard = _.workpiece.instanceIsStandard( dst );
     _.assert( arguments.length === 3 );
 
     let args = []
@@ -417,7 +417,7 @@ function _constant( val )
   _.assert( arguments.length === 1 );
 
   let definition = new _.Definition( o );
-  _.propertyHide( definition, 'constructionAmend' );
+  _.property.hide( definition, 'constructionAmend' );
   _.assert( definition.val !== undefined );
   return definition;
 
@@ -425,7 +425,7 @@ function _constant( val )
 
   function constructionAmend( dst, key, amend ) /* xxx : implement, use inheriting instead? */
   {
-    let instanceIsStandard = _.instanceIsStandard( dst );
+    let instanceIsStandard = _.workpiece.instanceIsStandard( dst );
     _.assert( arguments.length === 3 );
     _.assert( 0, 'not implemented' );
   }

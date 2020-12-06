@@ -77,7 +77,7 @@ function _mixinDelcare( o )
 
   if( !o.prototype )
   {
-    let got = _._classConstructorAndPrototypeGet( o );
+    let got = _.workpiece.prototypeAndConstructorOf( o );
 
     if( got.prototype )
     o.prototype = got.prototype;
@@ -191,7 +191,7 @@ function mixinApply( mixinDescriptor, dstPrototype )
   if( !_ObjectHasOwnProperty.call( dstPrototype, '_mixinsMap' ) )
   {
     dstPrototype._mixinsMap = Object.create( dstPrototype._mixinsMap || null );
-    _.propertyHide( dstPrototype, '_mixinsMap' );
+    _.property.hide( dstPrototype, '_mixinsMap' );
   }
 
   _.assert
@@ -209,9 +209,9 @@ function mixinApply( mixinDescriptor, dstPrototype )
 function mixinHas( proto, mixin )
 {
   if( _.constructorIs( proto ) )
-  proto = _.prototypeOf( proto );
+  proto = _.workpiece.prototypeOf( proto );
 
-  _.assert( _.prototypeIsStandard( proto ) );
+  _.assert( _.workpiece.prototypeIsStandard( proto ) );
   _.assert( arguments.length === 2, 'Expects exactly two arguments' );
 
   if( _.strIs( mixin ) )
@@ -667,7 +667,7 @@ function classExtend( o )
   /* get constructor */
 
   if( !o.cls )
-  o.cls = _._classConstructorAndPrototypeGet( o ).cls;
+  o.cls = _.workpiece.prototypeAndConstructorOf( o ).cls;
 
   /* */
 
@@ -926,8 +926,8 @@ function staticDeclare( o )
   if( !o.fieldsOfRelationsGroups )
   o.fieldsOfRelationsGroups = _.workpiece.fieldsOfRelationsGroupsFromPrototype( o.prototype );
 
-  let pd = _.propertyDescriptorGet( o.prototype, o.name );
-  let cd = _.propertyDescriptorGet( o.prototype.constructor, o.name );
+  let pd = _.prototype.propertyDescriptorGet( o.prototype, o.name );
+  let cd = _.prototype.propertyDescriptorGet( o.prototype.constructor, o.name );
 
   if( pd.object !== o.prototype )
   pd.descriptor = null;

@@ -22,6 +22,181 @@ let _ObjectPropertyIsEumerable = Object.propertyIsEnumerable;
 _.assert( _.objectIs( _.field ), 'wProto needs Tools/wtools/abase/l1/FieldMapper.s' );
 
 // --
+// prototype
+// --
+
+function prototypeIsStandard( src )
+{
+
+  if( !_.workpiece.prototypeIs( src ) )
+  return false;
+
+  if( !Object.hasOwnProperty.call( src, 'Composes' ) )
+  return false;
+
+  return true;
+}
+
+// function prototypeOf( src )
+function prototypeOf( src )
+{
+  _.assert( arguments.length === 1, 'Expects single argument, probably you want routine isPrototypeOf' );
+
+  if( !( 'constructor' in src ) )
+  return null;
+
+  let c = _.workpiece.constructorOf( src );
+
+  _.assert( arguments.length === 1, 'Expects single argument' );
+
+  return c.prototype;
+}
+
+//
+
+// function prototypeHasField( src, fieldName )
+function prototypeHasField( src, fieldName )
+{
+  let prototype = _.workpiece.prototypeOf( src );
+
+  _.assert( _.workpiece.prototypeIsStandard( prototype ), 'Expects standard prototype' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
+  _.assert( _.strIs( fieldName ) );
+
+  for( let f in _.DefaultFieldsGroupsRelations )
+  if( prototype[ f ][ fieldName ] !== undefined )
+  return true;
+
+  return false;
+}
+
+//
+
+// function _classConstructorAndPrototypeGet( o )
+function prototypeAndConstructorOf( o )
+{
+  let result = Object.create( null );
+
+  if( !result.cls )
+  if( o.prototype )
+  result.cls = o.prototype.constructor;
+
+  if( !result.cls )
+  if( o.extend )
+  if( o.extend.constructor !== Object.prototype.constructor )
+  result.cls = o.extend.constructor;
+
+  if( !result.cls )
+  if( o.usingStatics && o.extend && o.extend.Statics )
+  if( o.extend.Statics.constructor !== Object.prototype.constructor )
+  result.cls = o.extend.Statics.constructor;
+
+  if( !result.cls )
+  if( o.supplement )
+  if( o.supplement.constructor !== Object.prototype.constructor )
+  result.cls = o.supplement.constructor;
+
+  if( !result.cls )
+  if( o.usingStatics && o.supplement && o.supplement.Statics )
+  if( o.supplement.Statics.constructor !== Object.prototype.constructor )
+  result.cls = o.supplement.Statics.constructor;
+
+  if( o.prototype )
+  result.prototype = o.prototype;
+  else if( result.cls )
+  result.prototype = result.cls.prototype;
+
+  if( o.prototype )
+  _.assert( result.cls === o.prototype.constructor );
+
+  return result;
+}
+
+// --
+// constructor
+// --
+
+/**
+ * Get parent's constructor.
+ * @function parentOf
+ * @namespace Tools
+ * @module Tools/base/Proto
+ */
+
+function parentOf( src )
+{
+  let c = _.workpiece.constructorOf( src );
+
+  _.assert( arguments.length === 1, 'Expects single argument' );
+
+  let proto = Object.getPrototypeOf( c.prototype );
+  let result = proto ? proto.constructor : null;
+
+  return result;
+}
+
+//
+
+function constructorIsStandard( cls )
+{
+
+  _.assert( _.constructorIs( cls ) );
+
+  let prototype = _.workpiece.prototypeOf( cls );
+
+  return _.workpiece.prototypeIsStandard( prototype );
+}
+
+//
+
+function constructorOf( src )
+{
+  let proto;
+
+  _.assert( arguments.length === 1, 'Expects single argument' );
+
+  if( _ObjectHasOwnProperty.call( src, 'constructor' ) )
+  {
+    proto = src; /* proto */
+  }
+  else if( _ObjectHasOwnProperty.call( src, 'prototype' )  )
+  {
+    if( src.prototype )
+    proto = src.prototype; /* constructor */
+    else
+    proto = Object.getPrototypeOf( Object.getPrototypeOf( src ) ); /* instance behind ruotine */
+  }
+  else
+  {
+    proto = Object.getPrototypeOf( src ); /* instance */
+  }
+
+  if( proto === null )
+  return null;
+  else
+  return proto.constructor;
+}
+
+// --
+// instance
+// --
+
+function instanceIsStandard( src )
+{
+  _.assert( arguments.length === 1, 'Expects single argument' );
+
+  if( !_.instanceIs( src ) )
+  return false;
+
+  let proto = _.workpiece.prototypeOf( src );
+
+  if( !proto )
+  return false;
+
+  return _.workpiece.prototypeIsStandard( proto );
+}
+
+// --
 // fields group
 // --
 
@@ -481,11 +656,11 @@ function fieldsOfRelationsGroups( src )
 {
   let prototype = src;
 
-  if( !_.prototypeIs( prototype ) )
-  prototype = _.prototypeOf( src );
+  if( !_.workpiece.prototypeIs( prototype ) )
+  prototype = _.workpiece.prototypeOf( src );
 
-  _.assert( _.prototypeIs( prototype ) );
-  _.assert( _.prototypeIsStandard( prototype ), 'Expects standard prototype' );
+  _.assert( _.workpiece.prototypeIs( prototype ) );
+  _.assert( _.workpiece.prototypeIsStandard( prototype ), 'Expects standard prototype' );
   _.assert( arguments.length === 1, 'Expects single argument' );
 
   if( _.instanceIs( src ) )
@@ -502,11 +677,11 @@ function fieldsOfCopyableGroups( src )
 {
   let prototype = src;
 
-  if( !_.prototypeIs( prototype ) )
-  prototype = _.prototypeOf( src );
+  if( !_.workpiece.prototypeIs( prototype ) )
+  prototype = _.workpiece.prototypeOf( src );
 
-  _.assert( _.prototypeIs( prototype ) );
-  _.assert( _.prototypeIsStandard( prototype ), 'Expects standard prototype' );
+  _.assert( _.workpiece.prototypeIs( prototype ) );
+  _.assert( _.workpiece.prototypeIsStandard( prototype ), 'Expects standard prototype' );
   _.assert( arguments.length === 1, 'Expects single argument' );
 
   if( _.instanceIs( src ) )
@@ -521,11 +696,11 @@ function fieldsOfTightGroups( src )
 {
   let prototype = src;
 
-  if( !_.prototypeIs( prototype ) )
-  prototype = _.prototypeOf( src );
+  if( !_.workpiece.prototypeIs( prototype ) )
+  prototype = _.workpiece.prototypeOf( src );
 
-  _.assert( _.prototypeIs( prototype ) );
-  _.assert( _.prototypeIsStandard( prototype ), 'Expects standard prototype' );
+  _.assert( _.workpiece.prototypeIs( prototype ) );
+  _.assert( _.workpiece.prototypeIsStandard( prototype ), 'Expects standard prototype' );
   _.assert( arguments.length === 1, 'Expects single argument' );
 
   if( _.instanceIs( src ) )
@@ -540,11 +715,11 @@ function fieldsOfInputGroups( src )
 {
   let prototype = src;
 
-  if( !_.prototypeIs( prototype ) )
-  prototype = _.prototypeOf( src );
+  if( !_.workpiece.prototypeIs( prototype ) )
+  prototype = _.workpiece.prototypeOf( src );
 
-  _.assert( _.prototypeIs( prototype ) );
-  _.assert( _.prototypeIsStandard( prototype ), 'Expects standard prototype' );
+  _.assert( _.workpiece.prototypeIs( prototype ) );
+  _.assert( _.workpiece.prototypeIsStandard( prototype ), 'Expects standard prototype' );
   _.assert( arguments.length === 1, 'Expects single argument' );
 
   if( _.instanceIs( src ) )
@@ -568,7 +743,7 @@ function fieldsGroupsDeclare( o )
   if( !o.fieldsGroups )
   o.fieldsGroups = _.workpiece.fieldsGroupsGet( o.dstPrototype );
 
-  _.assert( _.isSubPrototypeOf( o.fieldsGroups, _.DefaultFieldsGroups ) );
+  _.assert( _.prototype.isSubPrototypeOf( o.fieldsGroups, _.DefaultFieldsGroups ) );
 
   for( let f in o.fieldsGroups )
   {
@@ -748,7 +923,7 @@ function construct( cls, context, args )
 function isFinited( src )
 {
   _.assert( _.instanceIs( src ), () => 'Expects instance, but got ' + _.toStrShort( src ) )
-  _.assert( _.objectLikeOrRoutine( src ) );
+  _.assert( !_.primitiveIs( src ) );
   return Object.isFrozen( src );
 }
 
@@ -758,7 +933,7 @@ function finit( src )
 {
 
   _.assert( !Object.isFrozen( src ), () => `Seems instance ${_.workpiece.qualifiedNameTry( src )} is already finited` );
-  _.assert( _.objectLikeOrRoutine( src ) );
+  _.assert( !_.primitiveIs( src ) );
   _.assert( arguments.length === 1, 'Expects single argument' );
 
   // let validator =
@@ -779,7 +954,6 @@ function finit( src )
   // let result = new Proxy( src, validator );
 
   Object.freeze( src );
-
 }
 
 //
@@ -915,7 +1089,7 @@ initFilter.defaults =
 
 function singleFrom( src, cls )
 {
-  cls = _.constructorOf( cls );
+  cls = _.workpiece.constructorOf( cls );
 
   _.assert( arguments.length === 2 );
 
@@ -928,7 +1102,7 @@ function singleFrom( src, cls )
 
 function from( srcs, cls )
 {
-  cls = _.constructorOf( cls );
+  cls = _.workpiece.constructorOf( cls );
 
   _.assert( arguments.length === 2 );
 
@@ -967,7 +1141,7 @@ function className( instance )
 {
   _.assert( _.instanceIs( instance ) );
   _.assert( arguments.length === 1 );
-  let cls = _.constructorOf( instance );
+  let cls = _.workpiece.constructorOf( instance );
   _.assert( cls === null || _.strIs( cls.name ) || _.strIs( cls._name ) );
   return cls ? ( cls.name || cls._name ) : '';
 }
@@ -1306,6 +1480,27 @@ let Fields =
 
 let Routines =
 {
+
+  // prototype
+
+  prototypeIs : _.prototypeIs,
+  prototypeIsStandard,
+  prototypeOf,
+  prototypeHasField,
+  prototypeAndConstructorOf,
+
+  // constructor
+
+  parentOf,
+  constructorIs : _.constructorIs,
+  constructorIsStandard,
+  constructorOf,
+  classGet : constructorOf,
+
+  // instance
+
+  instanceIs : _.instanceIs,
+  instanceIsStandard,
 
   // fields group
 

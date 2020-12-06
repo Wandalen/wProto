@@ -1,4 +1,4 @@
-( function _Proto_test_s_( ) {
+( function _Class_test_s_( ) {
 
 'use strict';
 

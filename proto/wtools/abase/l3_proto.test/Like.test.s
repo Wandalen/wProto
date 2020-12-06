@@ -8,10 +8,7 @@ if( typeof module !== 'undefined' )
 
   _.include( 'wTesting' );
 
-  // if( !_.module.isIncluded( 'wProto' ) )
-  // {
-    require( '../../abase/l3_proto/Include.s' );
-  // }
+  require( '../../abase/l3_proto/Include.s' );
 
 }
 let _global = _global_;
