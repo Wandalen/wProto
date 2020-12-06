@@ -182,10 +182,11 @@ module:
           - ../proto/wtools/abase/l3_proto/l5/Collection.s
           - ../proto/wtools/abase/l3_proto/l5/Like.s
           - ../proto/wtools/abase/l3_proto.test
+          - ../proto/wtools/abase/l3_proto.test/Accessor.test.s
           - ../proto/wtools/abase/l3_proto.test/Blueprint.test.s
           - ../proto/wtools/abase/l3_proto.test/Class.test.s
           - ../proto/wtools/abase/l3_proto.test/Like.test.s
-          - ../proto/wtools/abase/l3_proto.test/Proto.test.s
+          - ../proto/wtools/abase/l3_proto.test/Workpiece.test.s
           - ../proto/wtools/amid
           - ../proto/wtools/atop
     submodule:
