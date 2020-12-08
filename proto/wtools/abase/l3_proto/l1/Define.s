@@ -28,7 +28,7 @@ function common( src )
   _.assert( arguments.length === 1 );
   _.assert( definition.val !== undefined );
 
-  definition.valueGenerate = function get() { return this.val }
+  definition.valueGenerate = function get() { return this.val } /* xxx */
 
   _.property.hide( definition, 'valueGenerate' );
 
@@ -175,35 +175,6 @@ contained.defaults =
   shallowCloning : 0,
 }
 
-// //
-//
-// function ownerCallback( o )
-// {
-//   if( !_.mapIs( o ) )
-//   o = { callback : arguments[ 0 ] };
-//   _.assert( _.routineIs( o.callback ) || _.strIs( o.callback ) );
-//   o.isMeta = true;
-//   o.val = null;
-//   o.subKind = 'ownerCallback';
-//
-//   if( _.strIs( o.callback ) )
-//   {
-//     let callbackName = o.callback;
-//     o.callback = function callback()
-//     {
-//       return this[ callbackName ]( ... arguments );
-//     }
-//   }
-//
-//   let definition = new _.Definition( o );
-//   return definition;
-// }
-//
-// ownerCallback.defaults =
-// {
-//   callback : null,
-// }
-
 //
 
 function accessor( o )
@@ -217,6 +188,7 @@ function accessor( o )
   o.definitionGroup = 'definition.named';
   o.subKind = 'accessor';
   o.constructionAmend = constructionAmend;
+  o.valueGenerate = valueGenerate;
 
   _.assert( _.routineIs( o.routine ) );
   _.assert( arguments.length === 1 );
@@ -225,6 +197,14 @@ function accessor( o )
   _.property.hide( definition, 'constructionAmend' );
   _.assert( definition.val !== undefined );
   return definition;
+
+  /* */
+
+  function valueGenerate( val )
+  {
+    _.assert( _.routineIs( val ) );
+    return val;
+  }
 
   /* */
 
@@ -413,6 +393,7 @@ function _constant( val )
   o.definitionGroup = 'definition.named';
   o.subKind = 'constant';
   o.constructionAmend = constructionAmend;
+  o.valueGenerate = valueGenerate;
 
   _.assert( arguments.length === 1 );
 
@@ -420,6 +401,14 @@ function _constant( val )
   _.property.hide( definition, 'constructionAmend' );
   _.assert( definition.val !== undefined );
   return definition;
+
+  /* */
+
+  function valueGenerate( val )
+  {
+    _.assert( val !== undefined );
+    return val;
+  }
 
   /* */
 
@@ -457,7 +446,6 @@ let DefineExtension =
   instanceOf,
   makeWith,
   contained,
-  // ownerCallback,
 
   accessor,
   getter,

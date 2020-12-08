@@ -948,7 +948,7 @@ function staticDeclare( o )
   /* */
 
   let prototype = o.prototype;
-  if( !o.readOnly )
+  if( o.writable )
   methods[ aname.set ] = function set( src )
   {
     /*
@@ -986,7 +986,7 @@ function staticDeclare( o )
         configurable : true,
         enumerable : false,
         strict : false,
-        readOnly : o.readOnly,
+        writable : o.writable,
       });
 
     }
@@ -1014,7 +1014,7 @@ function staticDeclare( o )
         configurable : true,
         prime : false,
         strict : false,
-        readOnly : o.readOnly,
+        writable : o.writable,
       });
 
     }
@@ -1034,7 +1034,7 @@ defaults.prototype = null;
 defaults.fieldsOfRelationsGroups = null;
 defaults.dstNotHasOnly = 1; /**/
 defaults.dstNotOwnOnly = 0; /* !!! not used yet */
-defaults.readOnly = 0;
+defaults.writable = 1;
 
 // --
 // fields

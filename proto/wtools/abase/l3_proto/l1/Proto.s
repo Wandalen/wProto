@@ -548,8 +548,6 @@ _.assert( wCallableObject.shortName === 'CallableObject' );
 // fields
 // --
 
-// let Combining = [ 'rewrite', 'supplement', 'apppend', 'prepend' ];
-
 /**
  * @typedef {Object} DefaultFieldsGroups - contains predefined class fields groups.
  * @module Tools/base/Proto
@@ -628,13 +626,6 @@ Object.freeze( DefaultForbiddenNames );
 let ToolsExtension =
 {
 
-  // constructorIsStandard,
-  // constructorOf,
-  // classGet : constructorOf,
-
-  // isSubClassOf,
-  // isSubPrototypeOf,
-
   // prototype
 
   prototypeUnitedInterface, /* experimental */
@@ -659,8 +650,6 @@ let ToolsExtension =
   defaultProxyFlatteningToArray,
 
   // fields
-
-  // Combining,
 
   DefaultFieldsGroups,
   DefaultFieldsGroupsRelations,

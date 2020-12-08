@@ -776,8 +776,8 @@ function mixinStaticsWithDefinition( test )
   var map = { 0 : wrap };
   var Statics =
   {
-    array : _.define.contained({ val : array, readOnly : 1, shallowCloning : 1 }),
-    map : _.define.contained({ val : map, readOnly : 1, shallowCloning : 1 }),
+    array : _.define.contained({ val : array, writable : 0, shallowCloning : 1 }),
+    map : _.define.contained({ val : map, writable : 0, shallowCloning : 1 }),
     bool : _.define.contained({ val : 0 }),
     wrap : _.define.contained({ val : wrap }),
   }
