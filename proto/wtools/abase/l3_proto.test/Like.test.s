@@ -43,9 +43,7 @@ function isLike( test )
   /* */
 
   test.case = 'base instance like base class';
-  debugger;
   var base1 = Base1.constructor();
-  debugger;
   var is = _.lconstruction.isLike( base1, Base1 );
   test.true( is );
 

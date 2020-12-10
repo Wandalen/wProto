@@ -26,7 +26,7 @@ let _ObjectHasOwnProperty = Object.hasOwnProperty;
 let _ObjectPropertyIsEumerable = Object.propertyIsEnumerable;
 let _nameFielded = _.nameFielded;
 
-_.assert( _.objectIs( _.field ), 'wProto needs Tools/wtools/abase/l1/FieldMapper.s' );
+_.assert( _.objectIs( _.property ), 'wProto needs Tools/wtools/abase/l1/FieldMapper.s' );
 _.assert( _.routineIs( _nameFielded ), 'wProto needs Tools/wtools/l3/NameTools.s' );
 
 // --
@@ -266,7 +266,7 @@ function mixinHas( proto, mixin )
  *  {
  *    let self = this;
  *    Parent.prototype.init.call( this );
- *    _.mapExtendConditional( _.field.mapper.srcOwn, self, Composes );
+ *    _.mapExtendConditional( _.property.mapper.srcOwn(), self, Composes );
  *  }
  *
  *  let Composes =
@@ -512,7 +512,7 @@ function classDeclare( o )
     if( mixinOptions.supplementOwn )
     mixinOptions.supplementOwn = _.mapExtend( null, mixinOptions.supplementOwn );
 
-    mixinOptions.prototype = prototype; /* xxx : remove? */
+    mixinOptions.prototype = prototype; /* zzz : remove? */
 
     _._mixinDelcare( mixinOptions );
     o.cls.__mixin__ = mixinOptions;
@@ -671,13 +671,9 @@ function classExtend( o )
 
   /* */
 
-  let staticsOwn = _.mapOwnProperties( o.prototype.Statics );
+  let staticsOwn = _.property.own( o.prototype.Statics );
   let staticsAll = staticsAllGet();
   let fieldsGroups = _.workpiece.fieldsGroupsGet( o.prototype );
-
-  /* xxx : investigate */
-  // if( _.mapKeys( staticsOwn ).length )
-  // debugger;
 
 /*
 
@@ -728,7 +724,7 @@ to prioritize ordinary facets adjustment order should be
     for( let f in _.DefaultFieldsGroupsRelations )
     if( f !== 'Statics' )
     if( _.mapOwnKey( o.prototype, f ) )
-    _.mapExtendConditional( _.field.mapper.srcOwnPrimitive, o.prototype, o.prototype[ f ] );
+    _.mapExtendConditional( _.property.mapper.srcOwnPrimitive(), o.prototype, o.prototype[ f ] );
   }
 
   /* accessors */
@@ -917,7 +913,9 @@ function staticDeclare( o )
   o.value = o.prototype.Statics[ o.name ];
 
   if( _.definitionIs( o.value ) )
-  _.mapExtend( o, o.value.valueGenerate( o.value.val ) );
+  {
+    _.mapExtend( o, o.value.valueGenerate( o.value.val ) );
+  }
 
   _.routineOptions( staticDeclare, arguments );
   _.assert( _.strIs( o.name ) );

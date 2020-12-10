@@ -192,22 +192,21 @@ function declareConstant( test )
 
   /* */
 
-  // xxx : make it working
-  // test.case = 'read only implicitly, value instead of descriptor';
-  //
-  // var dst =
-  // {
-  // };
-  //
-  // var exp = { 'a' : 'a1' }
-  // _.accessor.declare
-  // ({
-  //   object : dst,
-  //   names : { a : _.define.constant( 'a1' ) },
-  //   prime : 0,
-  // });
-  // test.identical( dst, exp );
-  // test.shouldThrowErrorSync( () => dst.a = 'a2' );
+  test.case = 'read only implicitly, value instead of descriptor';
+
+  var dst =
+  {
+  };
+
+  var exp = { 'a' : 'a1' }
+  _.accessor.declare
+  ({
+    object : dst,
+    names : { a : _.define.constant( 'a1' ) },
+    prime : 0,
+  });
+  test.identical( dst, exp );
+  test.shouldThrowErrorSync( () => dst.a = 'a2' );
 
   /* */
 
@@ -243,27 +242,26 @@ function declareConstantSymbol( test )
 
   /* */
 
-  // xxx : make it working
-  // test.case = 'read only implicitly, value instead of descriptor';
-  //
-  // var dst =
-  // {
-  // };
-  //
-  // var exp = {}
-  // _.accessor.declare
-  // ({
-  //   object : dst,
-  //   names : { [ Symbol.for( 'a' ) ] : _.define.constant( 'a1' ) },
-  //   prime : 0,
-  // });
-  // test.identical( dst, exp );
-  // test.identical( dst[ Symbol.for( 'a' ) ], 'a1' );
-  // test.shouldThrowErrorSync( () => dst[ Symbol.for( 'a' ) ] = 'a2' );
-  // var exp = { a : 'a3' };
-  // dst.a = 'a3';
-  // test.identical( dst, exp );
-  // test.identical( dst[ Symbol.for( 'a' ) ], 'a1' );
+  test.case = 'read only implicitly, value instead of descriptor';
+
+  var dst =
+  {
+  };
+
+  var exp = {}
+  _.accessor.declare
+  ({
+    object : dst,
+    names : { [ Symbol.for( 'a' ) ] : _.define.constant( 'a1' ) },
+    prime : 0,
+  });
+  test.identical( dst, exp );
+  test.identical( dst[ Symbol.for( 'a' ) ], 'a1' );
+  test.shouldThrowErrorSync( () => dst[ Symbol.for( 'a' ) ] = 'a2' );
+  var exp = { a : 'a3' };
+  dst.a = 'a3';
+  test.identical( dst, exp );
+  test.identical( dst[ Symbol.for( 'a' ) ], 'a1' );
 
   /* */
 
@@ -358,7 +356,7 @@ function accessorOptionAddingMethods( test )
     strict : 0,
     addingMethods : 1,
   });
-  test.identical( _.mapOwnProperties( dst, { enumerable : 0 } ), exp );
+  test.identical( _.property.own( dst, { onlyEnumerable : 0 } ), exp );
   test.true( _.routineIs( dst.aGrab ) );
   test.true( _.routineIs( dst.aGet ) );
   test.true( _.routineIs( dst.aPut ) );
@@ -401,7 +399,7 @@ function accessorOptionAddingMethods( test )
     strict : 0,
     addingMethods : 1,
   });
-  test.identical( _.mapOwnProperties( dst, { enumerable : 0 } ), exp );
+  test.identical( _.property.own( dst, { onlyEnumerable : 0 } ), exp );
 
   var exp =
   {
@@ -444,7 +442,7 @@ function accessorOptionAddingMethods( test )
     strict : 0,
     addingMethods : 1,
   });
-  test.identical( _.mapOwnProperties( dst, { enumerable : 0 } ), exp );
+  test.identical( _.property.own( dst, { onlyEnumerable : 0 } ), exp );
 
   var exp =
   {
@@ -726,7 +724,7 @@ function forbids( test )
 
   test.identical( instance._f1Get, undefined );
   test.identical( instance._f1Set, undefined );
-  test.identical( _.mapProperties( instance ), Object.create( null ) );
+  test.identical( _.property.of( instance ), Object.create( null ) );
 
   test.case = 'throwing';
 
@@ -2245,9 +2243,7 @@ function classDeclare( test )
 
     test.identical( C1.f1,1 );
     test.identical( C1.f2,2 );
-    debugger;
     test.identical( C1.f3,33 );
-    debugger;
     test.identical( C1.f4,4 );
 
     test.identical( C1.prototype.f1,11 );

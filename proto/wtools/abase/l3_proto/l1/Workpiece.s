@@ -19,7 +19,7 @@ let _ = _global_.wTools;
 let _ObjectHasOwnProperty = Object.hasOwnProperty;
 let _ObjectPropertyIsEumerable = Object.propertyIsEnumerable;
 
-_.assert( _.objectIs( _.field ), 'wProto needs Tools/wtools/abase/l1/FieldMapper.s' );
+_.assert( _.objectIs( _.property ), 'wProto needs Tools/wtools/abase/l1/FieldMapper.s' );
 
 // --
 // prototype
@@ -282,7 +282,8 @@ function fieldsGroupDeclare( o )
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( o.srcMap === null || !_.primitiveIs( o.srcMap ), 'Expects object {-o.srcMap-}, got', _.strType( o.srcMap ) );
   _.assert( _.strIs( o.fieldsGroupName ) );
-  _.assert( _.routineIs( o.filter ) && _.strIs( o.filter.functionFamily ) );
+  // _.assert( _.routineIs( o.filter ) && _.strIs( o.filter.functionFamily ) );
+  _.assert( _.property.transformerIs( o.filter ) );
 
   _.workpiece.fieldsGroupFor( o.dstPrototype, o.fieldsGroupName );
 
@@ -297,7 +298,7 @@ fieldsGroupDeclare.defaults =
 {
   dstPrototype : null,
   srcMap : null,
-  filter : _.field.mapper.bypass,
+  filter : _.property.mapper.bypass(),
   fieldsGroupName : null,
 }
 
@@ -330,7 +331,7 @@ function fieldsGroupComposesExtend( dstPrototype, srcMap )
     fieldsGroupName,
     dstPrototype,
     srcMap,
-    // filter : _.field.mapper.bypass,
+    // filter : _.property.mapper.bypass(),
   });
 
 }
@@ -364,7 +365,7 @@ function fieldsGroupAggregatesExtend( dstPrototype, srcMap )
     fieldsGroupName,
     dstPrototype,
     srcMap,
-    // filter : _.field.mapper.bypass,
+    // filter : _.property.mapper.bypass(),
   });
 
 }
@@ -398,7 +399,7 @@ function fieldsGroupAssociatesExtend( dstPrototype, srcMap )
     fieldsGroupName,
     dstPrototype,
     srcMap,
-    // filter : _.field.mapper.bypass,
+    // filter : _.property.mapper.bypass(),
   });
 
 }
@@ -432,7 +433,7 @@ function fieldsGroupRestrictsExtend( dstPrototype, srcMap )
     fieldsGroupName,
     dstPrototype,
     srcMap,
-    // filter : _.field.mapper.bypass,
+    // filter : _.property.mapper.bypass(),
   });
 
 }
@@ -466,7 +467,7 @@ function fieldsGroupComposesSupplement( dstPrototype, srcMap )
     fieldsGroupName,
     dstPrototype,
     srcMap,
-    filter : _.field.mapper.dstNotHas,
+    filter : _.property.mapper.dstNotHas(),
   });
 
 }
@@ -500,7 +501,7 @@ function fieldsGroupAggregatesSupplement( dstPrototype, srcMap )
     fieldsGroupName,
     dstPrototype,
     srcMap,
-    filter : _.field.mapper.dstNotHas,
+    filter : _.property.mapper.dstNotHas(),
   });
 
 }
@@ -534,7 +535,7 @@ function fieldsGroupAssociatesSupplement( dstPrototype, srcMap )
     fieldsGroupName,
     dstPrototype,
     srcMap,
-    filter : _.field.mapper.dstNotHas,
+    filter : _.property.mapper.dstNotHas(),
   });
 
 }
@@ -568,7 +569,7 @@ function fieldsGroupRestrictsSupplement( dstPrototype, srcMap )
     fieldsGroupName,
     dstPrototype,
     srcMap,
-    filter : _.field.mapper.dstNotHas,
+    filter : _.property.mapper.dstNotHas(),
   });
 
 }
@@ -819,7 +820,7 @@ function fieldsGroupsDeclareForEachFilter( o )
     dstPrototype : o.dstPrototype,
     srcMap : o.extendMap,
     fieldsGroups : newFieldsGroups,
-    filter : _.field.mapper.bypass,
+    filter : _.property.mapper.bypass(),
   });
 
   _.workpiece.fieldsGroupsDeclare
@@ -827,7 +828,7 @@ function fieldsGroupsDeclareForEachFilter( o )
     dstPrototype : o.dstPrototype,
     srcMap : o.supplementOwnMap,
     fieldsGroups : newFieldsGroups,
-    filter : _.field.mapper.dstOwn,
+    filter : _.property.mapper.dstOwn(),
   });
 
   _.workpiece.fieldsGroupsDeclare
@@ -835,7 +836,7 @@ function fieldsGroupsDeclareForEachFilter( o )
     dstPrototype : o.dstPrototype,
     srcMap : o.supplementMap,
     fieldsGroups : newFieldsGroups,
-    filter : _.field.mapper.dstNotHas,
+    filter : _.property.mapper.dstNotHas(),
   });
 
 }
@@ -1032,9 +1033,9 @@ function initExtending( instance, prototype )
   if( prototype === undefined )
   prototype = instance;
 
-  _.mapExtendConditional( _.field.mapper.assigning, instance, prototype.Restricts );
-  _.mapExtendConditional( _.field.mapper.assigning, instance, prototype.Composes );
-  _.mapExtendConditional( _.field.mapper.assigning, instance, prototype.Aggregates );
+  _.mapExtendConditional( _.property.mapper.assigning(), instance, prototype.Restricts );
+  _.mapExtendConditional( _.property.mapper.assigning(), instance, prototype.Composes );
+  _.mapExtendConditional( _.property.mapper.assigning(), instance, prototype.Aggregates );
   _.mapExtend( instance, prototype.Associates );
 
   return instance;

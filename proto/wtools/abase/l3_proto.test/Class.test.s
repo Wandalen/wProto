@@ -315,10 +315,7 @@ function classDeclare( test )
     test.case = 'setting static field with constructor';
 
     o.Class.Instances = o.Class.Instances.slice();
-    // test.true( o.Class === C1 || o.Class.Instances !== C1.Instances );
-    debugger;
     test.true( o.Class.Instances === C1.Instances || _.mapOwnKey( o.Class.prototype.Statics, 'Instances' ) );
-    debugger;
     test.true( o.Class.Instances === o.Class.prototype.Instances );
     test.true( o.Class.Instances === c1a.Instances );
     test.true( o.Class.Instances === c1b.Instances );
@@ -328,8 +325,6 @@ function classDeclare( test )
     test.case = 'setting static field with prototype';
 
     o.Class.prototype.Instances = o.Class.prototype.Instances.slice();
-    // if( o.Class !== C1 && !o.ownStatics )
-    // test.true( o.Class === C1 || o.Class.Instances !== C1.Instances );
     test.true( o.Class.Instances === C1.Instances || _.mapOwnKey( o.Class.prototype.Statics, 'Instances' ) );
     test.true( o.Class.Instances === o.Class.prototype.Instances );
     test.true( o.Class.Instances === c1a.Instances );
@@ -340,8 +335,6 @@ function classDeclare( test )
     test.case = 'setting static field with instance';
 
     c1a.Instances = o.Class.Instances.slice();
-    // if( o.Class !== C1 && !o.ownStatics )
-    // test.true( o.Class === C1 || o.Class.Instances !== C1.Instances );
     test.true( o.Class.Instances === C1.Instances || _.mapOwnKey( o.Class.prototype.Statics, 'Instances' ) );
     test.true( o.Class.Instances === o.Class.prototype.Instances );
     test.true( o.Class.Instances === c1a.Instances );
@@ -500,9 +493,7 @@ function classDeclare( test )
 
     test.identical( C1.f1,1 );
     test.identical( C1.f2,2 );
-    debugger;
     test.identical( C1.f3,33 );
-    debugger;
     test.identical( C1.f4,4 );
 
     test.identical( C1.prototype.f1,11 );
@@ -798,7 +789,6 @@ function mixinStaticsWithDefinition( test )
   test.identical( Mixin.__mixin__.mixin, Mixin.mixin );
   test.identical( Mixin.__mixin__.name, 'Mixin' );
   test.identical( Mixin.__mixin__.shortName, 'Mix' );
-  // test.identical( Mixin.__mixin__.prototype, undefined ); /* xxx */
   test.identical( Mixin.__mixin__.extend.constructor, undefined );
 
   /* */
@@ -1097,20 +1087,15 @@ function customFieldsGroups( test )
   test.will = 'check base class';
 
   test.true( !!instance0.Groups );
-  // test.true( !!BasicConstructor.Groups ); /* xxx */
   test.true( !!BasicConstructor.prototype.Groups );
-  // test.true( instance0.Groups === BasicConstructor.Groups );
   test.true( instance0.Groups === BasicConstructor.prototype.Groups );
 
   test.will = 'check dervied class1';
 
   test.true( !!instance1.Groups );
-  // test.true( !!DerivedConstructor1.Groups );
   test.true( !!DerivedConstructor1.prototype.Groups );
-  // test.true( instance1.Groups === DerivedConstructor1.Groups );
   test.true( instance1.Groups === DerivedConstructor1.prototype.Groups );
   test.true( instance1.Groups !== instance0.Groups );
-  // test.true( DerivedConstructor1.Groups !== instance0.Groups );
   test.true( DerivedConstructor1.prototype.Groups !== instance0.Groups );
   test.true( instance1.Names.a === Names1.a );
   test.true( instance1.Names.b === Names1.b );
@@ -1119,15 +1104,11 @@ function customFieldsGroups( test )
   test.will = 'check dervied class2';
 
   test.true( !!instance2.Groups );
-  // test.true( !!DerivedConstructor2.Groups );
   test.true( !!DerivedConstructor2.prototype.Groups );
-  // test.true( instance2.Groups === DerivedConstructor2.Groups );
   test.true( instance2.Groups === DerivedConstructor2.prototype.Groups );
   test.true( instance2.Groups !== instance0.Groups );
-  // test.true( DerivedConstructor2.Groups !== instance0.Groups );
   test.true( DerivedConstructor2.prototype.Groups !== instance0.Groups );
   test.true( instance2.Groups !== instance1.Groups );
-  // test.true( DerivedConstructor2.Groups !== instance1.Groups );
   test.true( DerivedConstructor2.prototype.Groups !== instance1.Groups );
   test.true( instance2.Names.a === Names1.a );
   test.true( instance2.Names.b === Names2.b );
@@ -1136,15 +1117,11 @@ function customFieldsGroups( test )
   test.will = 'check dervied class3';
 
   test.true( !!instance3.Groups );
-  // test.true( !!DerivedConstructor3.Groups );
   test.true( !!DerivedConstructor3.prototype.Groups );
-  // test.true( instance3.Groups === DerivedConstructor3.Groups );
   test.true( instance3.Groups === DerivedConstructor3.prototype.Groups );
   test.true( instance3.Groups !== instance0.Groups );
-  // test.true( DerivedConstructor3.Groups !== instance0.Groups );
   test.true( DerivedConstructor3.prototype.Groups !== instance0.Groups );
   test.true( instance3.Groups !== instance1.Groups );
-  // test.true( DerivedConstructor3.Groups !== instance1.Groups );
   test.true( DerivedConstructor3.prototype.Groups !== instance1.Groups );
   test.true( instance3.Names.a === Names1.a );
   test.true( instance3.Names.b === Names2.b );
@@ -1216,17 +1193,10 @@ function staticFieldsPreserving( test )
   test.identical( BasicConstructor.prototype.set, basicSet );
   test.identical( DerivedConstructor1.prototype.set, derivedSet );
 
-  debugger;
   var instance = DerivedConstructor1();
-  debugger;
 
   test.identical( BasicConstructor.prototype.set, basicSet );
   test.identical( DerivedConstructor1.prototype.set, derivedSet );
-
-  /* works fine with new */
-
-  // var instance = new DerivedConstructor1();
-  // test.identical( BasicConstructor.prototype.set, basicSet );
 
 }
 
@@ -1339,9 +1309,7 @@ function workpieceConstruct( test )
 //   {
 //   }
 //
-//   debugger;
 //   _.construction.extend( Composes, Settings );
-//   debugger;
 //
 //   function Cls()
 //   {
@@ -1358,9 +1326,7 @@ function workpieceConstruct( test )
 //     }
 //   });
 //
-//   debugger;
 //   var instance = new Cls();
-//   debugger;
 //   test.identical( instance.size, [ 2, 2, 2 ] );
 //   test.identical( instance.usingExploding, 0 );
 //   test.true( instance.size !== Settings.size );

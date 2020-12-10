@@ -28,7 +28,8 @@ function common( src )
   _.assert( arguments.length === 1 );
   _.assert( definition.val !== undefined );
 
-  definition.valueGenerate = function get() { return this.val } /* xxx */
+  // definition.valueGenerate = function get() { debugger; return this.val }
+  definition.valueGenerate = function get( val ) { return val }
 
   _.property.hide( definition, 'valueGenerate' );
 
@@ -57,7 +58,8 @@ function own( src )
   _.assert( definition.val !== undefined );
 
   // definition.valueGenerate = function get() { return _.entityMake( this.val ) }
-  definition.valueGenerate = function get() { return _.cloneJust( this.val ) }
+  // definition.valueGenerate = function get() { return _.cloneJust( this.val ) }
+  definition.valueGenerate = function get( val ) { return _.cloneJust( val ) };
 
   _.property.hide( definition, 'valueGenerate' );
 
@@ -85,7 +87,8 @@ function instanceOf( src )
   _.assert( arguments.length === 1 );
   _.assert( definition.val !== undefined );
 
-  definition.valueGenerate = function get() { return new this.val() }
+  // definition.valueGenerate = function get() { return new this.val() };
+  definition.valueGenerate = function get( val ) { return new val() };
 
   _.property.hide( definition, 'valueGenerate' );
 
@@ -113,7 +116,8 @@ function makeWith( src )
   _.assert( arguments.length === 1 );
   _.assert( definition.val !== undefined );
 
-  definition.valueGenerate = function get() { return this.val() }
+  // definition.valueGenerate = function get() { return this.val() }
+  definition.valueGenerate = function get( val ) { return val() };
 
   _.property.hide( definition, 'valueGenerate' );
 
@@ -131,7 +135,7 @@ function makeWith( src )
 */
 
 /*
-zzz : remove routine contained
+xxx : remove contained
 */
 
 function contained( src )
@@ -149,17 +153,23 @@ function contained( src )
   let definition = new _.Definition( o );
 
   if( o.shallowCloning )
-  definition.valueGenerate = function get()
+  definition.valueGenerate = function get( val )
   {
-    let result = this.container;
-    result.value = _.entityMake( definition.val );
+    // debugger;
+    let result = _.mapExtend( null, container );
+    // let result = this.container;
+    // result.value = _.entityMake( definition.val );
+    result.value = _.entityMake( val );
     return result;
   }
   else
-  definition.valueGenerate = function get()
+  definition.valueGenerate = function get( val )
   {
-    let result = this.container;
-    result.value = definition.val;
+    // debugger;
+    let result = _.mapExtend( null, container );
+    // let result = this.container;
+    // result.value = definition.val;
+    result.value = val;
     return result;
   }
 
@@ -394,6 +404,7 @@ function _constant( val )
   o.subKind = 'constant';
   o.constructionAmend = constructionAmend;
   o.valueGenerate = valueGenerate;
+  o.asAccessorSuite = asAccessorSuite;
 
   _.assert( arguments.length === 1 );
 
@@ -401,6 +412,14 @@ function _constant( val )
   _.property.hide( definition, 'constructionAmend' );
   _.assert( definition.val !== undefined );
   return definition;
+
+  /* */
+
+  function asAccessorSuite( op )
+  {
+    _.assert( _.definitionIs( op.amethod ) );
+    return { get : op.amethod, set : false, put : false };
+  }
 
   /* */
 
@@ -412,7 +431,7 @@ function _constant( val )
 
   /* */
 
-  function constructionAmend( dst, key, amend ) /* xxx : implement, use inheriting instead? */
+  function constructionAmend( dst, key, amend )
   {
     let instanceIsStandard = _.workpiece.instanceIsStandard( dst );
     _.assert( arguments.length === 3 );
