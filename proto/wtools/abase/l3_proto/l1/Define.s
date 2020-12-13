@@ -28,10 +28,10 @@ function common( src )
   _.assert( arguments.length === 1 );
   _.assert( definition.val !== undefined );
 
-  // definition.valueGenerate = function get() { debugger; return this.val }
-  definition.valueGenerate = function get( val ) { return val }
+  // definition.toVal = function get() { debugger; return this.val }
+  definition.toVal = function get( val ) { return val }
 
-  _.property.hide( definition, 'valueGenerate' );
+  _.property.hide( definition, 'toVal' );
 
   Object.freeze( definition );
   return definition;
@@ -57,11 +57,11 @@ function own( src )
   _.assert( arguments.length === 1 );
   _.assert( definition.val !== undefined );
 
-  // definition.valueGenerate = function get() { return _.entityMake( this.val ) }
-  // definition.valueGenerate = function get() { return _.cloneJust( this.val ) }
-  definition.valueGenerate = function get( val ) { return _.cloneJust( val ) };
+  // definition.toVal = function get() { return _.entityMake( this.val ) }
+  // definition.toVal = function get() { return _.cloneJust( this.val ) }
+  definition.toVal = function get( val ) { return _.cloneJust( val ) };
 
-  _.property.hide( definition, 'valueGenerate' );
+  _.property.hide( definition, 'toVal' );
 
   Object.freeze( definition );
   return definition;
@@ -87,10 +87,10 @@ function instanceOf( src )
   _.assert( arguments.length === 1 );
   _.assert( definition.val !== undefined );
 
-  // definition.valueGenerate = function get() { return new this.val() };
-  definition.valueGenerate = function get( val ) { return new val() };
+  // definition.toVal = function get() { return new this.val() };
+  definition.toVal = function get( val ) { return new val() };
 
-  _.property.hide( definition, 'valueGenerate' );
+  _.property.hide( definition, 'toVal' );
 
   Object.freeze( definition );
   return definition;
@@ -116,10 +116,10 @@ function makeWith( src )
   _.assert( arguments.length === 1 );
   _.assert( definition.val !== undefined );
 
-  // definition.valueGenerate = function get() { return this.val() }
-  definition.valueGenerate = function get( val ) { return val() };
+  // definition.toVal = function get() { return this.val() }
+  definition.toVal = function get( val ) { return val() };
 
-  _.property.hide( definition, 'valueGenerate' );
+  _.property.hide( definition, 'toVal' );
 
   Object.freeze( definition );
   return definition;
@@ -153,7 +153,7 @@ function contained( src )
   let definition = new _.Definition( o );
 
   if( o.shallowCloning )
-  definition.valueGenerate = function get( val )
+  definition.toVal = function get( val )
   {
     // debugger;
     let result = _.mapExtend( null, container );
@@ -163,7 +163,7 @@ function contained( src )
     return result;
   }
   else
-  definition.valueGenerate = function get( val )
+  definition.toVal = function get( val )
   {
     // debugger;
     let result = _.mapExtend( null, container );
@@ -173,7 +173,7 @@ function contained( src )
     return result;
   }
 
-  _.property.hide( definition, 'valueGenerate' );
+  _.property.hide( definition, 'toVal' );
   Object.freeze( definition );
   _.assert( definition.val !== undefined );
   return definition;
@@ -198,7 +198,7 @@ function accessor( o )
   o.definitionGroup = 'definition.named';
   o.subKind = 'accessor';
   o.constructionAmend = constructionAmend;
-  o.valueGenerate = valueGenerate;
+  o.toVal = toVal;
 
   _.assert( _.routineIs( o.routine ) );
   _.assert( arguments.length === 1 );
@@ -210,7 +210,7 @@ function accessor( o )
 
   /* */
 
-  function valueGenerate( val )
+  function toVal( val )
   {
     _.assert( _.routineIs( val ) );
     return val;
@@ -240,11 +240,11 @@ function accessor( o )
 
     _.assert( _.mapIs( o2 ) );
 
-    if( o.routine.defaults.fieldName !== undefined )
-    if( o2.fieldName === undefined || o2.fieldName === null )
+    if( o.routine.defaults.propName !== undefined )
+    if( o2.propName === undefined || o2.propName === null )
     {
       _.assert( 0, 'not tested' ); /* zzz : test */
-      o2.fieldName = key;
+      o2.propName = key;
     }
 
     let r;
@@ -391,60 +391,6 @@ putter.defaults =
   routine : null,
 }
 
-//
-
-function _constant( val )
-{
-
-  let o = { val }
-
-  _.routineOptions( _constant, o );
-
-  o.definitionGroup = 'definition.named';
-  o.subKind = 'constant';
-  o.constructionAmend = constructionAmend;
-  o.valueGenerate = valueGenerate;
-  o.asAccessorSuite = asAccessorSuite;
-
-  _.assert( arguments.length === 1 );
-
-  let definition = new _.Definition( o );
-  _.property.hide( definition, 'constructionAmend' );
-  _.assert( definition.val !== undefined );
-  return definition;
-
-  /* */
-
-  function asAccessorSuite( op )
-  {
-    _.assert( _.definitionIs( op.amethod ) );
-    return { get : op.amethod, set : false, put : false };
-  }
-
-  /* */
-
-  function valueGenerate( val )
-  {
-    _.assert( val !== undefined );
-    return val;
-  }
-
-  /* */
-
-  function constructionAmend( dst, key, amend )
-  {
-    let instanceIsStandard = _.workpiece.instanceIsStandard( dst );
-    _.assert( arguments.length === 3 );
-    _.assert( 0, 'not implemented' );
-  }
-
-}
-
-_constant.defaults =
-{
-  val : null,
-}
-
 // --
 // define
 // --
@@ -470,7 +416,7 @@ let DefineExtension =
   getter,
   setter,
   putter,
-  constant : _constant,
+  // constant : _constant,
 
 }
 

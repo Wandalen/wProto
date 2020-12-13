@@ -54,17 +54,17 @@ function prototypeOf( src )
 
 //
 
-// function prototypeHasField( src, fieldName )
-function prototypeHasField( src, fieldName )
+// function prototypeHasField( src, propName )
+function prototypeHasField( src, propName )
 {
   let prototype = _.workpiece.prototypeOf( src );
 
   _.assert( _.workpiece.prototypeIsStandard( prototype ), 'Expects standard prototype' );
   _.assert( arguments.length === 2, 'Expects exactly two arguments' );
-  _.assert( _.strIs( fieldName ) );
+  _.assert( _.strIs( propName ) );
 
   for( let f in _.DefaultFieldsGroupsRelations )
-  if( prototype[ f ][ fieldName ] !== undefined )
+  if( prototype[ f ][ propName ] !== undefined )
   return true;
 
   return false;

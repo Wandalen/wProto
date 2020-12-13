@@ -452,7 +452,7 @@ toElementSet_functor.defaults =
 function symbolPut_functor( o )
 {
   o = _.routineOptions( symbolPut_functor, arguments );
-  let symbol = Symbol.for( o.fieldName );
+  let symbol = Symbol.for( o.propName );
   return function put( val )
   {
     this[ symbol ] = val;
@@ -462,10 +462,11 @@ function symbolPut_functor( o )
 
 symbolPut_functor.defaults =
 {
-  fieldName : null,
+  propName : null,
 }
 
-symbolPut_functor.identity = [ 'accessor', 'put', 'functor' ];
+symbolPut_functor.identity = { 'accessor' : true, 'put' : true, 'functor' : true };
+// symbolPut_functor.identity = [ 'accessor', 'put', 'functor' ];
 
 //
 
@@ -509,9 +510,9 @@ function withSymbolGet_functor( o ) /* xxx : deprecate in favor of toValueGet_fu
 
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.routineOptions( withSymbolGet_functor, o );
-  _.assert( _.strDefined( o.fieldName ) );
+  _.assert( _.strDefined( o.propName ) );
 
-  let spaceName = o.fieldName;
+  let spaceName = o.propName;
   let setter = Object.create( null );
   let getter = Object.create( null );
   let symbol = Symbol.for( spaceName );
@@ -532,23 +533,23 @@ function withSymbolGet_functor( o ) /* xxx : deprecate in favor of toValueGet_fu
   {
     let handlers =
     {
-      get( original, fieldName, proxy )
+      get( original, propName, proxy )
       {
-        let method = getter[ fieldName ];
+        let method = getter[ propName ];
         if( method )
         return end();
 
-        if( fieldName === spaceName )
+        if( propName === spaceName )
         {
-          method = getter[ fieldName ] = function get( value )
+          method = getter[ propName ] = function get( value )
           {
             return undefined;
           }
           return end();
         }
 
-        let symbol = _.symbolIs( fieldName ) ? fieldName : Symbol.for( fieldName );
-        method = getter[ fieldName ] = function get( value )
+        let symbol = _.symbolIs( propName ) ? propName : Symbol.for( propName );
+        method = getter[ propName ] = function get( value )
         {
           return this[ symbol ];
         }
@@ -560,14 +561,14 @@ function withSymbolGet_functor( o ) /* xxx : deprecate in favor of toValueGet_fu
         }
 
       },
-      set( original, fieldName, value, proxy )
+      set( original, propName, value, proxy )
       {
-        let method = setter[ fieldName ];
+        let method = setter[ propName ];
         if( method )
         return end();
 
-        let symbol = _.symbolIs( fieldName ) ? fieldName : Symbol.for( fieldName );
-        method = setter[ fieldName ] = function put( value )
+        let symbol = _.symbolIs( propName ) ? propName : Symbol.for( propName );
+        method = setter[ propName ] = function put( value )
         {
           this[ symbol ] = value;
         }
@@ -590,10 +591,11 @@ function withSymbolGet_functor( o ) /* xxx : deprecate in favor of toValueGet_fu
 
 withSymbolGet_functor.defaults =
 {
-  fieldName : null,
+  propName : null,
 }
 
-withSymbolGet_functor.identity = [ 'accessor', 'getter', 'functor' ];
+withSymbolGet_functor.identity = { 'accessor' : true, 'get' : true, 'functor' : true };
+// withSymbolGet_functor.identity = [ 'accessor', 'getter', 'functor' ];
 
 //
 
@@ -602,9 +604,9 @@ function toStructureGet_functor( o ) /* xxx : deprecate in favor of toValueGet_f
 
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.routineOptions( toStructureGet_functor, o );
-  _.assert( _.strDefined( o.fieldName ) );
+  _.assert( _.strDefined( o.propName ) );
 
-  let spaceName = o.fieldName;
+  let spaceName = o.propName;
   let setter = Object.create( null );
   let getter = Object.create( null );
   let symbol = Symbol.for( spaceName );
@@ -625,26 +627,26 @@ function toStructureGet_functor( o ) /* xxx : deprecate in favor of toValueGet_f
   {
     let handlers =
     {
-      get( original, fieldName, proxy )
+      get( original, propName, proxy )
       {
-        let method = getter[ fieldName ];
+        let method = getter[ propName ];
         if( method )
         return end();
 
-        if( fieldName === spaceName )
+        if( propName === spaceName )
         {
-          method = getter[ fieldName ] = function get( value )
+          method = getter[ propName ] = function get( value )
           {
             return undefined;
           }
           return end();
         }
 
-        let symbol = _.symbolIs( fieldName ) ? fieldName : Symbol.for( fieldName );
-        if( original.hasField( fieldName ) || Object.hasOwnProperty.call( original, symbol ) )
+        let symbol = _.symbolIs( propName ) ? propName : Symbol.for( propName );
+        if( original.hasField( propName ) || Object.hasOwnProperty.call( original, symbol ) )
         {
           // debugger;
-          method = getter[ fieldName ] = function get( value )
+          method = getter[ propName ] = function get( value )
           {
             // debugger;
             return this[ symbol ];
@@ -652,9 +654,9 @@ function toStructureGet_functor( o ) /* xxx : deprecate in favor of toValueGet_f
           return end();
         }
 
-        method = getter[ fieldName ] = function get( value )
+        method = getter[ propName ] = function get( value )
         {
-          return this[ fieldName ];
+          return this[ propName ];
         }
         return end();
 
@@ -664,45 +666,45 @@ function toStructureGet_functor( o ) /* xxx : deprecate in favor of toValueGet_f
         }
 
       },
-      set( original, fieldName, value, proxy )
+      set( original, propName, value, proxy )
       {
-        let method = setter[ fieldName ];
+        let method = setter[ propName ];
         if( method )
         return end();
 
-        let putName1 = '_' + fieldName + 'Put';
+        let putName1 = '_' + propName + 'Put';
         if( original[ putName1 ] )
         {
-          method = setter[ fieldName ] = function put( value )
+          method = setter[ propName ] = function put( value )
           {
             return this[ putName1 ]( value );
           }
           return end();
         }
 
-        let putName2 = fieldName + 'Put';
+        let putName2 = propName + 'Put';
         if( original[ putName2 ] )
         {
-          method = setter[ fieldName ] = function put( value )
+          method = setter[ propName ] = function put( value )
           {
             return this[ putName2 ]( value );
           }
           return end();
         }
 
-        let symbol = _.symbolIs( fieldName ) ? fieldName : Symbol.for( fieldName );
-        if( original.hasField( fieldName ) || Object.hasOwnProperty.call( original, symbol ) )
+        let symbol = _.symbolIs( propName ) ? propName : Symbol.for( propName );
+        if( original.hasField( propName ) || Object.hasOwnProperty.call( original, symbol ) )
         {
-          method = setter[ fieldName ] = function put( value )
+          method = setter[ propName ] = function put( value )
           {
             this[ symbol ] = value;
           }
           return end();
         }
 
-        method = setter[ fieldName ] = function put( value )
+        method = setter[ propName ] = function put( value )
         {
-          this[ fieldName ] = value;
+          this[ propName ] = value;
         }
 
         return end();
@@ -724,10 +726,11 @@ function toStructureGet_functor( o ) /* xxx : deprecate in favor of toValueGet_f
 
 toStructureGet_functor.defaults =
 {
-  fieldName : null,
+  propName : null,
 }
 
-toStructureGet_functor.identity = [ 'accessor', 'getter', 'functor' ];
+toStructureGet_functor.identity = { 'accessor' : true, 'get' : true, 'functor' : true };
+// toStructureGet_functor.identity = [ 'accessor', 'getter', 'functor' ];
 
 //
 
@@ -736,10 +739,10 @@ function toValueGet_functor( o )
 
   _.routineOptions( toValueGet_functor, o );
   _.assert( arguments.length === 1, 'Expects single argument' );
-  _.assert( _.strDefined( o.fieldName ) );
+  _.assert( _.strDefined( o.propName ) );
   _.assert( _.longHas( [ 'grab', 'get', 'suite' ], o.accessorKind ) );
 
-  let spaceName = o.fieldName;
+  let spaceName = o.propName;
   let setter = Object.create( null );
   let getter = Object.create( null );
   let symbol = Symbol.for( spaceName );
@@ -795,37 +798,37 @@ function toValueGet_functor( o )
   {
     let handlers =
     {
-      get( original, fieldName, proxy )
+      get( original, propName, proxy )
       {
-        let method = getter[ fieldName ];
+        let method = getter[ propName ];
         if( method )
         return end();
 
-        if( fieldName === spaceName )
+        if( propName === spaceName )
         {
-          method = getter[ fieldName ] = function get( value )
+          method = getter[ propName ] = function get( value )
           {
             return undefined;
           }
           return end();
         }
 
-        if( _.symbolIs( fieldName ) )
+        if( _.symbolIs( propName ) )
         {
-          let symbol = fieldName;
-          method = getter[ fieldName ] = function get( value )
+          let symbol = propName;
+          method = getter[ propName ] = function get( value )
           {
             return this[ symbol ];
           }
           return end();
         }
 
-        let getName1 = '_' + fieldName + 'Get';
-        let getName2 = '' + fieldName + 'Get';
+        let getName1 = '_' + propName + 'Get';
+        let getName2 = '' + propName + 'Get';
 
         if( _.routineIs( original[ getName1 ] ) )
         {
-          method = getter[ fieldName ] = function get()
+          method = getter[ propName ] = function get()
           {
             return this[ getName1 ]();
           }
@@ -834,15 +837,15 @@ function toValueGet_functor( o )
 
         if( _.routineIs( original[ getName2 ] ) )
         {
-          method = getter[ fieldName ] = function get()
+          method = getter[ propName ] = function get()
           {
             return this[ getName2 ]();
           }
           return end();
         }
 
-        let symbol = Symbol.for( fieldName );
-        method = getter[ fieldName ] = function get()
+        let symbol = Symbol.for( propName );
+        method = getter[ propName ] = function get()
         {
           return this[ symbol ];
         }
@@ -854,34 +857,34 @@ function toValueGet_functor( o )
         }
 
       },
-      set( original, fieldName, value, proxy )
+      set( original, propName, value, proxy )
       {
-        let method = setter[ fieldName ];
+        let method = setter[ propName ];
         if( method )
         return end();
 
-        let putName1 = '_' + fieldName + 'Put';
+        let putName1 = '_' + propName + 'Put';
         if( original[ putName1 ] )
         {
-          method = setter[ fieldName ] = function put( value )
+          method = setter[ propName ] = function put( value )
           {
             return this[ putName1 ]( value );
           }
           return end();
         }
 
-        let putName2 = fieldName + 'Put';
+        let putName2 = propName + 'Put';
         if( original[ putName2 ] )
         {
-          method = setter[ fieldName ] = function put( value )
+          method = setter[ propName ] = function put( value )
           {
             return this[ putName2 ]( value );
           }
           return end();
         }
 
-        let symbol = _.symbolIs( fieldName ) ? fieldName : Symbol.for( fieldName );
-        method = setter[ fieldName ] = function put( value )
+        let symbol = _.symbolIs( propName ) ? propName : Symbol.for( propName );
+        method = setter[ propName ] = function put( value )
         {
           this[ symbol ] = value;
         }
@@ -905,12 +908,13 @@ function toValueGet_functor( o )
 
 toValueGet_functor.defaults =
 {
-  fieldName : null,
+  propName : null,
   accessor : null,
   accessorKind : null,
 }
 
-toValueGet_functor.identity = [ 'accessor', 'suite', 'getter', 'functor' ];
+toValueGet_functor.identity = { 'accessor' : true, suite : true, 'get' : true, 'functor' : true };
+// toValueGet_functor.identity = [ 'accessor', 'suite', 'getter', 'functor' ];
 
 //
 
@@ -981,7 +985,7 @@ aliasSetter_functor_body.defaults =
   container : null,
   originalName : null,
   // aliasName : null,
-  // fieldName : null,
+  // propName : null,
 }
 
 let aliasSet_functor = _.routineUnite( alias_head, aliasSetter_functor_body );

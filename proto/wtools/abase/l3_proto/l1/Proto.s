@@ -114,18 +114,18 @@ function prototypeUnitedInterface( protos )
 
   /* */
 
-  function get( fieldName )
+  function get( propName )
   {
     return function unitedGet()
     {
-      return this[ unitedMapSymbol ][ fieldName ][ fieldName ];
+      return this[ unitedMapSymbol ][ propName ][ propName ];
     }
   }
-  function set( fieldName )
+  function set( propName )
   {
     return function unitedSet( value )
     {
-      this[ unitedMapSymbol ][ fieldName ][ fieldName ] = value;
+      this[ unitedMapSymbol ][ propName ][ propName ] = value;
     }
   }
 }

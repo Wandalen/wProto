@@ -149,123 +149,124 @@ function accessor( test )
 
 }
 
+// //
 //
-
-function declareConstant( test )
-{
-
-  /* */
-
-  test.case = 'read only explicitly, get is definitition';
-
-  var dst =
-  {
-  };
-
-  var exp = { 'a' : 'a1' };
-  _.accessor.declare
-  ({
-    object : dst,
-    names : { a : { writable : 0, get : _.define.constant( 'a1' ) } },
-    prime : 0,
-  });
-  test.identical( dst, exp );
-  test.shouldThrowErrorSync( () => dst.a = 'a2' );
-
-  /* */
-
-  test.case = 'read only implicitly, value in descriptor';
-
-  var dst =
-  {
-  };
-
-  var exp = { 'a' : 'a1' }
-  _.accessor.declare
-  ({
-    object : dst,
-    names : { a : { set : false, get : _.define.constant( 'a1' ) } },
-    prime : 0,
-  });
-  test.identical( dst, exp );
-  test.shouldThrowErrorSync( () => dst.a = 'a2' );
-
-  /* */
-
-  test.case = 'read only implicitly, value instead of descriptor';
-
-  var dst =
-  {
-  };
-
-  var exp = { 'a' : 'a1' }
-  _.accessor.declare
-  ({
-    object : dst,
-    names : { a : _.define.constant( 'a1' ) },
-    prime : 0,
-  });
-  test.identical( dst, exp );
-  test.shouldThrowErrorSync( () => dst.a = 'a2' );
-
-  /* */
-
-}
-
+// function declareConstantWithDefinition( test )
+// {
 //
-
-function declareConstantSymbol( test )
-{
-
-  /* */
-
-  test.case = 'read only implicitly, value in descriptor';
-
-  var dst =
-  {
-  };
-
-  var exp = {}
-  _.accessor.declare
-  ({
-    object : dst,
-    names : { [ Symbol.for( 'a' ) ] : { set : false, get : _.define.constant( 'a1' ) } },
-    prime : 0,
-  });
-  test.identical( dst, exp );
-  test.identical( dst[ Symbol.for( 'a' ) ], 'a1' );
-  test.shouldThrowErrorSync( () => dst[ Symbol.for( 'a' ) ] = 'a2' );
-  var exp = { a : 'a3' };
-  dst.a = 'a3';
-  test.identical( dst, exp );
-  test.identical( dst[ Symbol.for( 'a' ) ], 'a1' );
-
-  /* */
-
-  test.case = 'read only implicitly, value instead of descriptor';
-
-  var dst =
-  {
-  };
-
-  var exp = {}
-  _.accessor.declare
-  ({
-    object : dst,
-    names : { [ Symbol.for( 'a' ) ] : _.define.constant( 'a1' ) },
-    prime : 0,
-  });
-  test.identical( dst, exp );
-  test.identical( dst[ Symbol.for( 'a' ) ], 'a1' );
-  test.shouldThrowErrorSync( () => dst[ Symbol.for( 'a' ) ] = 'a2' );
-  var exp = { a : 'a3' };
-  dst.a = 'a3';
-  test.identical( dst, exp );
-  test.identical( dst[ Symbol.for( 'a' ) ], 'a1' );
-
-  /* */
-
-}
+//   /* */
+//
+//   test.case = 'read only explicitly, get is definitition';
+//
+//   var dst =
+//   {
+//   };
+//
+//   var exp = { 'a' : 'a1' };
+//   _.accessor.declare
+//   ({
+//     object : dst,
+//     // names : { a : { writable : 0, get : _.define.constant( 'a1' ) } },
+//     names : { a : { writable : 0, get : _.define.constant( 'a1' ) } },
+//     prime : 0,
+//   });
+//   test.identical( dst, exp );
+//   test.shouldThrowErrorSync( () => dst.a = 'a2' );
+//
+//   /* */
+//
+//   test.case = 'read only implicitly, value in descriptor';
+//
+//   var dst =
+//   {
+//   };
+//
+//   var exp = { 'a' : 'a1' }
+//   _.accessor.declare
+//   ({
+//     object : dst,
+//     names : { a : { set : false, get : _.define.constant( 'a1' ) } },
+//     prime : 0,
+//   });
+//   test.identical( dst, exp );
+//   test.shouldThrowErrorSync( () => dst.a = 'a2' );
+//
+//   /* */
+//
+//   test.case = 'read only implicitly, value instead of descriptor';
+//
+//   var dst =
+//   {
+//   };
+//
+//   var exp = { 'a' : 'a1' }
+//   _.accessor.declare
+//   ({
+//     object : dst,
+//     names : { a : _.define.constant( 'a1' ) },
+//     prime : 0,
+//   });
+//   test.identical( dst, exp );
+//   test.shouldThrowErrorSync( () => dst.a = 'a2' );
+//
+//   /* */
+//
+// }
+//
+// //
+//
+// function declareConstantSymbolWithDefinition( test )
+// {
+//
+//   /* */
+//
+//   test.case = 'read only implicitly, value in descriptor';
+//
+//   var dst =
+//   {
+//   };
+//
+//   var exp = {}
+//   _.accessor.declare
+//   ({
+//     object : dst,
+//     names : { [ Symbol.for( 'a' ) ] : { set : false, get : _.define.constant( 'a1' ) } },
+//     prime : 0,
+//   });
+//   test.identical( dst, exp );
+//   test.identical( dst[ Symbol.for( 'a' ) ], 'a1' );
+//   test.shouldThrowErrorSync( () => dst[ Symbol.for( 'a' ) ] = 'a2' );
+//   var exp = { a : 'a3' };
+//   dst.a = 'a3';
+//   test.identical( dst, exp );
+//   test.identical( dst[ Symbol.for( 'a' ) ], 'a1' );
+//
+//   /* */
+//
+//   test.case = 'read only implicitly, value instead of descriptor';
+//
+//   var dst =
+//   {
+//   };
+//
+//   var exp = {}
+//   _.accessor.declare
+//   ({
+//     object : dst,
+//     names : { [ Symbol.for( 'a' ) ] : _.define.constant( 'a1' ) },
+//     prime : 0,
+//   });
+//   test.identical( dst, exp );
+//   test.identical( dst[ Symbol.for( 'a' ) ], 'a1' );
+//   test.shouldThrowErrorSync( () => dst[ Symbol.for( 'a' ) ] = 'a2' );
+//   var exp = { a : 'a3' };
+//   dst.a = 'a3';
+//   test.identical( dst, exp );
+//   test.identical( dst[ Symbol.for( 'a' ) ], 'a1' );
+//
+//   /* */
+//
+// }
 
 //
 
@@ -562,7 +563,7 @@ function accessorDeducingPrime( test )
   _.accessor.declare( o2 );
 
   test.identical( o2.prime, null );
-  test.identical( o2.strict, 1 );
+  test.identical( o2.strict, true );
   test.contains( object, exp );
 
   /* */
@@ -589,7 +590,7 @@ function accessorDeducingPrime( test )
   _.accessor.readOnly( o2 );
 
   test.identical( o2.prime, null );
-  test.identical( o2.strict, 1 );
+  test.identical( o2.strict, true );
   test.contains( object, exp );
 
   /* */
@@ -2469,8 +2470,8 @@ let Self =
     //
 
     accessor,
-    declareConstant,
-    declareConstantSymbol,
+    // declareConstantWithDefinition,
+    // declareConstantSymbolWithDefinition,
     accessorIsClean,
     accessorDeducingPrime,
     accessorReadOnly,

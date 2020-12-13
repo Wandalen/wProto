@@ -2,22 +2,6 @@
 
 'use strict';
 
-// if( typeof module !== 'undefined' )
-// {
-//
-//   let _ = require( '../../../wtools/Tools.s' );
-//
-//   if( !_global_.wTools.nameFielded )
-//   try
-//   {
-//     require( './NameTools.s' );
-//   }
-//   catch( err )
-//   {
-//   }
-//
-// }
-
 let Self = _global_.wTools;
 let _global = _global_;
 let _ = _global_.wTools;
@@ -914,7 +898,7 @@ function staticDeclare( o )
 
   if( _.definitionIs( o.value ) )
   {
-    _.mapExtend( o, o.value.valueGenerate( o.value.val ) );
+    _.mapExtend( o, o.value.toVal( o.value.val ) );
   }
 
   _.routineOptions( staticDeclare, arguments );
