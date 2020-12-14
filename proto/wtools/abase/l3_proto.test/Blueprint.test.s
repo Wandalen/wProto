@@ -106,15 +106,19 @@ function constructionAmendBlueprintSetterAlias( test )
   test.true( _.mapIs( map ) );
   test.true( _.mapIsPure( map ) );
   test.identical( _.mapKeys( map ), [ 'begin', 'end', 'str', 'container1', 'f1' ] );
-  test.identical( map.begin, undefined );
-  test.identical( map.str, undefined );
+  // test.identical( map.begin, undefined );
+  // test.identical( map.str, undefined );
+  test.shouldThrowErrorSync( () => map.begin );
+  test.shouldThrowErrorSync( () => map.str );
 
   container.Str = 'Str2';
-  test.identical( map.str, undefined );
+  // test.identical( map.str, undefined );
+  test.shouldThrowErrorSync( () => map.str );
   test.identical( container.Str, 'Str2' );
 
   map.str = 'Str3';
-  test.identical( map.str, undefined );
+  // test.identical( map.str, undefined );
+  test.shouldThrowErrorSync( () => map.str );
   test.identical( container.Str, 'Str3' );
 
 }
