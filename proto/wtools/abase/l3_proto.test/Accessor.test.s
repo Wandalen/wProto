@@ -371,7 +371,7 @@ function accessorOptionAddingMethods( test )
     'set' : dst.aSet,
     'move' : false,
   }
-  test.identical( declared.a.asuite, exp );
+  test.identical( declared.a.normalizedAsuite, exp );
 
   /* */
 
@@ -410,7 +410,7 @@ function accessorOptionAddingMethods( test )
     'set' : dst.aSet,
     'move' : false,
   }
-  test.identical( declared.a.asuite, exp );
+  test.identical( declared.a.normalizedAsuite, exp );
 
   /* */
 
@@ -453,7 +453,7 @@ function accessorOptionAddingMethods( test )
     'set' : dst.aSet,
     'move' : false,
   }
-  test.identical( declared.a.asuite, exp );
+  test.identical( declared.a.normalizedAsuite, exp );
 
   /* */
 

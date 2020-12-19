@@ -751,7 +751,7 @@ function toValueGet_functor( o )
   o.accessor.configurable = 1;
   let configurable = o.accessor.configurable;
   if( configurable === null )
-  configurable = _.accessor.AccessorPreferences.configurable;
+  configurable = _.accessor.DeclarationDefaults.configurable;
   _.assert( _.boolLike( configurable ) );
 
   if( o.accessorKind === 'suite' )
