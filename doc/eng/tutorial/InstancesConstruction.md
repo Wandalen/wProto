@@ -8,7 +8,7 @@ Routine `_.workpiece.construct` is used for instances construction.
 Types of arguments and their amount are as expected.
 
 ### Method `init` is called
-Method `init` in the class prototype is called with given context and arguments. It's optional method to initialize instance with options.
+Method `init` in the class prototype is called with given context and arguments. It's the optional method to initialize an instance with options.
 
 ### The routine `_.workpiece.construct` standardizes constructors.
 It makes their execution the same and anticipated. Code becomes reusable and functional.
