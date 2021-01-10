@@ -159,7 +159,7 @@ function mixinApply( mixinDescriptor, dstPrototype )
 
   /* extend */
 
-  _.assert( _.mapOwnKey( dstPrototype, 'constructor' ) );
+  _.assert( _.mapOnlyOwnKey( dstPrototype, 'constructor' ) );
   _.assert( dstPrototype.constructor.prototype === dstPrototype );
   _.classExtend
   ({
@@ -655,7 +655,7 @@ function classExtend( o )
 
   /* */
 
-  let staticsOwn = _.property.own( o.prototype.Statics );
+  let staticsOwn = _.property.onlyOwn( o.prototype.Statics );
   let staticsAll = staticsAllGet();
   let fieldsGroups = _.workpiece.fieldsGroupsGet( o.prototype );
 
@@ -707,7 +707,7 @@ to prioritize ordinary facets adjustment order should be
     debugger;
     for( let f in _.DefaultFieldsGroupsRelations )
     if( f !== 'Statics' )
-    if( _.mapOwnKey( o.prototype, f ) )
+    if( _.mapOnlyOwnKey( o.prototype, f ) )
     _.mapExtendConditional( _.property.mapper.srcOwnPrimitive(), o.prototype, o.prototype[ f ] );
   }
 

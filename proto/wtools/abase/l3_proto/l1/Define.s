@@ -155,20 +155,14 @@ function contained( src )
   if( o.shallowCloning )
   definition.toVal = function get( val )
   {
-    // debugger;
     let result = _.mapExtend( null, container );
-    // let result = this.container;
-    // result.value = _.entityMake( definition.val );
     result.value = _.entityMake( val );
     return result;
   }
   else
   definition.toVal = function get( val )
   {
-    // debugger;
     let result = _.mapExtend( null, container );
-    // let result = this.container;
-    // result.value = definition.val;
     result.value = val;
     return result;
   }

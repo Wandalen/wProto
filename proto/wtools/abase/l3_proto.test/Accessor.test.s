@@ -357,7 +357,7 @@ function accessorOptionAddingMethods( test )
     strict : 0,
     addingMethods : 1,
   });
-  test.identical( _.property.own( dst, { onlyEnumerable : 0 } ), exp );
+  test.identical( _.property.onlyOwn( dst, { onlyEnumerable : 0 } ), exp );
   test.true( _.routineIs( dst.aGrab ) );
   test.true( _.routineIs( dst.aGet ) );
   test.true( _.routineIs( dst.aPut ) );
@@ -400,7 +400,7 @@ function accessorOptionAddingMethods( test )
     strict : 0,
     addingMethods : 1,
   });
-  test.identical( _.property.own( dst, { onlyEnumerable : 0 } ), exp );
+  test.identical( _.property.onlyOwn( dst, { onlyEnumerable : 0 } ), exp );
 
   var exp =
   {
@@ -443,7 +443,7 @@ function accessorOptionAddingMethods( test )
     strict : 0,
     addingMethods : 1,
   });
-  test.identical( _.property.own( dst, { onlyEnumerable : 0 } ), exp );
+  test.identical( _.property.onlyOwn( dst, { onlyEnumerable : 0 } ), exp );
 
   var exp =
   {
@@ -2066,7 +2066,7 @@ function classDeclare( test )
     test.case = 'setting static field with constructor';
 
     o.Class.Instances = o.Class.Instances.slice();
-    test.true( o.Class.Instances === C1.Instances || _.mapOwnKey( o.Class.prototype.Statics, 'Instances' ) );
+    test.true( o.Class.Instances === C1.Instances || _.mapOnlyOwnKey( o.Class.prototype.Statics, 'Instances' ) );
     test.true( o.Class.Instances === o.Class.prototype.Instances );
     test.true( o.Class.Instances === c1a.Instances );
     test.true( o.Class.Instances === c1b.Instances );
@@ -2076,7 +2076,7 @@ function classDeclare( test )
     test.case = 'setting static field with prototype';
 
     o.Class.prototype.Instances = o.Class.prototype.Instances.slice();
-    test.true( o.Class.Instances === C1.Instances || _.mapOwnKey( o.Class.prototype.Statics, 'Instances' ) );
+    test.true( o.Class.Instances === C1.Instances || _.mapOnlyOwnKey( o.Class.prototype.Statics, 'Instances' ) );
     test.true( o.Class.Instances === o.Class.prototype.Instances );
     test.true( o.Class.Instances === c1a.Instances );
     test.true( o.Class.Instances === c1b.Instances );
@@ -2086,7 +2086,7 @@ function classDeclare( test )
     test.case = 'setting static field with instance';
 
     c1a.Instances = o.Class.Instances.slice();
-    test.true( o.Class.Instances === C1.Instances || _.mapOwnKey( o.Class.prototype.Statics, 'Instances' ) );
+    test.true( o.Class.Instances === C1.Instances || _.mapOnlyOwnKey( o.Class.prototype.Statics, 'Instances' ) );
     test.true( o.Class.Instances === o.Class.prototype.Instances );
     test.true( o.Class.Instances === c1a.Instances );
     test.true( o.Class.Instances === c1b.Instances );
