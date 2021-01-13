@@ -214,6 +214,7 @@ function accessor( o )
 
   function constructionAmend( dst, key, amend )
   {
+    _.assert( 0, 'deprecated' ); /* xxx */
     let instanceIsStandard = _.workpiece.instanceIsStandard( dst );
     _.assert( arguments.length === 3 );
 
@@ -316,7 +317,7 @@ accessor.defaults =
   set : null,
 }
 
-//
+
 
 function getter( o )
 {
@@ -339,7 +340,7 @@ getter.defaults =
   routine : null,
 }
 
-//
+
 
 function setter( o )
 {
@@ -410,7 +411,6 @@ let DefineExtension =
   getter,
   setter,
   putter,
-  // constant : _constant,
 
 }
 
