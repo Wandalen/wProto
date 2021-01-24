@@ -7,7 +7,7 @@ Relations module. Collection of cross-platform routines to define classes and re
 git clone https://github.com/Wandalen/wProto
 cd wProto
 npm install
-node sample/Sample.s
+node sample/trivial/Sample.s
 ```
 
 ## To add to your project
