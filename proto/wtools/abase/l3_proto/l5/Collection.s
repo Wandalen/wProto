@@ -172,7 +172,7 @@ function setterOwn_functor( op )
 
     _.assert( arguments.length === 1 );
 
-    self[ symbol ] = _.entityMake( src );
+    self[ symbol ] = _.entity.make( src );
 
     return self[ symbol ];
   }

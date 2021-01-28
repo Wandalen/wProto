@@ -57,7 +57,7 @@ function own( src )
   _.assert( arguments.length === 1 );
   _.assert( definition.val !== undefined );
 
-  // definition.toVal = function get() { return _.entityMake( this.val ) }
+  // definition.toVal = function get() { return _.entity.make( this.val ) }
   // definition.toVal = function get() { return _.cloneJust( this.val ) }
   definition.toVal = function get( val ) { return _.cloneJust( val ) };
 
@@ -156,7 +156,7 @@ function contained( src )
   definition.toVal = function get( val )
   {
     let result = _.mapExtend( null, container );
-    result.value = _.entityMake( val );
+    result.value = _.entity.make( val );
     return result;
   }
   else
