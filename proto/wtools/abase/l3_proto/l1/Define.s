@@ -21,7 +21,7 @@ let _ = _global_.wTools;
 function common( src )
 {
   let o2 = { val : src }
-  o2.definitionGroup = 'definition.named';
+  o2.defGroup = 'definition.named';
   let definition = new _.Definition( o2 );
 
   _.assert( src !== undefined, () => 'Expects object-like or long, but got ' + _.strType( src ) );
@@ -50,7 +50,7 @@ function common( src )
 function own( src )
 {
   let o2 = { val : src }
-  o2.definitionGroup = 'definition.named';
+  o2.defGroup = 'definition.named';
   let definition = new _.Definition( o2 );
 
   _.assert( src !== undefined, () => 'Expects object-like or long, but got ' + _.strType( src ) );
@@ -80,7 +80,7 @@ function own( src )
 function instanceOf( src )
 {
   let o2 = { val : src }
-  o2.definitionGroup = 'definition.named';
+  o2.defGroup = 'definition.named';
   let definition = new _.Definition( o2 );
 
   _.assert( _.routineIs( src ), 'Expects constructor' );
@@ -109,7 +109,7 @@ function instanceOf( src )
 function makeWith( src )
 {
   let o2 = { val : src }
-  o2.definitionGroup = 'definition.named';
+  o2.defGroup = 'definition.named';
   let definition = new _.Definition( o2 );
 
   _.assert( _.routineIs( src ), 'Expects constructor' );
@@ -149,7 +149,7 @@ function contained( src )
   let o = _.mapOnly( src, contained.defaults );
   o.container = container;
   o.val = src.val;
-  o.definitionGroup = 'definition.named';
+  o.defGroup = 'definition.named';
   let definition = new _.Definition( o );
 
   if( o.shallowCloning )
@@ -189,7 +189,7 @@ function accessor( o )
 
   _.routineOptions( accessor, o );
 
-  o.definitionGroup = 'definition.named';
+  o.defGroup = 'definition.named';
   o.subKind = 'accessor';
   o.constructionAmend = constructionAmend;
   o.toVal = toVal;
