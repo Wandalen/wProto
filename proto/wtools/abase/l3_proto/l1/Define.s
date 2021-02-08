@@ -134,10 +134,6 @@ function makeWith( src )
 * @namespace Tools.define
 */
 
-/*
-xxx : remove contained
-*/
-
 function contained( src )
 {
 
@@ -191,7 +187,7 @@ function accessor( o )
 
   o.defGroup = 'definition.named';
   o.subKind = 'accessor';
-  o.constructionAmend = constructionAmend;
+  // o.constructionAmend = constructionAmend;
   o.toVal = toVal;
 
   _.assert( _.routineIs( o.routine ) );
@@ -212,96 +208,96 @@ function accessor( o )
 
   /* */
 
-  function constructionAmend( dst, key, amend )
-  {
-    _.assert( 0, 'deprecated' ); /* xxx */
-    let instanceIsStandard = _.workpiece.instanceIsStandard( dst );
-    _.assert( arguments.length === 3 );
-
-    let args = []
-    for( let i = 0 ; i < o.val.length ; i++ )
-    args[ i ] = _.make( o.val[ i ] );
-    let o2;
-    if( o.routine.head )
-    {
-      o2 = o.routine.head( o.routine, args );
-    }
-    else
-    {
-      debugger;
-      _.assert( args.length === 1 );
-      o2 = args[ 0 ];
-    }
-
-    _.assert( _.mapIs( o2 ) );
-
-    if( o.routine.defaults.propName !== undefined )
-    if( o2.propName === undefined || o2.propName === null )
-    {
-      _.assert( 0, 'not tested' ); /* zzz : test */
-      o2.propName = key;
-    }
-
-    let r;
-    if( o.routine.body )
-    r = o.routine.body( o2 );
-    else
-    r = o.routine( o2 );
-
-    if( _.boolLike( o.get ) && !o.get && o.set === null )
-    {
-      if( _.routineIs( r ) )
-      {
-        o.set = r;
-        if( o.put === null || _.boolLikeTrue( o.put ) )
-        o.put = r;
-      }
-      else if( _.mapIs( r ) )
-      {
-        o.set = r.set;
-        if( o.put === null || _.boolLikeTrue( o.put ) )
-        if( r.put )
-        o.put = r.put;
-      }
-      else _.assert( 0 );
-    }
-    else if( _.boolLike( o.set ) && !o.set && o.get === null )
-    {
-      if( _.routineIs( r ) )
-      o.get = r;
-      else if( _.mapIs( r ) )
-      o.get = r.get
-      else _.assert( 0 );
-    }
-    else
-    {
-      if( _.mapIs( r ) )
-      {
-        if( o.get === null || _.boolLikeTrue( o.get ) )
-        o.get = r.get;
-        if( o.set === null || _.boolLikeTrue( o.set ) )
-        o.set = r.set;
-        if( o.put === null || _.boolLikeTrue( o.put ) )
-        o.put = r.put;
-      }
-    }
-
-    _.assert( _.boolLikeFalse( o.get ) || _.routineIs( o.get ) );
-    _.assert( _.boolLikeFalse( o.set ) || _.routineIs( o.set ) );
-
-    _.accessor.declare
-    ({
-      object : dst,
-      names : key,
-      grab : o.grab,
-      get : o.get,
-      put : o.put,
-      set : o.set,
-      prime : instanceIsStandard,
-      strict : instanceIsStandard,
-    });
-
-  }
+  // function constructionAmend( dst, key, amend )
+  // {
+  //   _.assert( 0, 'deprecated' );
+  //   let instanceIsStandard = _.workpiece.instanceIsStandard( dst );
+  //   _.assert( arguments.length === 3 );
+  //
+  //   let args = []
+  //   for( let i = 0 ; i < o.val.length ; i++ )
+  //   args[ i ] = _.make( o.val[ i ] );
+  //   let o2;
+  //   if( o.routine.head )
+  //   {
+  //     o2 = o.routine.head( o.routine, args );
+  //   }
+  //   else
+  //   {
+  //     debugger;
+  //     _.assert( args.length === 1 );
+  //     o2 = args[ 0 ];
+  //   }
+  //
+  //   _.assert( _.mapIs( o2 ) );
+  //
+  //   if( o.routine.defaults.propName !== undefined )
+  //   if( o2.propName === undefined || o2.propName === null )
+  //   {
+  //     _.assert( 0, 'not tested' ); /* zzz : test */
+  //     o2.propName = key;
+  //   }
+  //
+  //   let r;
+  //   if( o.routine.body )
+  //   r = o.routine.body( o2 );
+  //   else
+  //   r = o.routine( o2 );
+  //
+  //   if( _.boolLike( o.get ) && !o.get && o.set === null )
+  //   {
+  //     if( _.routineIs( r ) )
+  //     {
+  //       o.set = r;
+  //       if( o.put === null || _.boolLikeTrue( o.put ) )
+  //       o.put = r;
+  //     }
+  //     else if( _.mapIs( r ) )
+  //     {
+  //       o.set = r.set;
+  //       if( o.put === null || _.boolLikeTrue( o.put ) )
+  //       if( r.put )
+  //       o.put = r.put;
+  //     }
+  //     else _.assert( 0 );
+  //   }
+  //   else if( _.boolLike( o.set ) && !o.set && o.get === null )
+  //   {
+  //     if( _.routineIs( r ) )
+  //     o.get = r;
+  //     else if( _.mapIs( r ) )
+  //     o.get = r.get
+  //     else _.assert( 0 );
+  //   }
+  //   else
+  //   {
+  //     if( _.mapIs( r ) )
+  //     {
+  //       if( o.get === null || _.boolLikeTrue( o.get ) )
+  //       o.get = r.get;
+  //       if( o.set === null || _.boolLikeTrue( o.set ) )
+  //       o.set = r.set;
+  //       if( o.put === null || _.boolLikeTrue( o.put ) )
+  //       o.put = r.put;
+  //     }
+  //   }
+  //
+  //   _.assert( _.boolLikeFalse( o.get ) || _.routineIs( o.get ) );
+  //   _.assert( _.boolLikeFalse( o.set ) || _.routineIs( o.set ) );
+  //
+  //   _.accessor.declare
+  //   ({
+  //     object : dst,
+  //     names : key,
+  //     grab : o.grab,
+  //     get : o.get,
+  //     put : o.put,
+  //     set : o.set,
+  //     prime : instanceIsStandard,
+  //     strict : instanceIsStandard,
+  //   });
+  //
+  // }
 
   /* */
 
