@@ -37,6 +37,8 @@ function prototypeIsStandard( src )
   return true;
 }
 
+//
+
 // function prototypeOf( src )
 function prototypeOf( src )
 {
@@ -194,6 +196,17 @@ function instanceIsStandard( src )
   return false;
 
   return _.workpiece.prototypeIsStandard( proto );
+}
+
+//
+
+function instanceLikeStandard( src )
+{
+  if( _.primitiveIs( src ) )
+  return false;
+  if( src.Composes )
+  return true;
+  return false;
 }
 
 // --
@@ -1502,6 +1515,7 @@ let Routines =
 
   instanceIs : _.instanceIs,
   instanceIsStandard,
+  instanceLikeStandard,
 
   // fields group
 
