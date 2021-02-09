@@ -107,6 +107,148 @@ function prototypeIs( t )
 
 //
 
+function instanceLikeStandard( test )
+{
+  test.case = 'check null';
+  var got = _.workpiece.instanceLikeStandard( null );
+  test.identical( got, false );
+
+  test.case = 'check undefined';
+  var got = _.workpiece.instanceLikeStandard( undefined );
+  test.identical( got, false );
+
+  test.case = 'check _.nothing';
+  var got = _.workpiece.instanceLikeStandard( _.nothing );
+  test.identical( got, false );
+
+  test.case = 'check zero';
+  var got = _.workpiece.instanceLikeStandard( 0 );
+  test.identical( got, false );
+
+  test.case = 'check empty string';
+  var got = _.workpiece.instanceLikeStandard( '' );
+  test.identical( got, false );
+
+  test.case = 'check false';
+  var got = _.workpiece.instanceLikeStandard( false );
+  test.identical( got, false );
+
+  test.case = 'check NaN';
+  var got = _.workpiece.instanceLikeStandard( NaN );
+  test.identical( got, false );
+
+  test.case = 'check Symbol';
+  var got = _.workpiece.instanceLikeStandard( Symbol( 'a' ) );
+  test.identical( got, false );
+
+  test.case = 'check empty array';
+  var got = _.workpiece.instanceLikeStandard( [] );
+  test.identical( got, false );
+
+  test.case = 'check empty arguments array';
+  var got = _.workpiece.instanceLikeStandard( _.argumentsArrayMake( [] ) );
+  test.identical( got, false );
+
+  test.case = 'check empty unroll';
+  var got = _.workpiece.instanceLikeStandard( _.unrollMake( [] ) );
+  test.identical( got, false );
+
+  test.case = 'check empty map';
+  var got = _.workpiece.instanceLikeStandard( {} );
+  test.identical( got, false );
+
+  test.case = 'check empty pure map';
+  var got = _.workpiece.instanceLikeStandard( Object.create( null ) );
+  test.identical( got, false );
+
+  test.case = 'check empty Set';
+  var got = _.workpiece.instanceLikeStandard( new Set( [] ) );
+  test.identical( got, false );
+
+  test.case = 'check empty Map';
+  var got = _.workpiece.instanceLikeStandard( new Map( [] ) );
+  test.identical( got, false );
+
+  test.case = 'check empty BufferRaw';
+  var got = _.workpiece.instanceLikeStandard( new BufferRaw() );
+  test.identical( got, false );
+
+  test.case = 'check empty BufferTyped';
+  var got = _.workpiece.instanceLikeStandard( new U8x() );
+  test.identical( got, false );
+
+  test.case = 'check number';
+  var got = _.workpiece.instanceLikeStandard( 3 );
+  test.identical( got, false );
+
+  test.case = 'check bigInt';
+  var got = _.workpiece.instanceLikeStandard( 1n );
+  test.identical( got, false );
+
+  test.case = 'check string';
+  var got = _.workpiece.instanceLikeStandard( 'str' );
+  test.identical( got, false );
+
+  test.case = 'check not empty array';
+  var got = _.workpiece.instanceLikeStandard( [ null ] );
+  test.identical( got, false );
+
+  test.case = 'check map with property constructor';
+  var got = _.workpiece.instanceLikeStandard( { 'constructor' : 1 } );
+  test.identical( got, false );
+
+  test.case = 'check map with properties constructor and Composes';
+  var got = _.workpiece.instanceLikeStandard( { 'constructor' : 1, 'Composes' : 1 } );
+  test.identical( got, true );
+
+  test.case = 'check pure map with property constructor';
+  var src = Object.create( null );
+  src.constructor = false;
+  var got = _.workpiece.instanceLikeStandard( src );
+  test.identical( got, false );
+
+  test.case = 'check pure map with properties constructor and Composes';
+  var src = Object.create( null );
+  src.constructor = false;
+  src.Composes = 1;
+  var got = _.workpiece.instanceLikeStandard( src );
+  test.identical( got, true );
+
+  test.case = 'check instance of constructor with own properties constructor and Composes';
+  function Constr1()
+  {
+    this.x = 1;
+    return this;
+  };
+  var src = new Constr1();
+  src.constructor = true;
+  src.Composes = true;
+  var got = _.workpiece.instanceLikeStandard( src );
+  test.identical( got, true );
+
+  test.case = 'check constructor';
+  function Constr2()
+  {
+    this.x = 1;
+    return this;
+  };
+  var got = _.workpiece.instanceLikeStandard( Constr2 );
+  test.identical( got, false );
+
+  test.case = 'instance of Promise';
+  var src = new Promise( ( resolve, reject ) => { return resolve( 0 ) } );
+  var got = _.workpiece.instanceLikeStandard( src );
+  test.identical( got, false );
+
+  test.case = 'function _Promise';
+  function Promise(){}
+  var src = Promise;
+  var got = _.workpiece.instanceLikeStandard( src );
+  test.identical( got, false );
+}
+
+//
+
 function instanceIsStandard( t )
 {
   var self = this;
@@ -167,7 +309,11 @@ let Self =
 
     prototypeIs,
     prototypeIsStandard,
+
+    // instance
+
     instanceIsStandard,
+    instanceLikeStandard,
 
   },
 

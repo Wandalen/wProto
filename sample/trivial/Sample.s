@@ -1,4 +1,5 @@
-( function _Sample_js_(){
+( function _Sample_js_()
+{
 
 'use strict';
 
@@ -11,7 +12,8 @@ require( 'wProto' );
 
 let _ = wTools;
 let Parent = null;
-let Self = function BaseClass()
+let Self = BaseClass;
+function BaseClass()
 {
   return _.workpiece.construct( Self, this, arguments );
 }
@@ -46,7 +48,7 @@ function finit()
 function print()
 {
   var self = this;
-  console.log( self.name,'a :',self.a );
+  console.log( self.name, 'a :', self.a );
 }
 
 //
@@ -56,9 +58,9 @@ function staticFunction()
   var self = this;
 
   if( self === Self )
-  console.log( self.name,'static function called as static' );
+  console.log( self.name, 'static function called as static' );
   else
-  console.log( self.name,'static function called as method' );
+  console.log( self.name, 'static function called as method' );
 
 }
 
@@ -74,7 +76,7 @@ var Composes =
 
 var Statics =
 {
-  staticFunction : staticFunction,
+  staticFunction,
 }
 
 // --
@@ -84,13 +86,13 @@ var Statics =
 var Proto =
 {
 
-  init : init,
-  finit : finit,
+  init,
+  finit,
 
-  print : print,
+  print,
 
-  Composes : Composes,
-  Statics : Statics,
+  Composes,
+  Statics,
 
 }
 
