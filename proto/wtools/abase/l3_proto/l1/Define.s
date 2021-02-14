@@ -57,9 +57,8 @@ function own( src )
   _.assert( arguments.length === 1 );
   _.assert( definition.val !== undefined );
 
-  // definition.toVal = function get() { return _.entity.make( this.val ) }
-  // definition.toVal = function get() { return _.cloneJust( this.val ) }
   definition.toVal = function get( val ) { return _.cloneJust( val ) };
+  // definition.toVal = function get( val ) { return _.cloneDeep( val ) }; /* xxx : use this */
 
   _.property.hide( definition, 'toVal' );
 
