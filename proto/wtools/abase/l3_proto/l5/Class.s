@@ -274,7 +274,7 @@ function mixinHas( proto, mixin )
  *
  *  let betta = new Betta();
  *  console.log( proto === Self.prototype ); //returns true
- *  console.log( Parent.prototype.isPrototypeOf( betta ) ); //returns true
+ *  console.log( Parent.prototype.isPrototypeFor( betta ) ); //returns true
  *  console.log( betta.a, betta.b, betta.c ); //returns 1 2 5
  *
  * @function classDeclare
