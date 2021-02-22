@@ -239,6 +239,7 @@ function suiteMakerFrom_functor( fop )
   _.assert( _.entityIdentical( defaults, _.mapExtend( null, fop.getterFunctor.defaults ) ) );
   if( fop.setterFunctor && _.entityIdentical )
   _.assert( _.entityIdentical( defaults, _.mapExtend( null, fop.setterFunctor.defaults ) ) );
+  /* xxx : use _.identicalShallow() */
 
   let _head = fop.getterFunctor.head || fop.setterFunctor.head;
   if( _head )
