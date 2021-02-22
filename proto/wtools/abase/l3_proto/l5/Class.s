@@ -30,7 +30,7 @@ function _mixinDelcare( o )
 
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.mapIs( o ) || _.routineIs( o ) );
-  _.assert( _.routineIs( o.onMixinApply ) || o.onMixinApply === undefined || o.onMixinApply === null, 'Expects routine {-o.onMixinApply-}, but got', _.strType( o ) );
+  _.assert( _.routineIs( o.onMixinApply ) || o.onMixinApply === undefined || o.onMixinApply === null, 'Expects routine {-o.onMixinApply-}, but got', _.entity.strType( o ) );
   _.assert( _.strDefined( o.name ), 'mixin should have name' );
   _.assert( _.objectIs( o.extend ) || o.extend === undefined || o.extend === null );
   _.assert( _.objectIs( o.supplementOwn ) || o.supplementOwn === undefined || o.supplementOwn === null );
@@ -142,7 +142,7 @@ function mixinApply( mixinDescriptor, dstPrototype )
 {
 
   _.assert( arguments.length === 2, 'Expects exactly two arguments' );
-  _.assert( !_.primitiveIs( dstPrototype ), () => 'Second argument {-dstPrototype-} does not look like prototype, got ' + _.strType( dstPrototype ) );
+  _.assert( !_.primitiveIs( dstPrototype ), () => 'Second argument {-dstPrototype-} does not look like prototype, got ' + _.entity.strType( dstPrototype ) );
   _.assert( _.routineIs( mixinDescriptor.mixin ), 'First argument does not look like mixin descriptor' );
   _.assert( _.objectIs( mixinDescriptor ) );
   _.assert( Object.isFrozen( mixinDescriptor ), 'First argument does not look like mixin descriptor' );
@@ -204,8 +204,8 @@ function mixinHas( proto, mixin )
   }
   else
   {
-    _.assert( _.routineIs( mixin.mixin ), 'Expects mixin, but got not mixin', _.strType( mixin ) );
-    _.assert( _.strDefined( mixin.name ), 'Expects mixin, but got not mixin', _.strType( mixin ) );
+    _.assert( _.routineIs( mixin.mixin ), 'Expects mixin, but got not mixin', _.entity.strType( mixin ) );
+    _.assert( _.strDefined( mixin.name ), 'Expects mixin, but got not mixin', _.entity.strType( mixin ) );
     return proto._mixinsMap && proto._mixinsMap[ mixin.name ];
   }
 
@@ -356,7 +356,7 @@ function classDeclare( o )
     _.assert( !o.cls );
   }
 
-  _.assert( _.routineIs( o.parent ) || o.parent === undefined || o.parent === null, () => 'Wrong type of parent : ' + _.strType( 'o.parent' ) );
+  _.assert( _.routineIs( o.parent ) || o.parent === undefined || o.parent === null, () => 'Wrong type of parent : ' + _.entity.strType( 'o.parent' ) );
   _.assert( _.objectIs( o.extend ) || o.extend === undefined );
   _.assert( _.objectIs( o.supplement ) || o.supplement === undefined );
   _.assert( o.parent !== o.extend || o.extend === undefined );

@@ -306,7 +306,7 @@ function proxyReadOnly( ins )
   {
     set : function( obj, k, e )
     {
-      throw _.err( 'Read only', _.strType( ins ), ins );
+      throw _.err( 'Read only', _.entity.strType( ins ), ins );
     }
   }
 

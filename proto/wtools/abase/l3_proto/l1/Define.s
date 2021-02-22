@@ -24,7 +24,7 @@ function common( src )
   o2.defGroup = 'definition.named';
   let definition = new _.Definition( o2 );
 
-  _.assert( src !== undefined, () => 'Expects object-like or long, but got ' + _.strType( src ) );
+  _.assert( src !== undefined, () => 'Expects object-like or long, but got ' + _.entity.strType( src ) );
   _.assert( arguments.length === 1 );
   _.assert( definition.val !== undefined );
 
@@ -53,7 +53,7 @@ function own( src )
   o2.defGroup = 'definition.named';
   let definition = new _.Definition( o2 );
 
-  _.assert( src !== undefined, () => 'Expects object-like or long, but got ' + _.strType( src ) );
+  _.assert( src !== undefined, () => 'Expects object-like or long, but got ' + _.entity.strType( src ) );
   _.assert( arguments.length === 1 );
   _.assert( definition.val !== undefined );
 

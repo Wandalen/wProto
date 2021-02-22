@@ -204,7 +204,7 @@ function setterFriend_functor( o )
   {
 
     let self = this;
-    _.assert( src === null || _.objectIs( src ), 'setterFriend : expects null or object, but got ' + _.strType( src ) );
+    _.assert( src === null || _.objectIs( src ), 'setterFriend : expects null or object, but got ' + _.entity.strType( src ) );
 
     if( !src )
     {
@@ -976,7 +976,7 @@ function aliasSetter_functor_body( o )
     self[ originalName ] = src;
     return self[ originalName ];
   }
-  else _.assert( 0, `Unknown type of container ${_.strType( container )}` );
+  else _.assert( 0, `Unknown type of container ${_.entity.strType( container )}` );
 
 }
 
@@ -1029,7 +1029,7 @@ function aliasGet_functor_body( o )
     let self = this;
     return self[ originalName ];
   }
-  else _.assert( 0, `Unknown type of container ${_.strType( container )}` );
+  else _.assert( 0, `Unknown type of container ${_.entity.strType( container )}` );
 
 }
 

@@ -215,8 +215,8 @@ function instanceLikeStandard( src )
 
 function fieldsGroupsGet( src )
 {
-  // _.assert( _.objectIs( src ), () => 'Expects map {-src-}, but got ' + _.strType( src ) );
-  _.assert( !_.primitiveIs( src ), () => 'Expects map {-src-}, but got ' + _.strType( src ) );
+  // _.assert( _.objectIs( src ), () => 'Expects map {-src-}, but got ' + _.entity.strType( src ) );
+  _.assert( !_.primitiveIs( src ), () => 'Expects map {-src-}, but got ' + _.entity.strType( src ) );
   _.assert( src.Groups === undefined || _.objectIs( src.Groups ) );
 
   if( src.Groups )
@@ -293,7 +293,7 @@ function fieldsGroupDeclare( o )
 
   _.routineOptions( fieldsGroupDeclare, o );
   _.assert( arguments.length === 1, 'Expects single argument' );
-  _.assert( o.srcMap === null || !_.primitiveIs( o.srcMap ), 'Expects object {-o.srcMap-}, got', _.strType( o.srcMap ) );
+  _.assert( o.srcMap === null || !_.primitiveIs( o.srcMap ), 'Expects object {-o.srcMap-}, got', _.entity.strType( o.srcMap ) );
   _.assert( _.strIs( o.fieldsGroupName ) );
   // _.assert( _.routineIs( o.filter ) && _.strIs( o.filter.functionFamily ) );
   _.assert( _.property.transformerIs( o.filter ) );
@@ -749,7 +749,7 @@ function fieldsGroupsDeclare( o )
 
   _.routineOptions( fieldsGroupsDeclare, o );
   _.assert( arguments.length === 1, 'Expects single argument' );
-  _.assert( o.srcMap === null || !_.primitiveIs( o.srcMap ), 'Expects object {-o.srcMap-}, got', _.strType( o.srcMap ) );
+  _.assert( o.srcMap === null || !_.primitiveIs( o.srcMap ), 'Expects object {-o.srcMap-}, got', _.entity.strType( o.srcMap ) );
 
   if( !o.srcMap )
   return;
@@ -936,7 +936,7 @@ function construct( cls, context, args )
 
 function isFinited( src )
 {
-  _.assert( _.instanceIs( src ), () => 'Expects instance, but got ' + _.toStrShort( src ) )
+  _.assert( _.instanceIs( src ), () => 'Expects instance, but got ' + _.entity.exportStringShort( src ) )
   _.assert( !_.primitiveIs( src ) );
   return Object.isFrozen( src );
 }
@@ -1258,7 +1258,7 @@ function toStr( instance, options )
 
   var fields = _.workpiece.fieldsOfTightGroups( instance );
 
-  var t = _.toStr( fields, o );
+  var t = _.entity.exportString( fields, o );
   _.assert( _.strIs( t ) );
   result += t;
 
@@ -1366,7 +1366,7 @@ function exportString( self, ... args )
   o.src = _.routineCallButOnly( self, 'exportStructure', o, [ 'dst' ] )
 
   o.dst += _.workpiece.qualifiedName( self ) + '\n';
-  o.dst += _.toStrNice( o.src );
+  o.dst += _.entity.exportStringNice( o.src );
 
   return o.dst;
 }
