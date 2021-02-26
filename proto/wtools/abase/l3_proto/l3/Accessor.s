@@ -235,11 +235,16 @@ function suiteMakerFrom_functor( fop )
   else
   defaults = _.mapExtend( null, fop.setterFunctor.defaults );
 
-  if( fop.getterFunctor && _.entityIdentical )
-  _.assert( _.entityIdentical( defaults, _.mapExtend( null, fop.getterFunctor.defaults ) ) );
-  if( fop.setterFunctor && _.entityIdentical )
-  _.assert( _.entityIdentical( defaults, _.mapExtend( null, fop.setterFunctor.defaults ) ) );
-  /* xxx : use _.identicalShallow() */
+  if( Config.debug )
+  {
+    if( fop.getterFunctor )
+    _.entity.identicalShallow( defaults, _.mapExtend( null, fop.getterFunctor.defaults ) )
+    // _.assert( _.entityIdentical( defaults, _.mapExtend( null, fop.getterFunctor.defaults ) ) );
+    if( fop.setterFunctor )
+    _.entity.identicalShallow( defaults, _.mapExtend( null, fop.setterFunctor.defaults ) )
+    // _.assert( _.entityIdentical( defaults, _.mapExtend( null, fop.setterFunctor.defaults ) ) );
+    /* xxx : use _.identicalShallow() */
+  }
 
   let _head = fop.getterFunctor.head || fop.setterFunctor.head;
   if( _head )
