@@ -1321,7 +1321,7 @@ function exportStructure( self, ... args )
     {
       if( it.src === self )
       {
-        it.srcEffective = _.mapOnly( it.src, it.src.Export || it.src.Import );
+        it./*srcEffective*/src = _.mapOnly( it.src, it.src.Export || it.src.Import );
         it.iterable = _.looker.containerNameToIdMap.aux;
       }
     }
@@ -1377,6 +1377,7 @@ exportString.defaults =
   dst : '',
   src : null,
   style : 'nice',
+  it : null,
 }
 
 // --
