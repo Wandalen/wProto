@@ -1321,8 +1321,9 @@ function exportStructure( self, ... args )
     {
       if( it.src === self )
       {
-        it./*srcEffective*/src = _.mapOnly( it.src, it.src.Export || it.src.Import );
-        it.iterable = _.looker.containerNameToIdMap.aux;
+        it.src = _.mapOnly( it.src, it.src.Export || it.src.Import );
+        it.iterable = _.looker.Looker.containerNameToIdMap.aux;
+        // it.iterable = _.looker.containerNameToIdMap.aux;
       }
     }
 

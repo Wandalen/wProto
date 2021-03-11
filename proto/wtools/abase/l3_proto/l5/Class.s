@@ -908,8 +908,8 @@ function staticDeclare( o )
   if( !o.fieldsOfRelationsGroups )
   o.fieldsOfRelationsGroups = _.workpiece.fieldsOfRelationsGroupsFromPrototype( o.prototype );
 
-  let pd = _.prototype.propertyDescriptorGet( o.prototype, o.name );
-  let cd = _.prototype.propertyDescriptorGet( o.prototype.constructor, o.name );
+  let pd = _.property.descriptorOf( o.prototype, o.name );
+  let cd = _.property.descriptorOf( o.prototype.constructor, o.name );
 
   if( pd.object !== o.prototype )
   pd.descriptor = null;
