@@ -988,7 +988,7 @@ aliasSetter_functor_body.defaults =
   // propName : null,
 }
 
-let aliasSet_functor = _.routineUnite( alias_head, aliasSetter_functor_body );
+let aliasSet_functor = _.routine.uniteCloning_( alias_head, aliasSetter_functor_body );
 
 //
 
@@ -1035,7 +1035,7 @@ function aliasGet_functor_body( o )
 
 aliasGet_functor_body.defaults = Object.create( aliasSet_functor.defaults );
 
-let aliasGetter_functor = _.routineUnite( alias_head, aliasGet_functor_body );
+let aliasGetter_functor = _.routine.uniteCloning_( alias_head, aliasGet_functor_body );
 
 //
 
