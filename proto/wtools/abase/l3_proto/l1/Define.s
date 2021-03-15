@@ -58,7 +58,7 @@ function own( src )
   _.assert( definition.val !== undefined );
 
   definition.toVal = function get( val ) { return _.cloneJust( val ) };
-  // definition.toVal = function get( val ) { return _.cloneDeep( val ) }; /* xxx : use this */
+  // definition.toVal = function get( val ) { return _.cloneDeep( val ) }; /* xxx0 : use replicator */
 
   _.property.hide( definition, 'toVal' );
 
