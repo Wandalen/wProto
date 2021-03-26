@@ -7,17 +7,16 @@ if( typeof module !== 'undefined' )
 
 }
 
-let _global = _global_;
-let _ = _global_.wTools;
-var _ObjectHasOwnProperty = Object.hasOwnProperty;
-var _nameFielded = _.nameFielded;
+const _global = _global_;
+const _ = _global_.wTools;
+const _ObjectHasOwnProperty = Object.hasOwnProperty;
 
 _.assert( !_.lconstruction )
 
 //
 
-let Parent = null;
-let Self = function wLike( o )
+const Parent = null;
+const Self = function wLike( o )
 {
 }
 
@@ -62,7 +61,7 @@ function like()
       else
       return new( _.constructorJoin( proto.constructor, arguments ) );
 
-      _.assertMapHasOnly( this, proto, 'Prototype of the object ' + ( location ? 'defined at\n' + location + '\n' : '' ) + 'does not have requested fields.' );
+      _.map.assertHasOnly( this, proto, 'Prototype of the object ' + ( location ? 'defined at\n' + location + '\n' : '' ) + 'does not have requested fields.' );
 
       _.mapComplement( this, proto );
       Object.preventExtensions( this );
@@ -190,7 +189,7 @@ var symbolForAllClasses = Symbol.for( 'allClasses' );
 // declare
 // --
 
-var Proto =
+const LconstructionExtension =
 {
   is,
   isLike,
@@ -198,24 +197,24 @@ var Proto =
 
 _.assert( !_.lconstruction );
 _.lconstruction = Object.create( null );
-_.mapExtend( _.lconstruction, Proto );
+_.mapExtend( _.lconstruction, LconstructionExtension );
 
 // --
 // declare
 // --
 
-var Proto =
+const ToolsExtension =
 {
   like,
 }
 
-_.mapExtend( _, Proto );
+_.mapExtend( _, ToolsExtension );
 
 // --
 // declare
 // --
 
-var Proto =
+const Proto =
 {
   name,
   also,

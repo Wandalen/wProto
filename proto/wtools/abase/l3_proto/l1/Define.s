@@ -2,9 +2,9 @@
 
 'use strict';
 
-let Self = _global_.wTools;
-let _global = _global_;
-let _ = _global_.wTools;
+const Self = _global_.wTools;
+const _global = _global_;
+const _ = _global_.wTools;
 
 // --
 // implementation
@@ -140,8 +140,8 @@ function contained( src )
   _.assert( arguments.length === 1 );
   _.assert( src.val !== undefined );
 
-  let container = _.mapBut( src, contained.defaults );
-  let o = _.mapOnly( src, contained.defaults );
+  let container = _.mapBut_( null, src, contained.defaults );
+  let o = _.mapOnly_( null, src, contained.defaults );
   o.container = container;
   o.val = src.val;
   o.defGroup = 'definition.named';

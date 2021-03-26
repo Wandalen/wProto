@@ -2,12 +2,12 @@
 
 'use strict';
 
-let Self = _global_.wTools;
-let _global = _global_;
-let _ = _global_.wTools;
+const Self = _global_.wTools;
+const _global = _global_;
+const _ = _global_.wTools;
 
-let _ObjectHasOwnProperty = Object.hasOwnProperty;
-let _ObjectPropertyIsEumerable = Object.propertyIsEnumerable;
+const _ObjectHasOwnProperty = Object.hasOwnProperty;
+const _ObjectPropertyIsEumerable = Object.propertyIsEnumerable;
 let _nameFielded = _.nameFielded;
 
 _.assert( _.objectIs( _.property ), 'wProto needs Tools/wtools/abase/l1/FieldMapper.s' );
@@ -45,7 +45,7 @@ function _mixinDelcare( o )
     _.assert( arguments.length === 1, 'Expects single argument' );
     _.assert( _.routineIs( dstClass ), 'Expects constructor' );
     _.assert( dstClass === dstClass.prototype.constructor );
-    _.assertMapHasOnly( this, [ _.KnownConstructorFields, { mixin : 'mixin', __mixin__ : '__mixin__' }, this.prototype.Statics || {} ] );
+    _.map.assertHasOnly( this, [ _.KnownConstructorFields, { mixin : 'mixin', __mixin__ : '__mixin__' }, this.prototype.Statics || {} ] );
 
     if( md.onMixinApply )
     md.onMixinApply( md, dstClass );
@@ -146,7 +146,7 @@ function mixinApply( mixinDescriptor, dstPrototype )
   _.assert( _.routineIs( mixinDescriptor.mixin ), 'First argument does not look like mixin descriptor' );
   _.assert( _.objectIs( mixinDescriptor ) );
   _.assert( Object.isFrozen( mixinDescriptor ), 'First argument does not look like mixin descriptor' );
-  _.assertMapHasOnly( mixinDescriptor, _.MixinDescriptorFields );
+  _.map.assertHasOnly( mixinDescriptor, _.MixinDescriptorFields );
 
   /* mixin into routine */
 
@@ -233,14 +233,14 @@ function mixinHas( proto, mixin )
  * @returns {object} Returns constructor's prototype based on( o.parent ) prototype and complemented by fields, static and non-static methods.
  *
  * @example
- *  let Parent = function Alpha(){ };
+ *  const Parent = function Alpha(){ };
  *  Parent.prototype.init = function(  )
  *  {
  *    let self = this;
  *    self.c = 5;
  *  };
  *
- *  let Self = Betta;
+ *  const Self = Betta;
  *  function Betta( o )
  *  {
  *    return _.workpiece.construct( Self, this, arguments );
@@ -343,9 +343,9 @@ function classDeclare( o )
     _.assert( !o.name || o.cls.name === o.name || o.cls._name === o.name, 'class has name', o.cls.name + ', but options', o.name );
     _.assert( !o.shortName || !o.cls.shortName|| o.cls.shortName === o.shortName, 'class has short name', o.cls.shortName + ', but options', o.shortName );
 
-    _.assertMapOwnAll( o.cls.prototype, has, 'classDeclare expects constructor' );
-    _.assertMapOwnNone( o.cls.prototype, hasNot );
-    _.assertMapOwnNone( o.cls.prototype, _.DefaultForbiddenNames );
+    _.map.assertOwnAll( o.cls.prototype, has, 'classDeclare expects constructor' );
+    _.map.assertOwnNone( o.cls.prototype, hasNot );
+    _.map.assertOwnNone( o.cls.prototype, _.DefaultForbiddenNames );
 
     if( o.extend && _ObjectHasOwnProperty.call( o.extend, 'constructor' ) )
     _.assert( o.extend.constructor === o.cls );
@@ -440,7 +440,7 @@ function classDeclare( o )
 
     _.assert( _.routineIs( prototype.constructor ) );
     _.assert( _.objectIs( prototype.Statics ) );
-    _.assertMapHasAll( prototype.constructor, prototype.Statics );
+    _.map.assertHasAll( prototype.constructor, prototype.Statics );
     _.assert( prototype === o.cls.prototype );
     _.assert( _ObjectHasOwnProperty.call( prototype, 'constructor' ), 'prototype should has own constructor' );
     _.assert( _.routineIs( prototype.constructor ), 'prototype should has own constructor' );
@@ -556,7 +556,7 @@ classDeclare.defaults =
  * @returns {object} Returns constructor's prototype complemented by fields, static and non-static methods.
  *
  * @example
- * let Self = Betta;
+ * const Self = Betta;
 function Betta( o ) { };
  * let Statics = { staticFunction : function staticFunction(){ } };
  * let Composes = { a : 1, b : 2 };
@@ -763,7 +763,7 @@ to prioritize ordinary facets adjustment order should be
 
   function fieldsDeclare( extend, src )
   {
-    let map = _.mapBut( src, fieldsGroups );
+    let map = _.mapBut_( null, src, fieldsGroups );
     for( let s in staticsAll )
     if( map[ s ] === staticsAll[ s ] )
     delete map[ s ];
@@ -781,9 +781,9 @@ to prioritize ordinary facets adjustment order should be
     if( !o.allowingExtendStatics )
     if( Object.getPrototypeOf( o.prototype.Statics ) )
     {
-      map = _.mapBut( map, staticsOwn );
+      map = _.mapBut_( null, map, staticsOwn );
 
-      let keys = _.mapKeys( _.mapOnly( map, Object.getPrototypeOf( o.prototype.Statics ) ) );
+      let keys = _.mapKeys( _.mapOnly_( null, map, Object.getPrototypeOf( o.prototype.Statics ) ) );
       if( keys.length )
       {
         _.assert( 0, 'attempt to extend static field', keys );

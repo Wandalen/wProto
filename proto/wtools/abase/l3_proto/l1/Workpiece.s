@@ -12,12 +12,12 @@
 qqq : repair and improve doc
 */
 
-let Self = _global_.wTools.workpiece = _global_.wTools.workpiece || Object.create( null );;
-let _global = _global_;
-let _ = _global_.wTools;
+const Self = _global_.wTools.workpiece = _global_.wTools.workpiece || Object.create( null );;
+const _global = _global_;
+const _ = _global_.wTools;
 
-let _ObjectHasOwnProperty = Object.hasOwnProperty;
-let _ObjectPropertyIsEumerable = Object.propertyIsEnumerable;
+const _ObjectHasOwnProperty = Object.hasOwnProperty;
+const _ObjectPropertyIsEumerable = Object.propertyIsEnumerable;
 
 _.assert( _.objectIs( _.property ), 'wProto needs Tools/wtools/abase/l1/FieldMapper.s' );
 
@@ -270,7 +270,7 @@ function fieldsGroupFor( dst, fieldsGroupName )
  * @private
  *
  * @example
- * let Self = ClassName;
+ * const Self = ClassName;
 function ClassName( o ) { };
  * _.workpiece.fieldsGroupDeclare
  * ({
@@ -322,7 +322,7 @@ fieldsGroupDeclare.defaults =
  * @param {array-like} arguments - for arguments details see {@link wTools~protoAddDefaults}.
  *
  * @example
- * let Self = ClassName;
+ * const Self = ClassName;
 function ClassName( o ) { };
  * let Composes = { tree : null };
  * _.workpiece.fieldsGroupComposesExtend( Self.prototype, Composes );
@@ -356,7 +356,7 @@ function fieldsGroupComposesExtend( dstPrototype, srcMap )
  * @param {array-like} arguments - for arguments details see {@link wTools~protoAddDefaults}.
  *
  * @example
- * let Self = ClassName;
+ * const Self = ClassName;
 function ClassName( o ) { };
  * let Aggregates = { tree : null };
  * _.workpiece.fieldsGroupAggregatesExtend( Self.prototype, Aggregates );
@@ -390,7 +390,7 @@ function fieldsGroupAggregatesExtend( dstPrototype, srcMap )
  * @param {array-like} arguments - for arguments details see {@link wTools~protoAddDefaults}.
  *
  * @example
- * let Self = ClassName;
+ * const Self = ClassName;
 function ClassName( o ) { };
  * let Associates = { tree : null };
  * _.workpiece.fieldsGroupAssociatesExtend( Self.prototype, Associates );
@@ -424,7 +424,7 @@ function fieldsGroupAssociatesExtend( dstPrototype, srcMap )
  * @param {array-like} arguments - for arguments details see {@link wTools~protoAddDefaults}.
  *
  * @example
- * let Self = ClassName;
+ * const Self = ClassName;
 function ClassName( o ) { };
  * let Restricts = { tree : null };
  * _.workpiece.fieldsGroupRestrictsExtend( Self.prototype, Restricts );
@@ -458,7 +458,7 @@ function fieldsGroupRestrictsExtend( dstPrototype, srcMap )
  * @param {array-like} arguments - for arguments details see {@link wTools~protoAddDefaults}.
  *
  * @example
- * let Self = ClassName;
+ * const Self = ClassName;
 function ClassName( o ) { };
  * let Composes = { tree : null };
  * _.workpiece.fieldsGroupComposesSupplement( Self.prototype, Composes );
@@ -492,7 +492,7 @@ function fieldsGroupComposesSupplement( dstPrototype, srcMap )
  * @param {array-like} arguments - for arguments details see {@link wTools~protoAddDefaults}.
  *
  * @example
- * let Self = ClassName;
+ * const Self = ClassName;
 function ClassName( o ) { };
  * let Aggregates = { tree : null };
  * _.workpiece.fieldsGroupAggregatesSupplement( Self.prototype, Aggregates );
@@ -526,7 +526,7 @@ function fieldsGroupAggregatesSupplement( dstPrototype, srcMap )
  * @param {array-like} arguments - for arguments details see {@link wTools~protoAddDefaults}.
  *
  * @example
- * let Self = ClassName;
+ * const Self = ClassName;
 function ClassName( o ) { };
  * let Associates = { tree : null };
  * _.workpiece.fieldsGroupAssociatesSupplement( Self.prototype, Associates );
@@ -560,7 +560,7 @@ function fieldsGroupAssociatesSupplement( dstPrototype, srcMap )
  * @param {array-like} arguments - for arguments details see {@link wTools~protoAddDefaults}.
  *
  * @example
- * let Self = ClassName;
+ * const Self = ClassName;
 function ClassName( o ) { };
  * let Restricts = { tree : null };
  * _.workpiece.fieldsGroupRestrictsSupplement( Self.prototype, Restricts );
@@ -679,7 +679,7 @@ function fieldsOfRelationsGroups( src )
 
   if( _.instanceIs( src ) )
   {
-    return _.mapOnly( src, _.workpiece.fieldsOfRelationsGroupsFromPrototype( prototype ) );
+    return _.mapOnly_( null, src, _.workpiece.fieldsOfRelationsGroupsFromPrototype( prototype ) );
   }
 
   return _.workpiece.fieldsOfRelationsGroupsFromPrototype( prototype );
@@ -699,7 +699,7 @@ function fieldsOfCopyableGroups( src )
   _.assert( arguments.length === 1, 'Expects single argument' );
 
   if( _.instanceIs( src ) )
-  return _.mapOnly( src, _.workpiece.fieldsOfCopyableGroupsFromPrototype( prototype ) );
+  return _.mapOnly_( null, src, _.workpiece.fieldsOfCopyableGroupsFromPrototype( prototype ) );
 
   return _.workpiece.fieldsOfCopyableGroupsFromPrototype( prototype );
 }
@@ -718,7 +718,7 @@ function fieldsOfTightGroups( src )
   _.assert( arguments.length === 1, 'Expects single argument' );
 
   if( _.instanceIs( src ) )
-  return _.mapOnly( src, _.workpiece.fieldsOfTightGroupsFromPrototype( prototype ) );
+  return _.mapOnly_( null, src, _.workpiece.fieldsOfTightGroupsFromPrototype( prototype ) );
 
   return _.workpiece.fieldsOfTightGroupsFromPrototype( prototype );
 }
@@ -737,7 +737,7 @@ function fieldsOfInputGroups( src )
   _.assert( arguments.length === 1, 'Expects single argument' );
 
   if( _.instanceIs( src ) )
-  return _.mapOnly( src, _.workpiece.fieldsOfInputGroupsFromPrototype( prototype ) );
+  return _.mapOnly_( null, src, _.workpiece.fieldsOfInputGroupsFromPrototype( prototype ) );
 
   return _.workpiece.fieldsOfInputGroupsFromPrototype( prototype );
 }
@@ -808,7 +808,7 @@ function fieldsGroupsDeclareForEachFilter( o )
 
   _.assert( arguments.length === 1 );
   _.assertRoutineOptions( fieldsGroupsDeclareForEachFilter, arguments );
-  _.assertMapHasNoUndefine( o );
+  _.map.assertHasNoUndefine( o );
 
   let oldFieldsGroups = _.workpiece.fieldsGroupsGet( o.dstPrototype );
   let newFieldsGroups = Object.create( oldFieldsGroups )
@@ -936,7 +936,7 @@ function construct( cls, context, args )
 
 function isFinited( src )
 {
-  _.assert( _.instanceIs( src ), () => 'Expects instance, but got ' + _.entity.exportStringShort( src ) )
+  _.assert( _.instanceIs( src ), () => 'Expects instance, but got ' + _.entity.exportStringShallow( src ) )
   _.assert( !_.primitiveIs( src ) );
   return Object.isFrozen( src );
 }
@@ -977,7 +977,7 @@ function finit( src )
  * @param {object} instance - instance to complement.
  *
  * @example
- * let Self = Alpha;
+ * const Self = Alpha;
 function Alpha( o ) { };
  *
  * let Proto = { constructor: Self, Composes : { a : 1, b : 2 } };
@@ -1283,7 +1283,7 @@ function assertDoesNotHaveReduntantFields( src )
   let Restricts = src.Restricts || Object.create( null );
 
   _.assert( _.ojbectIs( src ) )
-  _.assertMapOwnOnly( src, [ Composes, Aggregates, Associates, Restricts ] );
+  _.map.assertOwnOnly( src, [ Composes, Aggregates, Associates, Restricts ] );
 
   return dst;
 }
@@ -1321,7 +1321,7 @@ function exportStructure( self, ... args )
     {
       if( it.src === self )
       {
-        it.src = _.mapOnly( it.src, it.src.Export || it.src.Import );
+        it.src = _.mapOnly_( null, it.src, it.src.Export || it.src.Import );
         it.iterable = _.looker.Looker.containerNameToIdMap.aux;
         // it.iterable = _.looker.containerNameToIdMap.aux;
       }

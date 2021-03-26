@@ -45,12 +45,12 @@
 
 */
 
-let Self = _global_.wTools;
-let _global = _global_;
-let _ = _global_.wTools;
+const Self = _global_.wTools;
+const _global = _global_;
+const _ = _global_.wTools;
 
-let _ObjectHasOwnProperty = Object.hasOwnProperty;
-let _ObjectPropertyIsEumerable = Object.propertyIsEnumerable;
+const _ObjectHasOwnProperty = Object.hasOwnProperty;
+const _ObjectPropertyIsEumerable = Object.propertyIsEnumerable;
 let _nameFielded = _.nameFielded;
 
 _.assert( _.objectIs( _.property ), 'wProto needs Tools/wtools/abase/l1/FieldMapper.s' );

@@ -14,8 +14,8 @@ if( typeof module !== 'undefined' )
 
 }
 
-let _global = _global_;
-let _ = _global_.wTools;
+const _global = _global_;
+const _ = _global_.wTools;
 
 // --
 // accessor
@@ -875,7 +875,7 @@ function getterToValueDefine( test )
     'enumerable' : true,
     'configurable' : true
   }
-  test.identical( _.mapBut( _.property.descriptorOf( object, '_' ).descriptor, [ 'value' ] ), exp );
+  test.identical( _.mapBut_( null, _.property.descriptorOf( object, '_' ).descriptor, [ 'value' ] ), exp );
   var exp =
   {
     'a' : 'a1',
@@ -902,7 +902,7 @@ function getterToValueDefine( test )
   test.identical( object.a, exp.a );
   test.identical( object.b, exp.b );
   var exp = { 'writable' : false, 'enumerable' : false, 'configurable' : false }
-  test.identical( _.mapBut( _.property.descriptorOf( object, '_' ).descriptor, [ 'value' ] ), exp );
+  test.identical( _.mapBut_( null, _.property.descriptorOf( object, '_' ).descriptor, [ 'value' ] ), exp );
 
   /* */
 
@@ -932,7 +932,7 @@ function getterToValueDefine( test )
     'enumerable' : true,
     'configurable' : false,
   }
-  test.identical( _.mapBut( _.property.descriptorOf( object, '_' ).descriptor, [ 'value' ] ), exp );
+  test.identical( _.mapBut_( null, _.property.descriptorOf( object, '_' ).descriptor, [ 'value' ] ), exp );
   var exp =
   {
     'a' : 'a1',
@@ -966,7 +966,7 @@ function getterToValueDefine( test )
     'enumerable' : true,
     'configurable' : false,
   }
-  test.identical( _.mapBut( _.property.descriptorOf( object, '_' ).descriptor, [ 'value' ] ), exp );
+  test.identical( _.mapBut_( null, _.property.descriptorOf( object, '_' ).descriptor, [ 'value' ] ), exp );
 
   /* */
 
@@ -996,7 +996,7 @@ function getterToValueDefine( test )
     'enumerable' : true,
     'configurable' : true,
   }
-  test.identical( _.mapBut( _.property.descriptorOf( object, '_' ).descriptor, [ 'value' ] ), exp );
+  test.identical( _.mapBut_( null, _.property.descriptorOf( object, '_' ).descriptor, [ 'value' ] ), exp );
   var exp =
   {
     'a' : 'a1',
@@ -1027,7 +1027,7 @@ function getterToValueDefine( test )
   test.identical( object.a, exp.a );
   test.identical( object.b, exp.b );
   var exp = { 'writable' : false, 'enumerable' : false, 'configurable' : false };
-  test.identical( _.mapBut( _.property.descriptorOf( object, '_' ).descriptor, [ 'value' ] ), exp );
+  test.identical( _.mapBut_( null, _.property.descriptorOf( object, '_' ).descriptor, [ 'value' ] ), exp );
 
   /* */
 
@@ -1057,7 +1057,7 @@ function getterToValueDefine( test )
     'enumerable' : true,
     'configurable' : true
   }
-  test.identical( _.mapBut( _.property.descriptorOf( object, '_' ).descriptor, [ 'value' ] ), exp );
+  test.identical( _.mapBut_( null, _.property.descriptorOf( object, '_' ).descriptor, [ 'value' ] ), exp );
   var exp =
   {
     'a' : 'a1',
@@ -1088,7 +1088,7 @@ function getterToValueDefine( test )
   test.identical( object.a, exp.a );
   test.identical( object.b, exp.b );
   var exp = { 'writable' : false, 'enumerable' : false, 'configurable' : false };
-  test.identical( _.mapBut( _.property.descriptorOf( object, '_' ).descriptor, [ 'value' ] ), exp );
+  test.identical( _.mapBut_( null, _.property.descriptorOf( object, '_' ).descriptor, [ 'value' ] ), exp );
 
   /* */
 
@@ -1118,7 +1118,7 @@ function getterToValueDefine( test )
     'enumerable' : true,
     'configurable' : true
   }
-  test.identical( _.mapBut( _.property.descriptorOf( object, '_' ).descriptor, [ 'value' ] ), exp );
+  test.identical( _.mapBut_( null, _.property.descriptorOf( object, '_' ).descriptor, [ 'value' ] ), exp );
   var exp =
   {
     'a' : 'a1',
@@ -1149,7 +1149,7 @@ function getterToValueDefine( test )
   test.identical( object.a, exp.a );
   test.identical( object.b, exp.b );
   var exp = { 'writable' : false, 'enumerable' : false, 'configurable' : false };
-  test.identical( _.mapBut( _.property.descriptorOf( object, '_' ).descriptor, [ 'value' ] ), exp );
+  test.identical( _.mapBut_( null, _.property.descriptorOf( object, '_' ).descriptor, [ 'value' ] ), exp );
 
   /* */
 
@@ -1179,7 +1179,7 @@ function getterToValueDefine( test )
     'enumerable' : true,
     'configurable' : false
   }
-  test.identical( _.mapBut( _.property.descriptorOf( object, '_' ).descriptor, [ 'value' ] ), exp );
+  test.identical( _.mapBut_( null, _.property.descriptorOf( object, '_' ).descriptor, [ 'value' ] ), exp );
   var exp =
   {
     'a' : 'a1',
@@ -1217,7 +1217,7 @@ function getterToValueDefine( test )
     'enumerable' : true,
     'configurable' : false
   }
-  test.identical( _.mapBut( _.property.descriptorOf( object, '_' ).descriptor, [ 'value' ] ), exp );
+  test.identical( _.mapBut_( null, _.property.descriptorOf( object, '_' ).descriptor, [ 'value' ] ), exp );
 
   /* */
 
@@ -1258,7 +1258,7 @@ function getterToValueAccess( test )
     'enumerable' : true,
     'configurable' : true
   }
-  test.identical( _.mapBut( _.property.descriptorOf( object, '_' ).descriptor, [ 'value' ] ), exp );
+  test.identical( _.mapBut_( null, _.property.descriptorOf( object, '_' ).descriptor, [ 'value' ] ), exp );
 
   var exp =
   {
@@ -1304,7 +1304,7 @@ function getterToValueAccess( test )
     'configurable' : false,
     'writable' : false,
   }
-  test.identical( _.mapBut( _.property.descriptorOf( object, '_' ).descriptor, [ 'value' ] ), exp );
+  test.identical( _.mapBut_( null, _.property.descriptorOf( object, '_' ).descriptor, [ 'value' ] ), exp );
   test.identical( object.a, 'a1' );
   test.identical( object._.a, 'a1' );
   test.identical( object.b, 'b1' );
@@ -1388,7 +1388,7 @@ function getterToValueAccess( test )
     'enumerable' : true,
     'configurable' : true
   }
-  test.identical( _.mapBut( _.property.descriptorOf( object, '_' ).descriptor, [ 'value', 'set', 'get' ] ), exp );
+  test.identical( _.mapBut_( null, _.property.descriptorOf( object, '_' ).descriptor, [ 'value', 'set', 'get' ] ), exp );
   var exp =
   {
     'a' : 'a1',
@@ -1409,7 +1409,7 @@ function getterToValueAccess( test )
     'configurable' : false,
     'writable' : false,
   }
-  test.identical( _.mapBut( _.property.descriptorOf( object, '_' ).descriptor, [ 'value' ] ), exp );
+  test.identical( _.mapBut_( null, _.property.descriptorOf( object, '_' ).descriptor, [ 'value' ] ), exp );
   test.identical( object.a, 'a1' );
   test.identical( object._.a, 'a1' );
   test.identical( object.b, 'b1' );
@@ -1492,7 +1492,7 @@ function getterToValueAccess( test )
     'enumerable' : true,
     'configurable' : true
   }
-  test.identical( _.mapBut( _.property.descriptorOf( object, '_' ).descriptor, [ 'value' ] ), exp );
+  test.identical( _.mapBut_( null, _.property.descriptorOf( object, '_' ).descriptor, [ 'value' ] ), exp );
 
   var exp =
   {
@@ -1535,7 +1535,7 @@ function getterToValueAccess( test )
     'configurable' : false,
     'writable' : false,
   }
-  test.identical( _.mapBut( _.property.descriptorOf( object, '_' ).descriptor, [ 'value' ] ), exp );
+  test.identical( _.mapBut_( null, _.property.descriptorOf( object, '_' ).descriptor, [ 'value' ] ), exp );
   test.identical( object.a, undefined );
   test.identical( object._.a, undefined );
   test.identical( object.b, undefined );
@@ -1616,7 +1616,7 @@ function getterToValueAccess( test )
     'enumerable' : true,
     'configurable' : true
   }
-  test.identical( _.mapBut( _.property.descriptorOf( object, '_' ).descriptor, [ 'value', 'get', 'set' ] ), exp );
+  test.identical( _.mapBut_( null, _.property.descriptorOf( object, '_' ).descriptor, [ 'value', 'get', 'set' ] ), exp );
   var exp =
   {
     'a' : undefined,
@@ -1634,7 +1634,7 @@ function getterToValueAccess( test )
     'configurable' : false,
     'writable' : false,
   }
-  test.identical( _.mapBut( _.property.descriptorOf( object, '_' ).descriptor, [ 'value' ] ), exp );
+  test.identical( _.mapBut_( null, _.property.descriptorOf( object, '_' ).descriptor, [ 'value' ] ), exp );
   test.identical( object.a, undefined );
   test.identical( object._.a, undefined );
   test.identical( object.b, undefined );
@@ -2458,7 +2458,7 @@ function callable( test )
 // declare
 // --
 
-let Self =
+const Proto =
 {
 
   name : 'Tools.l3.proto.Accessor',
@@ -2494,7 +2494,7 @@ let Self =
 
 //
 
-Self = wTestSuite( Self );
+const Self = wTestSuite( Proto );
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );
 

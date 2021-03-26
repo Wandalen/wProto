@@ -2,9 +2,9 @@
 
 'use strict';
 
-let Self = _global_.wTools;
-let _global = _global_;
-let _ = _global_.wTools;
+const Self = _global_.wTools;
+const _global = _global_;
+const _ = _global_.wTools;
 
 // --
 // getter / setter functors
@@ -13,7 +13,7 @@ let _ = _global_.wTools;
 function setterMapCollection_functor( o )
 {
 
-  _.assertMapHasOnly( o, setterMapCollection_functor.defaults );
+  _.map.assertHasOnly( o, setterMapCollection_functor.defaults );
   _.assert( _.strIs( o.name ) );
   _.assert( _.routineIs( o.elementMaker ) );
   let symbol = Symbol.for( o.name );
@@ -198,7 +198,7 @@ function setterFriend_functor( o )
   _.assert( _.strIs( name ) );
   _.assert( _.strIs( friendName ) );
   _.assert( _.routineIs( maker ), 'Expects maker {-o.maker-}' );
-  _.assertMapHasOnly( o, setterFriend_functor.defaults );
+  _.map.assertHasOnly( o, setterFriend_functor.defaults );
 
   return function setterFriend( src )
   {
@@ -266,7 +266,7 @@ function setterCopyable_functor( o )
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.strIs( name ) );
   _.assert( _.routineIs( maker ) );
-  _.assertMapHasOnly( o, setterCopyable_functor.defaults );
+  _.map.assertHasOnly( o, setterCopyable_functor.defaults );
 
   return function setterCopyable( data )
   {
