@@ -175,7 +175,7 @@ function mixinApply( mixinDescriptor, dstPrototype )
   if( !_ObjectHasOwnProperty.call( dstPrototype, '_mixinsMap' ) )
   {
     dstPrototype._mixinsMap = Object.create( dstPrototype._mixinsMap || null );
-    _.property.hide( dstPrototype, '_mixinsMap' );
+    _.property.conceal( dstPrototype, '_mixinsMap' );
   }
 
   _.assert

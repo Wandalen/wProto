@@ -31,7 +31,7 @@ function common( src )
   // definition.toVal = function get() { debugger; return this.val }
   definition.toVal = function get( val ) { return val }
 
-  _.property.hide( definition, 'toVal' );
+  _.property.conceal( definition, 'toVal' );
 
   Object.freeze( definition );
   return definition;
@@ -60,7 +60,7 @@ function own( src )
   definition.toVal = function get( val ) { return _.cloneJust( val ) };
   // definition.toVal = function get( val ) { return _.cloneDeep( val ) }; /* xxx0 : use replicator */
 
-  _.property.hide( definition, 'toVal' );
+  _.property.conceal( definition, 'toVal' );
 
   Object.freeze( definition );
   return definition;
@@ -89,7 +89,7 @@ function instanceOf( src )
   // definition.toVal = function get() { return new this.val() };
   definition.toVal = function get( val ) { return new val() };
 
-  _.property.hide( definition, 'toVal' );
+  _.property.conceal( definition, 'toVal' );
 
   Object.freeze( definition );
   return definition;
@@ -118,7 +118,7 @@ function makeWith( src )
   // definition.toVal = function get() { return this.val() }
   definition.toVal = function get( val ) { return val() };
 
-  _.property.hide( definition, 'toVal' );
+  _.property.conceal( definition, 'toVal' );
 
   Object.freeze( definition );
   return definition;
@@ -162,7 +162,7 @@ function contained( src )
     return result;
   }
 
-  _.property.hide( definition, 'toVal' );
+  _.property.conceal( definition, 'toVal' );
   Object.freeze( definition );
   _.assert( definition.val !== undefined );
   return definition;
@@ -193,7 +193,7 @@ function accessor( o )
   _.assert( arguments.length === 1 );
 
   let definition = new _.Definition( o );
-  _.property.hide( definition, 'constructionAmend' );
+  _.property.conceal( definition, 'constructionAmend' );
   _.assert( definition.val !== undefined );
   return definition;
 
