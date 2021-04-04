@@ -1,54 +1,24 @@
 {
-  "name": "wProto",
-  "version": "0.4.344",
-  "engine": "node >= 10.0.0",
-  "description": "Relations module. Collection of cross-platform routines to define classes and relations between them. Proto leverages multiple inheritances, mixins, accessors, fields groups defining, introspection and more. Use it as a skeleton of the application.",
-  "author": "Kostiantyn Wandalen <wanalen@01.school>",
-  "license": "MIT",
-  "contributors": [
-    {
-      "name": "Kostiantyn Wandalen",
-      "email": "wanalen@01.school"
-    },
-    {
-      "name": "Volodymyr M.",
-      "email": "volodymyr.migdal@gmail.com"
-    }
+  "name" : "wProto",
+  "version" : "0.4.345",
+  "engine" : "node >= 10.0.0",
+  "description" : "Relations module. Collection of cross-platform routines to define classes and relations between them. Proto leverages multiple inheritances, mixins, accessors, fields groups defining, introspection and more. Use it as a skeleton of the application.",
+  "author" : "Kostiantyn Wandalen <wanalen@01.school>",
+  "license" : "MIT",
+  "contributors" :
+  [
+    { "name" : "Kostiantyn Wandalen", "email" : "wanalen@01.school" },
+    { "name" : "Volodymyr M.", "email" : "volodymyr.migdal@gmail.com" }
   ],
-  "main": "proto/wtools/abase/l3_proto/Include.s",
-  "files": [
-    "proto/wtools/abase/l3_proto",
-    "proto/wtools/Tools.s",
-    "out",
-    "proto/node_modules"
-  ],
-  "scripts": {
-    "test": "wtest .run 'proto/**' rapidity:-1",
-    "docgen": "wdocgen proto"
+  "main" : "proto/node_modules/wProto",
+  "files" : [ "proto/wtools/abase/l3_proto", "proto/wtools/Tools.s", "out", "proto/node_modules" ],
+  "scripts" : { "test" : "wtest .run 'proto/**' rapidity:-1", "docgen" : "wdocgen proto" },
+  "repository" : { "type" : "git", "url" : "https://github.com/Wandalen/wProto.git" },
+  "bugs" :
+  {
+    "url" : "https://github.com/Wandalen/wProto/issues"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Wandalen/wProto.git"
-  },
-  "bugs": {
-    "url": "https://github.com/Wandalen/wProto/issues"
-  },
-  "dependencies": {
-    "wTools": "delta",
-    "wblueprint": "delta"
-  },
-  "devDependencies": {
-    "eslint": "7.1.0",
-    "wTesting": "delta",
-    "wequaler": "delta"
-  },
-  "keywords": [
-    "wTools",
-    "wProto",
-    "mixin",
-    "Class",
-    "Object",
-    "Prototype",
-    "Incapsulation"
-  ]
+  "dependencies" : { "wTools" : "delta", "wblueprint" : "delta" },
+  "devDependencies" : { "wequaler" : "delta", "wTesting" : "delta" },
+  "keywords" : [ "wTools", "wProto", "mixin", "Class", "Object", "Prototype", "Incapsulation" ]
 }
