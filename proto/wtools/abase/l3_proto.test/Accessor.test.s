@@ -1774,7 +1774,7 @@ function putterSymbol( test )
 
 function classDeclare( test )
 {
-  var context = this;
+  let context = this;
 
   /* */
 

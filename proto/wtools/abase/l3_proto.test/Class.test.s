@@ -23,7 +23,7 @@ const _ = _global_.wTools;
 
 function classDeclare( test )
 {
-  var context = this;
+  let context = this;
 
   /* */
 

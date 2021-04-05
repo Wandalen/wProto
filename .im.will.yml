@@ -80,8 +80,8 @@ path:
       raw: compiled
       content: prime
   npm.proto.entry:
-    - /pro/module/wProto/proto/wtools/abase/l3_proto/Include.s
-    - /pro/module/wProto/proto/node_modules/wProto
+    - proto/wtools/abase/l3_proto/Include.s
+    - proto/node_modules/wProto
 reflector:
   reflect.proto:
     inherit: predefined.*
