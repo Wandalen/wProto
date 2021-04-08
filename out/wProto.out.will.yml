@@ -1548,6 +1548,4 @@ module:
       ../.im.will.yml:
         hash: b9e0f52be2400d8db79becd3b7563ec9
         size: 5033
-      wProto.out.will.yml:
-        hash: af166992e1d815d29c024c22fb43b4cf
-        size: 39956
+      wProto.out.will.yml: *ref_0
