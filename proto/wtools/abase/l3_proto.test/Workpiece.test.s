@@ -146,11 +146,11 @@ function instanceLikeStandard( test )
   test.identical( got, false );
 
   test.case = 'check empty arguments array';
-  var got = _.workpiece.instanceLikeStandard( _.argumentsArrayMake( [] ) );
+  var got = _.workpiece.instanceLikeStandard( _.argumentsArray.make( [] ) );
   test.identical( got, false );
 
   test.case = 'check empty unroll';
-  var got = _.workpiece.instanceLikeStandard( _.unrollMake( [] ) );
+  var got = _.workpiece.instanceLikeStandard( _.unroll.make( [] ) );
   test.identical( got, false );
 
   test.case = 'check empty map';
@@ -305,7 +305,7 @@ const Proto =
   tests :
   {
 
-    // checker
+    // dichotomy
 
     prototypeIs,
     prototypeIsStandard,

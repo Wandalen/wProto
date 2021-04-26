@@ -41,7 +41,7 @@ function like()
     {
       // debugger;
       _.assert( arguments.length === 1, 'Expects single argument' );
-      _.mapExtend( this, o );
+      _.props.extend( this, o );
       return this;
     }
   });
@@ -67,7 +67,7 @@ function like()
       Object.preventExtensions( this );
 
       if( o )
-      _.mapExtend( this, o );
+      _.props.extend( this, o );
 
       return this;
     }
@@ -116,7 +116,7 @@ function like()
   Object.freeze( helper );
 
   if( arguments.length > 0 )
-  _.mapExtend.apply( _, Array.prototype.concat.apply( [ proto ], arguments ) );
+  _.props.extend.apply( _, Array.prototype.concat.apply( [ proto ], arguments ) );
 
   return helper;
 }
@@ -134,7 +134,7 @@ function name( src )
 function also( src )
 {
   _.assert( arguments.length === 1, 'Expects single argument' );
-  _.mapExtend( this.proto, src );
+  _.props.extend( this.proto, src );
   return this;
 }
 
@@ -197,7 +197,7 @@ const LconstructionExtension =
 
 _.assert( !_.lconstruction );
 _.lconstruction = Object.create( null );
-_.mapExtend( _.lconstruction, LconstructionExtension );
+_.props.extend( _.lconstruction, LconstructionExtension );
 
 // --
 // declare
@@ -208,7 +208,7 @@ const ToolsExtension =
   like,
 }
 
-_.mapExtend( _, ToolsExtension );
+_.props.extend( _, ToolsExtension );
 
 // --
 // declare

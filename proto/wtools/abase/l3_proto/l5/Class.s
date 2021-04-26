@@ -8,10 +8,10 @@ const _ = _global_.wTools;
 
 const _ObjectHasOwnProperty = Object.hasOwnProperty;
 const _ObjectPropertyIsEumerable = Object.propertyIsEnumerable;
-let _nameFielded = _.nameFielded;
+// let _nameFielded = _.nameFielded;
 
-_.assert( _.objectIs( _.property ), 'wProto needs Tools/wtools/abase/l1/FieldMapper.s' );
-_.assert( _.routineIs( _nameFielded ), 'wProto needs Tools/wtools/l3/NameTools.s' );
+_.assert( _.objectIs( _.props ), 'wProto needs Tools/wtools/abase/l1/FieldMapper.s' );
+// _.assert( _.routineIs( _nameFielded ), 'wProto needs Tools/wtools/l3/NameTools.s' );
 
 // --
 // mixin
@@ -36,7 +36,7 @@ function _mixinDelcare( o )
   _.assert( _.objectIs( o.supplementOwn ) || o.supplementOwn === undefined || o.supplementOwn === null );
   _.assert( _.objectIs( o.supplement ) || o.supplement === undefined || o.supplement === null );
   _.assertOwnNoConstructor( o );
-  _.routineOptions( _mixinDelcare, o );
+  _.routine.options_( _mixinDelcare, o );
 
   o.mixin = function mixin( dstClass )
   {
@@ -175,7 +175,7 @@ function mixinApply( mixinDescriptor, dstPrototype )
   if( !_ObjectHasOwnProperty.call( dstPrototype, '_mixinsMap' ) )
   {
     dstPrototype._mixinsMap = Object.create( dstPrototype._mixinsMap || null );
-    _.property.conceal( dstPrototype, '_mixinsMap' );
+    _.props.conceal( dstPrototype, '_mixinsMap' );
   }
 
   _.assert
@@ -250,7 +250,7 @@ function mixinHas( proto, mixin )
  *  {
  *    let self = this;
  *    Parent.prototype.init.call( this );
- *    _.mapExtendConditional( _.property.mapper.srcOwn(), self, Composes );
+ *    _.mapExtendConditional( _.props.mapper.srcOwn(), self, Composes );
  *  }
  *
  *  let Composes =
@@ -377,7 +377,7 @@ function classDeclare( o )
     _.assertOwnNoConstructor( o.supplement );
   }
 
-  _.routineOptions( classDeclare, o );
+  _.routine.options_( classDeclare, o );
 
   /* */
 
@@ -442,7 +442,7 @@ function classDeclare( o )
     _.assert( _.objectIs( prototype.Statics ) );
     _.map.assertHasAll( prototype.constructor, prototype.Statics );
     _.assert( prototype === o.cls.prototype );
-    _.assert( _ObjectHasOwnProperty.call( prototype, 'constructor' ), 'prototype should has own constructor' );
+    _.assert( _ObjectHasOwnProperty.call( prototype, 'constructor' ), 'prototype should own constructor' );
     _.assert( _.routineIs( prototype.constructor ), 'prototype should has own constructor' );
 
     /* mixin tracking */
@@ -473,7 +473,7 @@ function classDeclare( o )
   if( o.withMixin )
   {
 
-    let mixinOptions = _.mapExtend( null, o );
+    let mixinOptions = _.props.extend( null, o );
 
     _.assert( !o.usingPrimitiveExtension );
     _.assert( !o.usingOriginalPrototype );
@@ -490,11 +490,11 @@ function classDeclare( o )
     delete mixinOptions.onClassMakeEnd;
 
     if( mixinOptions.extend )
-    mixinOptions.extend = _.mapExtend( null, mixinOptions.extend );
+    mixinOptions.extend = _.props.extend( null, mixinOptions.extend );
     if( mixinOptions.supplement )
-    mixinOptions.supplement = _.mapExtend( null, mixinOptions.supplement );
+    mixinOptions.supplement = _.props.extend( null, mixinOptions.supplement );
     if( mixinOptions.supplementOwn )
-    mixinOptions.supplementOwn = _.mapExtend( null, mixinOptions.supplementOwn );
+    mixinOptions.supplementOwn = _.props.extend( null, mixinOptions.supplementOwn );
 
     mixinOptions.prototype = prototype; /* zzz : remove? */
 
@@ -633,7 +633,7 @@ function classExtend( o )
     _.assertOwnNoConstructor( o.supplement );
   }
 
-  _.routineOptions( classExtend, o );
+  _.routine.options_( classExtend, o );
 
   // _.assert( _.objectIs( o.prototype ) );
   _.assert( !_.primitiveIs( o.prototype ) && !_.routineIs( o.prototype ) );
@@ -655,7 +655,7 @@ function classExtend( o )
 
   /* */
 
-  let staticsOwn = _.property.onlyOwn( o.prototype.Statics );
+  let staticsOwn = _.props.onlyOwn( o.prototype.Statics );
   let staticsAll = staticsAllGet();
   let fieldsGroups = _.workpiece.fieldsGroupsGet( o.prototype );
 
@@ -673,12 +673,12 @@ to prioritize ordinary facets adjustment order should be
   /* static extend */
 
   if( o.extend && o.extend.Statics )
-  declareStaticsForMixin( o.extend.Statics, _.mapExtend );
+  declareStaticsForMixin( o.extend.Statics, _.props.extend.bind( _.props ) );
 
   /* ordinary extend */
 
   if( o.extend )
-  fieldsDeclare( _.mapExtend, o.extend );
+  fieldsDeclare( _.props.extend.bind( _.props ), o.extend );
 
   /* ordinary supplementOwn */
 
@@ -688,7 +688,7 @@ to prioritize ordinary facets adjustment order should be
   /* ordinary supplement */
 
   if( o.supplement )
-  fieldsDeclare( _.mapSupplement, o.supplement );
+  fieldsDeclare( _.props.supplement.bind( _.props ), o.supplement );
 
   /* static supplementOwn */
 
@@ -698,7 +698,7 @@ to prioritize ordinary facets adjustment order should be
   /* static supplement */
 
   if( o.supplement && o.supplement.Statics )
-  declareStaticsForMixin( o.supplement.Statics, _.mapSupplement );
+  declareStaticsForMixin( o.supplement.Statics, _.props.supplement.bind( _.props ) );
 
   /* primitive extend */
 
@@ -708,7 +708,7 @@ to prioritize ordinary facets adjustment order should be
     for( let f in _.DefaultFieldsGroupsRelations )
     if( f !== 'Statics' )
     if( _.mapOnlyOwnKey( o.prototype, f ) )
-    _.mapExtendConditional( _.property.mapper.srcOwnPrimitive(), o.prototype, o.prototype[ f ] );
+    _.mapExtendConditional( _.props.mapper.srcOwnPrimitive(), o.prototype, o.prototype[ f ] );
   }
 
   /* accessors */
@@ -783,7 +783,7 @@ to prioritize ordinary facets adjustment order should be
     {
       map = _.mapBut_( null, map, staticsOwn );
 
-      let keys = _.mapKeys( _.mapOnly_( null, map, Object.getPrototypeOf( o.prototype.Statics ) ) );
+      let keys = _.props.keys( _.mapOnly_( null, map, Object.getPrototypeOf( o.prototype.Statics ) ) );
       if( keys.length )
       {
         _.assert( 0, 'attempt to extend static field', keys );
@@ -818,13 +818,13 @@ to prioritize ordinary facets adjustment order should be
 
   function staticsAllGet()
   {
-    let staticsAll = _.mapExtend( null, o.prototype.Statics );
+    let staticsAll = _.props.extend( null, o.prototype.Statics );
     if( o.supplement && o.supplement.Statics )
-    _.mapSupplement( staticsAll, o.supplement.Statics );
+    _.props.supplement( staticsAll, o.supplement.Statics );
     if( o.supplementOwn && o.supplementOwn.Statics )
     _.mapExtendDstNotOwn( staticsAll, o.supplementOwn.Statics );
     if( o.extend && o.extend.Statics )
-    _.mapExtend( staticsAll, o.extend.Statics );
+    _.props.extend( staticsAll, o.extend.Statics );
     return staticsAll;
   }
 
@@ -898,18 +898,18 @@ function staticDeclare( o )
 
   if( _.definitionIs( o.value ) )
   {
-    _.mapExtend( o, o.value.toVal( o.value.val ) );
+    _.props.extend( o, o.value.toVal( o.value.val ) );
   }
 
-  _.routineOptions( staticDeclare, arguments );
+  _.routine.options_( staticDeclare, arguments );
   _.assert( _.strIs( o.name ) );
   _.assert( arguments.length === 1 );
 
   if( !o.fieldsOfRelationsGroups )
   o.fieldsOfRelationsGroups = _.workpiece.fieldsOfRelationsGroupsFromPrototype( o.prototype );
 
-  let pd = _.property.descriptorOf( o.prototype, o.name );
-  let cd = _.property.descriptorOf( o.prototype.constructor, o.name );
+  let pd = _.props.descriptorOf( o.prototype, o.name );
+  let cd = _.props.descriptorOf( o.prototype.constructor, o.name );
 
   if( pd.object !== o.prototype )
   pd.descriptor = null;
@@ -1099,8 +1099,8 @@ let Routines =
 
 //
 
-_.mapExtend( _, Routines );
-_.mapExtend( _, Fields );
+_.props.extend( _, Routines );
+_.props.extend( _, Fields );
 
 // --
 // export

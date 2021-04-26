@@ -207,10 +207,10 @@ function classDeclare( test )
     o.Extension = Extend1;
 
     if( !o.keys )
-    o.keys = _.mapKeys( o.Statics );
+    o.keys = _.props.keys( o.Statics );
 
     if( !o.vals )
-    o.vals = _.mapVals( o.Statics );
+    o.vals = _.props.vals( o.Statics );
 
     var C0proto = null;
     if( !o.Class0 )
@@ -285,8 +285,8 @@ function classDeclare( test )
     test.true( o.Statics !== o.Class.prototype.Statics );
     test.true( o.Statics !== c1a.Statics );
 
-    test.identical( _.mapKeys( c1a.Statics ), o.keys );
-    test.identical( _.mapVals( c1a.Statics ), o.vals );
+    test.identical( _.props.keys( c1a.Statics ), o.keys );
+    test.identical( _.props.vals( c1a.Statics ), o.vals );
     test.identical( o.Class.Statics, undefined );
 
     if( !C0proto )

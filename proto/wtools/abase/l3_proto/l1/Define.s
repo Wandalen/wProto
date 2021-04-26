@@ -31,7 +31,7 @@ function common( src )
   // definition.toVal = function get() { debugger; return this.val }
   definition.toVal = function get( val ) { return val }
 
-  _.property.conceal( definition, 'toVal' );
+  _.props.conceal( definition, 'toVal' );
 
   Object.freeze( definition );
   return definition;
@@ -58,9 +58,9 @@ function own( src )
   _.assert( definition.val !== undefined );
 
   definition.toVal = function get( val ) { return _.cloneJust( val ) };
-  // definition.toVal = function get( val ) { return _.cloneDeep( val ) }; /* xxx0 : use replicator */
+  // definition.toVal = function get( val ) { return _.entity.cloneDeep( val ) }; /* xxx0 : use replicator */
 
-  _.property.conceal( definition, 'toVal' );
+  _.props.conceal( definition, 'toVal' );
 
   Object.freeze( definition );
   return definition;
@@ -89,7 +89,7 @@ function instanceOf( src )
   // definition.toVal = function get() { return new this.val() };
   definition.toVal = function get( val ) { return new val() };
 
-  _.property.conceal( definition, 'toVal' );
+  _.props.conceal( definition, 'toVal' );
 
   Object.freeze( definition );
   return definition;
@@ -118,7 +118,7 @@ function makeWith( src )
   // definition.toVal = function get() { return this.val() }
   definition.toVal = function get( val ) { return val() };
 
-  _.property.conceal( definition, 'toVal' );
+  _.props.conceal( definition, 'toVal' );
 
   Object.freeze( definition );
   return definition;
@@ -150,19 +150,19 @@ function contained( src )
   if( o.shallowCloning )
   definition.toVal = function get( val )
   {
-    let result = _.mapExtend( null, container );
+    let result = _.props.extend( null, container );
     result.value = _.entity.make( val );
     return result;
   }
   else
   definition.toVal = function get( val )
   {
-    let result = _.mapExtend( null, container );
+    let result = _.props.extend( null, container );
     result.value = val;
     return result;
   }
 
-  _.property.conceal( definition, 'toVal' );
+  _.props.conceal( definition, 'toVal' );
   Object.freeze( definition );
   _.assert( definition.val !== undefined );
   return definition;
@@ -182,7 +182,7 @@ function accessor( o )
   if( _.routineIs( o ) )
   o = { routine : arguments[ 0 ] }
 
-  _.routineOptions( accessor, o );
+  _.routine.options_( accessor, o );
 
   o.defGroup = 'definition.named';
   o.subKind = 'accessor';
@@ -193,7 +193,7 @@ function accessor( o )
   _.assert( arguments.length === 1 );
 
   let definition = new _.Definition( o );
-  _.property.conceal( definition, 'constructionAmend' );
+  _.props.conceal( definition, 'constructionAmend' );
   _.assert( definition.val !== undefined );
   return definition;
 
@@ -215,7 +215,7 @@ function accessor( o )
   //
   //   let args = []
   //   for( let i = 0 ; i < o.val.length ; i++ )
-  //   args[ i ] = _.make( o.val[ i ] );
+  //   args[ i ] = _.entity.cloneShallow( o.val[ i ] );
   //   let o2;
   //   if( o.routine.head )
   //   {
@@ -320,7 +320,7 @@ function getter( o )
   if( _.routineIs( o ) )
   o = { routine : arguments[ 0 ] }
 
-  _.routineOptions( getter, o );
+  _.routine.options_( getter, o );
 
   o.get = null;
   o.put = false;
@@ -343,7 +343,7 @@ function setter( o )
   if( _.routineIs( o ) )
   o = { routine : arguments[ 0 ] }
 
-  _.routineOptions( setter, o );
+  _.routine.options_( setter, o );
 
   o.get = false;
   o.put = null;
@@ -366,7 +366,7 @@ function putter( o )
   if( _.routineIs( o ) )
   o = { routine : arguments[ 0 ] }
 
-  _.routineOptions( putter, o );
+  _.routine.options_( putter, o );
 
   o.get = false;
   o.set = false;
@@ -410,7 +410,7 @@ let DefineExtension =
 }
 
 _.define = _.define || Object.create( null );
-_.mapExtend( _.define, DefineExtension );
+_.props.extend( _.define, DefineExtension );
 
 //
 
@@ -426,7 +426,7 @@ let DefinitionExtension =
 }
 
 _.definition = _.definition || Object.create( null );
-_.mapExtend( _.definition, DefinitionExtension );
+_.props.extend( _.definition, DefinitionExtension );
 _.assert( _.routineIs( _.definitionIs ) );
 _.assert( _.definition.is === _.definitionIs );
 
@@ -436,7 +436,7 @@ let ToolsExtension =
 {
 }
 
-_.mapExtend( _, ToolsExtension );
+_.props.extend( _, ToolsExtension );
 
 // --
 // export

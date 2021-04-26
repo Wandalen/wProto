@@ -40,7 +40,7 @@ function basic( test )
 //     End : function End(){ return 'End' },
 //     Str : 'Str',
 //   }
-//   var container = _.mapExtend( function(){}, _container );
+//   var container = _.props.extend( function(){}, _container );
 //
 //   var alias = ( originalName ) => _.accessor.define.getter.alias({ originalName, container : container });
 //   var blueprint =
@@ -56,7 +56,7 @@ function basic( test )
 //
 //   test.true( _.mapIs( map ) );
 //   test.true( _.mapIsPure( map ) );
-//   test.identical( _.mapKeys( map ), [ 'begin', 'end', 'str', 'container1', 'f1' ] );
+//   test.identical( _.props.keys( map ), [ 'begin', 'end', 'str', 'container1', 'f1' ] );
 //   test.identical( map.begin, container.Begin );
 //   test.identical( map.str, container.Str );
 //   test.true( _.routineIs( map.begin ) );
@@ -94,7 +94,7 @@ function basic( test )
 //     End : function End(){ return 'End' },
 //     Str : 'Str',
 //   }
-//   var container = _.mapExtend( function(){}, _container );
+//   var container = _.props.extend( function(){}, _container );
 //
 //   var alias = ( originalName ) => _.accessor.define.setter.alias({ originalName, container : container });
 //   var blueprint =
@@ -110,7 +110,7 @@ function basic( test )
 //
 //   test.true( _.mapIs( map ) );
 //   test.true( _.mapIsPure( map ) );
-//   test.identical( _.mapKeys( map ), [ 'begin', 'end', 'str', 'container1', 'f1' ] );
+//   test.identical( _.props.keys( map ), [ 'begin', 'end', 'str', 'container1', 'f1' ] );
 //   // test.identical( map.begin, undefined );
 //   // test.identical( map.str, undefined );
 //   test.shouldThrowErrorSync( () => map.begin );
@@ -148,7 +148,7 @@ function basic( test )
 //     End : function End(){ return 'End' },
 //     Str : 'Str',
 //   }
-//   var container = _.mapExtend( function(){}, _container );
+//   var container = _.props.extend( function(){}, _container );
 //
 //   var alias = ( originalName ) => _.accessor.define.suite.alias({ originalName, container : container });
 //   var blueprint =
@@ -164,7 +164,7 @@ function basic( test )
 //
 //   test.true( _.mapIs( map ) );
 //   test.true( _.mapIsPure( map ) );
-//   test.identical( _.mapKeys( map ), [ 'begin', 'end', 'str', 'container1', 'f1' ] );
+//   test.identical( _.props.keys( map ), [ 'begin', 'end', 'str', 'container1', 'f1' ] );
 //   test.identical( map.begin, container.Begin );
 //   test.identical( map.str, container.Str );
 //   test.true( _.routineIs( map.begin ) );

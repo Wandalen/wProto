@@ -75,7 +75,7 @@ function setterArrayCollection_functor( o )
   if( _.strIs( arguments[ 0 ] ) )
   o = { name : arguments[ 0 ] }
 
-  _.routineOptions( setterArrayCollection_functor, o );
+  _.routine.options_( setterArrayCollection_functor, o );
   _.assert( _.strIs( o.name ) );
   _.assert( arguments.length === 1 );
   _.assert( _.routineIs( o.elementMaker ) || o.elementMaker === null );
@@ -164,7 +164,7 @@ function setterOwn_functor( op )
 {
   let symbol = Symbol.for( op.name );
 
-  _.routineOptions( setterOwn_functor, arguments );
+  _.routine.options_( setterOwn_functor, arguments );
 
   return function ownSet( src )
   {
@@ -338,7 +338,7 @@ function setterBufferFrom_functor( o )
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.strIs( name ) );
   _.assert( _.routineIs( bufferConstructor ) );
-  _.routineOptions( setterBufferFrom_functor, o );
+  _.routine.options_( setterBufferFrom_functor, o );
 
   return function setterBufferFrom( data )
   {
@@ -374,7 +374,7 @@ function setterChangesTracking_functor( o )
   let nameOfChangeFlag = Symbol.for( _.nameUnfielded( o.nameOfChangeFlag ).coded );
 
   _.assert( arguments.length === 1, 'Expects single argument' );
-  _.routineOptions( setterChangesTracking_functor, o );
+  _.routine.options_( setterChangesTracking_functor, o );
 
   throw _.err( 'not tested' );
 
@@ -420,7 +420,7 @@ function toElementSet_functor( o )
   _.assert( _.strIs( o.name ) );
   _.assert( _.strIs( o.storageName ) );
   _.assert( _.numberIs( o.index ) );
-  _.routineOptions( toElementSet_functor, o );
+  _.routine.options_( toElementSet_functor, o );
 
   debugger;
 
@@ -451,7 +451,7 @@ toElementSet_functor.defaults =
 
 function symbolPut_functor( o )
 {
-  o = _.routineOptions( symbolPut_functor, arguments );
+  o = _.routine.options_( symbolPut_functor, arguments );
   let symbol = Symbol.for( o.propName );
   return function put( val )
   {
@@ -478,7 +478,7 @@ function toElementGet_functor( o )
   _.assert( _.strIs( o.name ) );
   _.assert( _.strIs( o.storageName ) );
   _.assert( _.numberIs( o.index ) );
-  _.routineOptions( toElementGet_functor, o );
+  _.routine.options_( toElementGet_functor, o );
 
   debugger;
 
@@ -509,7 +509,7 @@ function withSymbolGet_functor( o ) /* xxx : deprecate in favor of toValueGet_fu
 {
 
   _.assert( arguments.length === 1, 'Expects single argument' );
-  _.routineOptions( withSymbolGet_functor, o );
+  _.routine.options_( withSymbolGet_functor, o );
   _.assert( _.strDefined( o.propName ) );
 
   let spaceName = o.propName;
@@ -603,7 +603,7 @@ function toStructureGet_functor( o ) /* xxx : deprecate in favor of toValueGet_f
 {
 
   _.assert( arguments.length === 1, 'Expects single argument' );
-  _.routineOptions( toStructureGet_functor, o );
+  _.routine.options_( toStructureGet_functor, o );
   _.assert( _.strDefined( o.propName ) );
 
   let spaceName = o.propName;
@@ -737,7 +737,7 @@ toStructureGet_functor.identity = { 'accessor' : true, 'get' : true, 'functor' :
 function toValueGet_functor( o )
 {
 
-  _.routineOptions( toValueGet_functor, o );
+  _.routine.options_( toValueGet_functor, o );
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.strDefined( o.propName ) );
   _.assert( _.longHas( [ 'grab', 'get', 'suite' ], o.accessorKind ) );
@@ -939,7 +939,7 @@ function alias_head( routine, args )
   if( _.strIs( args[ 0 ] ) )
   o = { originalName : args[ 0 ] }
 
-  _.routineOptions( routine, o );
+  _.routine.options_( routine, o );
 
   _.assert( args.length === 1, 'Expects single argument' );
   _.assert( _.strIs( o.originalName ) );
@@ -954,7 +954,7 @@ function aliasSetter_functor_body( o )
   let container = o.container;
   let originalName = o.originalName;
 
-  _.assertRoutineOptions( aliasSetter_functor_body, arguments );
+  _.routine.assertOptions( aliasSetter_functor_body, arguments );
 
   if( _.strIs( container ) )
   return function aliasSet( src )
@@ -988,7 +988,7 @@ aliasSetter_functor_body.defaults =
   // propName : null,
 }
 
-let aliasSet_functor = _.routine.uniteCloning_( alias_head, aliasSetter_functor_body );
+let aliasSet_functor = _.routine.uniteCloning_replaceByUnite( alias_head, aliasSetter_functor_body );
 
 //
 
@@ -1009,7 +1009,7 @@ function aliasGet_functor_body( o )
   let originalName = o.originalName;
   // let aliasName = o.aliasName;
 
-  _.assertRoutineOptions( aliasGet_functor_body, arguments );
+  _.routine.assertOptions( aliasGet_functor_body, arguments );
 
   if( _.strIs( container ) )
   return function aliasGet( src )
@@ -1035,7 +1035,7 @@ function aliasGet_functor_body( o )
 
 aliasGet_functor_body.defaults = Object.create( aliasSet_functor.defaults );
 
-let aliasGetter_functor = _.routine.uniteCloning_( alias_head, aliasGet_functor_body );
+let aliasGetter_functor = _.routine.uniteCloning_replaceByUnite( alias_head, aliasGet_functor_body );
 
 //
 
@@ -1100,16 +1100,16 @@ let Suite =
 // --
 
 _.accessor.getter = _.accessor.getter || Object.create( null );
-_.mapExtend( _.accessor.getter, Getter );
+_.props.extend( _.accessor.getter, Getter );
 
 _.accessor.setter = _.accessor.setter || Object.create( null );
-_.mapExtend( _.accessor.setter, Setter );
+_.props.extend( _.accessor.setter, Setter );
 
 _.accessor.putter = _.accessor.putter || Object.create( null );
-_.mapExtend( _.accessor.putter, Putter );
+_.props.extend( _.accessor.putter, Putter );
 
 _.accessor.suite = _.accessor.suite || Object.create( null );
-_.mapExtend( _.accessor.suite, Suite );
+_.props.extend( _.accessor.suite, Suite );
 
 _.accessor.define.getter = _.accessor._DefinesGenerate( _.accessor.define.getter || null, _.accessor.getter, 'getter' );
 _.accessor.define.setter = _.accessor._DefinesGenerate( _.accessor.define.setter || null, _.accessor.setter, 'setter' );

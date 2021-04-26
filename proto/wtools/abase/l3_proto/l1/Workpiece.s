@@ -19,7 +19,7 @@ const _ = _global_.wTools;
 const _ObjectHasOwnProperty = Object.hasOwnProperty;
 const _ObjectPropertyIsEumerable = Object.propertyIsEnumerable;
 
-_.assert( _.objectIs( _.property ), 'wProto needs Tools/wtools/abase/l1/FieldMapper.s' );
+_.assert( _.objectIs( _.props ), 'wProto needs Tools/wtools/abase/l1/FieldMapper.s' );
 
 // --
 // prototype
@@ -291,12 +291,12 @@ function fieldsGroupDeclare( o )
 {
   o = o || Object.create( null );
 
-  _.routineOptions( fieldsGroupDeclare, o );
+  _.routine.options_( fieldsGroupDeclare, o );
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( o.srcMap === null || !_.primitiveIs( o.srcMap ), 'Expects object {-o.srcMap-}, got', _.entity.strType( o.srcMap ) );
   _.assert( _.strIs( o.fieldsGroupName ) );
   // _.assert( _.routineIs( o.filter ) && _.strIs( o.filter.functionFamily ) );
-  _.assert( _.property.transformerIs( o.filter ) );
+  _.assert( _.props.transformerIs( o.filter ) );
 
   _.workpiece.fieldsGroupFor( o.dstPrototype, o.fieldsGroupName );
 
@@ -311,7 +311,7 @@ fieldsGroupDeclare.defaults =
 {
   dstPrototype : null,
   srcMap : null,
-  filter : _.property.mapper.bypass(),
+  filter : _.props.mapper.bypass(),
   fieldsGroupName : null,
 }
 
@@ -344,7 +344,7 @@ function fieldsGroupComposesExtend( dstPrototype, srcMap )
     fieldsGroupName,
     dstPrototype,
     srcMap,
-    // filter : _.property.mapper.bypass(),
+    // filter : _.props.mapper.bypass(),
   });
 
 }
@@ -378,7 +378,7 @@ function fieldsGroupAggregatesExtend( dstPrototype, srcMap )
     fieldsGroupName,
     dstPrototype,
     srcMap,
-    // filter : _.property.mapper.bypass(),
+    // filter : _.props.mapper.bypass(),
   });
 
 }
@@ -412,7 +412,7 @@ function fieldsGroupAssociatesExtend( dstPrototype, srcMap )
     fieldsGroupName,
     dstPrototype,
     srcMap,
-    // filter : _.property.mapper.bypass(),
+    // filter : _.props.mapper.bypass(),
   });
 
 }
@@ -446,7 +446,7 @@ function fieldsGroupRestrictsExtend( dstPrototype, srcMap )
     fieldsGroupName,
     dstPrototype,
     srcMap,
-    // filter : _.property.mapper.bypass(),
+    // filter : _.props.mapper.bypass(),
   });
 
 }
@@ -480,7 +480,7 @@ function fieldsGroupComposesSupplement( dstPrototype, srcMap )
     fieldsGroupName,
     dstPrototype,
     srcMap,
-    filter : _.property.mapper.dstNotHas(),
+    filter : _.props.mapper.dstNotHas(),
   });
 
 }
@@ -514,7 +514,7 @@ function fieldsGroupAggregatesSupplement( dstPrototype, srcMap )
     fieldsGroupName,
     dstPrototype,
     srcMap,
-    filter : _.property.mapper.dstNotHas(),
+    filter : _.props.mapper.dstNotHas(),
   });
 
 }
@@ -548,7 +548,7 @@ function fieldsGroupAssociatesSupplement( dstPrototype, srcMap )
     fieldsGroupName,
     dstPrototype,
     srcMap,
-    filter : _.property.mapper.dstNotHas(),
+    filter : _.props.mapper.dstNotHas(),
   });
 
 }
@@ -582,7 +582,7 @@ function fieldsGroupRestrictsSupplement( dstPrototype, srcMap )
     fieldsGroupName,
     dstPrototype,
     srcMap,
-    filter : _.property.mapper.dstNotHas(),
+    filter : _.props.mapper.dstNotHas(),
   });
 
 }
@@ -601,7 +601,7 @@ function fieldsOfRelationsGroupsFromPrototype( src )
   for( let g in _.DefaultFieldsGroupsRelations )
   {
     if( src[ g ] )
-    _.mapExtend( result, src[ g ] );
+    _.props.extend( result, src[ g ] );
   }
 
   return result;
@@ -620,7 +620,7 @@ function fieldsOfCopyableGroupsFromPrototype( src )
   for( let g in _.DefaultFieldsGroupsCopyable )
   {
     if( src[ g ] )
-    _.mapExtend( result, src[ g ] );
+    _.props.extend( result, src[ g ] );
   }
 
   return result;
@@ -639,7 +639,7 @@ function fieldsOfTightGroupsFromPrototype( src )
   for( let g in _.DefaultFieldsGroupsTight )
   {
     if( src[ g ] )
-    _.mapExtend( result, src[ g ] );
+    _.props.extend( result, src[ g ] );
   }
 
   return result;
@@ -658,7 +658,7 @@ function fieldsOfInputGroupsFromPrototype( src )
   for( let g in _.DefaultFieldsGroupsInput )
   {
     if( src[ g ] )
-    _.mapExtend( result, src[ g ] );
+    _.props.extend( result, src[ g ] );
   }
 
   return result;
@@ -747,7 +747,7 @@ function fieldsOfInputGroups( src )
 function fieldsGroupsDeclare( o )
 {
 
-  _.routineOptions( fieldsGroupsDeclare, o );
+  _.routine.options_( fieldsGroupsDeclare, o );
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( o.srcMap === null || !_.primitiveIs( o.srcMap ), 'Expects object {-o.srcMap-}, got', _.entity.strType( o.srcMap ) );
 
@@ -807,7 +807,7 @@ function fieldsGroupsDeclareForEachFilter( o )
 {
 
   _.assert( arguments.length === 1 );
-  _.assertRoutineOptions( fieldsGroupsDeclareForEachFilter, arguments );
+  _.routine.assertOptions( fieldsGroupsDeclareForEachFilter, arguments );
   _.map.assertHasNoUndefine( o );
 
   let oldFieldsGroups = _.workpiece.fieldsGroupsGet( o.dstPrototype );
@@ -815,11 +815,11 @@ function fieldsGroupsDeclareForEachFilter( o )
   if( ( o.extendMap && o.extendMap.Groups ) || ( o.supplementOwnMap && o.supplementOwnMap.Groups ) || ( o.supplementMap && o.supplementMap.Groups ) )
   {
     if( o.supplementMap && o.supplementMap.Groups )
-    _.mapSupplement( newFieldsGroups, o.supplementMap.Groups );
+    _.props.supplement( newFieldsGroups, o.supplementMap.Groups );
     if( o.supplementOwnMap && o.supplementOwnMap.Groups )
     _.mapExtendDstNotOwn( newFieldsGroups, o.supplementOwnMap.Groups );
     if( o.extendMap && o.extendMap.Groups )
-    _.mapExtend( newFieldsGroups, o.extendMap.Groups );
+    _.props.extend( newFieldsGroups, o.extendMap.Groups );
   }
 
   if( !o.dstPrototype.Groups )
@@ -833,7 +833,7 @@ function fieldsGroupsDeclareForEachFilter( o )
     dstPrototype : o.dstPrototype,
     srcMap : o.extendMap,
     fieldsGroups : newFieldsGroups,
-    filter : _.property.mapper.bypass(),
+    filter : _.props.mapper.bypass(),
   });
 
   _.workpiece.fieldsGroupsDeclare
@@ -841,7 +841,7 @@ function fieldsGroupsDeclareForEachFilter( o )
     dstPrototype : o.dstPrototype,
     srcMap : o.supplementOwnMap,
     fieldsGroups : newFieldsGroups,
-    filter : _.property.mapper.dstOwn(),
+    filter : _.props.mapper.dstOwn(),
   });
 
   _.workpiece.fieldsGroupsDeclare
@@ -849,7 +849,7 @@ function fieldsGroupsDeclareForEachFilter( o )
     dstPrototype : o.dstPrototype,
     srcMap : o.supplementMap,
     fieldsGroups : newFieldsGroups,
-    filter : _.property.mapper.dstNotHas(),
+    filter : _.props.mapper.dstNotHas(),
   });
 
 }
@@ -886,7 +886,7 @@ function construct( cls, context, args )
   _.assert( args.length === 0 || args.length === 1 );
   _.assert( arguments.length === 3 );
   _.assert( _.routineIs( cls ) );
-  _.assert( _.arrayLike( args ) );
+  _.assert( _.argumentsArray.like( args ) );
 
   let o = args[ 0 ];
 
@@ -898,7 +898,7 @@ function construct( cls, context, args )
   }
   else
   {
-    if( args.length === 1 && _.arrayLike( args[ 0 ] ) )
+    if( args.length === 1 && _.argumentsArray.like( args[ 0 ] ) )
     {
       let result = [];
       for( let i = 0 ; i < args[ 0 ].length ; i++ )
@@ -1016,7 +1016,7 @@ function initFields( instance, prototype )
 function initWithArguments( o )
 {
 
-  o = _.routineOptions( initWithArguments, arguments );
+  o = _.routine.options_( initWithArguments, arguments );
   _.assert( arguments.length === 1 );
   _.assert( o.args.length === 0 || o.args.length === 1 );
   _.workpiece.initFields( o.instance );
@@ -1046,10 +1046,10 @@ function initExtending( instance, prototype )
   if( prototype === undefined )
   prototype = instance;
 
-  _.mapExtendConditional( _.property.mapper.assigning(), instance, prototype.Restricts );
-  _.mapExtendConditional( _.property.mapper.assigning(), instance, prototype.Composes );
-  _.mapExtendConditional( _.property.mapper.assigning(), instance, prototype.Aggregates );
-  _.mapExtend( instance, prototype.Associates );
+  _.mapExtendConditional( _.props.mapper.assigning(), instance, prototype.Restricts );
+  _.mapExtendConditional( _.props.mapper.assigning(), instance, prototype.Composes );
+  _.mapExtendConditional( _.props.mapper.assigning(), instance, prototype.Aggregates );
+  _.props.extend( instance, prototype.Associates );
 
   return instance;
 }
@@ -1059,7 +1059,7 @@ function initExtending( instance, prototype )
 function initFilter( o )
 {
 
-  _.routineOptions( initFilter, o );
+  _.routine.options_( initFilter, o );
   _.assertOwnNoConstructor( o );
   _.assert( _.routineIs( o.cls ) );
   _.assert( !o.args || o.args.length === 0 || o.args.length === 1 );
@@ -1080,7 +1080,7 @@ function initFilter( o )
   if( !result.original )
   result.original = _.FileProvider.Default();
 
-  _.mapExtend( result, o.extend );
+  _.props.extend( result, o.extend );
 
   Object.setPrototypeOf( result, result.original );
 
@@ -1125,7 +1125,7 @@ function from( srcs, cls )
     return srcs;
   }
 
-  if( _.arrayLike( srcs ) )
+  if( _.argumentsArray.like( srcs ) )
   {
     debugger;
     var result = _.map_( null, srcs, ( src ) =>
@@ -1292,7 +1292,7 @@ function assertDoesNotHaveReduntantFields( src )
 
 function exportStructure( self, ... args )
 {
-  let o = _.routineOptions( exportStructure, args );
+  let o = _.routine.options_( exportStructure, args );
 
   _.assert( _.instanceIs( self ) );
 
@@ -1356,7 +1356,7 @@ exportStructure.defaults =
 
 function exportString( self, ... args )
 {
-  let o = _.routineOptions( exportString, args );
+  let o = _.routine.options_( exportString, args );
 
   _.assert( _.instanceIs( self ) );
   _.assert( o.style === 'nice' );
@@ -1582,8 +1582,8 @@ let Routines =
 
 //
 
-_.mapExtend( Self, Routines );
-_.mapExtend( Self, Fields );
+_.props.extend( Self, Routines );
+_.props.extend( Self, Fields );
 
 // --
 // export

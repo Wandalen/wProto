@@ -58,7 +58,7 @@ const _ = _global_.wTools;
 function _register( o )
 {
 
-  _.routineOptions( _register, arguments );
+  _.routine.options_( _register, arguments );
   _.assert( _.workpiece.prototypeIsStandard( o.proto ), 'Expects formal prototype' );
   _.assert( _.strDefined( o.declaratorName ) );
   _.assert( _.arrayIs( o.declaratorArgs ) );
@@ -188,7 +188,7 @@ function supplement( dst, src )
     else
     {
       _.assert( accessor.declaratorArgs.length === 1 );
-      let optionsForAccessor = _.mapExtend( null, accessor.declaratorArgs[ 0 ] );
+      let optionsForAccessor = _.props.extend( null, accessor.declaratorArgs[ 0 ] );
       optionsForAccessor.object = dst;
       if( !optionsForAccessor.methods )
       optionsForAccessor.methods = dst;
@@ -227,22 +227,22 @@ function suiteMakerFrom_functor( fop )
   if( arguments.length === 2 )
   fop = { getterFunctor : arguments[ 0 ], setterFunctor : arguments[ 1 ] }
 
-  _.routineOptions( suiteMakerFrom_functor, fop );
+  _.routine.options_( suiteMakerFrom_functor, fop );
 
   let defaults;
   if( fop.getterFunctor )
-  defaults = _.mapExtend( null, fop.getterFunctor.defaults );
+  defaults = _.props.extend( null, fop.getterFunctor.defaults );
   else
-  defaults = _.mapExtend( null, fop.setterFunctor.defaults );
+  defaults = _.props.extend( null, fop.setterFunctor.defaults );
 
   if( Config.debug )
   {
     if( fop.getterFunctor )
-    _.entity.identicalShallow( defaults, _.mapExtend( null, fop.getterFunctor.defaults ) )
-    // _.assert( _.entityIdentical( defaults, _.mapExtend( null, fop.getterFunctor.defaults ) ) );
+    _.entity.identicalShallow( defaults, _.props.extend( null, fop.getterFunctor.defaults ) )
+    // _.assert( _.entityIdentical( defaults, _.props.extend( null, fop.getterFunctor.defaults ) ) );
     if( fop.setterFunctor )
-    _.entity.identicalShallow( defaults, _.mapExtend( null, fop.setterFunctor.defaults ) )
-    // _.assert( _.entityIdentical( defaults, _.mapExtend( null, fop.setterFunctor.defaults ) ) );
+    _.entity.identicalShallow( defaults, _.props.extend( null, fop.setterFunctor.defaults ) )
+    // _.assert( _.entityIdentical( defaults, _.props.extend( null, fop.setterFunctor.defaults ) ) );
     /* xxx : use _.identicalShallow() */
   }
 
@@ -271,7 +271,7 @@ function suiteMakerFrom_functor( fop )
     if( _head )
     o = head( accessorMaker, arguments );
     else
-    o = _.routineOptions( accessorMaker, arguments );
+    o = _.routine.options_( accessorMaker, arguments );
 
     if( fop.setterFunctor )
     if( fop.setterFunctor.body )
@@ -405,8 +405,8 @@ let ToolsExtension =
 // --
 
 _.accessor = _.accessor || Object.create( null );
-_.mapSupplement( _, ToolsExtension );
-_.mapExtend( _.accessor, AccessorExtension );
+_.props.supplement( _, ToolsExtension );
+_.props.extend( _.accessor, AccessorExtension );
 
 _.accessor.forbid( _, Forbids );
 _.accessor.forbid( _.accessor, Forbids );

@@ -51,10 +51,10 @@ const _ = _global_.wTools;
 
 const _ObjectHasOwnProperty = Object.hasOwnProperty;
 const _ObjectPropertyIsEumerable = Object.propertyIsEnumerable;
-let _nameFielded = _.nameFielded;
+// let _nameFielded = _.nameFielded;
 
-_.assert( _.objectIs( _.property ), 'wProto needs Tools/wtools/abase/l1/FieldMapper.s' );
-_.assert( _.routineIs( _nameFielded ), 'wProto needs Tools/wtools/l3/NameTools.s' );
+_.assert( _.objectIs( _.props ), 'wProto needs Tools/wtools/abase/l1/FieldMapper.s' );
+// _.assert( _.routineIs( _nameFielded ), 'wProto needs Tools/wtools/l3/NameTools.s' );
 
 // --
 // prototype
@@ -201,7 +201,7 @@ _.prototypeCrossRefer
 let _protoCrossReferAssociations = Object.create( null );
 function prototypeCrossRefer( o )
 {
-  let names = _.mapKeys( o.entities );
+  let names = _.props.keys( o.entities );
   let length = names.length;
 
   let association = _protoCrossReferAssociations[ o.name ];
@@ -212,11 +212,11 @@ function prototypeCrossRefer( o )
     association.name = o.name;
     association.length = length;
     association.have = 0;
-    association.entities = _.mapExtend( null, o.entities );
+    association.entities = _.props.extend( null, o.entities );
   }
   else
   {
-    _.assert( _.arraySetIdentical( _.mapKeys( association.entities ), _.mapKeys( o.entities ) ), 'cross reference should have same associations' );
+    _.assert( _.arraySetIdentical( _.props.keys( association.entities ), _.props.keys( o.entities ) ), 'cross reference should have same associations' );
   }
 
   _.assert( association.name === o.name );
@@ -334,7 +334,7 @@ function proxyMap( o )
 
   if( arguments.length === 2 )
   o = { front : arguments[ 0 ], back : arguments[ 1 ] }
-  o = _.routineOptions( proxyMap, o );
+  o = _.routine.options_( proxyMap, o );
   _.assert( arguments.length === 1 || arguments.length === 2 );
   _.assert( !!o.front );
   _.assert( !!o.back );
@@ -378,7 +378,7 @@ function proxyShadow( o )
 
   if( arguments.length === 2 )
   o = { front : arguments[ 0 ], back : arguments[ 1 ] }
-  o = _.routineOptions( proxyShadow, o );
+  o = _.routine.options_( proxyShadow, o );
   _.assert( arguments.length === 1 || arguments.length === 2 );
   _.assert( !!o.front );
   _.assert( !!o.back );
@@ -441,7 +441,7 @@ function defaultApply( src )
     {
       if( !_.objectIs( src[ s ] ) )
       continue;
-      _.mapSupplement( src[ s ], defVal );
+      _.props.supplement( src[ s ], defVal );
     }
 
   }
@@ -452,7 +452,7 @@ function defaultApply( src )
     {
       if( !_.objectIs( src[ s ] ) )
       continue;
-      _.mapSupplement( src[ s ], defVal );
+      _.props.supplement( src[ s ], defVal );
     }
 
   }
@@ -664,7 +664,7 @@ let ToolsExtension =
 
 //
 
-_.mapExtend( _, ToolsExtension );
+_.props.extend( _, ToolsExtension );
 
 // --
 // export
