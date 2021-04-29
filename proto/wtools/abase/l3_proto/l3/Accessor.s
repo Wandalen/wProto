@@ -162,7 +162,7 @@ function supplement( dst, src )
 
     let accessor = src._Accessors[ a ];
 
-    if( _.objectIs( accessor ) )
+    if( _.object.isBasic( accessor ) )
     supplement( a, accessor );
     else for( let i = 0 ; i < accessor.length ; i++ )
     supplement( a, accessor[ i ] );
@@ -177,7 +177,7 @@ function supplement( dst, src )
     _.assert( _.arrayIs( accessor.declaratorArgs ) );
     _.assert( !accessor.combining || accessor.combining === 'rewrite' || accessor.combining === 'supplement' || accessor.combining === 'append', 'not implemented' );
 
-    if( _.objectIs( dst._Accessors[ name ] ) )
+    if( _.object.isBasic( dst._Accessors[ name ] ) )
     return;
 
     if( accessor.declaratorName !== 'accessor' )

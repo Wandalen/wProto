@@ -10,7 +10,7 @@ const _ObjectHasOwnProperty = Object.hasOwnProperty;
 const _ObjectPropertyIsEumerable = Object.propertyIsEnumerable;
 // let _nameFielded = _.nameFielded;
 
-_.assert( _.objectIs( _.props ), 'wProto needs Tools/wtools/abase/l1/FieldMapper.s' );
+_.assert( _.object.isBasic( _.props ), 'wProto needs Tools/wtools/abase/l1/FieldMapper.s' );
 // _.assert( _.routineIs( _nameFielded ), 'wProto needs Tools/wtools/l3/NameTools.s' );
 
 // --
@@ -32,9 +32,9 @@ function _mixinDelcare( o )
   _.assert( _.mapIs( o ) || _.routineIs( o ) );
   _.assert( _.routineIs( o.onMixinApply ) || o.onMixinApply === undefined || o.onMixinApply === null, 'Expects routine {-o.onMixinApply-}, but got', _.entity.strType( o ) );
   _.assert( _.strDefined( o.name ), 'mixin should have name' );
-  _.assert( _.objectIs( o.extend ) || o.extend === undefined || o.extend === null );
-  _.assert( _.objectIs( o.supplementOwn ) || o.supplementOwn === undefined || o.supplementOwn === null );
-  _.assert( _.objectIs( o.supplement ) || o.supplement === undefined || o.supplement === null );
+  _.assert( _.object.isBasic( o.extend ) || o.extend === undefined || o.extend === null );
+  _.assert( _.object.isBasic( o.supplementOwn ) || o.supplementOwn === undefined || o.supplementOwn === null );
+  _.assert( _.object.isBasic( o.supplement ) || o.supplement === undefined || o.supplement === null );
   _.assertOwnNoConstructor( o );
   _.routine.options_( _mixinDelcare, o );
 
@@ -144,7 +144,7 @@ function mixinApply( mixinDescriptor, dstPrototype )
   _.assert( arguments.length === 2, 'Expects exactly two arguments' );
   _.assert( !_.primitiveIs( dstPrototype ), () => 'Second argument {-dstPrototype-} does not look like prototype, got ' + _.entity.strType( dstPrototype ) );
   _.assert( _.routineIs( mixinDescriptor.mixin ), 'First argument does not look like mixin descriptor' );
-  _.assert( _.objectIs( mixinDescriptor ) );
+  _.assert( _.object.isBasic( mixinDescriptor ) );
   _.assert( Object.isFrozen( mixinDescriptor ), 'First argument does not look like mixin descriptor' );
   _.map.assertHasOnly( mixinDescriptor, _.MixinDescriptorFields );
 
@@ -329,7 +329,7 @@ function classDeclare( o )
   }
 
   _.assert( arguments.length === 1, 'Expects single argument' );
-  _.assert( _.objectIs( o ) );
+  _.assert( _.object.isBasic( o ) );
   _.assertOwnNoConstructor( o, 'options for classDeclare should have no constructor' );
   _.assert( !( 'parent' in o ) || o.parent !== undefined, 'parent is "undefined", something is wrong' );
 
@@ -357,8 +357,8 @@ function classDeclare( o )
   }
 
   _.assert( _.routineIs( o.parent ) || o.parent === undefined || o.parent === null, () => 'Wrong type of parent : ' + _.entity.strType( 'o.parent' ) );
-  _.assert( _.objectIs( o.extend ) || o.extend === undefined );
-  _.assert( _.objectIs( o.supplement ) || o.supplement === undefined );
+  _.assert( _.object.isBasic( o.extend ) || o.extend === undefined );
+  _.assert( _.object.isBasic( o.supplement ) || o.supplement === undefined );
   _.assert( o.parent !== o.extend || o.extend === undefined );
 
   if( o.extend )
@@ -439,7 +439,7 @@ function classDeclare( o )
     /* statics */
 
     _.assert( _.routineIs( prototype.constructor ) );
-    _.assert( _.objectIs( prototype.Statics ) );
+    _.assert( _.object.isBasic( prototype.Statics ) );
     _.map.assertHasAll( prototype.constructor, prototype.Statics );
     _.assert( prototype === o.cls.prototype );
     _.assert( _ObjectHasOwnProperty.call( prototype, 'constructor' ), 'prototype should own constructor' );
@@ -596,13 +596,13 @@ function classExtend( o )
   o.prototype = o.cls.prototype;
 
   _.assert( arguments.length === 1 || arguments.length === 2 );
-  _.assert( _.objectIs( o ) );
+  _.assert( _.object.isBasic( o ) );
   _.assert( !_ObjectHasOwnProperty.call( o, 'constructor' ) );
   _.assertOwnNoConstructor( o );
-  _.assert( _.objectIs( o.extend ) || o.extend === undefined || o.extend === null );
-  _.assert( _.objectIs( o.supplementOwn ) || o.supplementOwn === undefined || o.supplementOwn === null );
-  _.assert( _.objectIs( o.supplement ) || o.supplement === undefined || o.supplement === null );
-  _.assert( _.routineIs( o.cls ) || _.objectIs( o.prototype ), 'Expects class constructor or class prototype' );
+  _.assert( _.object.isBasic( o.extend ) || o.extend === undefined || o.extend === null );
+  _.assert( _.object.isBasic( o.supplementOwn ) || o.supplementOwn === undefined || o.supplementOwn === null );
+  _.assert( _.object.isBasic( o.supplement ) || o.supplement === undefined || o.supplement === null );
+  _.assert( _.routineIs( o.cls ) || _.object.isBasic( o.prototype ), 'Expects class constructor or class prototype' );
 
   /*
   mixin could have none class constructor
@@ -635,7 +635,7 @@ function classExtend( o )
 
   _.routine.options_( classExtend, o );
 
-  // _.assert( _.objectIs( o.prototype ) );
+  // _.assert( _.object.isBasic( o.prototype ) );
   _.assert( !_.primitiveIs( o.prototype ) && !_.routineIs( o.prototype ) );
 
   /* fields groups */
@@ -755,7 +755,7 @@ to prioritize ordinary facets adjustment order should be
     _.assert( o.cls === o.prototype.constructor );
   }
 
-  _.assert( _.objectIs( o.prototype.Statics ) );
+  _.assert( _.object.isBasic( o.prototype.Statics ) );
 
   return o.prototype;
 

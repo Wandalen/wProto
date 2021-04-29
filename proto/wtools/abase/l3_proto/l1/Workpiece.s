@@ -19,7 +19,7 @@ const _ = _global_.wTools;
 const _ObjectHasOwnProperty = Object.hasOwnProperty;
 const _ObjectPropertyIsEumerable = Object.propertyIsEnumerable;
 
-_.assert( _.objectIs( _.props ), 'wProto needs Tools/wtools/abase/l1/FieldMapper.s' );
+_.assert( _.object.isBasic( _.props ), 'wProto needs Tools/wtools/abase/l1/FieldMapper.s' );
 
 // --
 // prototype
@@ -215,9 +215,9 @@ function instanceLikeStandard( src )
 
 function fieldsGroupsGet( src )
 {
-  // _.assert( _.objectIs( src ), () => 'Expects map {-src-}, but got ' + _.entity.strType( src ) );
+  // _.assert( _.object.isBasic( src ), () => 'Expects map {-src-}, but got ' + _.entity.strType( src ) );
   _.assert( !_.primitiveIs( src ), () => 'Expects map {-src-}, but got ' + _.entity.strType( src ) );
-  _.assert( src.Groups === undefined || _.objectIs( src.Groups ) );
+  _.assert( src.Groups === undefined || _.object.isBasic( src.Groups ) );
 
   if( src.Groups )
   return src.Groups;

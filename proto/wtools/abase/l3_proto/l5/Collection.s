@@ -32,7 +32,7 @@ function setterMapCollection_functor( o )
   {
     let self = this;
 
-    _.assert( _.objectIs( src ) );
+    _.assert( _.object.isBasic( src ) );
 
     if( self[ symbol ] )
     {
@@ -204,7 +204,7 @@ function setterFriend_functor( o )
   {
 
     let self = this;
-    _.assert( src === null || _.objectIs( src ), 'setterFriend : expects null or object, but got ' + _.entity.strType( src ) );
+    _.assert( src === null || _.object.isBasic( src ), 'setterFriend : expects null or object, but got ' + _.entity.strType( src ) );
 
     if( !src )
     {
@@ -283,13 +283,13 @@ function setterCopyable_functor( o )
       return self[ symbol ];
     }
 
-    if( !_.objectIs( self[ symbol ] ) )
+    if( !_.object.isBasic( self[ symbol ] ) )
     {
 
       self[ symbol ] = maker( data );
 
     }
-    else if( _.objectIs( self[ symbol ] ) && !self[ symbol ].copy )
+    else if( _.object.isBasic( self[ symbol ] ) && !self[ symbol ].copy )
     {
       self[ symbol ] = maker( data );
     }
@@ -324,7 +324,7 @@ setterCopyable_functor.defaults =
  * @param {Object} o.name - name of property
  * @param {Object} o.bufferConstructor - buffer constructor
  * @returns {Function} Returns setter function.
- * @function bufferFrom
+ * @function bufferCoerceFrom
  * @namespace Tools.accessor.setter
  */
 
@@ -350,7 +350,7 @@ function setterBufferFrom_functor( o )
     }
     else
     {
-      data = _.bufferFrom({ src : data, bufferConstructor });
+      data = _.bufferCoerceFrom({ src : data, bufferConstructor });
     }
 
     self[ symbol ] = data;
@@ -416,7 +416,7 @@ function toElementSet_functor( o )
 {
   _.assert( 0, 'not tested' );
   _.assert( arguments.length === 1, 'Expects single argument' );
-  _.assert( _.objectIs( o.names ) );
+  _.assert( _.object.isBasic( o.names ) );
   _.assert( _.strIs( o.name ) );
   _.assert( _.strIs( o.storageName ) );
   _.assert( _.numberIs( o.index ) );
@@ -474,7 +474,7 @@ function toElementGet_functor( o )
 {
   _.assert( 0, 'not tested' );
   _.assert( arguments.length === 1, 'Expects single argument' );
-  _.assert( _.objectIs( o.names ) );
+  _.assert( _.object.isBasic( o.names ) );
   _.assert( _.strIs( o.name ) );
   _.assert( _.strIs( o.storageName ) );
   _.assert( _.numberIs( o.index ) );
@@ -1067,7 +1067,7 @@ let Setter =
   own : setterOwn_functor,
   friend : setterFriend_functor,
   copyable : setterCopyable_functor,
-  bufferFrom : setterBufferFrom_functor,
+  bufferCoerceFrom : setterBufferFrom_functor,
   changesTracking : setterChangesTracking_functor,
 
   alias : aliasSet_functor,

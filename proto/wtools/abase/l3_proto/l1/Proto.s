@@ -53,7 +53,7 @@ const _ObjectHasOwnProperty = Object.hasOwnProperty;
 const _ObjectPropertyIsEumerable = Object.propertyIsEnumerable;
 // let _nameFielded = _.nameFielded;
 
-_.assert( _.objectIs( _.props ), 'wProto needs Tools/wtools/abase/l1/FieldMapper.s' );
+_.assert( _.object.isBasic( _.props ), 'wProto needs Tools/wtools/abase/l1/FieldMapper.s' );
 // _.assert( _.routineIs( _nameFielded ), 'wProto needs Tools/wtools/l3/NameTools.s' );
 
 // --
@@ -143,13 +143,13 @@ function prototypeUnitedInterface( protos )
 function prototypeAppend( dstMap )
 {
 
-  _.assert( _.objectIs( dstMap ) );
+  _.assert( _.object.isBasic( dstMap ) );
 
   for( let a = 1 ; a < arguments.length ; a++ )
   {
     let proto = arguments[ a ];
 
-    _.assert( _.objectIs( proto ) );
+    _.assert( _.object.isBasic( proto ) );
 
     let parent = _.prototypeArchyGet( dstMap );
     Object.setPrototypeOf( parent, proto );
@@ -172,7 +172,7 @@ function prototypeAppend( dstMap )
 function prototypeArchyGet( srcPrototype )
 {
 
-  _.assert( _.objectIs( srcPrototype ) );
+  _.assert( _.object.isBasic( srcPrototype ) );
 
   while( Object.getPrototypeOf( srcPrototype ) !== Object.prototype )
   srcPrototype = Object.getPrototypeOf( srcPrototype );
@@ -425,21 +425,21 @@ apply default to each element of map, if present
 function defaultApply( src )
 {
 
-  _.assert( _.objectIs( src ) || _.longIs( src ) );
+  _.assert( _.object.isBasic( src ) || _.longIs( src ) );
 
   let defVal = src[ _.def ];
 
   if( !defVal )
   return src;
 
-  _.assert( _.objectIs( src ) );
+  _.assert( _.object.isBasic( src ) );
 
-  if( _.objectIs( src ) )
+  if( _.object.isBasic( src ) )
   {
 
     for( let s in src )
     {
-      if( !_.objectIs( src[ s ] ) )
+      if( !_.object.isBasic( src[ s ] ) )
       continue;
       _.props.supplement( src[ s ], defVal );
     }
@@ -450,7 +450,7 @@ function defaultApply( src )
 
     for( let s = 0 ; s < src.length ; s++ )
     {
-      if( !_.objectIs( src[ s ] ) )
+      if( !_.object.isBasic( src[ s ] ) )
       continue;
       _.props.supplement( src[ s ], defVal );
     }
@@ -469,7 +469,7 @@ activate default proxy
 function defaultProxy( map )
 {
 
-  _.assert( _.objectIs( map ) );
+  _.assert( _.object.isBasic( map ) );
   _.assert( arguments.length === 1, 'Expects single argument' );
 
   let validator =
@@ -498,7 +498,7 @@ function defaultProxyFlatteningToArray( src )
   let result = [];
 
   _.assert( arguments.length === 1, 'Expects single argument' );
-  _.assert( _.objectIs( src ) || _.arrayIs( src ) );
+  _.assert( _.object.isBasic( src ) || _.arrayIs( src ) );
 
   function flatten( src )
   {
@@ -510,7 +510,7 @@ function defaultProxyFlatteningToArray( src )
     }
     else
     {
-      if( _.objectIs( src ) )
+      if( _.object.isBasic( src ) )
       result.push( defaultApply( src ) );
       else
       result.push( src );
