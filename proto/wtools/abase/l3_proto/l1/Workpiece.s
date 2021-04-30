@@ -936,7 +936,7 @@ function construct( cls, context, args )
 
 function isFinited( src )
 {
-  _.assert( _.instanceIs( src ), () => 'Expects instance, but got ' + _.entity.exportStringShallow( src ) )
+  _.assert( _.instanceIs( src ), () => 'Expects instance, but got ' + _.entity.exportStringDiagnosticShallow( src ) )
   _.assert( !_.primitiveIs( src ) );
   return Object.isFrozen( src );
 }
