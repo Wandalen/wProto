@@ -166,7 +166,7 @@ function instanceLikeStandard( test )
   test.identical( got, false );
 
   test.case = 'check empty Map';
-  var got = _.workpiece.instanceLikeStandard( new Map( [] ) );
+  var got = _.workpiece.instanceLikeStandard( new HashMap( [] ) );
   test.identical( got, false );
 
   test.case = 'check empty BufferRaw';
