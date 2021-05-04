@@ -1128,7 +1128,7 @@ function from( srcs, cls )
   if( _.argumentsArray.like( srcs ) )
   {
     debugger;
-    var result = _.map_( null, srcs, ( src ) =>
+    var result = _.container.map_( null, srcs, ( src ) =>
     {
       return _.workpiece.singleFrom( src );
     });
