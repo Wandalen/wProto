@@ -883,7 +883,7 @@ fieldsGroupsDeclareForEachFilter.defaults =
 function construct( cls, context, args )
 {
 
-  _.assert( args.length === 0 || args.length === 1 );
+  _.assert( args.length === 0 || args.length === 1, () => `Expects optional argument, but got ${args.length} arguments` );
   _.assert( arguments.length === 3 );
   _.assert( _.routineIs( cls ) );
   _.assert( _.argumentsArray.like( args ) );
