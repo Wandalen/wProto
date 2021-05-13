@@ -99,8 +99,9 @@ function _register( o )
     combining : o.combining,
   }
 
-  if( Config.debug )
-  descriptor.stack = _.introspector.stack();
+  // yyy
+  // if( Config.debug )
+  // descriptor.stack = _.introspector.stack();
 
   if( o.combining === 'append' )
   {
