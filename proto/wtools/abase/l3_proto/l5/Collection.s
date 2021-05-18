@@ -104,7 +104,7 @@ function setterArrayCollection_functor( o )
     _.assert( arguments.length === 1 );
 
     if( src !== null )
-    src = _.arrayAs( src );
+    src = _.array.as( src );
 
     _.assert( _.arrayIs( src ) );
 
