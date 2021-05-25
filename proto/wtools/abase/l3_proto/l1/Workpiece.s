@@ -1306,15 +1306,21 @@ function exportStructure( self, ... args )
   ({
     src : o.src,
     dst : o.dst,
-    onSrcChanged : onSrcChanged,
-    onAscend : onAscend,
+    srcChanged,
+    // onSrcChanged,
+    ascend,
+    // onAscend : onAscend,
   });
 
   return o.dst;
 
-  function onSrcChanged()
+  // function onSrcChanged()
+  function srcChanged()
   {
     let it = this;
+
+    debugger;
+    it.Looker.srcChanged.call( it );
 
     if( !it.iterable )
     if( _.instanceIs( it.src ) )
@@ -1322,14 +1328,15 @@ function exportStructure( self, ... args )
       if( it.src === self )
       {
         it.src = _.mapOnly_( null, it.src, it.src.Export || it.src.Import );
-        it.iterable = _.looker.Looker.ContainerNameToIdMap.aux;
-        // it.iterable = _.looker.ContainerNameToIdMap.aux;
+        it.iterable = _.looker.Looker.ContainerType.aux;
+        // it.iterable = _.looker.ContainerType.aux;
       }
     }
 
   }
 
-  function onAscend()
+  // function onAscend()
+  function ascend()
   {
     let it = this;
 
@@ -1339,7 +1346,9 @@ function exportStructure( self, ... args )
     }
     else
     {
-      _.Looker.Iterator.onAscend.call( this );
+      debugger;
+      _.Looker.Iterator.call( this );
+      // _.Looker.Iterator.onAscend.call( this );
     }
 
   }
