@@ -1320,7 +1320,7 @@ function exportStructure( self, ... args )
     let it = this;
 
     debugger;
-    it.Looker.srcChanged.call( it );
+    it.Seeker.srcChanged.call( it );
 
     if( !it.iterable )
     if( _.instanceIs( it.src ) )
@@ -1347,8 +1347,8 @@ function exportStructure( self, ... args )
     else
     {
       debugger;
-      _.Looker.Iterator.call( this );
-      // _.Looker.Iterator.onAscend.call( this );
+      _.looker.Looker.Iterator.call( this );
+      // _.looker.Looker.Iterator.onAscend.call( this );
     }
 
   }
