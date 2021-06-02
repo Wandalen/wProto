@@ -116,7 +116,8 @@ function like()
   Object.freeze( helper );
 
   if( arguments.length > 0 )
-  _.props.extend.apply( _, Array.prototype.concat.apply( [ proto ], arguments ) );
+  _.props.extend( null, proto, ... arguments );
+  // _.props.extend.apply( _, Array.prototype.concat.apply( [ proto ], arguments ) );
 
   return helper;
 }
