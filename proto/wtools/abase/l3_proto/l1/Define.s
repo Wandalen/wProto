@@ -410,7 +410,7 @@ let DefineExtension =
 }
 
 _.define = _.define || Object.create( null );
-_.props.extend( _.define, DefineExtension );
+/* _.props.extend */Object.assign( _.define, DefineExtension );
 
 //
 
@@ -426,7 +426,7 @@ let DefinitionExtension =
 }
 
 _.definition = _.definition || Object.create( null );
-_.props.extend( _.definition, DefinitionExtension );
+/* _.props.extend */Object.assign( _.definition, DefinitionExtension );
 _.assert( _.routineIs( _.definitionIs ) );
 _.assert( _.definition.is === _.definitionIs );
 

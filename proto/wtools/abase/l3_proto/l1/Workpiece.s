@@ -8,16 +8,10 @@
 * @module Tools/base/Proto
 */
 
-/*
-qqq : repair and improve doc
-*/
-
-const Self = _global_.wTools.workpiece = _global_.wTools.workpiece || Object.create( null );;
 const _global = _global_;
 const _ = _global_.wTools;
-
+_.workpiece = _.workpiece || Object.create( null );;
 const _ObjectHasOwnProperty = Object.hasOwnProperty;
-const _ObjectPropertyIsEumerable = Object.propertyIsEnumerable;
 
 _.assert( _.object.isBasic( _.props ), 'wProto needs Tools/wtools/abase/l1/FieldMapper.s' );
 
@@ -39,7 +33,6 @@ function prototypeIsStandard( src )
 
 //
 
-// function prototypeOf( src )
 function prototypeOf( src )
 {
   _.assert( arguments.length === 1, 'Expects single argument, probably you want routine isPrototypeOf' );
@@ -56,7 +49,6 @@ function prototypeOf( src )
 
 //
 
-// function prototypeHasField( src, propName )
 function prototypeHasField( src, propName )
 {
   let prototype = _.workpiece.prototypeOf( src );
@@ -74,7 +66,6 @@ function prototypeHasField( src, propName )
 
 //
 
-// function _classConstructorAndPrototypeGet( o )
 function prototypeAndConstructorOf( o )
 {
   let result = Object.create( null );
@@ -1486,24 +1477,7 @@ Object.freeze( DefaultForbiddenNames );
 // define
 // --
 
-let Fields =
-{
-
-  KnownConstructorFields,
-
-  DefaultFieldsGroups,
-  DefaultFieldsGroupsRelations,
-  DefaultFieldsGroupsCopyable,
-  DefaultFieldsGroupsTight,
-  DefaultFieldsGroupsInput,
-
-  DefaultForbiddenNames,
-
-}
-
-//
-
-let Routines =
+let Extension =
 {
 
   // prototype
@@ -1587,12 +1561,23 @@ let Routines =
   exportStructure,
   exportString,
 
+  //
+
+  KnownConstructorFields,
+
+  DefaultFieldsGroups,
+  DefaultFieldsGroupsRelations,
+  DefaultFieldsGroupsCopyable,
+  DefaultFieldsGroupsTight,
+  DefaultFieldsGroupsInput,
+
+  DefaultForbiddenNames,
+
 }
 
 //
 
-_.props.extend( Self, Routines );
-_.props.extend( Self, Fields );
+/* _.props.extend */Object.assign( _.workpiece, Extension );
 
 // --
 // export

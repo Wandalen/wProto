@@ -153,7 +153,7 @@ function mixinApply( mixinDescriptor, dstPrototype )
   if( !_.mapIs( dstPrototype ) )
   {
     _.assert( dstPrototype.constructor.prototype === dstPrototype, 'mixin :', 'Expects prototype with own constructor field' );
-    _.assert( dstPrototype.constructor.name.length || dstPrototype.constructor._name.length, 'mixin :', 'constructor should has name' );
+    _.assert( dstPrototype.constructor.name.length > 0 || dstPrototype.constructor._name.length > 0, 'mixin :', 'constructor should has name' );
     _.assert( _.routineIs( dstPrototype.init ) );
   }
 
@@ -478,7 +478,7 @@ function classDeclare( o )
     _.assert( !o.usingPrimitiveExtension );
     _.assert( !o.usingOriginalPrototype );
     _.assert( !o.parent );
-    _.assert( !o.cls || o.withClass );
+    _.assert( !o.cls || !!o.withClass );
 
     delete mixinOptions.parent;
     delete mixinOptions.cls;
@@ -1069,17 +1069,7 @@ let MixinDescriptorFields =
 // definiton
 // --
 
-let Fields =
-{
-
-  KnownConstructorFields,
-  MixinDescriptorFields,
-
-}
-
-//
-
-let Routines =
+let Extension =
 {
 
   // mixin
@@ -1095,12 +1085,16 @@ let Routines =
   classExtend,
   staticDeclare,
 
+  //
+
+  KnownConstructorFields,
+  MixinDescriptorFields,
+
 }
 
 //
 
-_.props.extend( _, Routines );
-_.props.extend( _, Fields );
+_.props.extend( _, Extension );
 
 // --
 // export

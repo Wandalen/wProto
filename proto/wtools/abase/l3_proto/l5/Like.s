@@ -197,7 +197,7 @@ const LconstructionExtension =
 
 _.assert( !_.lconstruction );
 _.lconstruction = Object.create( null );
-_.props.extend( _.lconstruction, LconstructionExtension );
+/* _.props.extend */Object.assign( _.lconstruction, LconstructionExtension );
 
 // --
 // declare

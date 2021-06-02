@@ -1100,16 +1100,16 @@ let Suite =
 // --
 
 _.accessor.getter = _.accessor.getter || Object.create( null );
-_.props.extend( _.accessor.getter, Getter );
+/* _.props.extend */Object.assign( _.accessor.getter, Getter );
 
 _.accessor.setter = _.accessor.setter || Object.create( null );
-_.props.extend( _.accessor.setter, Setter );
+/* _.props.extend */Object.assign( _.accessor.setter, Setter );
 
 _.accessor.putter = _.accessor.putter || Object.create( null );
-_.props.extend( _.accessor.putter, Putter );
+/* _.props.extend */Object.assign( _.accessor.putter, Putter );
 
 _.accessor.suite = _.accessor.suite || Object.create( null );
-_.props.extend( _.accessor.suite, Suite );
+/* _.props.extend */Object.assign( _.accessor.suite, Suite );
 
 _.accessor.define.getter = _.accessor._DefinesGenerate( _.accessor.define.getter || null, _.accessor.getter, 'getter' );
 _.accessor.define.setter = _.accessor._DefinesGenerate( _.accessor.define.setter || null, _.accessor.setter, 'setter' );
