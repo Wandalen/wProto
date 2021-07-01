@@ -1,24 +1,54 @@
 {
-  "name" : "wProto",
-  "version" : "0.4.371",
-  "engine" : "node >= 10.0.0",
-  "description" : "Relations module. Collection of cross-platform routines to define classes and relations between them. Proto leverages multiple inheritances, mixins, accessors, fields groups defining, introspection and more. Use it as a skeleton of the application.",
-  "author" : "Kostiantyn Wandalen <wanalen@01.school>",
-  "license" : "MIT",
-  "contributors" :
-  [
-    { "name" : "Kostiantyn Wandalen", "email" : "wanalen@01.school" },
-    { "name" : "Volodymyr M.", "email" : "volodymyr.migdal@gmail.com" }
+  "name": "wProto",
+  "version": "0.4.372",
+  "engine": "node >= 10.0.0",
+  "description": "Relations module. Collection of cross-platform routines to define classes and relations between them. Proto leverages multiple inheritances, mixins, accessors, fields groups defining, introspection and more. Use it as a skeleton of the application.",
+  "author": "Kostiantyn Wandalen <wanalen@01.school>",
+  "license": "MIT",
+  "contributors": [
+    {
+      "name": "Kostiantyn Wandalen",
+      "email": "wanalen@01.school"
+    },
+    {
+      "name": "Volodymyr M.",
+      "email": "volodymyr.migdal@gmail.com"
+    }
   ],
-  "main" : "proto/node_modules/wProto",
-  "files" : [ "proto/wtools/abase/l3_proto", "out", "proto/node_modules", "proto/node_modules/Tools", "proto/node_modules/wProto" ],
-  "scripts" : { "test" : "wtest .run 'proto/**' rapidity:-1", "docgen" : "wdocgen proto" },
-  "repository" : { "type" : "git", "url" : "https://github.com/Wandalen/wProto.git" },
-  "bugs" :
-  {
-    "url" : "https://github.com/Wandalen/wProto/issues"
+  "main": "proto/node_modules/wProto",
+  "files": [
+    "proto/wtools/abase/l3_proto",
+    "out",
+    "proto/node_modules",
+    "proto/node_modules/Tools",
+    "proto/node_modules/wProto"
+  ],
+  "scripts": {
+    "test": "wtest .run 'proto/**' rapidity:-1",
+    "docgen": "wdocgen proto"
   },
-  "dependencies" : { "wTools" : "gamma", "wblueprint" : "gamma" },
-  "devDependencies" : { "wequaler" : "gamma", "wTesting" : "gamma" },
-  "keywords" : [ "wTools", "wProto", "mixin", "Class", "Object", "Prototype", "Incapsulation" ]
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Wandalen/wProto.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Wandalen/wProto/issues"
+  },
+  "dependencies": {
+    "wTools": "gamma",
+    "wblueprint": "gamma"
+  },
+  "devDependencies": {
+    "wTesting": "gamma",
+    "wequaler": "gamma"
+  },
+  "keywords": [
+    "wTools",
+    "wProto",
+    "mixin",
+    "Class",
+    "Object",
+    "Prototype",
+    "Incapsulation"
+  ]
 }
