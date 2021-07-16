@@ -198,17 +198,20 @@ function mixinHas( proto, mixin )
   _.assert( _.workpiece.prototypeIsStandard( proto ) );
   _.assert( arguments.length === 2, 'Expects exactly two arguments' );
 
+  let result;
+
   if( _.strIs( mixin ) )
   {
-    return proto._mixinsMap && proto._mixinsMap[ mixin ];
+    result = proto._mixinsMap && proto._mixinsMap[ mixin ];
   }
   else
   {
     _.assert( _.routineIs( mixin.mixin ), 'Expects mixin, but got not mixin', _.entity.strType( mixin ) );
     _.assert( _.strDefined( mixin.name ), 'Expects mixin, but got not mixin', _.entity.strType( mixin ) );
-    return proto._mixinsMap && proto._mixinsMap[ mixin.name ];
+    result = proto._mixinsMap && proto._mixinsMap[ mixin.name ];
   }
 
+  return !!result;
 }
 
 // --
