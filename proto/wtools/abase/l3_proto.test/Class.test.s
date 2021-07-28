@@ -733,6 +733,104 @@ function staticsOverwrite( test )
 
 //
 
+function classDeclareWithWrongPrototype( test )
+{
+  const a = test.assetFor( false );
+  const filePath = a.program({ entry : main }).filePath;
+  a.program({ entry : Class1 });
+
+  if( process.platform !== 'linux' )
+  return test.true( true );
+
+  /* - */
+
+  a.shell( `taskset -c 0 node ${ filePath }` );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    return null;
+  });
+
+  /* - */
+
+  return a.ready;
+
+  /* */
+
+  function main()
+  {
+    const _ = require( toolsPath );
+
+    const path = require.resolve( './Class1' );
+    let start = _.time.now();
+    let i = 1;
+    let exit = false;
+
+    while( !exit )
+    {
+      try
+      {
+        console.log( `Attempt #${ i }` );
+        require( path );
+        delete require.cache[ path ];
+        ++i;
+        if( _.time.now() - start > 300000 )
+        exit = true;
+      }
+      catch( err )
+      {
+        test.true( _.error.is( err ) );
+        console.error( err );
+        _.error.attend( err );
+        exit = true;
+      }
+    }
+  }
+
+  /* */
+
+  function Class1()
+  {
+    const _ = require( toolsPath );
+    _.include( 'wProto' );
+    _.include( 'wProcess' );
+
+    const Self = C2;
+    function C2()
+    {
+      this.y = 1;
+      return this;
+    }
+    var Statics =
+    {
+      constructor : null,
+    };
+    var Associates =
+    {
+      prop1 : 'prop1',
+      prop2 : 'prop2',
+    };
+    var Extend =
+    {
+      Statics,
+      Associates,
+      f2 : [],
+      f3 : [],
+    };
+
+    _.classDeclare
+    ({
+      cls : Self,
+      parent : null,
+      extend : Extend,
+    });
+  }
+}
+
+classDeclareWithWrongPrototype.timeOut = 400000;
+
+//
+
 function classExtendWithWrongPrototype( test )
 {
   if( !Config.debug )
@@ -1384,6 +1482,7 @@ const Proto =
     classDeclare,
     staticsDeclare,
     staticsOverwrite,
+    classDeclareWithWrongPrototype,
     classExtendWithWrongPrototype,
     mixinStaticsWithDefinition,
 
