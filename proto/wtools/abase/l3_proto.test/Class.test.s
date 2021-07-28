@@ -515,15 +515,10 @@ function classDeclare( test )
 
 }
 
-// classDeclare.timeOut = 300000;
-
 //
 
 function staticsDeclare( test )
 {
-
-  /* - */
-
   test.open( 'basic' );
   test.case = 'setup';
 
@@ -625,20 +620,12 @@ function staticsDeclare( test )
   test.true( instance2.f2 === Associates.f2.val );
 
   test.close( 'basic' );
-
-  /* - */
-
 }
-
-// staticsDeclare.timeOut = 300000;
 
 //
 
 function staticsOverwrite( test )
 {
-
-  /* - */
-
   test.open( 'basic' );
   test.case = 'setup';
 
@@ -742,9 +729,62 @@ function staticsOverwrite( test )
   test.identical( instance2.Instances.length, 2 );
 
   test.close( 'basic' );
+}
 
-  /* - */
+//
 
+function classExtendWithWrongPrototype( test )
+{
+  if( !Config.debug )
+  return test.true( true );
+
+  /* */
+
+  function C1()
+  {
+    this.x = 1;
+    return this;
+  }
+  function C2()
+  {
+    this.y = 1;
+    return this;
+  }
+  var Statics =
+  {
+    constructor : null,
+  };
+  var Associates =
+  {
+    prop1 : 'prop1',
+    prop2 : 'prop2',
+  };
+  var Extend =
+  {
+    Statics,
+    Associates,
+    f2 : [],
+    f3 : [],
+  };
+
+  /* */
+
+  test.case = 'prototype of function is not a routine';
+  var onErrorCallback = ( err, arg ) =>
+  {
+    test.true( _.error.is( err ) );
+    test.identical( arg, undefined );
+    test.identical( err.originalMessage, 'prototype should has own constructor' );
+  };
+  test.shouldThrowErrorOfAnyKind( function()
+  {
+    C2.prototype.constructor = null;
+    return _.classExtend
+    ({
+      cls : C2,
+      extend : Extend,
+    });
+  }, onErrorCallback );
 }
 
 //
@@ -1349,6 +1389,7 @@ const Proto =
     classDeclare,
     staticsDeclare,
     staticsOverwrite,
+    classExtendWithWrongPrototype,
     mixinStaticsWithDefinition,
 
     customFieldsGroups,
