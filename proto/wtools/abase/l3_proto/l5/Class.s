@@ -339,7 +339,7 @@ function classDeclare( o )
   if( o.withClass )
   {
 
-    _.assert( _.routineIs( o.cls ), 'Expects {-o.cls-}' );
+    // _.assert( _.routineIs( o.cls ), 'Expects {-o.cls-}' );
     _.assert( _.routineIs( o.cls ), 'classDeclare expects constructor' );
     _.assert( _.strIs( o.cls.name ) || _.strIs( o.cls._name ), 'constructor should have name' );
     _.assert( _ObjectHasOwnProperty.call( o.cls.prototype, 'constructor' ) );
@@ -707,7 +707,6 @@ to prioritize ordinary facets adjustment order should be
 
   if( o.usingPrimitiveExtension )
   {
-    debugger;
     for( let f in _.DefaultFieldsGroupsRelations )
     if( f !== 'Statics' )
     if( _.mapOnlyOwnKey( o.prototype, f ) )
@@ -774,7 +773,7 @@ to prioritize ordinary facets adjustment order should be
 
     // if( _global_.debugger )
     // debugger;
-    // let symbols = Object.getOwnPropertySymbols( src ); debugger;
+    // let symbols = Object.getOwnPropertySymbols( src );
     // for( let s in staticsAll )
     // if( symbols[ s ] === staticsAll[ s ] )
     // delete symbols[ s ];
@@ -926,9 +925,6 @@ function staticDeclare( o )
   let symbol = Symbol.for( o.name );
   let aname = _.accessor._propertyGetterSetterNames( o.name );
   let methods = Object.create( null );
-
-  // if( o.name === 'UsingUniqueNames' )
-  // debugger;
 
   /* */
 

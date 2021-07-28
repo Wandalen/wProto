@@ -740,11 +740,6 @@ function classExtendWithWrongPrototype( test )
 
   /* */
 
-  function C1()
-  {
-    this.x = 1;
-    return this;
-  }
   function C2()
   {
     this.y = 1;
