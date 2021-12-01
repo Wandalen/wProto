@@ -3,8 +3,8 @@ root:
   - wProto.out
 consistency:
   ../will.yml: &ref_0
-    hash: 825709267b6d9b4f270c401cd163e34a
-    size: 6682
+    hash: aeab6444d6308a4d7ca63c0cba05947a
+    size: 6690
 module:
   wProto.out:
     about:
@@ -1477,5 +1477,5 @@ module:
           - 'build::npm'
     consistency:
       ../will.yml:
-        hash: 825709267b6d9b4f270c401cd163e34a
-        size: 6682
+        hash: aeab6444d6308a4d7ca63c0cba05947a
+        size: 6690
